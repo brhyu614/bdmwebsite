@@ -1,0 +1,61 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-bg: #FAFAF9;
+  --color-text: #1C1917;
+  --color-subtext: #57534E;
+  --color-muted: #A8A29E;
+  --color-accent: #059669;
+  --color-accent-light: #10B981;
+  --color-accent-bg: #ECFDF5;
+  --color-border: #E7E5E4;
+
+  --font-sans: 'Outfit', 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Newsreader', 'Noto Sans KR', ui-serif, Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+/* Article body prose overrides */
+.prose {
+  --tw-prose-body: var(--color-text);
+  --tw-prose-headings: var(--color-text);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-text);
+  --tw-prose-quotes: var(--color-subtext);
+  --tw-prose-quote-borders: var(--color-accent);
+  --tw-prose-code: var(--color-text);
+  --tw-prose-hr: var(--color-border);
+}
+
+.prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  font-family: var(--font-serif);
+  line-height: 1.9;
+}
+
+.prose :where(li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  font-family: var(--font-serif);
+  line-height: 1.9;
+}
+
+.prose :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  font-family: var(--font-serif);
+  border-left-color: var(--color-accent);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-accent-bg);
+  color: var(--color-text);
+}

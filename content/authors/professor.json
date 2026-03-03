@@ -1,0 +1,12 @@
+{
+  "name": "임보람",
+  "nameEn": "Boram Lim",
+  "title": "교수",
+  "affiliation": "빅데이터 마케팅 랩 (BDM Lab)",
+  "bio": "데이터와 연구 기반의 마케팅 분석을 합니다. 감 대신 근거, 과장 대신 정확성을 추구합니다.",
+  "email": "contact@bigdatamarketinglab.com",
+  "social": {
+    "instagram": "https://instagram.com/bdm.lab"
+  },
+  "image": "/images/professor-profile.jpg"
+}

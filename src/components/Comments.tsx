@@ -20,11 +20,10 @@ export default function Comments({ slug }: CommentsProps) {
 
     const script = document.createElement('script')
     script.src = 'https://giscus.app/client.js'
-    // TODO: Replace with your actual GitHub repo and category
-    script.setAttribute('data-repo', 'brhyu614/bigdatamarketinglab')
-    script.setAttribute('data-repo-id', '')
-    script.setAttribute('data-category', 'Comments')
-    script.setAttribute('data-category-id', '')
+    script.setAttribute('data-repo', 'brhyu614/bdmwebsite')
+    script.setAttribute('data-repo-id', 'R_kgDORdyJaQ')
+    script.setAttribute('data-category', 'General')
+    script.setAttribute('data-category-id', 'DIC_kwDORdyJac4C3vgN')
     script.setAttribute('data-mapping', 'pathname')
     script.setAttribute('data-strict', '0')
     script.setAttribute('data-reactions-enabled', '1')

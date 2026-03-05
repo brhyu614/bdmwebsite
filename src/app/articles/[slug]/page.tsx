@@ -6,7 +6,7 @@ import { mdxComponents } from '@/components/mdx/MdxComponents'
 import SeriesLabel from '@/components/articles/SeriesLabel'
 import ArticleMeta from '@/components/articles/ArticleMeta'
 import RelatedArticles from '@/components/articles/RelatedArticles'
-import Comments from '@/components/Comments'
+
 import JsonLd from '@/components/JsonLd'
 import { SITE_NAME, SITE_URL, AUTHOR_NAME } from '@/lib/constants'
 import remarkGfm from 'remark-gfm'
@@ -112,9 +112,6 @@ export default async function ArticlePage({ params }: PageProps) {
             </span>
           ))}
         </div>
-
-        {/* Comments */}
-        <Comments slug={slug} />
 
         {/* Related Articles */}
         <RelatedArticles currentSlug={slug} series={frontmatter.series} />

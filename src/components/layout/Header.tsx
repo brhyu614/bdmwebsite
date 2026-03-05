@@ -7,8 +7,6 @@ import { useState } from 'react'
 const NAV_LINKS = [
   { href: '/articles?series=lab-research', label: '리서치' },
   { href: '/articles?series=algorithm-decode', label: '알고리즘 디코드' },
-  { href: '/about', label: 'About' },
-  { href: '/join', label: 'Join' },
 ]
 
 export default function Header() {

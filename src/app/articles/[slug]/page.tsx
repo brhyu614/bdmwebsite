@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation'
 import { compileMDX } from 'next-mdx-remote/rsc'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
 import { mdxComponents } from '@/components/mdx/MdxComponents'
 import SeriesLabel from '@/components/articles/SeriesLabel'
 import ArticleMeta from '@/components/articles/ArticleMeta'
 import RelatedArticles from '@/components/articles/RelatedArticles'
-
 import JsonLd from '@/components/JsonLd'
 import { SITE_NAME, SITE_URL, AUTHOR_NAME } from '@/lib/constants'
 import remarkGfm from 'remark-gfm'
@@ -41,6 +41,9 @@ export async function generateMetadata({
       authors: [frontmatter.author ?? AUTHOR_NAME],
       siteName: SITE_NAME,
       url: `${SITE_URL}/articles/${slug}`,
+      ...(frontmatter.coverImage && {
+        images: [{ url: frontmatter.coverImage, width: 1200, height: 630 }],
+      }),
     },
   }
 }
@@ -94,6 +97,22 @@ export default async function ArticlePage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      {/* Hero Image */}
+      {frontmatter.coverImage && (
+        <div className="mx-auto max-w-[960px] px-4 sm:px-6">
+          <div className="relative aspect-[2/1] overflow-hidden rounded-b-2xl sm:aspect-[2.4/1]">
+            <Image
+              src={frontmatter.coverImage}
+              alt={frontmatter.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 960px) 100vw, 960px"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Article Body */}
       <article className="mx-auto max-w-[720px] px-4 py-12 sm:px-6">

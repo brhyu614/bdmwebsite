@@ -6,6 +6,7 @@ export interface ArticleFrontmatter {
   readingTime: number
   excerpt: string
   featured?: boolean
+  coverImage?: string
   thumbnail?: string
   author?: string
 }

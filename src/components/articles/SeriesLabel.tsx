@@ -1,4 +1,4 @@
-import { getSeriesName } from '@/lib/series'
+import { getSeriesName, getSeriesColor } from '@/lib/series'
 
 interface SeriesLabelProps {
   series: string
@@ -6,11 +6,14 @@ interface SeriesLabelProps {
 }
 
 export default function SeriesLabel({ series, size = 'sm' }: SeriesLabelProps) {
+  const color = getSeriesColor(series)
+
   return (
     <span
-      className={`inline-block rounded-full bg-accent-bg font-medium text-accent ${
-        size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-3 py-1 text-sm'
+      className={`inline-block font-mono font-semibold uppercase tracking-wider ${
+        size === 'sm' ? 'text-xs' : 'text-sm'
       }`}
+      style={{ color }}
     >
       {getSeriesName(series)}
     </span>

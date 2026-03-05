@@ -2,14 +2,16 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-bg: #FAFAF9;
-  --color-text: #1C1917;
-  --color-subtext: #57534E;
-  --color-muted: #A8A29E;
-  --color-accent: #059669;
-  --color-accent-light: #10B981;
-  --color-accent-bg: #ECFDF5;
-  --color-border: #E7E5E4;
+  --color-bg: #000000;
+  --color-surface: #0A0A0A;
+  --color-surface-alt: #141414;
+  --color-text: #F0F0F0;
+  --color-subtext: #888888;
+  --color-muted: #555555;
+  --color-accent: #00FF88;
+  --color-accent-dim: #00CC6A;
+  --color-accent-bg: #00FF8815;
+  --color-border: #1E1E1E;
 
   --font-sans: 'Outfit', 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Newsreader', 'Noto Sans KR', ui-serif, Georgia, serif;
@@ -22,16 +24,20 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Article body prose overrides */
+/* Article body prose overrides for dark theme */
 .prose {
-  --tw-prose-body: var(--color-text);
+  --tw-prose-body: #D4D4D4;
   --tw-prose-headings: var(--color-text);
   --tw-prose-links: var(--color-accent);
   --tw-prose-bold: var(--color-text);
   --tw-prose-quotes: var(--color-subtext);
   --tw-prose-quote-borders: var(--color-accent);
-  --tw-prose-code: var(--color-text);
+  --tw-prose-code: var(--color-accent);
   --tw-prose-hr: var(--color-border);
+  --tw-prose-counters: var(--color-subtext);
+  --tw-prose-bullets: var(--color-muted);
+  --tw-prose-th-borders: var(--color-border);
+  --tw-prose-td-borders: var(--color-border);
 }
 
 .prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
@@ -49,6 +55,10 @@ body {
   border-left-color: var(--color-accent);
 }
 
+.prose :where(strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: var(--color-text);
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
@@ -56,6 +66,47 @@ html {
 
 /* Selection color */
 ::selection {
-  background-color: var(--color-accent-bg);
-  color: var(--color-text);
+  background-color: var(--color-accent);
+  color: #000000;
+}
+
+/* Neon glow effect */
+.neon-glow {
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+/* Card hover animation */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 255, 136, 0.08);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #00FF88, #00CC6A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
 }

@@ -20,19 +20,21 @@ export default function RelatedArticles({
 
   return (
     <section className="mt-16 border-t border-border pt-10">
-      <h2 className="mb-6 text-xl font-bold text-text">관련 아티클</h2>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <h2 className="mb-6 font-mono text-xs font-semibold uppercase tracking-widest text-muted">
+        관련 아티클
+      </h2>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((article) => (
           <Link
             key={article.slug}
             href={`/articles/${article.slug}`}
-            className="group rounded-lg border border-border p-5 transition-colors hover:border-accent"
+            className="group rounded-xl border border-border bg-surface p-5 transition-all hover:border-accent/50 hover:bg-surface-alt"
           >
             <SeriesLabel series={article.frontmatter.series} />
             <h3 className="mt-2 text-base font-bold text-text group-hover:text-accent">
               {article.frontmatter.title}
             </h3>
-            <p className="mt-1 text-sm text-subtext">
+            <p className="mt-2 font-mono text-xs text-muted">
               {formatDate(article.frontmatter.date)}
             </p>
           </Link>

@@ -5,18 +5,22 @@ interface ArticleMetaProps {
   date: string
   readingTime: number
   showAuthor?: boolean
+  author?: string
 }
 
 export default function ArticleMeta({
   date,
   readingTime,
   showAuthor = true,
+  author,
 }: ArticleMetaProps) {
+  const displayAuthor = author ?? AUTHOR_NAME
+
   return (
-    <div className="flex flex-wrap items-center gap-x-2 text-sm text-subtext">
+    <div className="flex flex-wrap items-center gap-x-3 font-mono text-sm text-subtext">
       {showAuthor && (
         <>
-          <span>{AUTHOR_NAME}</span>
+          <span>{displayAuthor}</span>
           <span className="text-muted">·</span>
         </>
       )}

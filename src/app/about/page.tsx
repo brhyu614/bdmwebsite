@@ -1,100 +1,142 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
-import { AUTHOR_NAME, INSTAGRAM_URL } from '@/lib/constants'
+import { AUTHOR_NAME, INSTAGRAM_URL, CONTACT_EMAIL } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'About',
-  description: '빅데이터 마케팅 랩(BDM Lab)과 연구 철학을 소개합니다.',
+  description: '빅데이터마케팅 랩(BDM Lab) — 데이터와 연구 기반의 마케팅 분석.',
 }
+
+const services = [
+  {
+    title: 'AI 예측 모델',
+    description: '수요 예측, 매출 예측, 고객 이탈 예측 등 머신러닝 기반 예측 모델을 개발합니다.',
+    icon: '01',
+  },
+  {
+    title: '인과분석',
+    description: '마케팅 캠페인의 실제 효과를 측정합니다. 상관관계가 아닌 인과관계를 밝힙니다.',
+    icon: '02',
+  },
+  {
+    title: '알고리즘 분석',
+    description: '플랫폼 추천 알고리즘과 AEO(Answer Engine Optimization)를 연구합니다.',
+    icon: '03',
+  },
+  {
+    title: '강연 · 워크숍',
+    description: '기업 맞춤 교육 프로그램. 데이터 기반 의사결정, AI 활용, 마케팅 분석.',
+    icon: '04',
+  },
+]
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <JsonLd type="person" />
       <JsonLd type="organization" />
-      {/* Professor Section */}
+
+      {/* Hero */}
       <section className="mx-auto max-w-[720px]">
+        <p className="font-mono text-sm uppercase tracking-widest text-accent">About</p>
+        <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
+          감 대신 근거로<br />마케팅을 읽습니다.
+        </h1>
+      </section>
+
+      {/* Professor Section */}
+      <section className="mx-auto mt-12 max-w-[720px]">
         <div className="flex items-start gap-6">
-          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-accent-bg text-3xl font-bold text-accent">
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-border bg-surface text-2xl font-bold text-accent">
             {AUTHOR_NAME.charAt(0)}
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-text">{AUTHOR_NAME}</h1>
-            <p className="mt-1 text-lg text-subtext">교수 · 빅데이터 마케팅 랩</p>
+            <h2 className="text-2xl font-bold text-text">{AUTHOR_NAME}</h2>
+            <p className="mt-1 font-mono text-sm text-subtext">교수 · 빅데이터마케팅 랩</p>
           </div>
         </div>
 
-        <div className="mt-8 space-y-4 font-serif text-base leading-relaxed text-text">
+        <div className="mt-8 space-y-4 font-serif text-base leading-relaxed text-subtext">
           <p>
             마케팅에서 &ldquo;감&rdquo;이라는 단어가 너무 자주 쓰인다고 생각합니다.
             감은 경험에서 나오지만, 경험은 편향을 동반합니다.
             데이터는 그 편향을 교정하는 도구입니다.
           </p>
           <p>
-            빅데이터 마케팅 랩(BDM Lab)은 이 믿음에서 출발했습니다.
+            빅데이터마케팅 랩(BDM Lab)은 이 믿음에서 출발했습니다.
             플랫폼 알고리즘이 어떻게 작동하는지, 마케팅 캠페인이 실제로 효과가 있었는지,
             매출 예측 모델은 어디까지 정확한지 — 이런 질문에 데이터로 답하는 것이 우리의 일입니다.
           </p>
           <p>
             과장하지 않습니다. 분석의 한계를 솔직히 밝힙니다.
-            &ldquo;이 방법으로는 여기까지만 알 수 있다&rdquo;고 말하는 것이
-            &ldquo;모든 것을 해결할 수 있다&rdquo;고 말하는 것보다 정직하고, 결국 더 유용합니다.
           </p>
         </div>
 
         {/* Social */}
-        <div className="mt-8 flex gap-4">
+        <div className="mt-6 flex gap-4">
           <a
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-accent hover:text-accent-light"
+            className="font-mono text-sm text-accent transition-colors hover:text-accent-dim"
           >
-            Instagram
+            Instagram &rarr;
           </a>
         </div>
       </section>
 
-      {/* Lab Section */}
-      <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-10">
-        <h2 className="text-2xl font-bold text-text">빅데이터 마케팅 랩이 하는 일</h2>
-        <p className="mt-3 font-serif text-base leading-relaxed text-subtext">
-          BDM Lab은 데이터 기반의 마케팅 의사결정을 연구합니다.
-          학술 연구와 기업 프로젝트를 병행하며, 이론과 실무의 간극을 줄이는 것을 목표로 합니다.
+      {/* Services */}
+      <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-12">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted">Services</p>
+        <h2 className="mt-3 text-2xl font-bold text-text">함께 일하기</h2>
+        <p className="mt-3 text-base text-subtext">
+          데이터로 더 나은 의사결정을 만들 수 있도록 돕겠습니다.
         </p>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-3">
-          <div className="rounded-lg border border-border p-5">
-            <h3 className="text-base font-bold text-text">AI 예측</h3>
-            <p className="mt-2 text-sm leading-relaxed text-subtext">
-              수요 예측, 매출 예측, 고객 이탈 예측 등 머신러닝 기반 예측 모델을 연구합니다.
-            </p>
-          </div>
-          <div className="rounded-lg border border-border p-5">
-            <h3 className="text-base font-bold text-text">인과분석</h3>
-            <p className="mt-2 text-sm leading-relaxed text-subtext">
-              마케팅 캠페인의 실제 효과를 측정합니다. 상관관계가 아닌 인과관계를 밝히는 것이 핵심입니다.
-            </p>
-          </div>
-          <div className="rounded-lg border border-border p-5">
-            <h3 className="text-base font-bold text-text">알고리즘 분석</h3>
-            <p className="mt-2 text-sm leading-relaxed text-subtext">
-              플랫폼 추천 알고리즘과 AEO(Answer Engine Optimization)를 연구합니다.
-            </p>
-          </div>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          {services.map((service) => (
+            <div
+              key={service.title}
+              className="rounded-xl border border-border bg-surface p-6 transition-colors hover:border-accent/30"
+            >
+              <span className="font-mono text-xs text-accent">{service.icon}</span>
+              <h3 className="mt-2 text-base font-bold text-text">{service.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-subtext">
+                {service.description}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Contact CTA */}
+        <div className="mt-10 rounded-xl border border-accent/20 bg-accent-bg p-8">
+          <h3 className="text-lg font-bold text-text">문의하기</h3>
+          <p className="mt-2 text-sm text-subtext">
+            프로젝트 문의, 강연 의뢰, 협업 제안 등 편하게 연락해 주세요.
+          </p>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="mt-4 inline-block rounded-lg bg-accent px-6 py-3 font-mono text-sm font-medium text-black transition-colors hover:bg-accent-dim"
+          >
+            이메일 보내기
+          </a>
+          <p className="mt-3 font-mono text-xs text-muted">
+            {CONTACT_EMAIL}
+          </p>
         </div>
       </section>
 
-      {/* Members Section */}
-      <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-10">
-        <h2 className="text-2xl font-bold text-text">랩 멤버</h2>
-        <p className="mt-3 font-serif text-base leading-relaxed text-subtext">
+      {/* Members */}
+      <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-12">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted">Team</p>
+        <h2 className="mt-3 text-2xl font-bold text-text">랩 멤버</h2>
+        <p className="mt-3 text-base text-subtext">
           현재 함께 연구할 대학원생을 모집하고 있습니다.
         </p>
         <Link
           href="/join"
-          className="mt-4 inline-block text-sm font-medium text-accent hover:text-accent-light"
+          className="mt-4 inline-block font-mono text-sm text-accent transition-colors hover:text-accent-dim"
         >
           지원 안내 보기 &rarr;
         </Link>

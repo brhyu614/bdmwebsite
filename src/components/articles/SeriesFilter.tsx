@@ -14,15 +14,15 @@ export default function SeriesFilter({ current, onChange }: SeriesFilterProps) {
   ]
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2">
+    <div className="flex gap-3 overflow-x-auto pb-2">
       {filters.map((filter) => (
         <button
           key={filter.slug ?? 'all'}
           onClick={() => onChange(filter.slug)}
-          className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+          className={`whitespace-nowrap rounded-full border px-5 py-2 font-mono text-sm font-medium transition-all ${
             current === filter.slug
-              ? 'bg-accent text-white'
-              : 'bg-white text-subtext hover:bg-accent-bg hover:text-accent'
+              ? 'border-accent bg-accent text-black'
+              : 'border-border bg-transparent text-subtext hover:border-accent hover:text-accent'
           }`}
         >
           {filter.name}

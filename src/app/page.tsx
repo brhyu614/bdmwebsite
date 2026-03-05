@@ -1,41 +1,29 @@
-import { getAllArticles, getFeaturedArticle } from '@/lib/articles'
-import ArticleHero from '@/components/articles/ArticleHero'
-import Sidebar from '@/components/layout/Sidebar'
-import NewsletterCTA from '@/components/NewsletterCTA'
+import { getAllArticles } from '@/lib/articles'
 import HomeFilter from './HomeFilter'
 
 export default function HomePage() {
   const allArticles = getAllArticles()
-  const featuredArticle = getFeaturedArticle() ?? allArticles[0]
-  const remainingArticles = allArticles.filter(
-    (a) => a.slug !== featuredArticle?.slug
-  )
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      {/* Hero */}
-      {featuredArticle && (
-        <section className="mb-10">
-          <ArticleHero article={featuredArticle} />
-        </section>
-      )}
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+      {/* Hero Section */}
+      <section className="mb-14">
+        <p className="font-mono text-sm uppercase tracking-widest text-accent">
+          BDM Lab
+        </p>
+        <h1 className="mt-3 text-4xl font-bold leading-tight text-text sm:text-5xl lg:text-6xl">
+          감 대신 근거.
+          <br />
+          <span className="gradient-text">데이터로 읽는 마케팅.</span>
+        </h1>
+        <p className="mt-4 max-w-xl text-lg text-subtext">
+          플랫폼 알고리즘, AI 예측, 인과분석 — 데이터와 연구 기반의 마케팅 인사이트.
+        </p>
+      </section>
 
-      {/* Content + Sidebar */}
-      <div className="lg:flex lg:gap-12">
-        {/* Main Content */}
-        <div className="flex-1 lg:max-w-2xl">
-          <HomeFilter articles={remainingArticles} />
-        </div>
-
-        {/* Sidebar (Desktop) */}
-        <div className="hidden w-72 shrink-0 lg:block">
-          <Sidebar />
-        </div>
-      </div>
-
-      {/* Newsletter CTA */}
-      <section className="mt-16">
-        <NewsletterCTA />
+      {/* Articles Grid */}
+      <section>
+        <HomeFilter articles={allArticles} />
       </section>
     </div>
   )

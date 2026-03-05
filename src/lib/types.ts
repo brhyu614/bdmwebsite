@@ -7,6 +7,7 @@ export interface ArticleFrontmatter {
   excerpt: string
   featured?: boolean
   thumbnail?: string
+  author?: string
 }
 
 export interface Article {
@@ -38,3 +39,15 @@ export interface SeriesInfo {
   name: string
   description: string
 }
+
+// Card gradient colors for the homepage
+export const CARD_GRADIENTS = [
+  'linear-gradient(135deg, #00FF88, #00AA5B)',
+  'linear-gradient(135deg, #FF3366, #CC0044)',
+  'linear-gradient(135deg, #7C3AED, #4338CA)',
+  'linear-gradient(135deg, #F59E0B, #EA580C)',
+  'linear-gradient(135deg, #06B6D4, #2563EB)',
+  'linear-gradient(135deg, #EC4899, #9333EA)',
+  'linear-gradient(135deg, #10B981, #0891B2)',
+  'linear-gradient(135deg, #EF4444, #F97316)',
+]

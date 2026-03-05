@@ -8,11 +8,22 @@ export const SERIES: Record<string, SeriesInfo> = {
   },
   'lab-research': {
     slug: 'lab-research',
-    name: '랩 리서치',
+    name: '리서치',
     description: 'BDM Lab이 직접 수행한 연구 + 기업 프로젝트 결과',
   },
 }
 
 export function getSeriesName(slug: string): string {
   return SERIES[slug]?.name ?? slug
+}
+
+export function getSeriesColor(slug: string): string {
+  switch (slug) {
+    case 'algorithm-decode':
+      return '#00FF88'
+    case 'lab-research':
+      return '#06B6D4'
+    default:
+      return '#00FF88'
+  }
 }

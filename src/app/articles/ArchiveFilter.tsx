@@ -18,7 +18,7 @@ export default function ArchiveFilter({ articles }: ArchiveFilterProps) {
 
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-8">
         <SeriesFilter current={currentSeries} onChange={setCurrentSeries} />
       </div>
       <ArticleList articles={filteredArticles} />

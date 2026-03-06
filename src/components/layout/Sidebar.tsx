@@ -30,10 +30,10 @@ export default function Sidebar() {
 
         {/* CTA */}
         <Link
-          href="/work-with-us"
+          href="/about"
           className="mt-5 block rounded-lg bg-accent px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-accent-light"
         >
-          함께 일하기
+          About &rarr;
         </Link>
       </div>
     </aside>

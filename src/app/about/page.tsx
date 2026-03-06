@@ -118,50 +118,45 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* What I Work On */}
-      <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Research</p>
-        <h2 className="mt-3 text-xl font-bold text-text">요즘 하는 일</h2>
-        <div className="mt-6 space-y-3">
-          <div className="rounded-xl border border-border bg-surface p-5">
-            <h3 className="font-bold text-text">AI 예측</h3>
-            <p className="mt-1 text-sm text-subtext">
-              치킨집 매출부터 고객 이탈까지. 머신러닝으로 &ldquo;다음에 무슨 일이 일어날지&rdquo; 추정한다.
-            </p>
-          </div>
-          <div className="rounded-xl border border-border bg-surface p-5">
-            <h3 className="font-bold text-text">인과분석</h3>
-            <p className="mt-1 text-sm text-subtext">
-              그 캠페인, 진짜 효과 있었나? 상관관계 말고 인과관계를 밝히는 방법론.
-            </p>
-          </div>
-          <div className="rounded-xl border border-border bg-surface p-5">
-            <h3 className="font-bold text-text">플랫폼 알고리즘</h3>
-            <p className="mt-1 text-sm text-subtext">
-              인스타, 틱톡, 검색 엔진, AI 답변 엔진. 추천 시스템이 마케팅을 어떻게 바꾸는지 분석한다.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Contact */}
       <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Contact</p>
-        <div className="mt-4 flex flex-col gap-2">
-          <a
-            href={`mailto:${AUTHOR_EMAIL}`}
-            className="font-mono text-sm text-accent transition-colors hover:text-accent-dim"
-          >
-            {AUTHOR_EMAIL}
-          </a>
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono text-sm text-subtext transition-colors hover:text-accent"
-          >
-            Instagram &rarr;
-          </a>
+        <p className="font-mono text-xs uppercase tracking-widest text-muted">Contact Us</p>
+        <div className="mt-6 space-y-4">
+          <div className="flex items-start gap-4">
+            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">Email</span>
+            <a
+              href={`mailto:${AUTHOR_EMAIL}`}
+              className="font-mono text-sm text-accent transition-colors hover:text-accent-dim"
+            >
+              {AUTHOR_EMAIL}
+            </a>
+          </div>
+          <div className="flex items-start gap-4">
+            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">Tel</span>
+            <a
+              href="tel:02-2220-1076"
+              className="font-mono text-sm text-subtext transition-colors hover:text-accent"
+            >
+              02-2220-1076
+            </a>
+          </div>
+          <div className="flex items-start gap-4">
+            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">Office</span>
+            <p className="text-sm text-subtext">
+              서울 성동구 왕십리로 222, 한양대학교 서울캠퍼스 경영관 614호
+            </p>
+          </div>
+          <div className="flex items-start gap-4">
+            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">SNS</span>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-sm text-subtext transition-colors hover:text-accent"
+            >
+              Instagram &rarr;
+            </a>
+          </div>
         </div>
       </section>
     </div>

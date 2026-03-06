@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import JsonLd from '@/components/JsonLd'
 
 export const metadata: Metadata = {
@@ -56,6 +57,18 @@ export default function ResearchPage() {
           공통점은 하나 — <strong className="text-text">직감이 아니라 데이터로 답을 찾는 것.</strong>
         </p>
       </section>
+
+      {/* Lab Photo */}
+      <div className="mx-auto mt-10 max-w-[720px] overflow-hidden rounded-2xl">
+        <Image
+          src="/images/lab-photo.jpg"
+          alt="빅데이터마케팅 랩 연구실"
+          width={720}
+          height={480}
+          className="w-full object-cover"
+          priority
+        />
+      </div>
 
       {/* ═══════════════════════════════════════════════════
           1. AI/ML Prediction
@@ -266,15 +279,6 @@ export default function ResearchPage() {
               </p>
               <p className="mt-2 font-mono text-xs text-muted">멀티 에이전트 · BIM · 리스크 정량화</p>
             </div>
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">LLM 경쟁 역학 시뮬레이션</h3>
-              <p className="mt-1 text-sm text-subtext">
-                GPT-4가 운영하는 두 레스토랑이 50명의 AI 고객을 두고 15일간 경쟁.
-                가격 전략, 메뉴 차별화, 광고 — 에이전트들이 스스로 전략을 세우고 실행한다.
-                경쟁이 품질을 올리는 메커니즘, 승자 독식 구조가 자연스럽게 나타났다.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">GPT-4 · 차별화 · 매튜 효과</p>
-            </div>
           </div>
         </div>
       </section>
@@ -418,50 +422,6 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════
-          Publications
-          ═══════════════════════════════════════════════════ */}
-      <section className="mx-auto mt-20 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Publications</p>
-        <h2 className="mt-3 text-xl font-bold text-text">주요 논문</h2>
-        <div className="mt-6 space-y-4 text-sm leading-relaxed text-subtext">
-          <div className="border-l-2 border-accent pl-4">
-            <p className="text-text">
-              Lim, Boram, Ying Xie, and Ernan Haruvy (2021)
-            </p>
-            <p>&ldquo;The Impact of Mobile Channel Adoption on Physical and Online Channels&rdquo;</p>
-            <p className="font-mono text-xs text-accent">Journal of Retailing</p>
-          </div>
-          <div className="border-l-2 border-border pl-4">
-            <p className="text-text">
-              Lim, Boram, Ernan Haruvy, and Peter T.L. Popkowski Leszczyc (2021)
-            </p>
-            <p>&ldquo;The Effect of Surcharge on Price in Online Auctions&rdquo;</p>
-            <p className="font-mono text-xs text-muted">Electronic Commerce Research</p>
-          </div>
-          <div className="border-l-2 border-border pl-4">
-            <p className="text-text">
-              Hong, E., Park, J., &amp; Lim, Boram (2025)
-            </p>
-            <p>&ldquo;Exploring Perceived Value&apos;s Impact on Attitudes in Autonomous Public Transportation Services&rdquo;</p>
-            <p className="font-mono text-xs text-muted">Total Quality Management &amp; Business Excellence</p>
-          </div>
-          <div className="border-l-2 border-border pl-4">
-            <p className="text-text">
-              임보람, 한상린, 박우현, 홍근혜 (2025)
-            </p>
-            <p>&ldquo;과거 소비 행태가 온라인 커머스 멤버십 가입에 미치는 영향&rdquo;</p>
-            <p className="font-mono text-xs text-muted">유통연구</p>
-          </div>
-          <div className="border-l-2 border-border pl-4">
-            <p className="text-text">
-              김민혜, 이윤지, Khin Chan Myae Nyein, 임보람 (2025)
-            </p>
-            <p>&ldquo;식료품 리테일러의 새벽배송 서비스 제공 효과 분석&rdquo;</p>
-            <p className="font-mono text-xs text-muted">서비스 연구</p>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

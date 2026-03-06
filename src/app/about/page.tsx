@@ -5,7 +5,7 @@ import { AUTHOR_NAME, INSTAGRAM_URL, CONTACT_EMAIL } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'About',
-  description: '빅데이터마케팅 랩(BDM Lab) — 데이터와 연구 기반의 마케팅 분석.',
+  description: '한양대학교 임보람 교수의 빅데이터마케팅 랩(Big Data Marketing Lab). AI 예측, 인과분석, 플랫폼 알고리즘 연구.',
 }
 
 const services = [
@@ -41,7 +41,7 @@ export default function AboutPage() {
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">About</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          감 대신 근거로<br />마케팅을 읽습니다.
+          직감 대신 근거로<br />마케팅을 읽습니다.
         </h1>
       </section>
 

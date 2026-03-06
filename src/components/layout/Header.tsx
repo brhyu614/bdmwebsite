@@ -16,12 +16,17 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-bg/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex items-baseline gap-0">
-          <span className="text-lg font-bold tracking-tight text-text">
-            빅데이터마케팅
+        <Link href="/" className="group flex flex-col">
+          <span className="flex items-baseline gap-0">
+            <span className="text-lg font-bold tracking-tight text-text">
+              빅데이터마케팅
+            </span>
+            <span className="text-lg font-bold tracking-tight text-accent">
+              {' '}랩
+            </span>
           </span>
-          <span className="text-lg font-bold tracking-tight text-accent">
-            {' '}랩
+          <span className="text-[10px] font-medium tracking-wide text-muted">
+            Big Data Marketing Lab
           </span>
         </Link>
 

@@ -11,8 +11,11 @@ export default function Footer() {
             <p className="text-lg font-bold text-text">
               빅데이터마케팅 <span className="text-accent">랩</span>
             </p>
+            <p className="mt-1 font-mono text-xs tracking-wide text-muted">
+              Big Data Marketing Lab · Hanyang Univ.
+            </p>
             <p className="mt-2 text-sm text-subtext">
-              감 대신 근거. 데이터로 읽는 마케팅.
+              직감 대신 근거. 데이터로 읽는 마케팅.
             </p>
           </div>
 

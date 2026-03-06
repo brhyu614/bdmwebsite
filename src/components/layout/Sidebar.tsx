@@ -10,9 +10,10 @@ export default function Sidebar() {
           {AUTHOR_NAME.charAt(0)}
         </div>
         <h3 className="text-base font-bold text-text">{AUTHOR_NAME}</h3>
-        <p className="mt-1 text-sm text-subtext">교수 · 빅데이터 마케팅 랩</p>
+        <p className="mt-1 text-sm text-subtext">한양대학교 경영학부 교수</p>
+        <p className="mt-0.5 font-mono text-xs text-muted">Big Data Marketing Lab</p>
         <p className="mt-3 text-sm leading-relaxed text-subtext">
-          데이터와 연구 기반의 마케팅 분석을 합니다. 감 대신 근거, 과장 대신 정확성을 추구합니다.
+          직감 대신 근거, 과장 대신 정확성. 데이터로 마케팅을 읽습니다.
         </p>
 
         {/* Social Links */}

@@ -3,7 +3,7 @@ import { CONTACT_EMAIL } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'Join the Lab',
-  description: '빅데이터마케팅 랩에서 함께 연구할 대학원생을 찾습니다.',
+  description: '한양대 빅데이터마케팅 랩(Big Data Marketing Lab) 대학원생 모집. 마케팅 데이터 분석, AI 예측, 인과분석 연구.',
 }
 
 export default function JoinPage() {

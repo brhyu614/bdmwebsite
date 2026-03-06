@@ -4,7 +4,7 @@ import ArchiveFilter from './ArchiveFilter'
 
 export const metadata: Metadata = {
   title: '아티클',
-  description: '빅데이터마케팅 랩의 모든 아티클을 확인하세요.',
+  description: '한양대 빅데이터마케팅 랩(Big Data Marketing Lab)의 알고리즘 분석, AI 예측, 인과분석 기반 마케팅 아티클.',
 }
 
 export default function ArticlesPage() {

@@ -29,6 +29,9 @@ export default function HomePage() {
         <p className="mt-5 text-base text-subtext">
           임보람 교수 · 한양대 Big Data Marketing Lab
         </p>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
+          디지털 마케팅 매거진. BDM Lab이 알고리즘의 구조를 파헤치고, 기업 전략과 소비자행동의 근본을 데이터로 풀어냅니다.
+        </p>
       </section>
 
       {/* Articles Grid */}

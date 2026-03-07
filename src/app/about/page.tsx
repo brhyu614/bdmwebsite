@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { AUTHOR_NAME, INSTAGRAM_URL } from '@/lib/constants'
-
-const AUTHOR_EMAIL = 'brlim@hanyang.ac.kr'
+import { AUTHOR_NAME } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -118,47 +116,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Contact */}
-      <section id="contact" className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Contact Us</p>
-        <div className="mt-6 space-y-4">
-          <div className="flex items-start gap-4">
-            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">Email</span>
-            <a
-              href={`mailto:${AUTHOR_EMAIL}`}
-              className="font-mono text-sm text-accent transition-colors hover:text-accent-dim"
-            >
-              {AUTHOR_EMAIL}
-            </a>
-          </div>
-          <div className="flex items-start gap-4">
-            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">Tel</span>
-            <a
-              href="tel:02-2220-1076"
-              className="font-mono text-sm text-subtext transition-colors hover:text-accent"
-            >
-              02-2220-1076
-            </a>
-          </div>
-          <div className="flex items-start gap-4">
-            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">Office</span>
-            <p className="text-sm text-subtext">
-              서울 성동구 왕십리로 222, 한양대학교 서울캠퍼스 경영관 614호
-            </p>
-          </div>
-          <div className="flex items-start gap-4">
-            <span className="mt-0.5 inline-block w-16 shrink-0 font-mono text-xs text-muted">SNS</span>
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-sm text-subtext transition-colors hover:text-accent"
-            >
-              Instagram &rarr;
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

@@ -12,12 +12,11 @@ export default function ContactPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <section className="mx-auto max-w-[720px]">
-        <p className="font-mono text-sm uppercase tracking-widest text-accent">Contact</p>
-        <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          연락하기
+        <h1 className="text-2xl font-bold text-text sm:text-3xl">
+          Contact
         </h1>
-        <p className="mt-4 text-base leading-relaxed text-subtext">
-          연구 협업, 기업 프로젝트, 강연/교육, 대학원 지원 등 어떤 주제든 편하게 연락주세요.
+        <p className="mt-3 text-lg text-subtext">
+          궁금한 점이 있으면 편하게 연락주세요.
         </p>
       </section>
 

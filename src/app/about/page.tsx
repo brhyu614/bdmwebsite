@@ -119,7 +119,7 @@ export default function AboutPage() {
       </section>
 
       {/* Contact */}
-      <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
+      <section id="contact" className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
         <p className="font-mono text-xs uppercase tracking-widest text-muted">Contact Us</p>
         <div className="mt-6 space-y-4">
           <div className="flex items-start gap-4">

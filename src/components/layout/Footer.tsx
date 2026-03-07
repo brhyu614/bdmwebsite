@@ -37,12 +37,27 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Connect */}
+          {/* Contact */}
           <div>
             <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-widest text-muted">
-              Connect
+              Contact
             </p>
             <div className="flex flex-col gap-2">
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="text-sm text-subtext hover:text-accent transition-colors"
+              >
+                {CONTACT_EMAIL}
+              </a>
+              <a
+                href="tel:02-2220-1076"
+                className="text-sm text-subtext hover:text-accent transition-colors"
+              >
+                02-2220-1076
+              </a>
+              <p className="text-sm text-subtext">
+                서울 성동구 왕십리로 222, 한양대 경영관 614호
+              </p>
               <a
                 href={INSTAGRAM_URL}
                 target="_blank"
@@ -50,12 +65,6 @@ export default function Footer() {
                 className="text-sm text-subtext hover:text-accent transition-colors"
               >
                 Instagram
-              </a>
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="text-sm text-subtext hover:text-accent transition-colors"
-              >
-                {CONTACT_EMAIL}
               </a>
             </div>
           </div>

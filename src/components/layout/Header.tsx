@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: '/articles?series=algorithm-decode', label: '알고리즘 디코드' },
   { href: '/research', label: '연구실' },
   { href: '/about', label: '교수' },
+  { href: '/about#contact', label: 'Contact' },
 ]
 
 export default function Header() {

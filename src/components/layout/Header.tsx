@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
 
 const NAV_LINKS = [
   { href: '/articles?series=lab-research', label: '리서치' },
@@ -13,38 +12,59 @@ const NAV_LINKS = [
 ]
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
+  const currentUrl = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-bg/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex flex-col">
-          <span className="flex items-baseline gap-0">
-            <span className="text-lg font-bold tracking-tight text-text">
-              빅데이터마케팅
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        {/* Desktop: single row */}
+        <div className="flex items-center justify-between py-5">
+          <Link href="/" className="group flex flex-col">
+            <span className="flex items-baseline gap-0">
+              <span className="text-lg font-bold tracking-tight text-text">
+                빅데이터마케팅
+              </span>
+              <span className="text-lg font-bold tracking-tight text-accent">
+                {' '}랩
+              </span>
             </span>
-            <span className="text-lg font-bold tracking-tight text-accent">
-              {' '}랩
+            <span className="text-[10px] font-medium tracking-wide text-muted">
+              Big Data Marketing Lab
             </span>
-          </span>
-          <span className="text-[10px] font-medium tracking-wide text-muted">
-            Big Data Marketing Lab
-          </span>
-        </Link>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-8 md:flex">
+          {/* Desktop Navigation */}
+          <nav className="hidden items-center gap-8 md:flex">
+            {NAV_LINKS.map((link) => {
+              const isActive = currentUrl === link.href || (pathname === link.href && !link.href.includes('?'))
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors hover:text-accent ${
+                    isActive ? 'text-accent' : 'text-subtext'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+
+        {/* Mobile Navigation: always visible horizontal bar */}
+        <nav className="flex gap-5 overflow-x-auto border-t border-border pb-3 pt-3 md:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {NAV_LINKS.map((link) => {
-            const currentUrl = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
             const isActive = currentUrl === link.href || (pathname === link.href && !link.href.includes('?'))
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-accent ${
-                  isActive ? 'text-accent' : 'text-subtext'
+                className={`shrink-0 text-[13px] font-medium transition-colors ${
+                  isActive ? 'text-accent' : 'text-muted hover:text-text'
                 }`}
               >
                 {link.label}
@@ -52,48 +72,7 @@ export default function Header() {
             )
           })}
         </nav>
-
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="flex flex-col gap-1.5 md:hidden"
-          aria-label="메뉴 열기"
-        >
-          <span
-            className={`block h-0.5 w-5 bg-text transition-transform ${
-              isMenuOpen ? 'translate-y-2 rotate-45' : ''
-            }`}
-          />
-          <span
-            className={`block h-0.5 w-5 bg-text transition-opacity ${
-              isMenuOpen ? 'opacity-0' : ''
-            }`}
-          />
-          <span
-            className={`block h-0.5 w-5 bg-text transition-transform ${
-              isMenuOpen ? '-translate-y-2 -rotate-45' : ''
-            }`}
-          />
-        </button>
       </div>
-
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <nav className="border-t border-border bg-bg px-4 py-6 md:hidden">
-          <div className="flex flex-col gap-5">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setIsMenuOpen(false)}
-                className="text-base font-medium text-subtext transition-colors hover:text-accent"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
-      )}
     </header>
   )
 }

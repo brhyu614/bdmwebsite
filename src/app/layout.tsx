@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { Outfit, Newsreader, Noto_Sans_KR, JetBrains_Mono } from 'next/font/google'
 import Header from '@/components/layout/Header'
@@ -70,7 +71,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-bg text-text antialiased">
         <JsonLd type="website" />
-        <Header />
+        <Suspense><Header /></Suspense>
         <main>{children}</main>
         <Footer />
       </body>

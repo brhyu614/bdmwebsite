@@ -39,6 +39,7 @@ export interface SeriesInfo {
   slug: SeriesSlug
   name: string
   description: string
+  intro: string
 }
 
 // Card gradient colors for the homepage

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 const NAV_LINKS = [
@@ -15,6 +15,7 @@ const NAV_LINKS = [
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-bg/90 backdrop-blur-md">
@@ -36,8 +37,8 @@ export default function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => {
-            const basePath = link.href.split('?')[0]
-            const isActive = pathname === basePath || pathname === link.href
+            const currentUrl = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
+            const isActive = currentUrl === link.href || (pathname === link.href && !link.href.includes('?'))
             return (
               <Link
                 key={link.href}

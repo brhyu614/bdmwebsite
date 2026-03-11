@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '직감 대신 근거 — 빅데이터마케팅 랩',
     description: '한양대학교 Big Data Marketing Lab. 알고리즘 분석, AI 예측, 인과분석 기반 마케팅 연구.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 }
 

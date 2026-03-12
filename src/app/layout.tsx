@@ -1,11 +1,14 @@
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Outfit, Newsreader, Noto_Sans_KR, JetBrains_Mono } from 'next/font/google'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import JsonLd from '@/components/JsonLd'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/constants'
 import './globals.css'
+
+const GA_ID = 'G-TQV4YVGX3C'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -78,6 +81,17 @@ export default function RootLayout({
       lang="ko"
       className={`${outfit.variable} ${newsreader.variable} ${notoSansKR.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <Script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
+      </head>
       <body className="min-h-screen bg-bg text-text antialiased">
         <JsonLd type="website" />
         <Suspense><Header /></Suspense>

@@ -80,11 +80,14 @@ export function getAllArticles(): Article[] {
   const files = getMDXFiles()
   return files
     .map(readArticle)
-    .sort(
-      (a, b) =>
-        new Date(b.frontmatter.date).getTime() -
-        new Date(a.frontmatter.date).getTime()
-    )
+    .sort((a, b) => {
+      const orderA = a.frontmatter.order
+      const orderB = b.frontmatter.order
+      if (orderA != null && orderB != null) return orderA - orderB
+      if (orderA != null) return -1
+      if (orderB != null) return 1
+      return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+    })
 }
 
 export function getArticleBySlug(slug: string): Article | undefined {

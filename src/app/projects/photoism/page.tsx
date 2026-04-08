@@ -185,8 +185,8 @@ export default function PhotoismPage() {
 
       {/* 납품물 */}
       <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Deliverables</p>
-        <h2 className="mt-4 text-xl font-bold text-text">납품한 것</h2>
+        <p className="font-mono text-xs uppercase tracking-widest text-muted">Output</p>
+        <h2 className="mt-4 text-xl font-bold text-text">구축한 것</h2>
         <div className="mt-6 space-y-3">
           {[
             { title: '예측 웹 애플리케이션', desc: '연예인 이름·기간·매장 유형을 입력하면 예상 매출을 보여주는 Streamlit 기반 웹앱' },

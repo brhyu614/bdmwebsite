@@ -9,8 +9,9 @@ const PROJECTS = [
   {
     category: 'AI 매출 예측 · 기업 납품',
     title: '포토이즘 IP 협업 수익 예측 시스템',
-    description: '셀럽/IP별 매출을 예측하는 시스템을 구축하여 기업에 납품. XGBoost + LightGBM 앙상블 모델, 검색 트렌드·인기도 순위 등 외부 변수 통합. Streamlit 기반 예측 웹앱 + 보고서 + 사용자 매뉴얼 포함.',
+    description: '462명 연예인, 4,042건 검증, 97.6% 적중률. 셀럽/IP별 콜라보 매출을 예측하는 AI 시스템을 구축하여 기업에 납품. 예측 웹앱 + 분석 보고서 + 데이터 파이프라인 포함.',
     tags: ['XGBoost', 'LightGBM', 'Streamlit', '예측 시스템 납품'],
+    link: '/projects/photoism',
   },
   {
     category: 'AI 매출 예측 · 학술 논문',
@@ -126,17 +127,10 @@ export default function ProjectsPage() {
 
       {/* Contact */}
       <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Contact</p>
-        <div className="mt-6 rounded-xl border border-accent/30 bg-accent/5 p-6">
-          <p className="text-base leading-relaxed text-text">
-            프로젝트 문의, 강연·교육 의뢰, 연구 협업은 아래로 연락 주세요.
-          </p>
-          <a
-            href="mailto:brlim@hanyang.ac.kr"
-            className="mt-4 inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
-          >
+        <div className="mt-6">
+          <p className="text-sm text-muted">
             brlim@hanyang.ac.kr
-          </a>
+          </p>
         </div>
       </section>
 

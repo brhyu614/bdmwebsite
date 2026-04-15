@@ -53,8 +53,8 @@ export default function HeroAnimation() {
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       text,
-      opacity: 0.08 + Math.random() * 0.12,
-      size: 11 + Math.random() * 5,
+      opacity: 0.25 + Math.random() * 0.35,
+      size: 13 + Math.random() * 6,
     }))
 
     const animate = () => {
@@ -72,8 +72,8 @@ export default function HeroAnimation() {
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < 200) {
             ctx.beginPath()
-            ctx.strokeStyle = `rgba(76, 158, 235, ${0.03 * (1 - dist / 200)})`
-            ctx.lineWidth = 0.5
+            ctx.strokeStyle = `rgba(76, 158, 235, ${0.15 * (1 - dist / 200)})`
+            ctx.lineWidth = 1
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
             ctx.stroke()
@@ -85,8 +85,8 @@ export default function HeroAnimation() {
       for (const p of particles) {
         // Draw dot
         ctx.beginPath()
-        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(76, 158, 235, ${p.opacity * 2})`
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(76, 158, 235, ${Math.min(p.opacity * 2.5, 1)})`
         ctx.fill()
 
         // Draw text
@@ -118,7 +118,7 @@ export default function HeroAnimation() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 h-full w-full"
-      style={{ opacity: 0.7 }}
+      style={{ opacity: 1 }}
     />
   )
 }

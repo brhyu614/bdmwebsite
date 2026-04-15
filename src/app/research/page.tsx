@@ -203,51 +203,8 @@ export default function ResearchPage() {
           </div>
         </div>
 
-        {/* PROJECTS */}
-        <div className="mt-8">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-accent">Projects</p>
-          <div className="mt-3 space-y-3">
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">새벽배송이 오프라인 리테일러에 미치는 영향</h3>
-              <p className="mt-1 text-sm text-subtext">
-                새벽배송 확산이 대형마트, 슈퍼마켓, 편의점의 생존에 실제로 영향을 주는지.
-                소비자 구매 데이터로 이코노메트릭 모델을 검증했다.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">Quasi-experiment · 소비자 구매 데이터</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">모바일 채널이 오프라인·온라인 매출에 미치는 영향</h3>
-              <p className="mt-1 text-sm text-subtext">
-                슈퍼마켓의 모바일 앱 도입이 기존 오프라인과 온라인 채널의 매출을 어떻게 바꾸는지.
-                채널 간 대체 효과와 보완 효과를 분리해서 추정했다.
-              </p>
-              <p className="mt-2 font-mono text-xs text-accent">Journal of Retailing (2021)</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">GS슈퍼 — 매장 최적 입지 선정</h3>
-              <p className="mt-1 text-sm text-subtext">
-                내부 데이터 + 상권 특성을 반영해서 신규 매장 입지를 최적화.
-                소비자의 매장 선택 구조를 경제학 모형으로 추정하는 Structural Modeling(New Empirical IO) 접근법.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">Structural Modeling · New Empirical IO</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">과거 소비 행태와 커머스 멤버십 가입</h3>
-              <p className="mt-1 text-sm text-subtext">
-                커머스 멤버십, 누가 가입하는가?
-                4,597명의 카드 결제 데이터로 과거 소비 패턴이 가입을 예측하는지 검증.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">유통연구 (2025) · 계량경제학</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">AI 앱 사용이 소비자 구매행동에 미치는 영향</h3>
-              <p className="mt-1 text-sm text-subtext">
-                ChatGPT 등 AI 도구를 쓰는 소비자의 구매 행동이 달라지는지.
-                사용 전후의 소비 패턴 변화를 인과적으로 분석.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">진행중 · Causal inference</p>
-            </div>
-          </div>
+        <div className="mt-6">
+          <a href="/projects" className="text-sm text-accent hover:underline">관련 프로젝트 보기 →</a>
         </div>
       </section>
 
@@ -318,27 +275,8 @@ export default function ResearchPage() {
           </div>
         </div>
 
-        {/* PROJECTS */}
-        <div className="mt-8">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-accent">Projects</p>
-          <div className="mt-3 space-y-3">
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">BBQ 매장별 채널 매출 예측</h3>
-              <p className="mt-1 text-sm text-subtext">
-                배달 · 픽업 · 매장 내 식사, 채널별로 매출을 따로 예측한다.
-                온라인 주문 데이터 + 오프라인 매장 데이터 + GIS 지리정보를 통합한 빅데이터 플랫폼.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">XGBoost · GIS · 빅데이터 플랫폼</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">포토이즘 — 연예인 IP 매출 예측</h3>
-              <p className="mt-1 text-sm text-subtext">
-                어떤 연예인 IP가 매출을 올리고, 어떤 요인이 IP 인기 상승/하락을 결정하는지.
-                IP 계약 전에 데이터로 가치를 추정한다.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">AI 예측 · IP 가치 분석</p>
-            </div>
-          </div>
+        <div className="mt-6">
+          <a href="/projects" className="text-sm text-accent hover:underline">관련 프로젝트 보기 →</a>
         </div>
       </section>
 
@@ -437,30 +375,8 @@ export default function ResearchPage() {
           </div>
         </div>
 
-        {/* PROJECTS */}
-        <div className="mt-8">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-accent">Projects</p>
-          <div className="mt-3 space-y-3">
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">리뷰 정렬 정책과 소비자 의사결정</h3>
-              <p className="mt-1 text-sm text-subtext">
-                AI 고객 에이전트 200명이 반복적으로 레스토랑을 선택하는 가상 시장.
-                리뷰를 최고 평점순으로 보여줄 때 vs. 최신순으로 보여줄 때,
-                시장 점유율이 어떻게 달라지는지 시뮬레이션.
-                동일 품질에서 정렬 정책만으로 20:1 매출 차이가 발생했다.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">GPT-4 · Beta-Bernoulli 모델 · 200명 × 20일</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="font-bold text-text">연우-한국투자증권 — 가상 건설 리스크 분석</h3>
-              <p className="mt-1 text-sm text-subtext">
-                BIM 품질에 따라 건설 프로젝트의 리스크가 어떻게 달라지는지
-                가상공간에서 건물을 지어서 평가한다.
-                27개 리스크 이벤트, 360일 시뮬레이션, 5단계 BIM 품질 비교.
-              </p>
-              <p className="mt-2 font-mono text-xs text-muted">멀티 에이전트 · BIM · 리스크 정량화</p>
-            </div>
-          </div>
+        <div className="mt-6">
+          <a href="/projects" className="text-sm text-accent hover:underline">관련 프로젝트 보기 →</a>
         </div>
       </section>
 

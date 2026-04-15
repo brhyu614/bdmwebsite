@@ -4,12 +4,11 @@ import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 const NAV_LINKS = [
-  { href: '/articles?series=lab-research', label: '리서치' },
-  { href: '/articles?series=algorithm-decode', label: '알고리즘 디코드' },
   { href: '/projects', label: '프로젝트' },
+  { href: '/articles', label: '인사이트' },
   { href: '/research', label: '연구실' },
   { href: '/about', label: '교수' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/contact', label: '문의' },
 ]
 
 export default function Header() {

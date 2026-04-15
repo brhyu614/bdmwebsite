@@ -1,0 +1,110 @@
+[
+  {
+    "target": "rate_to_in_001_t5",
+    "label": "rate_to_in_001_t5",
+    "train_n": 11314,
+    "test_n": 3775,
+    "n_features": 421,
+    "xgb_R2": 0.0002,
+    "lgb_R2": 0.0003,
+    "ens_weight": 0.75,
+    "R2": 0.0003,
+    "RMSE": 11210.08
+  },
+  {
+    "target": "rate_to_in_002_t5",
+    "label": "rate_to_in_002_t5",
+    "train_n": 11314,
+    "test_n": 3775,
+    "n_features": 421,
+    "xgb_R2": -1.4275,
+    "lgb_R2": -0.6238,
+    "ens_weight": 1.0,
+    "R2": -0.6238,
+    "RMSE": 5.64
+  },
+  {
+    "target": "rate_to_in_003_t5",
+    "label": "rate_to_in_003_t5",
+    "train_n": 11314,
+    "test_n": 3775,
+    "n_features": 421,
+    "xgb_R2": 0.0002,
+    "lgb_R2": 0.0002,
+    "ens_weight": 0.0,
+    "R2": 0.0002,
+    "RMSE": 11057.59
+  },
+  {
+    "target": "rate_to_in_004_t5",
+    "label": "rate_to_in_004_t5",
+    "train_n": 11294,
+    "test_n": 3771,
+    "n_features": 421,
+    "xgb_R2": -0.0202,
+    "lgb_R2": -0.0229,
+    "ens_weight": 0.45,
+    "R2": -0.0099,
+    "RMSE": 36.19
+  },
+  {
+    "target": "rate_to_in_005_t5",
+    "label": "rate_to_in_005_t5",
+    "train_n": 11299,
+    "test_n": 3773,
+    "n_features": 421,
+    "xgb_R2": 0.1612,
+    "lgb_R2": 0.1709,
+    "ens_weight": 0.55,
+    "R2": 0.183,
+    "RMSE": 20.38
+  },
+  {
+    "target": "rate_to_in_006_t5",
+    "label": "rate_to_in_006_t5",
+    "train_n": 11299,
+    "test_n": 3772,
+    "n_features": 421,
+    "xgb_R2": -0.0701,
+    "lgb_R2": 0.0597,
+    "ens_weight": 1.0,
+    "R2": 0.0597,
+    "RMSE": 29.37
+  },
+  {
+    "target": "rate_to_in_007_t5",
+    "label": "rate_to_in_007_t5",
+    "train_n": 11290,
+    "test_n": 3774,
+    "n_features": 421,
+    "xgb_R2": 0.0022,
+    "lgb_R2": 0.0024,
+    "ens_weight": 0.9500000000000001,
+    "R2": 0.0024,
+    "RMSE": 4246.61
+  },
+  {
+    "target": "rate_to_in_008_t5",
+    "label": "rate_to_in_008_t5",
+    "train_n": 11282,
+    "test_n": 3771,
+    "n_features": 421,
+    "xgb_R2": 0.0041,
+    "lgb_R2": 0.0029,
+    "ens_weight": 0.0,
+    "R2": 0.0041,
+    "RMSE": 1981.89
+  },
+  {
+    "target": "rate_to_in_001_t5_extended",
+    "label": "전체 인구 유입 변화율 (확장 학습)",
+    "train_n": 11314,
+    "test_n": 3775,
+    "n_features": 421,
+    "xgb_R2": 0.0002,
+    "lgb_R2": 0.0002,
+    "ens_weight": 0.0,
+    "R2": 0.0002,
+    "RMSE": 11210.19
+  }
+]

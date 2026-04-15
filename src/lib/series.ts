@@ -22,10 +22,10 @@ export function getSeriesName(slug: string): string {
 export function getSeriesColor(slug: string): string {
   switch (slug) {
     case 'algorithm-decode':
-      return '#00FF88'
+      return '#4C9EEB'
     case 'lab-research':
-      return '#06B6D4'
+      return '#7BB8F5'
     default:
-      return '#00FF88'
+      return '#4C9EEB'
   }
 }

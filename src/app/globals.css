@@ -2,16 +2,16 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-bg: #000000;
-  --color-surface: #0A0A0A;
-  --color-surface-alt: #141414;
-  --color-text: #F0F0F0;
-  --color-subtext: #888888;
-  --color-muted: #555555;
-  --color-accent: #00FF88;
-  --color-accent-dim: #00CC6A;
-  --color-accent-bg: #00FF8815;
-  --color-border: #1E1E1E;
+  --color-bg: #0B0F14;
+  --color-surface: #111820;
+  --color-surface-alt: #1A2230;
+  --color-text: #EAEDF2;
+  --color-subtext: #8B95A5;
+  --color-muted: #505C6E;
+  --color-accent: #4C9EEB;
+  --color-accent-dim: #3A7FCC;
+  --color-accent-bg: #4C9EEB12;
+  --color-border: #1E2A3A;
 
   --font-sans: 'Outfit', 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Newsreader', 'Noto Sans KR', ui-serif, Georgia, serif;
@@ -24,9 +24,9 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Article body prose overrides for dark theme */
+/* Article body prose overrides */
 .prose {
-  --tw-prose-body: #D4D4D4;
+  --tw-prose-body: #C8CDD6;
   --tw-prose-headings: var(--color-text);
   --tw-prose-links: var(--color-accent);
   --tw-prose-bold: var(--color-text);
@@ -67,12 +67,7 @@ html {
 /* Selection color */
 ::selection {
   background-color: var(--color-accent);
-  color: #000000;
-}
-
-/* Neon glow effect */
-.neon-glow {
-  text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  color: #0B0F14;
 }
 
 /* Card hover animation */
@@ -82,12 +77,12 @@ html {
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 255, 136, 0.08);
+  box-shadow: 0 8px 30px rgba(76, 158, 235, 0.08);
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #00FF88, #00CC6A);
+  background: linear-gradient(135deg, #4C9EEB, #7BB8F5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -99,14 +94,14 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: #2A3545;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555555;
+  background: var(--color-muted);
 }

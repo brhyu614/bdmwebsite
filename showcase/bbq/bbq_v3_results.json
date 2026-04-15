@@ -1,0 +1,154 @@
+[
+  {
+    "horizon": "1month",
+    "label": "1개월 후",
+    "target": "log_delivery",
+    "target_label": "배달 매출",
+    "features": 308,
+    "train_n": 47136,
+    "test_n": 4393,
+    "xgb1_R2": 0.3903,
+    "lgb_R2": -0.0882,
+    "xgb2_R2": -1.3012,
+    "weights": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "R2": 0.3903,
+    "RMSE": 0.4839
+  },
+  {
+    "horizon": "1month",
+    "label": "1개월 후",
+    "target": "log_pick_up",
+    "target_label": "포장 매출",
+    "features": 309,
+    "train_n": 47136,
+    "test_n": 4393,
+    "xgb1_R2": -0.0358,
+    "lgb_R2": -0.0056,
+    "xgb2_R2": 0.4928,
+    "weights": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "R2": 0.4928,
+    "RMSE": 0.5812
+  },
+  {
+    "horizon": "1month",
+    "label": "1개월 후",
+    "target": "log_dine_in",
+    "target_label": "매장식사 매출",
+    "features": 308,
+    "train_n": 47136,
+    "test_n": 4393,
+    "xgb1_R2": 0.9525,
+    "lgb_R2": 0.9567,
+    "xgb2_R2": 0.9602,
+    "weights": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "R2": 0.9602,
+    "RMSE": 1.3135
+  },
+  {
+    "horizon": "1month",
+    "label": "1개월 후",
+    "target": "log_total",
+    "target_label": "총 매출",
+    "features": 307,
+    "train_n": 47136,
+    "test_n": 4393,
+    "xgb1_R2": 0.5645,
+    "lgb_R2": 0.1534,
+    "xgb2_R2": -1.3904,
+    "weights": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "R2": 0.5645,
+    "RMSE": 0.3932
+  },
+  {
+    "horizon": "3months",
+    "label": "3개월 후",
+    "target": "log_delivery",
+    "target_label": "배달 매출",
+    "features": 308,
+    "train_n": 44067,
+    "test_n": 4393,
+    "xgb1_R2": 0.7431,
+    "lgb_R2": 0.6994,
+    "xgb2_R2": 0.783,
+    "weights": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "R2": 0.783,
+    "RMSE": 0.2887
+  },
+  {
+    "horizon": "3months",
+    "label": "3개월 후",
+    "target": "log_pick_up",
+    "target_label": "포장 매출",
+    "features": 309,
+    "train_n": 44067,
+    "test_n": 4393,
+    "xgb1_R2": 0.5616,
+    "lgb_R2": 0.6189,
+    "xgb2_R2": 0.6682,
+    "weights": [
+      0.0,
+      0.2,
+      0.8
+    ],
+    "R2": 0.6703,
+    "RMSE": 0.4686
+  },
+  {
+    "horizon": "3months",
+    "label": "3개월 후",
+    "target": "log_dine_in",
+    "target_label": "매장식사 매출",
+    "features": 308,
+    "train_n": 44067,
+    "test_n": 4393,
+    "xgb1_R2": 0.937,
+    "lgb_R2": 0.9383,
+    "xgb2_R2": 0.9438,
+    "weights": [
+      0.0,
+      0.2,
+      0.8
+    ],
+    "R2": 0.9441,
+    "RMSE": 1.5561
+  },
+  {
+    "horizon": "3months",
+    "label": "3개월 후",
+    "target": "log_total",
+    "target_label": "총 매출",
+    "features": 307,
+    "train_n": 44067,
+    "test_n": 4393,
+    "xgb1_R2": 0.7494,
+    "lgb_R2": 0.7237,
+    "xgb2_R2": 0.8022,
+    "weights": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "R2": 0.8022,
+    "RMSE": 0.265
+  }
+]

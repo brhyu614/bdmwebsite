@@ -106,12 +106,12 @@ export default function PhotoismPage() {
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="text-sm text-muted">상시 매장</p>
             <p className="mt-1 text-3xl font-bold text-accent">98.1%</p>
-            <p className="mt-1 text-xs text-muted">2,478건 검증 · 평균 오차 약 5,900원</p>
+            <p className="mt-1 text-xs text-muted">2,478건 검증</p>
           </div>
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="text-sm text-muted">팝업/임시 매장</p>
             <p className="mt-1 text-3xl font-bold text-text">96.9%</p>
-            <p className="mt-1 text-xs text-muted">1,564건 검증 · 평균 오차 약 29,500원</p>
+            <p className="mt-1 text-xs text-muted">1,564건 검증</p>
           </div>
         </div>
 

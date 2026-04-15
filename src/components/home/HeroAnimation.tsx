@@ -1,124 +1,109 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-
-const KEYWORDS = [
-  'AI Prediction', 'Causal Inference', 'Consumer Behavior',
-  'XGBoost', 'LightGBM', 'SHAP', 'Deep Learning',
-  'Revenue Forecasting', 'Demand Prediction',
-  'LLM Multi-Agent', 'Big Data Analytics',
-  'Natural Language Processing', 'Sentiment Analysis',
-  'A/B Testing', 'DID', 'Instrumental Variables',
-  'Platform Algorithm', 'Recommendation System',
-  'Social Commerce', 'Digital Marketing',
-  'Feature Importance', 'Ensemble Model',
-  'Time Series', 'Panel Data', 'Econometrics',
-]
-
-interface Particle {
-  x: number
-  y: number
-  vx: number
-  vy: number
-  text: string
-  opacity: number
-  size: number
-}
-
 export default function HeroAnimation() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const particlesRef = useRef<Particle[]>([])
-  const animRef = useRef<number>(0)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    // Init particles
-    const w = canvas.offsetWidth
-    const h = canvas.offsetHeight
-    particlesRef.current = KEYWORDS.map((text) => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      text,
-      opacity: 0.25 + Math.random() * 0.35,
-      size: 13 + Math.random() * 6,
-    }))
-
-    const animate = () => {
-      const cw = canvas.offsetWidth
-      const ch = canvas.offsetHeight
-      ctx.clearRect(0, 0, cw, ch)
-
-      const particles = particlesRef.current
-
-      // Draw connections
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 200) {
-            ctx.beginPath()
-            ctx.strokeStyle = `rgba(76, 158, 235, ${0.15 * (1 - dist / 200)})`
-            ctx.lineWidth = 1
-            ctx.moveTo(particles[i].x, particles[i].y)
-            ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.stroke()
-          }
-        }
-      }
-
-      // Draw particles
-      for (const p of particles) {
-        // Draw dot
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(76, 158, 235, ${Math.min(p.opacity * 2.5, 1)})`
-        ctx.fill()
-
-        // Draw text
-        ctx.font = `${p.size}px 'JetBrains Mono', monospace`
-        ctx.fillStyle = `rgba(76, 158, 235, ${p.opacity})`
-        ctx.fillText(p.text, p.x + 6, p.y + 4)
-
-        // Move
-        p.x += p.vx
-        p.y += p.vy
-
-        // Bounce
-        if (p.x < 0 || p.x > cw) p.vx *= -1
-        if (p.y < 0 || p.y > ch) p.vy *= -1
-      }
-
-      animRef.current = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animRef.current)
-    }
-  }, [])
-
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-full w-full"
-      style={{ opacity: 1 }}
-    />
+    <>
+      {/* Animated gradient mesh background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,rgba(76,158,235,0.15),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(76,158,235,0.1),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_80%,rgba(76,158,235,0.08),transparent_50%)]" />
+
+        {/* Animated orbs */}
+        <div
+          className="absolute h-[600px] w-[600px] rounded-full opacity-20 blur-[120px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(76,158,235,0.4) 0%, transparent 70%)',
+            top: '10%',
+            left: '10%',
+            animation: 'float1 20s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="absolute h-[500px] w-[500px] rounded-full opacity-15 blur-[100px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(76,158,235,0.3) 0%, transparent 70%)',
+            top: '50%',
+            right: '5%',
+            animation: 'float2 25s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="absolute h-[400px] w-[400px] rounded-full opacity-10 blur-[80px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(100,180,255,0.3) 0%, transparent 70%)',
+            bottom: '10%',
+            left: '30%',
+            animation: 'float3 18s ease-in-out infinite',
+          }}
+        />
+
+        {/* Grid pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(76,158,235,1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(76,158,235,1) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+          }}
+        />
+
+        {/* Floating keyword badges */}
+        <div className="absolute inset-0 hidden sm:block">
+          {[
+            { text: 'AI Prediction', top: '12%', left: '8%', delay: '0s' },
+            { text: 'XGBoost', top: '25%', right: '12%', delay: '2s' },
+            { text: 'Causal Inference', top: '65%', left: '5%', delay: '4s' },
+            { text: 'LLM Multi-Agent', top: '18%', right: '30%', delay: '6s' },
+            { text: 'SHAP', top: '75%', right: '15%', delay: '8s' },
+            { text: 'Consumer Behavior', top: '45%', right: '5%', delay: '1s' },
+            { text: 'Revenue Forecasting', top: '85%', left: '25%', delay: '3s' },
+            { text: 'Deep Learning', top: '8%', left: '45%', delay: '5s' },
+            { text: 'Big Data Analytics', top: '55%', left: '15%', delay: '7s' },
+            { text: 'Demand Prediction', top: '35%', left: '3%', delay: '9s' },
+          ].map((item) => (
+            <span
+              key={item.text}
+              className="absolute font-mono text-[11px] tracking-wider text-accent/20"
+              style={{
+                top: item.top,
+                left: item.left,
+                right: 'right' in item ? (item as { right: string }).right : undefined,
+                animation: `fadeFloat 12s ease-in-out ${item.delay} infinite`,
+              }}
+            >
+              {item.text}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom fade to bg */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[var(--color-bg)] to-transparent" />
+
+      <style jsx>{`
+        @keyframes float1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(80px, -60px) scale(1.1); }
+          66% { transform: translate(-40px, 40px) scale(0.95); }
+        }
+        @keyframes float2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(-60px, 50px) scale(1.05); }
+          66% { transform: translate(50px, -30px) scale(0.9); }
+        }
+        @keyframes float3 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(60px, -40px) scale(1.1); }
+        }
+        @keyframes fadeFloat {
+          0%, 100% { opacity: 0.1; transform: translateY(0); }
+          50% { opacity: 0.3; transform: translateY(-8px); }
+        }
+      `}</style>
+    </>
   )
 }

@@ -7,10 +7,10 @@ export const metadata: Metadata = {
 
 const PROJECTS = [
   {
-    category: 'AI 매출 예측 · 기업 납품',
-    title: '포토이즘 IP 협업 수익 예측 시스템',
-    description: '462명 연예인, 4,042건 검증, 97.6% 적중률. 셀럽/IP별 콜라보 매출을 예측하는 AI 시스템을 구축하여 기업에 납품. 예측 웹앱 + 분석 보고서 + 데이터 파이프라인 포함.',
-    tags: ['XGBoost', 'LightGBM', 'Streamlit', '예측 시스템 납품'],
+    category: 'AI 매출 예측',
+    title: '포토이즘 IP 콜라보 매출 예측',
+    description: '462명 연예인, 4,042건 검증, 97.6% 적중률. 새로운 셀럽/IP 콜라보의 주간 매출을 예측하는 AI 시스템.',
+    tags: ['XGBoost', 'LightGBM', 'Streamlit'],
     link: '/projects/photoism',
   },
   {

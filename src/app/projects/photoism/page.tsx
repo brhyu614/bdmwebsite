@@ -88,13 +88,14 @@ export default function PhotoismPage() {
         <p className="mt-2 text-sm text-subtext">
           IP명, 콜라보 기간, 매장 유형을 입력하면 예상 매출이 즉시 표시됩니다.
         </p>
-        {/* 영상 자리 — 교수님이 녹화한 영상으로 교체 */}
-        <div className="mt-6 flex h-80 items-center justify-center rounded-2xl border-2 border-dashed border-border bg-surface">
-          <div className="text-center">
-            <p className="text-lg font-bold text-muted">시스템 데모 영상</p>
-            <p className="mt-2 text-sm text-muted">(영상 준비 중)</p>
-          </div>
-        </div>
+        <video
+          className="mt-6 w-full rounded-2xl border border-border"
+          controls
+          preload="metadata"
+          playsInline
+        >
+          <source src="/videos/photoism-demo.mp4" type="video/mp4" />
+        </video>
       </section>
 
       {/* ── 예측 성능 대시보드 ── */}

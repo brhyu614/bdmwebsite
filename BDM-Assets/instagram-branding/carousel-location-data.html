@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDM Lab Carousel — 위치 데이터 (Location Data)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #e5e5e5; font-family: 'Noto Sans KR', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 60px; }
+    h2.section-title { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: #1C1917; margin-bottom: 10px; text-align: center; }
+    p.section-desc { font-size: 14px; color: #78716C; text-align: center; margin-bottom: 30px; }
+    .slides-row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 100%; }
+    .slide { width: 360px; height: 450px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); position: relative; flex-shrink: 0; }
+    .slide-number { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.5); color: white; font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; z-index: 10; }
+
+    /* OPTION A - LIGHT */
+    .opt-a { background: #FAFAF9; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+    .opt-a .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #059669; margin-bottom: 24px; }
+    .opt-a .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #1C1917; word-break: keep-all; }
+    .opt-a .main-text em { font-style: normal; color: #059669; }
+    .opt-a .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #78716C; margin-top: 20px; word-break: keep-all; }
+    .opt-a .accent-line { width: 40px; height: 3px; background: #059669; margin: 20px auto; border-radius: 2px; }
+    .opt-a .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #A8A29E; text-transform: uppercase; }
+    .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+    .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+    .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+    .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+    .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+    .opt-a .compare-label { font-size: 12px; color: #78716C; }
+    .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+    .opt-a .num-list { text-align: left; width: 100%; }
+    .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+    .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+    .opt-a .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .opt-a .num-text { font-size: 13px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+    .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+
+    /* OPTION B - DARK */
+    .opt-b { background: #0F0F0F; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+    .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+    .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+    .opt-b .main-text em { font-style: normal; color: #34d399; }
+    .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+    .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+    .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+    .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+    .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+    .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+    .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+    .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+    .opt-b .compare-label { font-size: 12px; color: #78716C; }
+    .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+    .opt-b .num-list { text-align: left; width: 100%; }
+    .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+    .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+    .opt-b .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .opt-b .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+    .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+    .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== OPTION A — LIGHT ==================== -->
+  <section>
+    <h2 class="section-title">Option A — Light Editorial</h2>
+    <p class="section-desc">위치 데이터 — 카페 수가 매출을 예측한다 (랩 리서치)</p>
+    <div class="slides-row">
+
+      <!-- Slide 1: Hook -->
+      <div class="slide opt-a">
+        <div class="slide-number">1 / 9</div>
+        <div class="top-label">Lab Research</div>
+        <div class="main-text">
+          프랜차이즈 매출 예측<br>
+          모델을 만들었다.<br>
+          가장 강력한 변수는<br>
+          <em>유동인구가 아니었다.</em><br>
+          <em>주변 카페 수</em>였다.
+        </div>
+        <div class="accent-line"></div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 2: Project background -->
+      <div class="slide opt-a">
+        <div class="slide-number">2 / 9</div>
+        <div class="top-label">배경</div>
+        <div class="main-text" style="font-size: 22px;">
+          프로젝트 배경
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          프랜차이즈 기업이 BDM Lab에 의뢰.<br>
+          <strong style="color: #1C1917;">"신규 매장, 어디에 내야 하는가?"</strong><br><br>
+          기존 방식: 부동산 중개인 추천 + 경영진 직관<br>
+          → 결과: <strong style="color: #ef4444;">20% 이상이 2년 내 폐점.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 3: What we used -->
+      <div class="slide opt-a">
+        <div class="slide-number">3 / 9</div>
+        <div class="top-label">방법론</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          뭘 넣었나
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">매장 데이터</span>
+            <span class="compare-value" style="font-size: 13px; color: #059669;">78개 매장 x 3년 매출</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">유동인구</span>
+            <span class="compare-value" style="font-size: 13px; color: #44403C;">통신사 데이터</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">상권 특성</span>
+            <span class="compare-value" style="font-size: 13px; color: #44403C;">경쟁, 임대료, 접근성</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">인구통계</span>
+            <span class="compare-value" style="font-size: 13px; color: #44403C;">연령, 소득, 주거 유형</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 12px;">모델: XGBoost + SHAP 분석</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 4: Accent Green — Foot Traffic Paradox -->
+      <div class="slide opt-a" style="background: #059669;">
+        <div class="slide-number">4 / 9</div>
+        <div class="top-label" style="color: rgba(255,255,255,0.7);">핵심 발견</div>
+        <div class="main-text" style="color: #fff; font-size: 24px; line-height: 1.5;">
+          유동인구의 역설
+        </div>
+        <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+        <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.8;">
+          유동인구 월 300만: 매출 중위권<br>
+          유동인구 월 40만: 매출 상위 10%<br><br>
+          → 핵심은 <strong style="color: #fff;">'통과형'이 아니라 '체류형'</strong> 유동인구.<br><br>
+          체류형의 매출 기여도 = 통과형의 <strong style="color: #fff;">4.2배</strong>
+        </div>
+        <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+      </div>
+
+      <!-- Slide 5: Cafe density data -->
+      <div class="slide opt-a">
+        <div class="slide-number">5 / 9</div>
+        <div class="top-label">데이터</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>카페 밀집도</em>가 왜?
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          반경 500m 카페 수<br>
+          → 전체 예측의 <strong style="color: #059669;">22%</strong> 설명.<br><br>
+          카페 운영자는 상권 전문가.<br>
+          카페가 밀집 = <strong style="color: #1C1917;">이미 전문가 검증을<br>
+          통과한 상권.</strong><br>
+          + 카페 밀집 = 체류 생태계가 형성된 곳.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 6: Rent Trap -->
+      <div class="slide opt-a">
+        <div class="slide-number">6 / 9</div>
+        <div class="top-label">함정</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>임대료</em> 함정
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">임대료 상위 25%</span>
+            <span class="compare-value" style="color: #059669;">매출 +40%</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">하지만 영업이익률</span>
+            <span class="compare-value" style="color: #ef4444;">-3.2%p</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 13px;">
+          좋은 자리에서 더 많이 팔았지만<br>
+          더 많이 남기진 못했다.<br>
+          → <strong style="color: #1C1917;">매출 ≠ 수익.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 7: Limitations -->
+      <div class="slide opt-a">
+        <div class="slide-number">7 / 9</div>
+        <div class="top-label">한계</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          한계: <em>솔직하게</em>
+        </div>
+        <div class="num-list">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>운영 역량</strong>은 모델에 안 잡힌다</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>상권은 변한다</strong> (시간적 정태성)</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text"><strong>상관 ≠ 인과</strong> (카페 옆 = 성공?)</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">4</div>
+            <div class="num-text"><strong>78개 매장</strong> = 작은 표본</div>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 11px; margin-top: 10px;">모델은 의사결정 도구이지 의사결정 자체가 아니다.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 8: Framework -->
+      <div class="slide opt-a">
+        <div class="slide-number">8 / 9</div>
+        <div class="top-label">실무 액션</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          <em>실무 프레임워크</em>
+        </div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8; margin-top: 0;">
+          위치 데이터 = <strong style="color: #059669;">스크리닝 도구</strong>
+        </div>
+        <div class="num-list" style="margin-top: 16px;">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>100개 후보를 10개로</strong> 좁히는 데 사용</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>10개에서 3개</strong>는 현장 조사 + 판단</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text">데이터로 <strong>명백한 실패를 걸러내되,</strong> 성공은 운영으로 만들어라</div>
+          </div>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 9: CTA -->
+      <div class="slide opt-a">
+        <div class="slide-number">9 / 9</div>
+        <div style="margin-bottom: 24px;">
+          <svg width="64" height="64" viewBox="0 0 500 500">
+            <circle cx="250" cy="250" r="248" fill="#0a0a0a"/>
+            <circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/>
+            <rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/>
+            <rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/>
+            <rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/>
+            <rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/>
+            <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+          </svg>
+        </div>
+        <div class="main-text" style="font-size: 20px; line-height: 1.6;">
+          위치 데이터는<br>
+          많은 것을 말해주지만<br>
+          모든 것을 말해주지 못한다.<br>
+          <em>데이터 + 판단. 둘 다 필요하다.</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          bigdatamarketinglab.com<br>
+          @bdm.lab
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== OPTION B — DARK ==================== -->
+  <section>
+    <h2 class="section-title">Option B — Dark Bold</h2>
+    <p class="section-desc">위치 데이터 — 카페 수가 매출을 예측한다 (랩 리서치)</p>
+    <div class="slides-row">
+
+      <!-- Slide 1: Hook -->
+      <div class="slide opt-b">
+        <div class="slide-number">1 / 9</div>
+        <div class="top-label">Lab Research</div>
+        <div class="main-text">
+          프랜차이즈 매출 예측<br>
+          모델을 만들었다.<br>
+          가장 강력한 변수는<br>
+          <em>유동인구가 아니었다.</em><br>
+          <em>주변 카페 수</em>였다.
+        </div>
+        <div class="accent-line"></div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 2: Project background -->
+      <div class="slide opt-b">
+        <div class="slide-number">2 / 9</div>
+        <div class="top-label">배경</div>
+        <div class="main-text" style="font-size: 22px;">
+          프로젝트 배경
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          프랜차이즈 기업이 BDM Lab에 의뢰.<br>
+          <strong style="color: #FAFAF9;">"신규 매장, 어디에 내야 하는가?"</strong><br><br>
+          기존 방식: 부동산 중개인 추천 + 경영진 직관<br>
+          → 결과: <strong style="color: #ef4444;">20% 이상이 2년 내 폐점.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 3: What we used -->
+      <div class="slide opt-b">
+        <div class="slide-number">3 / 9</div>
+        <div class="top-label">방법론</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          뭘 넣었나
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">매장 데이터</span>
+            <span class="compare-value" style="font-size: 13px; color: #34d399;">78개 매장 x 3년 매출</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">유동인구</span>
+            <span class="compare-value" style="font-size: 13px; color: #D6D3D1;">통신사 데이터</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">상권 특성</span>
+            <span class="compare-value" style="font-size: 13px; color: #D6D3D1;">경쟁, 임대료, 접근성</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">인구통계</span>
+            <span class="compare-value" style="font-size: 13px; color: #D6D3D1;">연령, 소득, 주거 유형</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 12px;">모델: XGBoost + SHAP 분석</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 4: Accent Green — Foot Traffic Paradox -->
+      <div class="slide opt-b" style="background: linear-gradient(160deg, #059669 0%, #047857 100%);">
+        <div class="slide-number">4 / 9</div>
+        <div class="top-label" style="color: rgba(255,255,255,0.7);">핵심 발견</div>
+        <div class="main-text" style="color: #fff; font-size: 24px; line-height: 1.5;">
+          유동인구의 역설
+        </div>
+        <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+        <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.8;">
+          유동인구 월 300만: 매출 중위권<br>
+          유동인구 월 40만: 매출 상위 10%<br><br>
+          → 핵심은 <strong style="color: #fff;">'통과형'이 아니라 '체류형'</strong> 유동인구.<br><br>
+          체류형의 매출 기여도 = 통과형의 <strong style="color: #fff;">4.2배</strong>
+        </div>
+        <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+      </div>
+
+      <!-- Slide 5: Cafe density data -->
+      <div class="slide opt-b">
+        <div class="slide-number">5 / 9</div>
+        <div class="top-label">데이터</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>카페 밀집도</em>가 왜?
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          반경 500m 카페 수<br>
+          → 전체 예측의 <strong style="color: #34d399;">22%</strong> 설명.<br><br>
+          카페 운영자는 상권 전문가.<br>
+          카페가 밀집 = <strong style="color: #FAFAF9;">이미 전문가 검증을<br>
+          통과한 상권.</strong><br>
+          + 카페 밀집 = 체류 생태계가 형성된 곳.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 6: Rent Trap -->
+      <div class="slide opt-b">
+        <div class="slide-number">6 / 9</div>
+        <div class="top-label">함정</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>임대료</em> 함정
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">임대료 상위 25%</span>
+            <span class="compare-value" style="color: #34d399;">매출 +40%</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">하지만 영업이익률</span>
+            <span class="compare-value" style="color: #ef4444;">-3.2%p</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 13px;">
+          좋은 자리에서 더 많이 팔았지만<br>
+          더 많이 남기진 못했다.<br>
+          → <strong style="color: #FAFAF9;">매출 ≠ 수익.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 7: Limitations -->
+      <div class="slide opt-b">
+        <div class="slide-number">7 / 9</div>
+        <div class="top-label">한계</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          한계: <em>솔직하게</em>
+        </div>
+        <div class="num-list">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>운영 역량</strong>은 모델에 안 잡힌다</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>상권은 변한다</strong> (시간적 정태성)</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text"><strong>상관 ≠ 인과</strong> (카페 옆 = 성공?)</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">4</div>
+            <div class="num-text"><strong>78개 매장</strong> = 작은 표본</div>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 11px; margin-top: 10px;">모델은 의사결정 도구이지 의사결정 자체가 아니다.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 8: Framework -->
+      <div class="slide opt-b">
+        <div class="slide-number">8 / 9</div>
+        <div class="top-label">실무 액션</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          <em>실무 프레임워크</em>
+        </div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8; margin-top: 0;">
+          위치 데이터 = <strong style="color: #34d399;">스크리닝 도구</strong>
+        </div>
+        <div class="num-list" style="margin-top: 16px;">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>100개 후보를 10개로</strong> 좁히는 데 사용</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>10개에서 3개</strong>는 현장 조사 + 판단</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text">데이터로 <strong>명백한 실패를 걸러내되,</strong> 성공은 운영으로 만들어라</div>
+          </div>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 9: CTA -->
+      <div class="slide opt-b">
+        <div class="slide-number">9 / 9</div>
+        <div style="margin-bottom: 24px;">
+          <svg width="64" height="64" viewBox="0 0 500 500">
+            <circle cx="250" cy="250" r="248" fill="#1A1A1A"/>
+            <circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/>
+            <rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/>
+            <rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/>
+            <rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/>
+            <rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/>
+            <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+          </svg>
+        </div>
+        <div class="main-text" style="font-size: 20px; line-height: 1.6;">
+          위치 데이터는<br>
+          많은 것을 말해주지만<br>
+          모든 것을 말해주지 못한다.<br>
+          <em>데이터 + 판단. 둘 다 필요하다.</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          bigdatamarketinglab.com<br>
+          @bdm.lab
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

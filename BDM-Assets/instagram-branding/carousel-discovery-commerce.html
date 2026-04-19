@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Lab Carousel — 발견형 커머스 v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #e5e5e5; font-family: 'Noto Sans KR', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 60px; }
+  h2.section-title { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: #1C1917; margin-bottom: 10px; text-align: center; }
+  p.section-desc { font-size: 14px; color: #78716C; text-align: center; margin-bottom: 30px; }
+  .slides-row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 100%; }
+  .slide { width: 360px; height: 450px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); position: relative; flex-shrink: 0; }
+  .slide-number { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.5); color: white; font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; z-index: 10; }
+
+  /* LIGHT */
+  .opt-a { background: #FAFAF9; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+  .opt-a .top-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #059669; margin-bottom: 24px; }
+  .opt-a .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #1C1917; word-break: keep-all; }
+  .opt-a .main-text em { font-style: normal; color: #059669; }
+  .opt-a .main-text .red { color: #ef4444; }
+  .opt-a .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #78716C; margin-top: 20px; word-break: keep-all; }
+  .opt-a .accent-line { width: 40px; height: 3px; background: #059669; margin: 20px auto; border-radius: 2px; }
+  .opt-a .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #A8A29E; text-transform: uppercase; }
+  .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+  .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+  .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+  .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+  .opt-a .compare-label { font-size: 12px; color: #78716C; }
+  .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+  .opt-a .num-list { text-align: left; width: 100%; }
+  .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; }
+  .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+  .opt-a .num-circle { width: 28px; height: 28px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-a .num-text { font-size: 14px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+  .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+  .opt-a .arrow-flow { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+  .opt-a .arrow-box { background: #F5F5F4; border-radius: 8px; padding: 10px 14px; font-size: 11px; font-weight: 600; color: #1C1917; flex: 1; text-align: center; }
+  .opt-a .arrow-box.highlight-green { background: #059669; color: white; }
+  .opt-a .arrow-box.dimmed { opacity: 0.4; }
+  .opt-a .arrow-icon { font-size: 16px; color: #A8A29E; }
+
+  /* DARK */
+  .opt-b { background: #0F0F0F; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+  .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+  .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+  .opt-b .main-text em { font-style: normal; color: #34d399; }
+  .opt-b .main-text .red { color: #ef4444; }
+  .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+  .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+  .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+  .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+  .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+  .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+  .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+  .opt-b .compare-label { font-size: 12px; color: #78716C; }
+  .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+  .opt-b .num-list { text-align: left; width: 100%; }
+  .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; }
+  .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+  .opt-b .num-circle { width: 28px; height: 28px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-b .num-text { font-size: 14px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+  .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+  .opt-b .arrow-flow { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+  .opt-b .arrow-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 8px; padding: 10px 14px; font-size: 11px; font-weight: 600; color: #E7E5E4; flex: 1; text-align: center; }
+  .opt-b .arrow-box.highlight-green { background: #059669; border-color: #059669; color: white; }
+  .opt-b .arrow-box.dimmed { opacity: 0.4; }
+  .opt-b .arrow-icon { font-size: 16px; color: #57534E; }
+
+  .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+
+  /* Slide 1 special - dramatic dark with big number */
+  .slide-hero-dark {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 40px 36px; text-align: center; position: relative;
+  }
+  .slide-hero-dark::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(239,68,68,0.08) 0%, transparent 70%);
+  }
+  .slide-hero-dark * { position: relative; z-index: 1; }
+  .slide-hero-dark .zero-click-visual {
+    font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 120px;
+    color: #ef4444; line-height: 0.9; margin-bottom: 8px;
+    text-shadow: 0 0 60px rgba(239,68,68,0.3);
+  }
+  .slide-hero-dark .zero-label {
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 18px;
+    color: rgba(255,255,255,0.6); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px;
+  }
+  .slide-hero-dark .main-text {
+    font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 22px;
+    line-height: 1.5; color: white; word-break: keep-all;
+  }
+  .slide-hero-dark .main-text em { font-style: normal; color: #ef4444; }
+  .slide-hero-dark .sub-text {
+    font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
+  }
+  .slide-hero-dark .bottom-brand {
+    position: absolute; bottom: 24px; left: 0; right: 0; text-align: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px;
+    color: rgba(255,255,255,0.2); text-transform: uppercase;
+  }
+  .slide-hero-dark .tag-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase; color: #ef4444;
+    border: 1px solid rgba(239,68,68,0.3); padding: 4px 12px; border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  /* Slide 1 light version */
+  .slide-hero-light {
+    background: #FAFAF9; position: relative;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 40px 36px; text-align: center;
+  }
+  .slide-hero-light .zero-click-visual {
+    font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 120px;
+    color: #ef4444; line-height: 0.9; margin-bottom: 8px;
+  }
+  .slide-hero-light .zero-label {
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 18px;
+    color: #78716C; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px;
+  }
+  .slide-hero-light .main-text {
+    font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 22px;
+    line-height: 1.5; color: #1C1917; word-break: keep-all;
+  }
+  .slide-hero-light .main-text em { font-style: normal; color: #ef4444; }
+  .slide-hero-light .sub-text {
+    font-size: 12px; color: #A8A29E; margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
+  }
+  .slide-hero-light .bottom-brand {
+    position: absolute; bottom: 24px; left: 0; right: 0; text-align: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px;
+    color: #A8A29E; text-transform: uppercase;
+  }
+  .slide-hero-light .tag-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase; color: #ef4444;
+    border: 1px solid rgba(239,68,68,0.2); padding: 4px 12px; border-radius: 4px;
+    margin-bottom: 20px; background: #FEF2F2;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     OPTION A — LIGHT
+     ============================================================ -->
+<h2 class="section-title">Option A — Light</h2>
+<p class="section-desc">발견형 커머스 — 검색 없이 사는 시대 (7 slides, casual tone v2)</p>
+
+<div class="slides-row">
+
+  <!-- A-1: HOOK — 빨간 "0" 비주얼 -->
+  <div class="slide slide-hero-light">
+    <div class="slide-number">1/7</div>
+    <div class="tag-badge">Zero-Click Search</div>
+    <div class="zero-click-visual">0</div>
+    <div class="zero-label">Click Searches</div>
+    <div class="main-text">
+      구글 검색의 <em>58.5%</em>는<br>
+      클릭 없이 끝난다.
+    </div>
+    <div class="sub-text">SparkToro, 2024</div>
+    <div class="bottom-brand">BDM Lab · @bdm.lab</div>
+  </div>
+
+  <!-- A-2: 과거 vs 지금 — "구매" 하이라이트 제거, "발견" 강조 -->
+  <div class="slide opt-a">
+    <div class="slide-number">2/7</div>
+    <div class="top-label">과거 vs 지금</div>
+    <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+      구매 여정이 <em>압축</em>됐다
+    </div>
+    <div class="sub-text" style="margin-top: 0; margin-bottom: 8px; font-weight: 600; color: #A8A29E; font-size: 11px;">과거: 길고 느린 터널</div>
+    <div class="arrow-flow">
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">필요</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">검색</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">비교</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">구매</div>
+    </div>
+    <div class="sub-text" style="margin-top: 16px; margin-bottom: 8px; font-weight: 600; color: #059669; font-size: 11px;">지금: 발견 → 바로 결제</div>
+    <div class="arrow-flow">
+      <div class="arrow-box highlight-green" style="font-size: 10px; padding: 8px 12px;">피드에서 발견</div>
+      <div class="arrow-icon" style="color: #059669;">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px; padding: 8px 12px;">"어 이거 괜찮은데?"</div>
+      <div class="arrow-icon" style="color: #059669;">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px; padding: 8px 12px;">결제</div>
+    </div>
+    <div class="sub-text" style="font-weight: 700; color: #1C1917; margin-top: 20px; font-size: 14px;">과정이 줄어든 게 아니라<br>없어진 거에 가까움.</div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-3: 왜 이게 검색을 이기는가 — 빨간 라벨 -->
+  <div class="slide opt-a" style="background: #059669;">
+    <div class="slide-number">3/7</div>
+    <div class="top-label" style="color: white; background: #ef4444; padding: 4px 12px; border-radius: 4px; font-size: 10px;">왜 이게 검색을 이기는가</div>
+    <div class="main-text" style="color: white; font-size: 32px; margin-bottom: 20px;">
+      선택 과부하<br>제거
+    </div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.95); font-size: 15px; text-align: left; line-height: 2;">
+      "러닝화" 검색 → 수천 개 결과 → 포기<br><br>
+      피드 → 알고리즘이 <strong style="color: white; font-size: 17px;">딱 3개</strong> 보여줌 → 결정
+    </div>
+    <div class="accent-line" style="background: rgba(255,255,255,0.5); margin-top: 24px;"></div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 13px;">
+      후기 + 댓글 + 좋아요가<br>
+      콘텐츠에 이미 딸려옴.<br>
+      = <strong style="color: white; font-size: 15px;">사회적 증거 자동 내장</strong>
+    </div>
+    <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+  </div>
+
+  <!-- A-4: 네이버의 위기 — "검색" 녹색 하이라이트, "결제" 일반 -->
+  <div class="slide opt-a">
+    <div class="slide-number">4/7</div>
+    <div class="top-label">네이버의 위기</div>
+    <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+      네이버 루프의 힘:<br><em>'첫 터치'</em>를 장악하는 것
+    </div>
+    <div class="arrow-flow">
+      <div class="arrow-box highlight-green" style="font-size: 10px;">검색</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px;">블로그</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px;">지도</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px;">결제</div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-size: 14px;">
+      근데 그 <strong style="color: #059669;">첫 터치가 인스타로</strong> 빠지고 있음.<br><br>
+      첫 터치를 뺏기면<br>
+      <strong style="color: #1C1917;">루프 전체가 무너진다.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-5: 데이터 -->
+  <div class="slide opt-a">
+    <div class="slide-number">5/7</div>
+    <div class="top-label" style="font-size: 11px;">데이터가 말한다</div>
+    <div style="margin-bottom: 24px;">
+      <div class="sub-text" style="margin-top: 0; font-size: 13px; font-weight: 600; color: #44403C;">인스타그램 월간 사용 시간</div>
+      <div class="stat-big" style="margin-top: 4px;">&gt;</div>
+      <div class="sub-text" style="margin-top: 0; font-size: 13px; font-weight: 600; color: #44403C;">네이버 월간 사용 시간</div>
+    </div>
+    <div class="compare-box">
+      <div class="compare-row">
+        <div class="compare-label">TikTok 사용자 중</div>
+        <div class="compare-value" style="color: #059669; font-size: 20px;">67%</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label" style="font-size: 12px; line-height: 1.6; text-align: left;">
+          "살 계획 없었는데<br>TikTok 보다가 샀다"
+        </div>
+        <div></div>
+      </div>
+    </div>
+    <div class="sub-text" style="font-weight: 600; color: #1C1917; font-size: 13px;">검색 안 하고도 사는 사람이<br>이미 이렇게 많음.</div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-6: 핵심 메시지 — 글씨 크게, "후자가 시장을..." 변경 -->
+  <div class="slide opt-a">
+    <div class="slide-number">6/7</div>
+    <div class="top-label" style="font-size: 12px; letter-spacing: 3px;">핵심 메시지</div>
+    <div class="num-list">
+      <div class="num-item">
+        <div class="num-circle" style="background: #78716C; width: 32px; height: 32px; font-size: 16px;">?</div>
+        <div class="num-text" style="font-size: 15px;"><strong>검색</strong> = 이미 필요를 아는 사람만 씀</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle" style="width: 32px; height: 32px; font-size: 16px;">!</div>
+        <div class="num-text" style="font-size: 15px;"><strong>발견형</strong> = 필요를 몰랐던 사람도 사게 만듦</div>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="main-text" style="font-size: 22px; line-height: 1.5;">
+      검색은 수요를 <em>가져오고</em><br>
+      발견은 수요를 <em>만든다.</em>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-7: CTA -->
+  <div class="slide opt-a">
+    <div class="slide-number">7/7</div>
+    <div style="margin-bottom: 20px;">
+      <svg width="64" height="64" viewBox="0 0 500 500"><circle cx="250" cy="250" r="248" fill="#0a0a0a"/><circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/><rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/><rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/><rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/><rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/><text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text></svg>
+    </div>
+    <div class="main-text" style="font-size: 20px;">
+      소비자는 검색 전에<br>이미 마음을 정한다.
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-weight: 700; color: #059669; font-size: 16px;">
+      당신의 브랜드는<br>발견되고 있는가?
+    </div>
+    <div style="margin-top: 24px; font-size: 12px; color: #78716C;">
+      DM 주시면 풀버전 아티클 보내드려요.
+    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #A8A29E; margin-top: 8px; letter-spacing: 1px;">
+      @bdm.lab
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     OPTION B — DARK
+     ============================================================ -->
+<h2 class="section-title">Option B — Dark</h2>
+<p class="section-desc">발견형 커머스 — 검색 없이 사는 시대 (7 slides, casual tone v2)</p>
+
+<div class="slides-row">
+
+  <!-- B-1: HOOK -->
+  <div class="slide slide-hero-dark">
+    <div class="slide-number">1/7</div>
+    <div class="tag-badge">Zero-Click Search</div>
+    <div class="zero-click-visual">0</div>
+    <div class="zero-label">Click Searches</div>
+    <div class="main-text">
+      구글 검색의 <em>58.5%</em>는<br>
+      클릭 없이 끝난다.
+    </div>
+    <div class="sub-text">SparkToro, 2024</div>
+    <div class="bottom-brand">BDM Lab · @bdm.lab</div>
+  </div>
+
+  <!-- B-2 -->
+  <div class="slide opt-b">
+    <div class="slide-number">2/7</div>
+    <div class="top-label">과거 vs 지금</div>
+    <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+      구매 여정이 <em>압축</em>됐다
+    </div>
+    <div class="sub-text" style="margin-top: 0; margin-bottom: 8px; font-weight: 600; color: #78716C; font-size: 11px;">과거: 길고 느린 터널</div>
+    <div class="arrow-flow">
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">필요</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">검색</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">비교</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box dimmed" style="font-size: 10px; padding: 8px 8px;">구매</div>
+    </div>
+    <div class="sub-text" style="margin-top: 16px; margin-bottom: 8px; font-weight: 600; color: #34d399; font-size: 11px;">지금: 발견 → 바로 결제</div>
+    <div class="arrow-flow">
+      <div class="arrow-box highlight-green" style="font-size: 10px; padding: 8px 12px;">피드에서 발견</div>
+      <div class="arrow-icon" style="color: #34d399;">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px; padding: 8px 12px;">"어 이거 괜찮은데?"</div>
+      <div class="arrow-icon" style="color: #34d399;">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px; padding: 8px 12px;">결제</div>
+    </div>
+    <div class="sub-text" style="font-weight: 700; color: #FAFAF9; margin-top: 20px; font-size: 14px;">과정이 줄어든 게 아니라<br>없어진 거에 가까움.</div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-3 -->
+  <div class="slide opt-b" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+    <div class="slide-number">3/7</div>
+    <div class="top-label" style="color: white; background: #ef4444; padding: 4px 12px; border-radius: 4px; font-size: 10px;">왜 이게 검색을 이기는가</div>
+    <div class="main-text" style="color: white; font-size: 32px; margin-bottom: 20px;">
+      선택 과부하<br>제거
+    </div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.95); font-size: 15px; text-align: left; line-height: 2;">
+      "러닝화" 검색 → 수천 개 결과 → 포기<br><br>
+      피드 → 알고리즘이 <strong style="color: white; font-size: 17px;">딱 3개</strong> 보여줌 → 결정
+    </div>
+    <div class="accent-line" style="background: rgba(255,255,255,0.5); margin-top: 24px;"></div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 13px;">
+      후기 + 댓글 + 좋아요가<br>
+      콘텐츠에 이미 딸려옴.<br>
+      = <strong style="color: white; font-size: 15px;">사회적 증거 자동 내장</strong>
+    </div>
+    <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+  </div>
+
+  <!-- B-4 -->
+  <div class="slide opt-b">
+    <div class="slide-number">4/7</div>
+    <div class="top-label">네이버의 위기</div>
+    <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+      네이버 루프의 힘:<br><em>'첫 터치'</em>를 장악하는 것
+    </div>
+    <div class="arrow-flow">
+      <div class="arrow-box highlight-green" style="font-size: 10px;">검색</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px;">블로그</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px;">지도</div>
+      <div class="arrow-icon">&rarr;</div>
+      <div class="arrow-box" style="font-size: 10px;">결제</div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-size: 14px;">
+      근데 그 <strong style="color: #34d399;">첫 터치가 인스타로</strong> 빠지고 있음.<br><br>
+      첫 터치를 뺏기면<br>
+      <strong style="color: #FAFAF9;">루프 전체가 무너진다.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-5 -->
+  <div class="slide opt-b">
+    <div class="slide-number">5/7</div>
+    <div class="top-label" style="font-size: 11px;">데이터가 말한다</div>
+    <div style="margin-bottom: 24px;">
+      <div class="sub-text" style="margin-top: 0; font-size: 13px; font-weight: 600; color: #D6D3D1;">인스타그램 월간 사용 시간</div>
+      <div class="stat-big" style="margin-top: 4px;">&gt;</div>
+      <div class="sub-text" style="margin-top: 0; font-size: 13px; font-weight: 600; color: #D6D3D1;">네이버 월간 사용 시간</div>
+    </div>
+    <div class="compare-box">
+      <div class="compare-row">
+        <div class="compare-label">TikTok 사용자 중</div>
+        <div class="compare-value" style="color: #34d399; font-size: 20px;">67%</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label" style="font-size: 12px; line-height: 1.6; text-align: left;">
+          "살 계획 없었는데<br>TikTok 보다가 샀다"
+        </div>
+        <div></div>
+      </div>
+    </div>
+    <div class="sub-text" style="font-weight: 600; color: #FAFAF9; font-size: 13px;">검색 안 하고도 사는 사람이<br>이미 이렇게 많음.</div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-6 -->
+  <div class="slide opt-b">
+    <div class="slide-number">6/7</div>
+    <div class="top-label" style="font-size: 12px; letter-spacing: 3px;">핵심 메시지</div>
+    <div class="num-list">
+      <div class="num-item">
+        <div class="num-circle" style="background: #78716C; width: 32px; height: 32px; font-size: 16px;">?</div>
+        <div class="num-text" style="font-size: 15px;"><strong>검색</strong> = 이미 필요를 아는 사람만 씀</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle" style="width: 32px; height: 32px; font-size: 16px;">!</div>
+        <div class="num-text" style="font-size: 15px;"><strong>발견형</strong> = 필요를 몰랐던 사람도 사게 만듦</div>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="main-text" style="font-size: 22px; line-height: 1.5;">
+      검색은 수요를 <em>가져오고</em><br>
+      발견은 수요를 <em>만든다.</em>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-7: CTA -->
+  <div class="slide opt-b">
+    <div class="slide-number">7/7</div>
+    <div style="margin-bottom: 20px;">
+      <svg width="64" height="64" viewBox="0 0 500 500"><circle cx="250" cy="250" r="248" fill="#1A1A1A"/><circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/><rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/><rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/><rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/><rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/><text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text></svg>
+    </div>
+    <div class="main-text" style="font-size: 20px;">
+      소비자는 검색 전에<br>이미 마음을 정한다.
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-weight: 700; color: #34d399; font-size: 16px;">
+      당신의 브랜드는<br>발견되고 있는가?
+    </div>
+    <div style="margin-top: 24px; font-size: 12px; color: #A8A29E;">
+      DM 주시면 풀버전 아티클 보내드려요.
+    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #57534E; margin-top: 8px; letter-spacing: 1px;">
+      @bdm.lab
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+</div>
+
+</body>
+</html>

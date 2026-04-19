@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Lab Carousel — NPC 스트리머 v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a1a;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 24px;
+  }
+
+  h2.section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #FAFAF9;
+    text-align: center;
+  }
+  p.section-desc {
+    font-size: 13px;
+    color: #78716C;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .slides-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .slide {
+    width: 360px;
+    height: 450px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .slide-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    z-index: 10;
+  }
+
+  /* Base dark slide */
+  .s {
+    background: #0F0F0F;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 44px 36px;
+    text-align: center;
+    height: 100%;
+    position: relative;
+  }
+  .s .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #34d399;
+    margin-bottom: 24px;
+  }
+  .s .title {
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.45;
+    color: #FAFAF9;
+    word-break: keep-all;
+  }
+  .s .title em { font-style: normal; color: #34d399; }
+  .s .desc {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #A8A29E;
+    margin-top: 20px;
+    word-break: keep-all;
+  }
+  .s .line {
+    width: 40px;
+    height: 3px;
+    background: #34d399;
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+  .s .brand {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #3a3a3a;
+    text-transform: uppercase;
+  }
+
+  /* Photo background slide */
+  .photo-bg {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  .photo-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.8) 100%);
+    z-index: 1;
+  }
+  .photo-bg .s {
+    background: transparent;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Chat bubble mockup */
+  .chat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 6px 0;
+  }
+  .chat-row.viewer {
+    justify-content: flex-start;
+  }
+  .chat-row.streamer {
+    justify-content: flex-end;
+  }
+  .chat-bubble {
+    border-radius: 16px;
+    padding: 10px 16px;
+    max-width: 75%;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .chat-bubble.viewer-msg {
+    background: #1E293B;
+    color: #94A3B8;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-bubble.streamer-msg {
+    background: #059669;
+    color: white;
+    border-bottom-right-radius: 4px;
+    font-weight: 600;
+  }
+  .chat-emoji {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .chat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #57534E;
+    margin-bottom: 4px;
+  }
+
+  /* Stat block */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    margin: 8px 0;
+  }
+  .stat-card {
+    flex: 1;
+    background: #1A1A1A;
+    border: 1px solid #2A2A2A;
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    color: #34d399;
+    line-height: 1;
+  }
+  .stat-card .unit {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #34d399;
+  }
+  .stat-card .stat-label {
+    font-size: 10px;
+    color: #78716C;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* Comparison table */
+  .cmp-box {
+    background: #1A1A1A;
+    border: 1px solid #2A2A2A;
+    border-radius: 12px;
+    padding: 16px 20px;
+    width: 100%;
+    margin: 8px 0;
+  }
+  .cmp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .cmp-row + .cmp-row { border-top: 1px solid #2A2A2A; }
+  .cmp-label { font-size: 12px; color: #78716C; }
+  .cmp-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; }
+
+  /* Numbered list */
+  .num-list { text-align: left; width: 100%; }
+  .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+  .num-circle {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #059669; color: white;
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+  .num-text strong { color: #FAFAF9; font-weight: 700; }
+
+  /* Flow */
+  .flow { display: flex; flex-direction: column; gap: 6px; width: 100%; margin: 8px 0; }
+  .flow-step { display: flex; align-items: center; gap: 10px; }
+  .flow-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+    background: #1A1A1A; border: 1px solid #2A2A2A;
+  }
+  .flow-txt { font-size: 12px; font-weight: 600; color: #E7E5E4; line-height: 1.4; }
+  .flow-txt span { font-weight: 400; color: #78716C; font-size: 11px; }
+  .flow-arr { text-align: center; color: #3a3a3a; font-size: 12px; margin-left: 10px; }
+
+</style>
+</head>
+<body>
+
+<h2 class="section-title">NPC 스트리머 캐러셀 v2</h2>
+<p class="section-desc">사진 + 맥락 강화 버전 — 다크 모드</p>
+
+<div class="slides-row">
+
+  <!-- ======== SLIDE 1: HOOK (with gaming photo bg) ======== -->
+  <div class="slide">
+    <div class="slide-number">1/9</div>
+    <div class="photo-bg" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1080&h=1350&fit=crop&q=80');">
+      <div class="s">
+        <div class="label">알고리즘 디코드</div>
+        <div class="title" style="font-size: 21px;">
+          TikTok에서<br>
+          게임 NPC처럼 행동하면<br><br>
+          하루 <em>$7,000</em>을 번다
+        </div>
+        <div class="line"></div>
+        <div class="desc" style="font-size: 12px;">
+          반복적이고 단순한 방송이<br>
+          수백만 시청자를 끌어모은 구조를 분석한다.
+        </div>
+        <div class="brand">BDM Lab &middot; Big Data Marketing Lab</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 2: WHAT IS NPC STREAMING (chat mockup) ======== -->
+  <div class="slide">
+    <div class="slide-number">2/9</div>
+    <div class="s">
+      <div class="label">이게 뭔데?</div>
+      <div class="title" style="font-size: 17px; margin-bottom: 16px;">
+        시청자가 선물을 보내면<br>
+        스트리머가 <em>정해진 반응</em>을 한다
+      </div>
+
+      <div style="width: 100%;">
+        <div class="chat-label">시청자가 🍦 아이스크림 선물을 보내면</div>
+        <div class="chat-row viewer">
+          <div class="chat-emoji">🍦</div>
+          <div class="chat-bubble viewer-msg">아이스크림 선물 전송!</div>
+        </div>
+        <div class="chat-row streamer">
+          <div class="chat-bubble streamer-msg">"Ice cream so good" 🤖</div>
+        </div>
+      </div>
+
+      <div style="width: 100%; margin-top: 12px;">
+        <div class="chat-label">시청자가 🌹 장미 선물을 보내면</div>
+        <div class="chat-row viewer">
+          <div class="chat-emoji">🌹</div>
+          <div class="chat-bubble viewer-msg">장미 선물 전송!</div>
+        </div>
+        <div class="chat-row streamer">
+          <div class="chat-bubble streamer-msg">"Yes yes yes" 🤖</div>
+        </div>
+      </div>
+
+      <div class="desc" style="font-size: 11px; margin-top: 14px;">
+        마치 게임 속 NPC(Non-Player Character)처럼<br>
+        반복적이고 기계적으로 반응한다.
+      </div>
+      <div class="brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 3: THE NUMBERS ======== -->
+  <div class="slide">
+    <div class="slide-number">3/9</div>
+    <div class="s">
+      <div class="label">규모</div>
+      <div class="title" style="font-size: 17px; margin-bottom: 16px;">
+        이 <em>"의미 없는"</em> 방송의 실적
+      </div>
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="num">$7K</div>
+          <div class="stat-label">하루 수익<br>(핑키돌 기준)</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">수백만</div>
+          <div class="stat-label">라이브 시청자 수</div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="num">100만+</div>
+          <div class="stat-label">한 달 만에<br>팔로워 증가</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">x10~50</div>
+          <div class="stat-label">일반 라이브 대비<br>선물 빈도</div>
+        </div>
+      </div>
+      <div class="desc" style="font-size: 11px; margin-top: 10px;">
+        우연이 아니다. 구조가 있다.
+      </div>
+      <div class="brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 4: KEY INSIGHT (green) ======== -->
+  <div class="slide">
+    <div class="slide-number">4/9</div>
+    <div class="s" style="background: linear-gradient(160deg, #059669 0%, #047857 100%);">
+      <div class="label" style="color: rgba(255,255,255,0.5);">핵심</div>
+      <div class="title" style="color: white; font-size: 22px;">
+        사용자에게<br>
+        <span style="font-size: 36px; text-shadow: 0 2px 20px rgba(0,0,0,0.3);">버튼</span>을 주면<br><br>
+        <span style="font-size: 36px; text-shadow: 0 2px 20px rgba(0,0,0,0.3);">체류 시간</span>이<br>
+        늘어난다
+      </div>
+      <div class="line" style="background: rgba(255,255,255,0.3);"></div>
+      <div class="desc" style="color: rgba(255,255,255,0.7); font-size: 12px;">
+        시청자가 관객에서 <strong style="color: white;">조종자</strong>가 되는 순간,<br>
+        이탈률이 급락한다.
+      </div>
+      <div class="brand" style="color: rgba(255,255,255,0.25);">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 5: IT'S A GAME (with gaming photo bg) ======== -->
+  <div class="slide">
+    <div class="slide-number">5/9</div>
+    <div class="photo-bg" style="background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1080&h=1350&fit=crop&q=80');">
+      <div class="s">
+        <div class="label">메커니즘</div>
+        <div class="title" style="font-size: 20px; margin-bottom: 20px;">
+          시청자는 <em>게임</em>을<br>하고 있는 것이다
+        </div>
+        <div class="cmp-box" style="background: rgba(15,15,15,0.85); border-color: rgba(255,255,255,0.1);">
+          <div class="cmp-row">
+            <div class="cmp-label" style="color: #A8A29E;">게임</div>
+            <div class="cmp-value" style="color: #FAFAF9;">버튼 → 캐릭터 반응</div>
+          </div>
+          <div class="cmp-row">
+            <div class="cmp-label" style="color: #34d399;">NPC 라이브</div>
+            <div class="cmp-value" style="color: #34d399;">선물 → 스트리머 반응</div>
+          </div>
+        </div>
+        <div class="desc" style="font-size: 12px; color: rgba(255,255,255,0.7);">
+          <strong style="color: white;">내 행동이 결과를 만든다</strong>는 느낌.<br>
+          심리학에서 <em style="color: #34d399;">행위 주체감(Agency)</em>이라 부른다.<br><br>
+          이 느낌이 강할수록<br>
+          이탈 = "내 세계를 떠나는 것"이 된다.
+        </div>
+        <div class="brand" style="color: rgba(255,255,255,0.2);">BDM Lab &middot; Big Data Marketing Lab</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 6: SLOT MACHINE (variable reward) ======== -->
+  <div class="slide">
+    <div class="slide-number">6/9</div>
+    <div class="photo-bg" style="background-image: url('https://images.unsplash.com/photo-1596838132731-3301c3ef1c5f?w=1080&h=1350&fit=crop&q=80');">
+      <div class="s">
+        <div class="label">가변 보상</div>
+        <div class="title" style="font-size: 20px; margin-bottom: 16px;">
+          <em>슬롯머신</em>과<br>같은 원리
+        </div>
+        <div class="cmp-box" style="background: rgba(15,15,15,0.85); border-color: rgba(255,255,255,0.1); text-align: left;">
+          <div style="font-size: 12px; color: #A8A29E; margin-bottom: 8px;">대부분은 예측 가능하다</div>
+          <div style="font-size: 14px; color: #FAFAF9; font-weight: 600;">
+            🍦 → "Ice cream so good"<br>
+            🌹 → "Yes yes yes"
+          </div>
+          <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; margin-top: 10px;">
+            <div style="font-size: 12px; color: #34d399; font-weight: 600;">하지만 가끔 —</div>
+            <div style="font-size: 13px; color: #E7E5E4; margin-top: 6px; line-height: 1.6;">
+              예상 못한 과부하 반응<br>
+              즉흥적인 새 대사<br>
+              미묘한 표정 변주
+            </div>
+          </div>
+        </div>
+        <div class="desc" style="font-size: 12px; color: rgba(255,255,255,0.7);">
+          보상 시점을 예측할 수 없을 때<br>
+          <strong style="color: white;">"한 번만 더"</strong>를 반복하게 된다.
+        </div>
+        <div class="brand" style="color: rgba(255,255,255,0.2);">BDM Lab &middot; Big Data Marketing Lab</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 7: PLATFORM ECONOMICS ======== -->
+  <div class="slide">
+    <div class="slide-number">7/9</div>
+    <div class="s">
+      <div class="label">플랫폼 경제학</div>
+      <div class="title" style="font-size: 18px; margin-bottom: 16px;">
+        왜 알고리즘이<br>NPC 라이브를 <em>밀어주는가</em>
+      </div>
+      <div class="cmp-box">
+        <div class="cmp-row">
+          <div class="cmp-label">TikTok 선물 수수료</div>
+          <div class="cmp-value" style="color: #34d399;">50–70%</div>
+        </div>
+        <div class="cmp-row">
+          <div class="cmp-label">일반 라이브: 선물</div>
+          <div class="cmp-value" style="color: #78716C;">가끔</div>
+        </div>
+        <div class="cmp-row">
+          <div class="cmp-label">NPC 라이브: 선물</div>
+          <div class="cmp-value" style="color: #34d399;">쉬지 않고 ↑↑↑</div>
+        </div>
+      </div>
+      <div class="desc" style="font-size: 12px;">
+        선물이 없으면 콘텐츠가 멈추는 구조.<br>
+        시청자의 <strong style="color: #FAFAF9;">돈</strong>이 콘텐츠의 <strong style="color: #FAFAF9;">연료</strong>다.<br><br>
+        <span style="font-size: 11px; color: #78716C;">체류 시간 ↑ + 수익 ↑ + 파생 콘텐츠 ↑<br>= 알고리즘이 추천할 이유가 3개</span>
+      </div>
+      <div class="brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 8: TAKEAWAYS ======== -->
+  <div class="slide">
+    <div class="slide-number">8/9</div>
+    <div class="s">
+      <div class="label">시사점</div>
+      <div class="title" style="font-size: 18px; margin-bottom: 16px;">
+        마케터가 가져갈 것
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text"><strong>인터랙티브 요소</strong>를 넣어라. 투표, Q&A, 실시간 반응 — 사용자에게 버튼을 주면 이탈률이 떨어진다.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text"><strong>즉각적 피드백</strong>이 핵심이다. 댓글 1시간 후 vs 10초 후 — 차이는 비용보다 훨씬 크다.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text"><strong>플랫폼 기능이 바뀌면 실험하라.</strong> NPC 스트리밍은 2년 전엔 없던 장르다. 기존 기능의 재조합이 새 콘텐츠를 만든다.</div>
+        </div>
+      </div>
+      <div class="brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- ======== SLIDE 9: CTA ======== -->
+  <div class="slide">
+    <div class="slide-number">9/9</div>
+    <div class="s" style="justify-content: center;">
+      <div style="margin-bottom: 24px;">
+        <svg width="64" height="64" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="248" fill="#1A1A1A"/>
+          <circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/>
+          <rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/>
+          <rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/>
+          <rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/>
+          <rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/>
+          <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+        </svg>
+      </div>
+      <div class="title" style="font-size: 16px; font-weight: 600; color: #A8A29E;">빅데이터 마케팅 랩</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #57534E; margin-top: 4px;">Big Data Marketing Lab</div>
+      <div class="line" style="margin: 24px auto;"></div>
+      <div class="desc" style="font-size: 14px; color: #D6D3D1; margin-top: 0;">전체 분석 읽기</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #34d399; margin-top: 8px; font-weight: 600;">bigdatamarketinglab.com</div>
+      <div style="font-size: 11px; color: #57534E; margin-top: 24px;">@bdm.lab</div>
+      <div class="brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin: 30px 0; padding: 20px; background: #2A2A2A; border-radius: 12px; max-width: 700px;">
+  <p style="font-size: 13px; color: #A8A29E; line-height: 1.8; text-align: center;">
+    <strong style="color: #FAFAF9;">슬라이드별 사진 사용:</strong><br>
+    1번 — 게이밍 셋업 (Unsplash, 무료)<br>
+    5번 — 게임 컨트롤러 네온 (Unsplash, 무료)<br>
+    6번 — 슬롯머신/카지노 (Unsplash, 무료)<br>
+    2, 3, 4, 7, 8, 9번 — 사진 없이 디자인으로 해결<br><br>
+    <span style="color: #78716C;">핑키돌 실제 방송 캡처를 1번이나 2번에 넣으면 더 강력해집니다.<br>
+    저작권상 직접 캡처하시는 것을 권장합니다.</span>
+  </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+image_01.jpg — 인스타그램/스마트폰
+https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1200&h=800&fit=crop
+
+image_02.jpg — 소셜미디어 피드 스크롤
+https://images.unsplash.com/photo-1563986768609-322da13575f2?w=1200&h=800&fit=crop
+
+image_03.jpg — 데이터/알고리즘
+https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&h=800&fit=crop
+
+image_04.jpg — 마케팅 전략 회의
+https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=800&fit=crop

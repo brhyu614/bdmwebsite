@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-Regular.ttf'); font-weight: 400; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-Medium.ttf'); font-weight: 500; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-SemiBold.ttf'); font-weight: 600; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-Bold.ttf'); font-weight: 700; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-ExtraBold.ttf'); font-weight: 800; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-Black.ttf'); font-weight: 900; }
+
+  :root { --accent: {{ accent }}; }
+  * { margin: 0; padding: 0; box-sizing: border-box; word-break: keep-all; overflow-wrap: break-word; }
+  body { font-family: 'Pretendard', -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; }
+
+  .slide {
+    width: 1080px; height: 1350px;
+    position: relative; overflow: hidden;
+    background: #0A0A0A;
+  }
+
+  /* ── 배경 비디오 ── */
+  .bg-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
+  }
+
+  .bg-grad {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg,
+      rgba(10,10,10,0.2) 0%,
+      rgba(10,10,10,0.5) 30%,
+      rgba(10,10,10,0.85) 50%,
+      #0A0A0A 65%);
+  }
+
+  /* ── 왼쪽 사이드 액센트 바 (두꺼운 세로 바) ── */
+  .side-bar {
+    position: absolute; top: 0; left: 0;
+    width: 14px; height: 100%;
+    background: var(--accent); z-index: 5;
+  }
+
+  /* ── 상단 액센트 바 ── */
+  .top-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px; background: var(--accent); z-index: 5;
+  }
+
+  /* ── 코너 장식 (우상단) ── */
+  .corner-deco {
+    position: absolute; top: 40px; right: 40px;
+    width: 80px; height: 80px; z-index: 5;
+    border-top: 4px solid var(--accent);
+    border-right: 4px solid var(--accent);
+  }
+
+  /* ── 브랜드 헤더 ── */
+  .brand-header {
+    position: absolute; top: 52px; left: 56px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 5;
+  }
+
+  .brand-logo {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 900; color: #0A0A0A;
+    letter-spacing: -1px;
+  }
+
+  .brand-info {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+
+  .brand-name {
+    font-size: 24px; font-weight: 700; color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .brand-handle {
+    font-size: 15px; font-weight: 400;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ── 카테고리 + 슬라이드 카운트 태그 ── */
+  .meta-row {
+    position: absolute; top: 140px; left: 56px; right: 56px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 5;
+  }
+
+  .cat-pill {
+    display: inline-block;
+    padding: 8px 22px;
+    background: var(--accent);
+    color: #0A0A0A;
+    font-size: 16px; font-weight: 800;
+    letter-spacing: 2px; text-transform: uppercase;
+    border-radius: 4px;
+  }
+
+  .slide-count {
+    font-size: 15px; font-weight: 500;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* ── 훅 넘버 영역 ── */
+  {% if hook_number %}
+  .hook-section {
+    position: absolute;
+    top: 280px; left: 56px; right: 56px;
+    z-index: 3;
+  }
+
+  .hook-number {
+    font-size: 220px; font-weight: 900;
+    color: var(--accent);
+    line-height: 0.85;
+    letter-spacing: -12px;
+    text-shadow:
+      0 0 120px rgba(57,255,20,0.25),
+      0 4px 0 rgba(0,0,0,0.3);
+    position: relative;
+  }
+
+  /* 숫자 뒤 반투명 워터마크 */
+  .hook-number::after {
+    content: '{{ hook_number }}';
+    position: absolute; top: 10px; left: 10px;
+    font-size: 220px; font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    letter-spacing: -12px;
+    z-index: -1;
+  }
+
+  .hook-label {
+    margin-top: 20px;
+    font-size: 32px; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    padding-left: 4px;
+  }
+  {% endif %}
+
+  /* ── 구분 라인 ── */
+  {% if hook_number %}
+  .divider-line {
+    position: absolute;
+    top: 640px; left: 56px;
+    width: 120px; height: 4px;
+    background: var(--accent);
+    z-index: 3;
+  }
+  {% endif %}
+
+  /* ── 메인 콘텐츠 ── */
+  .content {
+    position: absolute;
+    {% if hook_number %}
+    bottom: 0; left: 0; right: 0;
+    padding: 0 56px 130px;
+    {% else %}
+    top: 280px; left: 0; right: 0;
+    padding: 0 56px;
+    {% endif %}
+    z-index: 3;
+  }
+
+  .source-tag {
+    display: inline-block;
+    font-size: 17px; font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    margin-bottom: 28px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(57,255,20,0.3);
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: {% if hook_number %}72px{% else %}88px{% endif %};
+    font-weight: 800;
+    line-height: 1.2; color: #fff;
+    letter-spacing: -3px; margin-bottom: 36px;
+  }
+
+  /* 키워드 하이라이트 박스 — 형광펜 효과 */
+  h1 .acc {
+    color: #0A0A0A;
+    background: var(--accent);
+    padding: 4px 18px 8px;
+    border-radius: 6px;
+    display: inline;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+  }
+
+  h1 strong {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(57,255,20,0.2);
+  }
+
+  .sub {
+    font-size: 32px; font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+  }
+
+  /* ── 하단 스와이프 유도 ── */
+  .swipe-cta {
+    position: absolute;
+    bottom: 44px; left: 0; right: 0;
+    text-align: center; z-index: 5;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+  }
+
+  .swipe-arrow {
+    width: 32px; height: 32px;
+    border: none; background: none;
+    display: flex; align-items: center; justify-content: center;
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+
+  .swipe-arrow svg {
+    width: 28px; height: 28px;
+    fill: none; stroke: var(--accent);
+    stroke-width: 2.5; stroke-linecap: round;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(8px); }
+  }
+
+  .swipe-text {
+    font-size: 14px; font-weight: 600;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 3px; text-transform: uppercase;
+  }
+
+  /* ── 뮤트 아이콘 ── */
+  .mute {
+    position: absolute; top: 60px; right: 140px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 5;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mute svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.5); }
+
+  .footer {
+    position: absolute; bottom: 44px; left: 0; right: 0;
+    text-align: center; font-size: 15px; font-weight: 500;
+    font-style: italic; letter-spacing: 1px;
+    color: rgba(255,255,255,0.1); z-index: 4;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="{{ video_path }}" type="video/mp4">
+  </video>
+  <div class="bg-grad"></div>
+
+  <!-- 구조 장식 -->
+  <div class="side-bar"></div>
+  <div class="top-bar"></div>
+  <div class="corner-deco"></div>
+
+  <!-- 브랜드 헤더 -->
+  <div class="brand-header">
+    <div class="brand-logo">{{ brand_logo_text }}</div>
+    <div class="brand-info">
+      <div class="brand-name">{{ brand_name }}</div>
+      <div class="brand-handle">{{ brand_handle }}</div>
+    </div>
+  </div>
+
+  <div class="mute"><svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg></div>
+
+  <!-- 카테고리 필 -->
+  <div class="meta-row">
+    <span class="cat-pill">{{ category }}</span>
+  </div>
+
+  {% if hook_number %}
+  <!-- 훅 넘버 -->
+  <div class="hook-section">
+    <div class="hook-number">{{ hook_number }}</div>
+    {% if hook_label %}<div class="hook-label">{{ hook_label }}</div>{% endif %}
+  </div>
+  <div class="divider-line"></div>
+  {% endif %}
+
+  <!-- 메인 콘텐츠 -->
+  <div class="content">
+    {% if source %}<div class="source-tag">{{ source }}</div>{% endif %}
+    <h1>{{ title }}</h1>
+    <div class="sub">{{ subtitle }}</div>
+  </div>
+
+  <!-- 스와이프 유도 -->
+  <div class="swipe-cta">
+    <div class="swipe-arrow">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+
+  <div class="footer">{{ footer }}</div>
+</div>
+</body>
+</html>

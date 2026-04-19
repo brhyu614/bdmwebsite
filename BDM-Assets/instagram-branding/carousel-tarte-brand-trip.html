@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Lab Carousel — 타르트 브랜드 트립</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #e5e5e5;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 60px;
+  }
+
+  h2.section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1C1917;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  p.section-desc {
+    font-size: 14px;
+    color: #78716C;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .slides-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .slide {
+    width: 360px;
+    height: 450px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .slide-number {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    z-index: 10;
+  }
+
+  /* ============================================
+     OPTION A — Light, Editorial
+     ============================================ */
+  .opt-a {
+    background: #FAFAF9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .opt-a .top-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #059669;
+    margin-bottom: 24px;
+  }
+  .opt-a .main-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.45;
+    color: #1C1917;
+    word-break: keep-all;
+  }
+  .opt-a .main-text em {
+    font-style: normal;
+    color: #059669;
+  }
+  .opt-a .sub-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #78716C;
+    margin-top: 20px;
+    word-break: keep-all;
+  }
+  .opt-a .accent-line {
+    width: 40px;
+    height: 3px;
+    background: #059669;
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+  .opt-a .bottom-brand {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #A8A29E;
+    text-transform: uppercase;
+  }
+
+  .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+  .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+  .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+
+  .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+  .opt-a .compare-label { font-size: 12px; color: #78716C; }
+  .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+
+  .opt-a .num-list { text-align: left; width: 100%; }
+  .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+  .opt-a .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-a .num-text { font-size: 13px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+  .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+
+  /* ============================================
+     OPTION B — Dark, Bold
+     ============================================ */
+  .opt-b {
+    background: #0F0F0F;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+  .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+  .opt-b .main-text em { font-style: normal; color: #34d399; }
+  .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+  .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+  .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+
+  .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+  .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+  .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+
+  .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+  .opt-b .compare-label { font-size: 12px; color: #78716C; }
+  .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+
+  .opt-b .num-list { text-align: left; width: 100%; }
+  .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+  .opt-b .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-b .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+  .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+
+  .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+
+</style>
+</head>
+<body>
+
+<!-- =============================================
+     OPTION A — Light Editorial
+     ============================================= -->
+<h2 class="section-title">Option A — Light Editorial</h2>
+<p class="section-desc">타르트 브랜드 트립 — 불공정이 보이면 알고리즘이 처벌한다</p>
+
+<div class="slides-row">
+
+  <!-- SLIDE 1: Hook -->
+  <div class="slide">
+    <div class="slide-number">1/9</div>
+    <div class="opt-a">
+      <div class="top-label">알고리즘 디코드</div>
+      <div class="main-text" style="font-size: 28px;">
+        화장품 브랜드가<br>
+        인플루언서 <em>50명</em>을<br>
+        두바이 5성급 호텔에 초대했다.<br><br>
+        <span style="font-size: 22px; color: #78716C; font-weight: 600;">수백만 달러를 쓴 이 행사가<br>브랜드를 <em>망쳤다.</em></span>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: 현상 -->
+  <div class="slide">
+    <div class="slide-number">2/9</div>
+    <div class="opt-a">
+      <div class="top-label">현상</div>
+      <div class="main-text" style="font-size: 22px;">
+        문제는 단순했다.
+      </div>
+      <div class="accent-line"></div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">인플루언서 A</div>
+          <div class="compare-value" style="color: #059669;">스위트룸 + 에르메스 가방</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">인플루언서 B</div>
+          <div class="compare-value" style="color: #dc2626;">일반 객실 + 기본 키트</div>
+        </div>
+      </div>
+      <div class="sub-text">
+        둘 다 실시간으로<br>스토리에 올렸다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: 비교가 보이는 순간 -->
+  <div class="slide">
+    <div class="slide-number">3/9</div>
+    <div class="opt-a" style="background: #059669;">
+      <div class="top-label" style="color: rgba(255,255,255,0.6);">핵심</div>
+      <div class="main-text" style="color: white; font-size: 32px;">
+        팔로워들은<br>두 사람의 스토리를<br><em style="color: white; font-size: 40px;">동시에</em> 봤다.
+      </div>
+      <div class="accent-line" style="background: rgba(255,255,255,0.4);"></div>
+      <div class="sub-text" style="color: rgba(255,255,255,0.7);">
+        같은 행사. 다른 대우.<br>"불공정하다"는 감정이 폭발했다.
+      </div>
+      <div class="bottom-brand" style="color: rgba(255,255,255,0.3);">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 원숭이 실험 -->
+  <div class="slide">
+    <div class="slide-number">4/9</div>
+    <div class="opt-a">
+      <div class="top-label">연구</div>
+      <div class="main-text" style="font-size: 20px;">
+        카푸친 원숭이 실험
+      </div>
+      <div class="sub-text" style="font-size: 11px; margin-top: 8px; margin-bottom: 12px;">Frans de Waal, 2003</div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">같은 과제 수행</div>
+          <div class="compare-value" style="color: #1C1917;">두 원숭이</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">원숭이 A 보상</div>
+          <div class="compare-value" style="color: #059669;">포도</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">원숭이 B 보상</div>
+          <div class="compare-value" style="color: #dc2626;">오이</div>
+        </div>
+      </div>
+      <div class="main-text" style="font-size: 16px; margin-top: 16px;">
+        오이 받은 원숭이는<br>오이를 <em>내던졌다.</em>
+      </div>
+      <div class="sub-text" style="font-size: 12px;">
+        불공정 반응은 <strong style="color: #1C1917;">본능</strong>이다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: 알고리즘이 분노를 증폭 -->
+  <div class="slide">
+    <div class="slide-number">5/9</div>
+    <div class="opt-a">
+      <div class="top-label">메커니즘</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        알고리즘이<br><em>분노</em>를 증폭한다
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text">사람들이 분노하면 <strong>댓글</strong>을 단다. 길고, 구체적인 비판 댓글.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text">알고리즘은 감정의 <strong>방향(긍정/부정)</strong>을 모른다.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text">댓글이 많으면 = <strong>좋은 콘텐츠</strong>로 판단.</div>
+        </div>
+      </div>
+      <div class="sub-text" style="font-size: 12px;">
+        → 분노가 도달을 폭발시켰다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 제3자 비교 영상 -->
+  <div class="slide">
+    <div class="slide-number">6/9</div>
+    <div class="opt-a">
+      <div class="top-label">데이터</div>
+      <div class="main-text" style="font-size: 22px;">
+        가장 많이 조회된 건<br>참가자의 게시물이<br><em>아니었다.</em>
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text">
+        "A는 이걸 받았는데 B는 이것만"
+      </div>
+      <div class="main-text" style="font-size: 16px; margin-top: 16px;">
+        → 제3자가 만든 비교 영상이<br><em>수천만 조회</em>를 기록했다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: 소셜 미디어의 불문율 -->
+  <div class="slide">
+    <div class="slide-number">7/9</div>
+    <div class="opt-a">
+      <div class="top-label">시사점</div>
+      <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+        소셜 미디어의 불문율
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text"><strong>숨겨진 차등</strong>은 발각되면 더 크게 터진다</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text"><strong>팔로워 수 ≠ 인간 가치</strong> (사람들은 이걸 안다)</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text"><strong>과시는 임계점</strong>을 넘으면 동경 → 반감</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 브랜드가 배울 것 -->
+  <div class="slide">
+    <div class="slide-number">8/9</div>
+    <div class="opt-a">
+      <div class="top-label">전략</div>
+      <div class="main-text" style="font-size: 18px; margin-bottom: 16px;">
+        브랜드가 배울 것
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text">차등 대우를 하되, <strong>보이지 않게</strong> 하라</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text">"소셜 미디어에서 <strong>보이는 것은 전부</strong>"라고 가정하라</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text">알고리즘은 <strong>분노를 먹고 자란다.</strong> 공정성 위반은 최고의 알고리즘 연료다.</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: CTA -->
+  <div class="slide">
+    <div class="slide-number">9/9</div>
+    <div class="opt-a" style="justify-content: center;">
+      <div style="margin-bottom: 24px;">
+        <svg width="64" height="64" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="248" fill="#0a0a0a"/>
+          <circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/>
+          <rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/>
+          <rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/>
+          <rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/>
+          <rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/>
+          <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+        </svg>
+      </div>
+      <div class="main-text" style="font-size: 14px; font-weight: 600; color: #57534E;">소셜 미디어에는 보이지 않는 공정성 규칙이 있다.<br>그걸 어기면 알고리즘이 처벌한다.</div>
+      <div class="accent-line" style="margin: 20px auto;"></div>
+      <div class="sub-text" style="font-size: 14px; color: #44403C; margin-top: 0;">전체 분석 읽기</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #059669; margin-top: 8px; font-weight: 600;">bigdatamarketinglab.com</div>
+      <div style="font-size: 11px; color: #A8A29E; margin-top: 20px;">@bdm.lab</div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- =============================================
+     OPTION B — Dark Bold
+     ============================================= -->
+<h2 class="section-title" style="margin-top: 40px;">Option B — Dark Bold</h2>
+<p class="section-desc">타르트 브랜드 트립 — 불공정이 보이면 알고리즘이 처벌한다</p>
+
+<div class="slides-row">
+
+  <!-- SLIDE 1: Hook -->
+  <div class="slide">
+    <div class="slide-number">1/9</div>
+    <div class="opt-b">
+      <div class="top-label">알고리즘 디코드</div>
+      <div class="main-text" style="font-size: 28px;">
+        화장품 브랜드가<br>
+        인플루언서 <em>50명</em>을<br>
+        두바이 5성급 호텔에 초대했다.<br><br>
+        <span style="font-size: 22px; color: #A8A29E; font-weight: 600;">수백만 달러를 쓴 이 행사가<br>브랜드를 <em>망쳤다.</em></span>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: 현상 -->
+  <div class="slide">
+    <div class="slide-number">2/9</div>
+    <div class="opt-b">
+      <div class="top-label">현상</div>
+      <div class="main-text" style="font-size: 22px;">
+        문제는 단순했다.
+      </div>
+      <div class="accent-line"></div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">인플루언서 A</div>
+          <div class="compare-value" style="color: #34d399;">스위트룸 + 에르메스 가방</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">인플루언서 B</div>
+          <div class="compare-value" style="color: #ef4444;">일반 객실 + 기본 키트</div>
+        </div>
+      </div>
+      <div class="sub-text">
+        둘 다 실시간으로<br>스토리에 올렸다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: 비교가 보이는 순간 -->
+  <div class="slide">
+    <div class="slide-number">3/9</div>
+    <div class="opt-b" style="background: linear-gradient(160deg, #059669 0%, #047857 100%);">
+      <div class="top-label" style="color: rgba(255,255,255,0.5);">핵심</div>
+      <div class="main-text" style="color: white; font-size: 32px;">
+        팔로워들은<br>두 사람의 스토리를<br><span style="font-size: 40px; text-shadow: 0 2px 20px rgba(0,0,0,0.3);">동시에</span> 봤다.
+      </div>
+      <div class="accent-line" style="background: rgba(255,255,255,0.3);"></div>
+      <div class="sub-text" style="color: rgba(255,255,255,0.7);">
+        같은 행사. 다른 대우.<br>"불공정하다"는 감정이 폭발했다.
+      </div>
+      <div class="bottom-brand" style="color: rgba(255,255,255,0.25);">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 원숭이 실험 -->
+  <div class="slide">
+    <div class="slide-number">4/9</div>
+    <div class="opt-b">
+      <div class="top-label">연구</div>
+      <div class="main-text" style="font-size: 20px;">
+        카푸친 원숭이 실험
+      </div>
+      <div class="sub-text" style="font-size: 11px; margin-top: 8px; margin-bottom: 12px;">Frans de Waal, 2003</div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">같은 과제 수행</div>
+          <div class="compare-value" style="color: #FAFAF9;">두 원숭이</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">원숭이 A 보상</div>
+          <div class="compare-value" style="color: #34d399;">포도</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">원숭이 B 보상</div>
+          <div class="compare-value" style="color: #ef4444;">오이</div>
+        </div>
+      </div>
+      <div class="main-text" style="font-size: 16px; margin-top: 16px;">
+        오이 받은 원숭이는<br>오이를 <em>내던졌다.</em>
+      </div>
+      <div class="sub-text" style="font-size: 12px;">
+        불공정 반응은 <strong style="color: #FAFAF9;">본능</strong>이다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: 알고리즘이 분노를 증폭 -->
+  <div class="slide">
+    <div class="slide-number">5/9</div>
+    <div class="opt-b">
+      <div class="top-label">메커니즘</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        알고리즘이<br><em>분노</em>를 증폭한다
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text">사람들이 분노하면 <strong>댓글</strong>을 단다. 길고, 구체적인 비판 댓글.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text">알고리즘은 감정의 <strong>방향(긍정/부정)</strong>을 모른다.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text">댓글이 많으면 = <strong>좋은 콘텐츠</strong>로 판단.</div>
+        </div>
+      </div>
+      <div class="sub-text" style="font-size: 12px;">
+        → 분노가 도달을 폭발시켰다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 제3자 비교 영상 -->
+  <div class="slide">
+    <div class="slide-number">6/9</div>
+    <div class="opt-b">
+      <div class="top-label">데이터</div>
+      <div class="main-text" style="font-size: 22px;">
+        가장 많이 조회된 건<br>참가자의 게시물이<br><em>아니었다.</em>
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text">
+        "A는 이걸 받았는데 B는 이것만"
+      </div>
+      <div class="main-text" style="font-size: 16px; margin-top: 16px;">
+        → 제3자가 만든 비교 영상이<br><em>수천만 조회</em>를 기록했다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: 소셜 미디어의 불문율 -->
+  <div class="slide">
+    <div class="slide-number">7/9</div>
+    <div class="opt-b">
+      <div class="top-label">시사점</div>
+      <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+        소셜 미디어의 불문율
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text"><strong>숨겨진 차등</strong>은 발각되면 더 크게 터진다</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text"><strong>팔로워 수 ≠ 인간 가치</strong> (사람들은 이걸 안다)</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text"><strong>과시는 임계점</strong>을 넘으면 동경 → 반감</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 브랜드가 배울 것 -->
+  <div class="slide">
+    <div class="slide-number">8/9</div>
+    <div class="opt-b">
+      <div class="top-label">전략</div>
+      <div class="main-text" style="font-size: 18px; margin-bottom: 16px;">
+        브랜드가 배울 것
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text">차등 대우를 하되, <strong>보이지 않게</strong> 하라</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text">"소셜 미디어에서 <strong>보이는 것은 전부</strong>"라고 가정하라</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text">알고리즘은 <strong>분노를 먹고 자란다.</strong> 공정성 위반은 최고의 알고리즘 연료다.</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: CTA -->
+  <div class="slide">
+    <div class="slide-number">9/9</div>
+    <div class="opt-b" style="justify-content: center;">
+      <div style="margin-bottom: 24px;">
+        <svg width="64" height="64" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="248" fill="#1A1A1A"/>
+          <circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/>
+          <rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/>
+          <rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/>
+          <rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/>
+          <rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/>
+          <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+        </svg>
+      </div>
+      <div class="main-text" style="font-size: 14px; font-weight: 600; color: #A8A29E;">소셜 미디어에는 보이지 않는 공정성 규칙이 있다.<br>그걸 어기면 알고리즘이 처벌한다.</div>
+      <div class="accent-line" style="margin: 20px auto;"></div>
+      <div class="sub-text" style="font-size: 14px; color: #D6D3D1; margin-top: 0;">전체 분석 읽기</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #34d399; margin-top: 8px; font-weight: 600;">bigdatamarketinglab.com</div>
+      <div style="font-size: 11px; color: #57534E; margin-top: 20px;">@bdm.lab</div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin: 40px 0; padding: 24px; background: white; border-radius: 12px; max-width: 600px; text-align: center;">
+  <p style="font-size: 13px; color: #78716C; line-height: 1.8;">
+    <strong style="color: #1C1917;">사용법:</strong> 각 슬라이드를 1080&times;1350px 비율로 스크린샷하거나,<br>
+    브라우저에서 개별 슬라이드를 우클릭 &gt; 검사 &gt; 캡처하세요.<br>
+    또는 Figma/Canva에 이 디자인을 옮겨서 사용할 수 있습니다.
+  </p>
+</div>
+
+</body>
+</html>

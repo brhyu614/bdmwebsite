@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Lab Carousel — Very Demure 밈</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #e5e5e5;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 60px;
+  }
+
+  h2.section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1C1917;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  p.section-desc {
+    font-size: 14px;
+    color: #78716C;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .slides-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .slide {
+    width: 360px;
+    height: 450px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .slide-number {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    z-index: 10;
+  }
+
+  /* ============================================
+     OPTION A — Light, Editorial
+     ============================================ */
+  .opt-a {
+    background: #FAFAF9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .opt-a .top-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #059669;
+    margin-bottom: 24px;
+  }
+  .opt-a .main-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.45;
+    color: #1C1917;
+    word-break: keep-all;
+  }
+  .opt-a .main-text em {
+    font-style: normal;
+    color: #059669;
+  }
+  .opt-a .sub-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #78716C;
+    margin-top: 20px;
+    word-break: keep-all;
+  }
+  .opt-a .accent-line {
+    width: 40px;
+    height: 3px;
+    background: #059669;
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+  .opt-a .bottom-brand {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #A8A29E;
+    text-transform: uppercase;
+  }
+
+  .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+  .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+  .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+
+  .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+  .opt-a .compare-label { font-size: 12px; color: #78716C; }
+  .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+
+  .opt-a .num-list { text-align: left; width: 100%; }
+  .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+  .opt-a .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-a .num-text { font-size: 13px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+  .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+
+  /* ============================================
+     OPTION B — Dark, Bold
+     ============================================ */
+  .opt-b {
+    background: #0F0F0F;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+  .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+  .opt-b .main-text em { font-style: normal; color: #34d399; }
+  .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+  .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+  .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+
+  .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+  .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+  .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+
+  .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+  .opt-b .compare-label { font-size: 12px; color: #78716C; }
+  .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+
+  .opt-b .num-list { text-align: left; width: 100%; }
+  .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+  .opt-b .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-b .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+  .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+
+  .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+
+</style>
+</head>
+<body>
+
+<!-- =============================================
+     OPTION A — Light Editorial
+     ============================================= -->
+<h2 class="section-title">Option A — Light Editorial</h2>
+<p class="section-desc">Very Demure 밈 — 빈칸만 채우면 바이럴</p>
+
+<div class="slides-row">
+
+  <!-- SLIDE 1: Hook -->
+  <div class="slide">
+    <div class="slide-number">1/9</div>
+    <div class="opt-a">
+      <div class="top-label">알고리즘 디코드</div>
+      <div class="main-text" style="font-size: 28px;">
+        한 여자가<br>
+        출근 메이크업을 하면서<br>
+        이렇게 말했다.
+      </div>
+      <div class="accent-line"></div>
+      <div class="main-text" style="font-size: 20px; margin-top: 8px;">
+        "<em>Very demure, very mindful</em>"
+      </div>
+      <div class="sub-text">
+        <em>6단어.</em><br>TikTok 조회수 수십억.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: 진짜 폭발은 그 다음 -->
+  <div class="slide">
+    <div class="slide-number">2/9</div>
+    <div class="opt-a">
+      <div class="top-label">현상</div>
+      <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+        진짜 폭발은 그 다음
+      </div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">요리사</div>
+          <div class="compare-value" style="color: #059669;">"Very demure, very seasoned"</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">변호사</div>
+          <div class="compare-value" style="color: #059669;">"Very demure, very litigious"</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">NASA</div>
+          <div class="compare-value" style="color: #059669;">"Very demure, very cosmic"</div>
+        </div>
+      </div>
+      <div class="sub-text">
+        수십만 명이 같은 구조로<br>영상을 만들었다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: 왜 이게 터졌을까 (ACCENT GREEN) -->
+  <div class="slide">
+    <div class="slide-number">3/9</div>
+    <div class="opt-a" style="background: #059669;">
+      <div class="top-label" style="color: rgba(255,255,255,0.6);">핵심</div>
+      <div class="main-text" style="color: white; font-size: 32px;">
+        이건 "좋은 콘텐츠"가<br>아니었다.
+      </div>
+      <div class="main-text" style="color: white; font-size: 40px; margin-top: 16px;">
+        "따라 하기 쉬운<br>콘텐츠"였다.
+      </div>
+      <div class="accent-line" style="background: rgba(255,255,255,0.4);"></div>
+      <div class="sub-text" style="color: rgba(255,255,255,0.8); font-size: 16px;">
+        "Very __, very __"<br>구조는 고정. 빈칸만 채우면 됨.
+      </div>
+      <div class="bottom-brand" style="color: rgba(255,255,255,0.3);">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 템플릿의 힘 -->
+  <div class="slide">
+    <div class="slide-number">4/9</div>
+    <div class="opt-a">
+      <div class="top-label">메커니즘</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        템플릿의 힘
+      </div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">보는 것</div>
+          <div class="compare-value" style="color: #A8A29E;">수동적 (조회수만)</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">따라 하는 것</div>
+          <div class="compare-value" style="color: #059669;">능동적 (새 콘텐츠 생성)</div>
+        </div>
+      </div>
+      <div class="sub-text" style="text-align: left;">
+        → 참여자가 곧 홍보자가 된다.<br>
+        한 명이 만들면 그 팔로워에게 노출.<br><br>
+        → <strong style="color: #1C1917;">자기 강화 루프</strong> 형성.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: 관심사 침투 -->
+  <div class="slide">
+    <div class="slide-number">5/9</div>
+    <div class="opt-a">
+      <div class="top-label">확산</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        <em>관심사</em> 침투
+      </div>
+      <div class="sub-text" style="margin-top: 0; text-align: left;">
+        같은 템플릿이지만 맥락이 다르다.<br><br>
+        요리 / 법률 / 과학 / 패션 / 육아...<br><br>
+        → 하나의 밈이 수십 개 관심사에<br>
+        <strong style="color: #1C1917;">동시에 침투</strong>한다.<br><br>
+        알고리즘은 관심사별로<br>각 버전을 추천.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 문화적 순간 -->
+  <div class="slide">
+    <div class="slide-number">6/9</div>
+    <div class="opt-a">
+      <div class="top-label">심리</div>
+      <div class="main-text" style="font-size: 22px;">
+        문화적 순간이 되면
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text" style="text-align: left; font-size: 14px;">
+        참여 안 하면 "뒤처진다"는 느낌.<br><br>
+        → <strong style="color: #1C1917;">밴드왜건 효과</strong><br><br>
+        → 참여 자체가 소셜 화폐가 됨
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: 원본 크리에이터는? -->
+  <div class="slide">
+    <div class="slide-number">7/9</div>
+    <div class="opt-a">
+      <div class="top-label">시사점</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        원본 크리에이터는?
+      </div>
+      <div class="main-text" style="font-size: 16px;">
+        줄리안나 레베카:<br><em>수백만 팔로워</em> 획득.
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text" style="text-align: left;">
+        하지만 다음 바이럴은? <strong style="color: #1C1917;">거의 불가능.</strong><br><br>
+        → 밈의 주의는 광범위하지만 얕다.<br>
+        = 크리에이터 경제의 <strong style="color: #1C1917;">구조적 불안정성</strong>.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 브랜드 액션 (NUM LIST) -->
+  <div class="slide">
+    <div class="slide-number">8/9</div>
+    <div class="opt-a">
+      <div class="top-label">전략</div>
+      <div class="main-text" style="font-size: 18px; margin-bottom: 16px;">
+        브랜드 액션
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text">콘텐츠를 만들 때: <strong>"이걸 어떻게 따라 할 수 있는가?"</strong>를 먼저 설계</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text"><strong>템플릿은 단순할수록</strong> 좋다</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text">밈을 만드는 것 < <strong>밈에 올라타는 것.</strong> 타이밍: 발생 후 3~7일이 골든타임</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: CTA -->
+  <div class="slide">
+    <div class="slide-number">9/9</div>
+    <div class="opt-a" style="justify-content: center;">
+      <div style="margin-bottom: 24px;">
+        <svg width="64" height="64" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="248" fill="#0a0a0a"/>
+          <circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/>
+          <rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/>
+          <rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/>
+          <rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/>
+          <rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/>
+          <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+        </svg>
+      </div>
+      <div class="main-text" style="font-size: 14px; font-weight: 600; color: #57534E;">완성도 높은 콘텐츠보다<br>따라 하기 쉬운 콘텐츠가 이긴다.</div>
+      <div class="accent-line" style="margin: 20px auto;"></div>
+      <div class="sub-text" style="font-size: 14px; color: #44403C; margin-top: 0;">전체 분석 읽기</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #059669; margin-top: 8px; font-weight: 600;">bigdatamarketinglab.com</div>
+      <div style="font-size: 11px; color: #A8A29E; margin-top: 20px;">@bdm.lab</div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- =============================================
+     OPTION B — Dark Bold
+     ============================================= -->
+<h2 class="section-title" style="margin-top: 40px;">Option B — Dark Bold</h2>
+<p class="section-desc">Very Demure 밈 — 빈칸만 채우면 바이럴</p>
+
+<div class="slides-row">
+
+  <!-- SLIDE 1: Hook -->
+  <div class="slide">
+    <div class="slide-number">1/9</div>
+    <div class="opt-b">
+      <div class="top-label">알고리즘 디코드</div>
+      <div class="main-text" style="font-size: 28px;">
+        한 여자가<br>
+        출근 메이크업을 하면서<br>
+        이렇게 말했다.
+      </div>
+      <div class="accent-line"></div>
+      <div class="main-text" style="font-size: 20px; margin-top: 8px;">
+        "<em>Very demure, very mindful</em>"
+      </div>
+      <div class="sub-text">
+        <em>6단어.</em><br>TikTok 조회수 수십억.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: 진짜 폭발은 그 다음 -->
+  <div class="slide">
+    <div class="slide-number">2/9</div>
+    <div class="opt-b">
+      <div class="top-label">현상</div>
+      <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+        진짜 폭발은 그 다음
+      </div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">요리사</div>
+          <div class="compare-value" style="color: #34d399;">"Very demure, very seasoned"</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">변호사</div>
+          <div class="compare-value" style="color: #34d399;">"Very demure, very litigious"</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">NASA</div>
+          <div class="compare-value" style="color: #34d399;">"Very demure, very cosmic"</div>
+        </div>
+      </div>
+      <div class="sub-text">
+        수십만 명이 같은 구조로<br>영상을 만들었다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: 왜 이게 터졌을까 (ACCENT GREEN) -->
+  <div class="slide">
+    <div class="slide-number">3/9</div>
+    <div class="opt-b" style="background: linear-gradient(160deg, #059669 0%, #047857 100%);">
+      <div class="top-label" style="color: rgba(255,255,255,0.5);">핵심</div>
+      <div class="main-text" style="color: white; font-size: 32px;">
+        이건 "좋은 콘텐츠"가<br>아니었다.
+      </div>
+      <div class="main-text" style="color: white; font-size: 40px; margin-top: 16px; text-shadow: 0 2px 20px rgba(0,0,0,0.3);">
+        "따라 하기 쉬운<br>콘텐츠"였다.
+      </div>
+      <div class="accent-line" style="background: rgba(255,255,255,0.3);"></div>
+      <div class="sub-text" style="color: rgba(255,255,255,0.8); font-size: 16px;">
+        "Very __, very __"<br>구조는 고정. 빈칸만 채우면 됨.
+      </div>
+      <div class="bottom-brand" style="color: rgba(255,255,255,0.25);">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 템플릿의 힘 -->
+  <div class="slide">
+    <div class="slide-number">4/9</div>
+    <div class="opt-b">
+      <div class="top-label">메커니즘</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        템플릿의 힘
+      </div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">보는 것</div>
+          <div class="compare-value" style="color: #78716C;">수동적 (조회수만)</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-label">따라 하는 것</div>
+          <div class="compare-value" style="color: #34d399;">능동적 (새 콘텐츠 생성)</div>
+        </div>
+      </div>
+      <div class="sub-text" style="text-align: left;">
+        → 참여자가 곧 홍보자가 된다.<br>
+        한 명이 만들면 그 팔로워에게 노출.<br><br>
+        → <strong style="color: #FAFAF9;">자기 강화 루프</strong> 형성.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: 관심사 침투 -->
+  <div class="slide">
+    <div class="slide-number">5/9</div>
+    <div class="opt-b">
+      <div class="top-label">확산</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        <em>관심사</em> 침투
+      </div>
+      <div class="sub-text" style="margin-top: 0; text-align: left;">
+        같은 템플릿이지만 맥락이 다르다.<br><br>
+        요리 / 법률 / 과학 / 패션 / 육아...<br><br>
+        → 하나의 밈이 수십 개 관심사에<br>
+        <strong style="color: #FAFAF9;">동시에 침투</strong>한다.<br><br>
+        알고리즘은 관심사별로<br>각 버전을 추천.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 문화적 순간 -->
+  <div class="slide">
+    <div class="slide-number">6/9</div>
+    <div class="opt-b">
+      <div class="top-label">심리</div>
+      <div class="main-text" style="font-size: 22px;">
+        문화적 순간이 되면
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text" style="text-align: left; font-size: 14px;">
+        참여 안 하면 "뒤처진다"는 느낌.<br><br>
+        → <strong style="color: #FAFAF9;">밴드왜건 효과</strong><br><br>
+        → 참여 자체가 소셜 화폐가 됨
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: 원본 크리에이터는? -->
+  <div class="slide">
+    <div class="slide-number">7/9</div>
+    <div class="opt-b">
+      <div class="top-label">시사점</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        원본 크리에이터는?
+      </div>
+      <div class="main-text" style="font-size: 16px;">
+        줄리안나 레베카:<br><em>수백만 팔로워</em> 획득.
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text" style="text-align: left;">
+        하지만 다음 바이럴은? <strong style="color: #FAFAF9;">거의 불가능.</strong><br><br>
+        → 밈의 주의는 광범위하지만 얕다.<br>
+        = 크리에이터 경제의 <strong style="color: #FAFAF9;">구조적 불안정성</strong>.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 브랜드 액션 (NUM LIST) -->
+  <div class="slide">
+    <div class="slide-number">8/9</div>
+    <div class="opt-b">
+      <div class="top-label">전략</div>
+      <div class="main-text" style="font-size: 18px; margin-bottom: 16px;">
+        브랜드 액션
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text">콘텐츠를 만들 때: <strong>"이걸 어떻게 따라 할 수 있는가?"</strong>를 먼저 설계</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text"><strong>템플릿은 단순할수록</strong> 좋다</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text">밈을 만드는 것 < <strong>밈에 올라타는 것.</strong> 타이밍: 발생 후 3~7일이 골든타임</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: CTA -->
+  <div class="slide">
+    <div class="slide-number">9/9</div>
+    <div class="opt-b" style="justify-content: center;">
+      <div style="margin-bottom: 24px;">
+        <svg width="64" height="64" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="248" fill="#1A1A1A"/>
+          <circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/>
+          <rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/>
+          <rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/>
+          <rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/>
+          <rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/>
+          <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+        </svg>
+      </div>
+      <div class="main-text" style="font-size: 14px; font-weight: 600; color: #A8A29E;">완성도 높은 콘텐츠보다<br>따라 하기 쉬운 콘텐츠가 이긴다.</div>
+      <div class="accent-line" style="margin: 20px auto;"></div>
+      <div class="sub-text" style="font-size: 14px; color: #D6D3D1; margin-top: 0;">전체 분석 읽기</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #34d399; margin-top: 8px; font-weight: 600;">bigdatamarketinglab.com</div>
+      <div style="font-size: 11px; color: #57534E; margin-top: 20px;">@bdm.lab</div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin: 40px 0; padding: 24px; background: white; border-radius: 12px; max-width: 600px; text-align: center;">
+  <p style="font-size: 13px; color: #78716C; line-height: 1.8;">
+    <strong style="color: #1C1917;">사용법:</strong> 각 슬라이드를 1080&times;1350px 비율로 스크린샷하거나,<br>
+    브라우저에서 개별 슬라이드를 우클릭 &gt; 검사 &gt; 캡처하세요.<br>
+    또는 Figma/Canva에 이 디자인을 옮겨서 사용할 수 있습니다.
+  </p>
+</div>
+
+</body>
+</html>

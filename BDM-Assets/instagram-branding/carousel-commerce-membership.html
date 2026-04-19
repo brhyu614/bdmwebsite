@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDM Lab Carousel — 커머스 멤버십 (Commerce Membership)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #e5e5e5; font-family: 'Noto Sans KR', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 60px; }
+    h2.section-title { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: #1C1917; margin-bottom: 10px; text-align: center; }
+    p.section-desc { font-size: 14px; color: #78716C; text-align: center; margin-bottom: 30px; }
+    .slides-row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 100%; }
+    .slide { width: 360px; height: 450px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); position: relative; flex-shrink: 0; }
+    .slide-number { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.5); color: white; font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; z-index: 10; }
+
+    /* OPTION A - LIGHT */
+    .opt-a { background: #FAFAF9; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+    .opt-a .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #059669; margin-bottom: 24px; }
+    .opt-a .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #1C1917; word-break: keep-all; }
+    .opt-a .main-text em { font-style: normal; color: #059669; }
+    .opt-a .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #78716C; margin-top: 20px; word-break: keep-all; }
+    .opt-a .accent-line { width: 40px; height: 3px; background: #059669; margin: 20px auto; border-radius: 2px; }
+    .opt-a .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #A8A29E; text-transform: uppercase; }
+    .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+    .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+    .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+    .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+    .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+    .opt-a .compare-label { font-size: 12px; color: #78716C; }
+    .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+    .opt-a .num-list { text-align: left; width: 100%; }
+    .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+    .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+    .opt-a .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .opt-a .num-text { font-size: 13px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+    .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+
+    /* OPTION B - DARK */
+    .opt-b { background: #0F0F0F; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+    .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+    .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+    .opt-b .main-text em { font-style: normal; color: #34d399; }
+    .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+    .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+    .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+    .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+    .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+    .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+    .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+    .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+    .opt-b .compare-label { font-size: 12px; color: #78716C; }
+    .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+    .opt-b .num-list { text-align: left; width: 100%; }
+    .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+    .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+    .opt-b .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .opt-b .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+    .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+    .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+    .check { color: #059669; } .opt-b .check { color: #34d399; }
+    .cross { color: #ef4444; }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== OPTION A — LIGHT ==================== -->
+  <section>
+    <h2 class="section-title">Option A — Light Editorial</h2>
+    <p class="section-desc">커머스 멤버십 — 쿠팡플레이 때문에 가입하는 사람은 없다 (랩 리서치)</p>
+    <div class="slides-row">
+
+      <!-- Slide 1: Hook -->
+      <div class="slide opt-a">
+        <div class="slide-number">1 / 9</div>
+        <div class="top-label">Lab Research</div>
+        <div class="main-text" style="font-size: 22px;">
+          "로켓와우 가입하면<br>
+          드라마까지 공짜!"<br><br>
+          쿠팡이 쿠팡플레이에<br>
+          <em>수천억을 투자한 이유.</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">4,597명의 4년간 카드 결제 데이터를 봤다.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 2: Study characteristics -->
+      <div class="slide opt-a">
+        <div class="slide-number">2 / 9</div>
+        <div class="top-label">방법론</div>
+        <div class="main-text" style="font-size: 22px;">
+          이 연구의 특징
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          설문 아님. <strong style="color: #1C1917;">실제 카드 결제 내역.</strong><br>
+          4,597명 x 4년 (2020~2023)<br><br>
+          → 쿠팡만이 아니라 이마트, 11번가...<br>
+          <strong style="color: #1C1917;">전체 소비 포트폴리오</strong>를 봤다.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 3: 5 Hypotheses -->
+      <div class="slide opt-a">
+        <div class="slide-number">3 / 9</div>
+        <div class="top-label">검증</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          <em>5개 가설</em>을 검증했다
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">① 총지출이 크면 가입</span>
+            <span class="compare-value check">맞다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">② 온라인 쇼핑 많이 하면</span>
+            <span class="compare-value cross">아니다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">③ 쿠팡 지출 비중 높으면</span>
+            <span class="compare-value check">맞다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">④ OTT 많이 쓰면</span>
+            <span class="compare-value cross">아니다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">⑤ 오프라인 활동 많으면</span>
+            <span class="compare-value cross">아니다</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 12px;">살아남은 건 딱 2개.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 4: Accent Green — Finding 1 -->
+      <div class="slide opt-a" style="background: #059669;">
+        <div class="slide-number">4 / 9</div>
+        <div class="top-label" style="color: rgba(255,255,255,0.7);">발견 1</div>
+        <div class="main-text" style="color: #fff; font-size: 24px; line-height: 1.5;">
+          절약형이 아니라<br>
+          소비형
+        </div>
+        <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+        <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.8;">
+          <span style="opacity: 0.6; text-decoration: line-through;">"배달비 아끼려고 가입"?</span><br>
+          → 데이터는 정반대.<br><br>
+          <strong style="color: #fff;">이미 많이 쓰는 사람이 가입한다.</strong><br><br>
+          멤버십 = 수요 창출 도구가 아니라<br>
+          기존 수요를 구조화하는 도구.
+        </div>
+        <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+      </div>
+
+      <!-- Slide 5: Finding 2 -->
+      <div class="slide opt-a">
+        <div class="slide-number">5 / 9</div>
+        <div class="top-label">발견 2</div>
+        <div class="main-text" style="font-size: 20px;">
+          "온라인 쇼핑" ≠<br>
+          <em>"쿠팡 쇼핑"</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          11번가에서 많이 사는 건 무관.<br>
+          <strong style="color: #1C1917;">쿠팡에서 많이 사는 게 핵심.</strong><br><br>
+          → 멤버십은 새 고객을 데려오는 도구가 아니라<br>
+          기존 충성 고객을 <strong style="color: #1C1917;">고정(lock-in)</strong>하는 도구.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 6: Painful result -->
+      <div class="slide opt-a">
+        <div class="slide-number">6 / 9</div>
+        <div class="top-label">뼈아픈 결과</div>
+        <div class="main-text" style="font-size: 20px;">
+          OTT 번들링
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          넷플릭스에 월 1.5만원 쓰는 사람이<br>
+          "쿠팡플레이도 공짜니까" 가입?<br><br>
+          → <strong style="color: #ef4444;">NO.</strong><br><br>
+          OTT 지출과 멤버십 가입은<br>
+          <strong style="color: #1C1917;">통계적으로 유의한 관계 없음.</strong><br>
+          팬데믹 때도, 엔데믹 때도.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 7: OTT bundle role -->
+      <div class="slide opt-a">
+        <div class="slide-number">7 / 9</div>
+        <div class="top-label">역할</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          OTT 번들의 <em>진짜 역할</em>
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">신규 가입 유도</span>
+            <span class="compare-value cross">실패</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">기존 가입자 이탈 방지</span>
+            <span class="compare-value check">가능성 있음</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 13px;">
+          "해지하면 쿠팡플레이도 못 보는데..."<br>
+          → 가입의 동인이 아니라 <strong style="color: #1C1917;">이탈의 마찰.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 8: Action Items -->
+      <div class="slide opt-a">
+        <div class="slide-number">8 / 9</div>
+        <div class="top-label">실무 액션</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          <em>실무 액션</em>
+        </div>
+        <div class="num-list">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>멤버십 마케팅 타겟:</strong> "모든 비회원"이 아니라 "이미 상위 20% 지출 중인 비회원"</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>OTT 투자 ROI:</strong> 가입이 아닌 이탈률로 재측정</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text"><strong>번들 혜택 추가</strong> < 핵심 쇼핑 경험 강화</div>
+          </div>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 9: CTA -->
+      <div class="slide opt-a">
+        <div class="slide-number">9 / 9</div>
+        <div style="margin-bottom: 24px;">
+          <svg width="64" height="64" viewBox="0 0 500 500">
+            <circle cx="250" cy="250" r="248" fill="#0a0a0a"/>
+            <circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/>
+            <rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/>
+            <rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/>
+            <rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/>
+            <rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/>
+            <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+          </svg>
+        </div>
+        <div class="main-text" style="font-size: 20px; line-height: 1.6;">
+          멤버십 가입을 결정하는 건<br>
+          번들 혜택이 아니라<br>
+          <em>이미 그 플랫폼의<br>
+          핵심 경험에 만족하는 것.</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          bigdatamarketinglab.com<br>
+          @bdm.lab
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== OPTION B — DARK ==================== -->
+  <section>
+    <h2 class="section-title">Option B — Dark Bold</h2>
+    <p class="section-desc">커머스 멤버십 — 쿠팡플레이 때문에 가입하는 사람은 없다 (랩 리서치)</p>
+    <div class="slides-row">
+
+      <!-- Slide 1: Hook -->
+      <div class="slide opt-b">
+        <div class="slide-number">1 / 9</div>
+        <div class="top-label">Lab Research</div>
+        <div class="main-text" style="font-size: 22px;">
+          "로켓와우 가입하면<br>
+          드라마까지 공짜!"<br><br>
+          쿠팡이 쿠팡플레이에<br>
+          <em>수천억을 투자한 이유.</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">4,597명의 4년간 카드 결제 데이터를 봤다.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 2: Study characteristics -->
+      <div class="slide opt-b">
+        <div class="slide-number">2 / 9</div>
+        <div class="top-label">방법론</div>
+        <div class="main-text" style="font-size: 22px;">
+          이 연구의 특징
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          설문 아님. <strong style="color: #FAFAF9;">실제 카드 결제 내역.</strong><br>
+          4,597명 x 4년 (2020~2023)<br><br>
+          → 쿠팡만이 아니라 이마트, 11번가...<br>
+          <strong style="color: #FAFAF9;">전체 소비 포트폴리오</strong>를 봤다.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 3: 5 Hypotheses -->
+      <div class="slide opt-b">
+        <div class="slide-number">3 / 9</div>
+        <div class="top-label">검증</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          <em>5개 가설</em>을 검증했다
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">① 총지출이 크면 가입</span>
+            <span class="compare-value check">맞다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">② 온라인 쇼핑 많이 하면</span>
+            <span class="compare-value cross">아니다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">③ 쿠팡 지출 비중 높으면</span>
+            <span class="compare-value check">맞다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">④ OTT 많이 쓰면</span>
+            <span class="compare-value cross">아니다</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">⑤ 오프라인 활동 많으면</span>
+            <span class="compare-value cross">아니다</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 12px;">살아남은 건 딱 2개.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 4: Accent Green — Finding 1 -->
+      <div class="slide opt-b" style="background: linear-gradient(160deg, #059669 0%, #047857 100%);">
+        <div class="slide-number">4 / 9</div>
+        <div class="top-label" style="color: rgba(255,255,255,0.7);">발견 1</div>
+        <div class="main-text" style="color: #fff; font-size: 24px; line-height: 1.5;">
+          절약형이 아니라<br>
+          소비형
+        </div>
+        <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+        <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.8;">
+          <span style="opacity: 0.6; text-decoration: line-through;">"배달비 아끼려고 가입"?</span><br>
+          → 데이터는 정반대.<br><br>
+          <strong style="color: #fff;">이미 많이 쓰는 사람이 가입한다.</strong><br><br>
+          멤버십 = 수요 창출 도구가 아니라<br>
+          기존 수요를 구조화하는 도구.
+        </div>
+        <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+      </div>
+
+      <!-- Slide 5: Finding 2 -->
+      <div class="slide opt-b">
+        <div class="slide-number">5 / 9</div>
+        <div class="top-label">발견 2</div>
+        <div class="main-text" style="font-size: 20px;">
+          "온라인 쇼핑" ≠<br>
+          <em>"쿠팡 쇼핑"</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          11번가에서 많이 사는 건 무관.<br>
+          <strong style="color: #FAFAF9;">쿠팡에서 많이 사는 게 핵심.</strong><br><br>
+          → 멤버십은 새 고객을 데려오는 도구가 아니라<br>
+          기존 충성 고객을 <strong style="color: #FAFAF9;">고정(lock-in)</strong>하는 도구.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 6: Painful result -->
+      <div class="slide opt-b">
+        <div class="slide-number">6 / 9</div>
+        <div class="top-label">뼈아픈 결과</div>
+        <div class="main-text" style="font-size: 20px;">
+          OTT 번들링
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          넷플릭스에 월 1.5만원 쓰는 사람이<br>
+          "쿠팡플레이도 공짜니까" 가입?<br><br>
+          → <strong style="color: #ef4444;">NO.</strong><br><br>
+          OTT 지출과 멤버십 가입은<br>
+          <strong style="color: #FAFAF9;">통계적으로 유의한 관계 없음.</strong><br>
+          팬데믹 때도, 엔데믹 때도.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 7: OTT bundle role -->
+      <div class="slide opt-b">
+        <div class="slide-number">7 / 9</div>
+        <div class="top-label">역할</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          OTT 번들의 <em>진짜 역할</em>
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">신규 가입 유도</span>
+            <span class="compare-value cross">실패</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">기존 가입자 이탈 방지</span>
+            <span class="compare-value check">가능성 있음</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 13px;">
+          "해지하면 쿠팡플레이도 못 보는데..."<br>
+          → 가입의 동인이 아니라 <strong style="color: #FAFAF9;">이탈의 마찰.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 8: Action Items -->
+      <div class="slide opt-b">
+        <div class="slide-number">8 / 9</div>
+        <div class="top-label">실무 액션</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          <em>실무 액션</em>
+        </div>
+        <div class="num-list">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>멤버십 마케팅 타겟:</strong> "모든 비회원"이 아니라 "이미 상위 20% 지출 중인 비회원"</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>OTT 투자 ROI:</strong> 가입이 아닌 이탈률로 재측정</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text"><strong>번들 혜택 추가</strong> < 핵심 쇼핑 경험 강화</div>
+          </div>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 9: CTA -->
+      <div class="slide opt-b">
+        <div class="slide-number">9 / 9</div>
+        <div style="margin-bottom: 24px;">
+          <svg width="64" height="64" viewBox="0 0 500 500">
+            <circle cx="250" cy="250" r="248" fill="#1A1A1A"/>
+            <circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/>
+            <rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/>
+            <rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/>
+            <rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/>
+            <rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/>
+            <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+          </svg>
+        </div>
+        <div class="main-text" style="font-size: 20px; line-height: 1.6;">
+          멤버십 가입을 결정하는 건<br>
+          번들 혜택이 아니라<br>
+          <em>이미 그 플랫폼의<br>
+          핵심 경험에 만족하는 것.</em>
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          bigdatamarketinglab.com<br>
+          @bdm.lab
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.eesel.ai)",
+      "Bash(open /Users/boramlim/Dropbox/Website-BigDMKTG/BDM-Assets/instagram-branding/carousel-images/c2/)"
+    ]
+  }
+}

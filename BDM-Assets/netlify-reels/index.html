@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Reels Generator</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Inter:wght@300;400;600;700;900&display=swap');
+
+  :root { --accent: #00FF88; --bg: #0a0a0a; }
+  * { margin:0; padding:0; box-sizing:border-box; word-break:keep-all; }
+  body { font-family:'Pretendard','Inter','Noto Sans KR',-apple-system,sans-serif; background:var(--bg); color:#e0e0e0; min-height:100vh; }
+  .app { display:grid; grid-template-columns:420px 1fr; min-height:100vh; }
+
+  .sidebar { background:#111; border-right:1px solid #1e1e1e; padding:24px; overflow-y:auto; max-height:100vh; }
+  .sidebar-header { display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+  .sidebar-header .logo { color:var(--accent); font-size:22px; font-weight:800; letter-spacing:2px; }
+  .sidebar-header .sub { font-size:12px; color:#555; font-weight:500; }
+
+  .section-title { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:#555; margin:20px 0 8px; }
+  .section-title:first-of-type { margin-top:0; }
+
+  .api-key-bar { display:flex; gap:6px; margin-bottom:16px; }
+  .api-key-bar input { flex:1; background:#161616; border:1px solid #222; border-radius:8px; padding:8px 10px; color:#e0e0e0; font-size:12px; font-family:inherit; outline:none; }
+  .api-key-bar input:focus { border-color:var(--accent); }
+  .api-key-bar .status-dot { width:10px; height:10px; border-radius:50%; margin-top:10px; flex-shrink:0; }
+  .api-key-bar .status-dot.ok { background:var(--accent); }
+  .api-key-bar .status-dot.idle { background:#333; }
+
+  .video-source-area { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:10px; padding:14px; margin-bottom:8px; }
+  .video-source-area .vid-label { font-size:10px; color:#444; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .video-source-area .vid-label .vid-active { width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .video-search-row { display:flex; gap:6px; margin-bottom:8px; }
+  .video-search-row input { flex:1; background:#161616; border:1px solid #222; border-radius:6px; padding:8px 10px; color:#e0e0e0; font-size:12px; font-family:inherit; outline:none; }
+  .video-search-row input:focus { border-color:var(--accent); }
+  .icon-btn { width:34px; height:34px; border-radius:6px; border:1px solid #222; background:#161616; color:#888; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:all .15s; flex-shrink:0; }
+  .icon-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .icon-btn.loading { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .video-thumbs { display:flex; gap:4px; overflow-x:auto; padding-bottom:4px; }
+  .video-thumb { width:44px; height:78px; border-radius:5px; overflow:hidden; cursor:pointer; border:2px solid transparent; flex-shrink:0; position:relative; transition:border-color .15s; }
+  .video-thumb:hover { border-color:#444; }
+  .video-thumb.active { border-color:var(--accent); }
+  .video-thumb img { width:100%; height:100%; object-fit:cover; }
+  .video-thumb .dur { position:absolute; bottom:2px; right:2px; font-size:7px; background:rgba(0,0,0,.7); color:#ccc; padding:1px 3px; border-radius:2px; }
+  .video-status { font-size:10px; color:#444; margin-top:6px; min-height:14px; }
+  .or-divider { text-align:center; font-size:10px; color:#333; margin:8px 0; }
+  .upload-btn { width:100%; padding:9px; border:1px dashed #222; border-radius:6px; background:transparent; color:#444; cursor:pointer; font-size:11px; position:relative; transition:all .15s; }
+  .upload-btn:hover { border-color:#444; color:#888; }
+  .upload-btn input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+
+  .scene-list { display:flex; flex-direction:column; gap:3px; margin-bottom:8px; }
+  .scene-item { display:flex; align-items:center; gap:6px; padding:9px 10px; background:#161616; border-radius:7px; cursor:pointer; border:2px solid transparent; transition:all .12s; }
+  .scene-item:hover { background:#1a1a1a; }
+  .scene-item.active { border-color:var(--accent); background:rgba(0,255,136,.03); }
+  .scene-item .num { font-size:10px; font-weight:700; color:var(--accent); min-width:16px; opacity:.5; }
+  .scene-item .label { flex:1; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#999; }
+  .scene-item .badges { display:flex; gap:3px; align-items:center; }
+  .scene-item .badge { font-size:8px; font-weight:600; padding:2px 5px; border-radius:3px; text-transform:uppercase; }
+  .scene-item .badge-vid { color:var(--accent); background:rgba(0,255,136,.08); }
+  .scene-item .time-badge { font-size:9px; font-weight:600; color:#555; background:#1e1e1e; padding:2px 6px; border-radius:3px; font-variant-numeric:tabular-nums; }
+  .scene-item .delete-btn { background:none; border:none; color:#333; cursor:pointer; font-size:15px; padding:0 2px; }
+  .scene-item .delete-btn:hover { color:#ff4444; }
+  .add-scene-btn { width:100%; padding:9px; border:1px dashed #2a2a2a; border-radius:7px; background:transparent; color:#555; cursor:pointer; font-size:11px; font-weight:500; transition:all .2s; }
+  .add-scene-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  .edit-area { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+  .field label { display:block; font-size:11px; font-weight:500; color:#555; margin-bottom:3px; }
+  .field textarea, .field input[type="text"], .field input[type="number"], .field select { width:100%; background:#161616; border:1px solid #222; border-radius:7px; padding:9px 10px; color:#e0e0e0; font-size:13px; font-family:inherit; resize:vertical; outline:none; transition:border-color .2s; }
+  .field textarea:focus, .field input:focus { border-color:var(--accent); }
+  .field textarea { min-height:60px; }
+  .syntax-hint { font-size:9px; color:#3a3a3a; margin-top:2px; }
+  .time-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .time-row .field input { text-align:center; }
+
+  .pos-grid { display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,28px); gap:3px; width:120px; }
+  .pos-btn { border:1px solid #222; border-radius:4px; background:#161616; color:#555; cursor:pointer; font-size:8px; font-weight:600; transition:all .12s; }
+  .pos-btn:hover { border-color:#333; }
+  .pos-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.04); }
+
+  .style-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; }
+  .style-btn { padding:7px 4px; border:1px solid #222; border-radius:5px; background:#161616; color:#555; cursor:pointer; font-size:9px; font-weight:600; text-align:center; transition:all .12s; }
+  .style-btn:hover { border-color:#333; }
+  .style-btn.active { border-color:var(--accent); color:var(--accent); }
+
+  .toggle-row { display:flex; align-items:center; gap:7px; margin-top:3px; }
+  .toggle-row input[type="checkbox"] { accent-color:var(--accent); width:14px; height:14px; }
+  .toggle-row label { font-size:11px; color:#777; cursor:pointer; }
+
+  .grad-select { display:grid; grid-template-columns:repeat(2,1fr); gap:4px; }
+  .grad-btn { padding:5px; border:1px solid #222; border-radius:5px; background:#161616; color:#555; cursor:pointer; font-size:9px; font-weight:600; text-align:center; transition:all .12s; }
+  .grad-btn:hover { border-color:#333; }
+  .grad-btn.active { border-color:var(--accent); color:var(--accent); }
+
+  .deco-select { display:flex; gap:4px; }
+  .deco-btn { flex:1; padding:5px; border:1px solid #222; border-radius:5px; background:#161616; color:#555; cursor:pointer; font-size:9px; font-weight:600; text-align:center; transition:all .12s; }
+  .deco-btn:hover { border-color:#333; }
+  .deco-btn.active { border-color:var(--accent); color:var(--accent); }
+
+  .btn-primary { width:100%; padding:13px; background:var(--accent); color:#0a0a0a; border:none; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; transition:filter .2s; margin-top:6px; }
+  .btn-primary:hover { filter:brightness(1.1); }
+  .btn-secondary { width:100%; padding:10px; background:#161616; color:#777; border:1px solid #222; border-radius:9px; font-size:12px; font-weight:500; cursor:pointer; transition:all .2s; margin-top:5px; }
+  .btn-secondary:hover { background:#1e1e1e; color:#ccc; }
+  .download-progress { margin-top:6px; font-size:11px; color:#555; text-align:center; min-height:16px; }
+
+  .preview-area { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; overflow-y:auto; background:var(--bg); }
+  .preview-label { font-size:11px; color:#333; font-weight:600; letter-spacing:1px; margin-bottom:12px; }
+  .phone-frame { width:338px; height:600px; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.6); position:relative; background:#000; border:2px solid #1a1a1a; }
+  .phone-frame video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .phone-frame .overlay-grad { position:absolute; inset:0; z-index:1; pointer-events:none; }
+  .phone-frame .deco-layer { position:absolute; inset:0; z-index:2; pointer-events:none; }
+  .phone-frame .text-overlay { position:absolute; z-index:5; pointer-events:none; }
+  .phone-frame .text-overlay h2 { font-weight:800; line-height:1.3; text-shadow:0 2px 20px rgba(0,0,0,.5); }
+  .phone-frame .text-overlay .body-text { font-weight:400; line-height:1.7; text-shadow:0 1px 10px rgba(0,0,0,.4); }
+  .phone-frame .text-overlay .body-text strong { font-weight:700; }
+  .phone-frame .tag-label { position:absolute; z-index:6; font-weight:700; text-transform:uppercase; letter-spacing:2px; text-shadow:0 1px 8px rgba(0,0,0,.4); pointer-events:none; }
+  .phone-frame .top-bar-el { position:absolute; top:0; left:0; right:0; z-index:10; pointer-events:none; }
+  .phone-frame .footer-el { position:absolute; left:0; right:0; text-align:center; font-weight:500; font-style:italic; z-index:6; pointer-events:none; text-shadow:0 1px 6px rgba(0,0,0,.3); }
+  .phone-frame .corner-el { position:absolute; z-index:3; pointer-events:none; }
+  .phone-frame .mute-el { position:absolute; z-index:6; border-radius:50%; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .phone-frame .mute-el svg { fill:rgba(255,255,255,.7); }
+  .phone-no-video { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#333; font-size:13px; gap:8px; }
+  .phone-no-video span { font-size:36px; }
+
+  .timeline { width:338px; margin-top:16px; }
+  .timeline-bar { position:relative; height:40px; background:#111; border-radius:8px; overflow:hidden; border:1px solid #1e1e1e; cursor:pointer; }
+  .timeline-scene { position:absolute; top:0; height:100%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; color:rgba(255,255,255,.6); border-right:1px solid #222; transition:opacity .15s; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 4px; }
+  .timeline-scene:last-child { border-right:none; }
+  .timeline-scene.active { outline:2px solid var(--accent); outline-offset:-2px; z-index:2; }
+  .timeline-playhead { position:absolute; top:0; bottom:0; width:2px; background:var(--accent); z-index:5; pointer-events:none; box-shadow:0 0 6px var(--accent); }
+  .timeline-time { display:flex; justify-content:space-between; margin-top:4px; font-size:10px; color:#333; font-variant-numeric:tabular-nums; }
+  .playback-controls { display:flex; gap:8px; margin-top:10px; justify-content:center; align-items:center; }
+  .play-btn { width:40px; height:40px; border-radius:50%; border:1px solid #222; background:#161616; color:#e0e0e0; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+  .play-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .time-display { font-size:13px; color:#555; font-weight:600; font-variant-numeric:tabular-nums; min-width:90px; text-align:center; }
+
+  /* Help button */
+  .help-btn { width:28px; height:28px; border-radius:50%; border:1px solid #222; background:#161616; color:#555; cursor:pointer; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; transition:all .15s; margin-left:auto; }
+  .help-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* Modal */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:1000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+  .modal-overlay.hidden { display:none; }
+  .modal { background:#151515; border:1px solid #222; border-radius:16px; width:520px; max-width:90vw; max-height:85vh; overflow-y:auto; padding:36px; position:relative; }
+  .modal-close { position:absolute; top:16px; right:16px; background:none; border:none; color:#555; font-size:20px; cursor:pointer; transition:color .15s; }
+  .modal-close:hover { color:#fff; }
+  .modal h2 { color:var(--accent); font-size:20px; font-weight:800; margin-bottom:6px; letter-spacing:1px; }
+  .modal .modal-sub { color:#555; font-size:12px; margin-bottom:24px; }
+  .modal h3 { color:#e0e0e0; font-size:14px; font-weight:700; margin:20px 0 8px; display:flex; align-items:center; gap:8px; }
+  .modal h3 .step-num { background:var(--accent); color:#0a0a0a; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+  .modal p, .modal li { color:#999; font-size:13px; line-height:1.7; }
+  .modal ol, .modal ul { padding-left:16px; margin:6px 0; }
+  .modal li { margin-bottom:4px; }
+  .modal code { background:#1e1e1e; color:var(--accent); padding:2px 6px; border-radius:4px; font-size:12px; font-family:'Pretendard',monospace; }
+  .modal .key-box { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:10px; padding:14px; margin:12px 0; }
+  .modal .key-box ol { padding-left:18px; }
+  .modal .key-box li { color:#888; font-size:12px; line-height:1.8; }
+  .modal .key-box a { color:var(--accent); text-decoration:none; }
+  .modal .key-box a:hover { text-decoration:underline; }
+  .modal .syntax-table { width:100%; border-collapse:collapse; margin:8px 0; }
+  .modal .syntax-table td { padding:5px 8px; font-size:12px; border-bottom:1px solid #1a1a1a; }
+  .modal .syntax-table td:first-child { color:var(--accent); font-family:monospace; white-space:nowrap; }
+  .modal .syntax-table td:last-child { color:#777; }
+  .modal .tip { background:rgba(0,255,136,.04); border-left:3px solid var(--accent); padding:10px 14px; border-radius:0 6px 6px 0; margin:12px 0; font-size:12px; color:#888; line-height:1.6; }
+  .modal-start-btn { width:100%; padding:14px; background:var(--accent); color:#0a0a0a; border:none; border-radius:9px; font-size:14px; font-weight:700; cursor:pointer; margin-top:20px; transition:filter .2s; }
+  .modal-start-btn:hover { filter:brightness(1.1); }
+
+  @media (max-width:960px) { .app{grid-template-columns:1fr;} .preview-area{padding:20px;} .phone-frame{width:270px;height:480px;} .timeline{width:270px;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">BDM</span>
+      <span class="sub">Reels Generator</span>
+      <button class="help-btn" onclick="showGuide()" title="사용 가이드">?</button>
+    </div>
+
+    <div class="field" style="margin-bottom:4px">
+      <label>Pexels API Key <a href="https://www.pexels.com/api/" target="_blank" style="color:var(--accent);text-decoration:none;font-size:10px">(Get free key)</a></label>
+      <div class="api-key-bar">
+        <input type="password" id="apiKeyInput" placeholder="Paste your Pexels API key..." oninput="saveApiKey(this.value)">
+        <div class="status-dot idle" id="apiDot"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Scenes</div>
+    <div class="scene-list" id="sceneList"></div>
+    <button class="add-scene-btn" onclick="addScene()">+ Add Scene</button>
+
+    <div class="edit-area" id="editArea"></div>
+
+    <div class="section-title">Global</div>
+    <div class="field"><label>Footer</label><input type="text" id="footerText" value="BDM Lab · @bdm.lab" oninput="renderPreview()"></div>
+    <div class="field"><label>Overlay</label>
+      <div class="grad-select">
+        <button class="grad-btn" id="gradBtnDark" onclick="setGrad('dark')">Dark</button>
+        <button class="grad-btn" id="gradBtnLight" onclick="setGrad('light')">Light</button>
+        <button class="grad-btn" id="gradBtnGreen" onclick="setGrad('green')">Green</button>
+        <button class="grad-btn" id="gradBtnNone" onclick="setGrad('none')">None</button>
+      </div>
+    </div>
+    <div class="field"><label>Decoration</label>
+      <div class="deco-select">
+        <button class="deco-btn" id="decoBtnNone" onclick="setDeco('none')">None</button>
+        <button class="deco-btn" id="decoBtnGrid" onclick="setDeco('grid')">Grid</button>
+        <button class="deco-btn" id="decoBtnDots" onclick="setDeco('dots')">Dots</button>
+      </div>
+    </div>
+    <div class="toggle-row"><input type="checkbox" id="showTopBar" checked onchange="renderPreview()"><label for="showTopBar">Top bar</label></div>
+    <div class="toggle-row"><input type="checkbox" id="showCorners" checked onchange="renderPreview()"><label for="showCorners">Corners</label></div>
+    <div class="toggle-row"><input type="checkbox" id="showMute" checked onchange="renderPreview()"><label for="showMute">Mute icon</label></div>
+
+    <div class="section-title">Export</div>
+    <button class="btn-primary" onclick="exportVideo()">Export Reels Video (WebM)</button>
+    <button class="btn-secondary" onclick="exportCurrentPNG()">Export Current Frame (PNG)</button>
+    <div class="download-progress" id="downloadProgress"></div>
+  </div>
+
+  <div class="preview-area">
+    <div class="preview-label">9:16 REELS PREVIEW</div>
+    <div class="phone-frame" id="phoneFrame">
+      <div class="phone-no-video" id="noVideoMsg"><span>&#9654;</span>Add a background video to each scene</div>
+    </div>
+    <div class="timeline" id="timelineArea">
+      <div class="timeline-bar" id="timelineBar" onclick="timelineClick(event)"></div>
+      <div class="timeline-time"><span id="tlStart">0:00</span><span id="tlEnd">0:00</span></div>
+      <div class="playback-controls">
+        <button class="play-btn" onclick="togglePlay()" id="playBtn">&#9654;</button>
+        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Onboarding Modal -->
+<div class="modal-overlay hidden" id="guideModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeGuide()">&times;</button>
+    <h2>BDM Reels Generator</h2>
+    <div class="modal-sub">9:16 릴스 영상을 빠르게 만드는 도구입니다. 아래 가이드를 따라 시작하세요.</div>
+
+    <h3><span class="step-num">1</span> Pexels API Key 발급 (무료)</h3>
+    <div class="key-box">
+      <ol>
+        <li><a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a> 에 접속</li>
+        <li>계정 생성 (무료) 후 로그인</li>
+        <li>"Your API Key" 메뉴에서 키 복사</li>
+        <li>왼쪽 사이드바 상단 <code>Pexels API Key</code> 입력란에 붙여넣기</li>
+      </ol>
+    </div>
+    <div class="tip">API Key는 브라우저에 자동 저장됩니다. 다른 사람과 공유할 필요 없이 각자 발급받아 사용하세요.</div>
+
+    <h3><span class="step-num">2</span> 씬(장면) 구성</h3>
+    <p>릴스는 여러 <strong>씬</strong>으로 구성됩니다. 각 씬마다:</p>
+    <ul>
+      <li><strong>배경 영상</strong> — Pexels 검색 또는 직접 업로드 (씬마다 다른 영상 가능)</li>
+      <li><strong>시작/끝 시간</strong> — 해당 씬이 보이는 구간(초)</li>
+      <li><strong>텍스트</strong> — 제목, 본문, 태그</li>
+      <li><strong>위치/크기</strong> — 9방향 배치, 3단계 크기</li>
+    </ul>
+
+    <h3><span class="step-num">3</span> 텍스트 마크업</h3>
+    <table class="syntax-table">
+      <tr><td>**볼드 텍스트**</td><td>굵은 글씨</td></tr>
+      <tr><td>{{하이라이트}}</td><td>초록색 강조</td></tr>
+      <tr><td>줄바꿈</td><td>Enter로 줄바꿈</td></tr>
+    </table>
+
+    <h3><span class="step-num">4</span> 프리뷰 & 내보내기</h3>
+    <ul>
+      <li><strong>재생 버튼</strong>으로 전체 릴스 프리뷰</li>
+      <li><strong>타임라인</strong> 클릭으로 원하는 시점으로 이동</li>
+      <li><strong>Export Reels Video</strong>로 WebM 영상 다운로드</li>
+      <li><strong>Export Current Frame</strong>으로 현재 프레임 PNG 저장</li>
+    </ul>
+
+    <div class="tip">이 파일은 HTML 하나로 동작합니다. 파일만 공유하면 누구나 바로 사용할 수 있고, API Key는 각자 발급받아 사용합니다.</div>
+
+    <button class="modal-start-btn" onclick="closeGuide()">시작하기</button>
+  </div>
+</div>
+
+<canvas id="exportCanvas" width="1080" height="1920" style="position:fixed;left:-9999px;top:-9999px;"></canvas>
+
+<script>
+const W=1080, H=1920, ACCENT='#00FF88';
+const SCENE_COLORS=['#1a3a2a','#2a1a3a','#3a2a1a','#1a2a3a','#3a1a2a','#2a3a1a','#1a3a3a','#3a3a1a'];
+
+let apiKey = localStorage.getItem('pexels_api_key')||'';
+const videoCache = {};
+
+let state = {
+  cur: 0,
+  grad: 'dark',
+  deco: 'none',
+  scenes: [
+    mkScene(0, 3, '', '제목을\n입력하세요', '부제목 또는 설명을\n여기에 작성합니다', 'center-bottom', 'default'),
+    mkScene(3, 6, 'HOOK', '핵심 질문이나\n문제를 제기하세요', '', 'center-center', 'large'),
+    mkScene(6, 10, 'INSIGHT', '핵심 {{인사이트}}를\n전달하세요', '**강조 텍스트**와\n{{하이라이트}}를 활용하세요', 'center-bottom', 'default'),
+    mkScene(10, 13, 'KEY POINT', '가장 강조하고 싶은\n메시지', '', 'center-center', 'large'),
+    mkScene(13, 15, 'CTA', 'BDM', 'AI 마케팅이 궁금하다면?\n\ndbr.donga.com', 'center-center', 'default'),
+  ]
+};
+
+function mkScene(start, end, tag, title, body, pos, style) {
+  return { start, end, tag, title, body, pos, style,
+    videoUrl:null, videoFile:null, pexelResults:[], pexelIdx:-1, searching:false, keyword:'' };
+}
+
+function getTotalDuration() {
+  return Math.max(...state.scenes.map(s=>s.end));
+}
+
+// ── Helpers ──
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtTitle(t){let h=esc(t);h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');h=h.replace(/\{\{(.+?)\}\}/g,'<span style="color:var(--accent)">$1</span>');return h.replace(/\n/g,'<br>');}
+function fmtBody(t){let h=esc(t);h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');h=h.replace(/\{\{(.+?)\}\}/g,'<span style="color:var(--accent);font-weight:700">$1</span>');return h.replace(/\n/g,'<br>');}
+function fmtTime(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${String(sec).padStart(2,'0')}`;}
+function cleanLabel(t){return(t||'?').replace(/\n/g,' ').replace(/\*\*/g,'').replace(/\{\{|\}\}/g,'').slice(0,25);}
+
+// ── API Key ──
+function saveApiKey(v) {
+  apiKey = v.trim();
+  localStorage.setItem('pexels_api_key', apiKey);
+  document.getElementById('apiDot').className = 'status-dot ' + (apiKey ? 'ok' : 'idle');
+}
+
+// ── Pexels ──
+async function searchPexels(query) {
+  if (!apiKey || !query) return [];
+  const ck = query.toLowerCase().trim();
+  if (videoCache[ck]) return videoCache[ck];
+  const url = `https://api.pexels.com/videos/search?query=${encodeURIComponent(query)}&orientation=portrait&per_page=12&size=medium`;
+  try {
+    const res = await fetch(url, { headers: { 'Authorization': apiKey } });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    const results = (data.videos||[]).map(v => {
+      const hd = v.video_files.find(f => f.quality==='hd' && f.file_type==='video/mp4');
+      const sd = v.video_files.find(f => f.quality==='sd' && f.file_type==='video/mp4');
+      const file = hd || sd || v.video_files[0];
+      return { id:v.id, url:file?.link, thumb:v.image, duration:v.duration };
+    }).filter(r => r.url);
+    videoCache[ck] = results;
+    return results;
+  } catch(e) { console.error(e); return []; }
+}
+
+async function doSceneSearch(idx) {
+  const s = state.scenes[idx];
+  const kw = s.keyword || '';
+  if (!kw || !apiKey) return;
+  s.searching = true;
+  if (idx === state.cur) renderEditArea();
+  const results = await searchPexels(kw);
+  s.pexelResults = results;
+  s.pexelIdx = -1;
+  s.searching = false;
+  if (idx === state.cur) renderEditArea();
+}
+
+function selectSceneVideo(sceneIdx, vidIdx) {
+  const s = state.scenes[sceneIdx];
+  if (!s.pexelResults[vidIdx]) return;
+  s.pexelIdx = vidIdx;
+  if (s.videoUrl && s.videoFile) URL.revokeObjectURL(s.videoUrl);
+  s.videoUrl = s.pexelResults[vidIdx].url;
+  s.videoFile = null;
+  renderEditArea(); renderSceneList(); loadSceneVideo(sceneIdx);
+}
+
+function uploadSceneVideo(sceneIdx, e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const s = state.scenes[sceneIdx];
+  if (s.videoUrl && s.videoFile) URL.revokeObjectURL(s.videoUrl);
+  s.videoFile = file;
+  s.videoUrl = URL.createObjectURL(file);
+  renderEditArea(); renderSceneList(); loadSceneVideo(sceneIdx);
+}
+
+function removeSceneVideo(sceneIdx) {
+  const s = state.scenes[sceneIdx];
+  if (s.videoUrl && s.videoFile) URL.revokeObjectURL(s.videoUrl);
+  s.videoUrl = null; s.videoFile = null; s.pexelResults = []; s.pexelIdx = -1;
+  renderEditArea(); renderSceneList(); renderPreview();
+}
+
+// ── Scene Video Elements ──
+const sceneVideos = {};
+
+function loadSceneVideo(idx) {
+  const s = state.scenes[idx];
+  if (!s.videoUrl) { delete sceneVideos[idx]; renderPreview(); return; }
+  const vid = document.createElement('video');
+  vid.crossOrigin = 'anonymous';
+  vid.src = s.videoUrl;
+  vid.muted = true; vid.loop = true; vid.playsInline = true;
+  vid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+  vid.addEventListener('loadedmetadata', () => renderPreview());
+  sceneVideos[idx] = vid;
+  renderPreview();
+}
+
+function getActiveVideoEl() {
+  return sceneVideos[state.cur] || null;
+}
+
+// ── Scene List ──
+function renderSceneList() {
+  document.getElementById('sceneList').innerHTML = state.scenes.map((s,i) => `
+    <div class="scene-item ${state.cur===i?'active':''}" onclick="selectScene(${i})">
+      <span class="num">${i+1}</span>
+      <span class="label">${esc(cleanLabel(s.title))}</span>
+      <span class="badges">
+        ${s.videoUrl?'<span class="badge badge-vid">VID</span>':''}
+        <span class="time-badge">${fmtTime(s.start)}–${fmtTime(s.end)}</span>
+      </span>
+      ${state.scenes.length>1?`<button class="delete-btn" onclick="event.stopPropagation();deleteScene(${i})">&times;</button>`:''}
+    </div>
+  `).join('');
+}
+
+function selectScene(i) {
+  state.cur = i;
+  renderSceneList(); renderEditArea(); renderPreview(); renderTimeline();
+  // Seek preview
+  seekToScene(i);
+}
+
+function addScene() {
+  const last = state.scenes[state.scenes.length-1];
+  const start = last.end, end = start + 3;
+  state.scenes.push(mkScene(start, end, '', 'New Scene', '', 'center-center', 'default'));
+  state.cur = state.scenes.length-1;
+  renderSceneList(); renderEditArea(); renderPreview(); renderTimeline();
+}
+
+function deleteScene(i) {
+  if (state.scenes.length<=1) return;
+  if (sceneVideos[i]) delete sceneVideos[i];
+  state.scenes.splice(i,1);
+  // Re-index scene videos
+  const newVids = {};
+  Object.keys(sceneVideos).forEach(k => {
+    const ki = parseInt(k);
+    if (ki < i) newVids[ki] = sceneVideos[ki];
+    else if (ki > i) newVids[ki-1] = sceneVideos[ki];
+  });
+  Object.keys(sceneVideos).forEach(k => delete sceneVideos[k]);
+  Object.assign(sceneVideos, newVids);
+  if (state.cur >= state.scenes.length) state.cur = state.scenes.length-1;
+  renderSceneList(); renderEditArea(); renderPreview(); renderTimeline();
+}
+
+// ── Edit Area ──
+function renderEditArea() {
+  const area = document.getElementById('editArea');
+  const s = state.scenes[state.cur];
+  const ci = state.cur;
+  const positions = [
+    ['left-top','LT'],['center-top','CT'],['right-top','RT'],
+    ['left-center','LC'],['center-center','CC'],['right-center','RC'],
+    ['left-bottom','LB'],['center-bottom','CB'],['right-bottom','RB']
+  ];
+  const styles = [['default','Default'],['large','Large'],['huge','Huge']];
+
+  area.innerHTML = `
+    <div class="section-title">Scene ${ci+1} — Video</div>
+    <div class="video-source-area">
+      ${s.videoUrl ? `<div class="vid-label"><div class="vid-active"></div> Video loaded</div>` : ''}
+      <div class="video-search-row">
+        <input type="text" id="sceneKw" value="${esc(s.keyword)}" placeholder="Search video for this scene..." onkeydown="if(event.key==='Enter'){event.preventDefault();searchCurrentScene();}">
+        <button class="icon-btn ${s.searching?'loading':''}" onclick="searchCurrentScene()" title="Search">&#x1F50D;</button>
+        ${s.videoUrl?`<button class="icon-btn" onclick="removeSceneVideo(${ci})" title="Remove" style="color:#ff6666;">&#x2715;</button>`:''}
+      </div>
+      ${s.pexelResults.length > 0 ? `
+        <div class="video-thumbs">
+          ${s.pexelResults.map((r,i) => `
+            <div class="video-thumb ${s.pexelIdx===i?'active':''}" onclick="selectSceneVideo(${ci},${i})">
+              <img src="${r.thumb}" loading="lazy">
+              <div class="dur">${r.duration}s</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      <div class="video-status">${s.searching?'Searching...':s.pexelResults.length>0?`${s.pexelResults.length} results`:!apiKey?'Enter API key above':'Type keyword and press Enter'}</div>
+      <div class="or-divider">or</div>
+      <div class="upload-btn">Upload video file<input type="file" accept="video/*" onchange="uploadSceneVideo(${ci},event)"></div>
+    </div>
+
+    <div class="section-title">Timing</div>
+    <div class="time-row">
+      <div class="field"><label>Start (sec)</label><input type="number" value="${s.start}" step="0.5" min="0" onchange="updScene('start',parseFloat(this.value))"></div>
+      <div class="field"><label>End (sec)</label><input type="number" value="${s.end}" step="0.5" min="0" onchange="updScene('end',parseFloat(this.value))"></div>
+    </div>
+
+    <div class="section-title">Content</div>
+    <div class="field"><label>Tag</label><input type="text" value="${esc(s.tag)}" oninput="updSceneText('tag',this.value)" placeholder="INSIGHT, HOOK, CTA..."></div>
+    <div class="field"><label>Title</label><textarea style="min-height:55px" oninput="updSceneText('title',this.value)">${esc(s.title)}</textarea><div class="syntax-hint">**bold** {{green highlight}}</div></div>
+    <div class="field"><label>Body</label><textarea oninput="updSceneText('body',this.value)">${esc(s.body)}</textarea></div>
+
+    <div class="section-title">Style</div>
+    <div class="field"><label>Text Size</label>
+      <div class="style-grid">${styles.map(([id,name])=>`<button class="style-btn ${s.style===id?'active':''}" onclick="updScene('style','${id}')">${name}</button>`).join('')}</div>
+    </div>
+    <div class="field"><label>Position</label>
+      <div class="pos-grid">${positions.map(([id,name])=>`<button class="pos-btn ${s.pos===id?'active':''}" onclick="updScene('pos','${id}')">${name}</button>`).join('')}</div>
+    </div>
+  `;
+}
+
+function searchCurrentScene() {
+  const kw = document.getElementById('sceneKw')?.value?.trim();
+  if (kw) state.scenes[state.cur].keyword = kw;
+  doSceneSearch(state.cur);
+}
+
+function updScene(f,v) { state.scenes[state.cur][f]=v; renderEditArea(); renderSceneList(); renderPreview(); renderTimeline(); }
+function updSceneText(f,v) { state.scenes[state.cur][f]=v; renderSceneList(); renderPreview(); }
+
+// ── Global ──
+function setGrad(v) { state.grad=v; renderGradButtons(); renderPreview(); }
+function setDeco(v) { state.deco=v; renderDecoButtons(); renderPreview(); }
+function renderGradButtons() { ['dark','light','green','none'].forEach(g => { const b=document.getElementById('gradBtn'+g.charAt(0).toUpperCase()+g.slice(1)); if(b)b.className='grad-btn'+(state.grad===g?' active':''); }); }
+function renderDecoButtons() { ['none','grid','dots'].forEach(d => { const b=document.getElementById('decoBtn'+d.charAt(0).toUpperCase()+d.slice(1)); if(b)b.className='deco-btn'+(state.deco===d?' active':''); }); }
+
+// ── Preview ──
+let isPlaying = false;
+let playTimer = null;
+let playStartWall = 0;
+let playStartTime = 0;
+
+function getSceneAt(t) {
+  return state.scenes.find(s => t >= s.start && t < s.end) || null;
+}
+function getSceneIdxAt(t) {
+  return state.scenes.findIndex(s => t >= s.start && t < s.end);
+}
+
+function renderPreview() {
+  const frame = document.getElementById('phoneFrame');
+  const sc = 338/W;
+  const px = v => `${Math.round(v*sc)}px`;
+
+  const currentTime = getCurrentPlayTime();
+  const scene = getSceneAt(currentTime);
+  const sceneIdx = getSceneIdxAt(currentTime);
+  const vid = sceneIdx >= 0 ? sceneVideos[sceneIdx] : null;
+  const hasVid = !!vid;
+
+  const bar = document.getElementById('showTopBar').checked;
+  const corners = document.getElementById('showCorners').checked;
+  const mute = document.getElementById('showMute').checked;
+  const footer = document.getElementById('footerText').value;
+
+  // Gradient
+  let gradStyle = '';
+  if (state.grad==='dark') gradStyle = 'background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.1) 20%,rgba(0,0,0,.6) 55%,rgba(0,0,0,.85) 75%,rgba(0,0,0,.9) 100%)';
+  else if (state.grad==='light') gradStyle = 'background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.5) 60%,rgba(255,255,255,.85) 80%)';
+  else if (state.grad==='green') gradStyle = `background:linear-gradient(180deg,rgba(0,255,136,0) 0%,rgba(0,255,136,.3) 50%,rgba(0,255,136,.8) 75%,${ACCENT} 90%)`;
+
+  // Deco
+  let decoHTML = '';
+  const gColor = state.grad==='green'?'rgba(255,255,255,1)':'rgba(0,255,136,1)';
+  if (state.deco==='grid') { const gs=`${Math.round(60*sc)}px`; decoHTML=`<div class="deco-layer" style="opacity:${state.grad==='green'?.06:.04};background-image:linear-gradient(${gColor} 1px,transparent 1px),linear-gradient(90deg,${gColor} 1px,transparent 1px);background-size:${gs} ${gs}"></div>`; }
+  else if (state.deco==='dots') { const ds=`${Math.round(40*sc)}px`; decoHTML=`<div class="deco-layer" style="opacity:${state.grad==='green'?.08:.06};background-image:radial-gradient(circle,${gColor} 1px,transparent 1px);background-size:${ds} ${ds}"></div>`; }
+
+  // Corners
+  const cColor = state.grad==='green'?'rgba(255,255,255,.15)':'rgba(0,255,136,.15)';
+  let cornerHTML = '';
+  if (corners) cornerHTML = `<div class="corner-el" style="top:${px(50)};left:${px(50)};width:${px(40)};height:${px(40)};border-top:2px solid ${cColor};border-left:2px solid ${cColor}"></div><div class="corner-el" style="bottom:${px(100)};right:${px(50)};width:${px(40)};height:${px(40)};border-bottom:2px solid ${cColor};border-right:2px solid ${cColor}"></div>`;
+
+  // Mute
+  const ms = Math.round(40*sc), mis = Math.round(18*sc);
+  let muteHTML = '';
+  if (mute && hasVid) muteHTML = `<div class="mute-el" style="top:${px(60)};right:${px(44)};width:${ms}px;height:${ms}px"><svg viewBox="0 0 24 24" style="width:${mis}px;height:${mis}px"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg></div>`;
+
+  // Text
+  let textHTML = '';
+  if (scene) {
+    const sizes = { default:[56,28], large:[72,32], huge:[90,36] };
+    const [tFs, bFs] = sizes[scene.style] || sizes.default;
+    const isLight = state.grad==='light';
+    const titleColor = isLight?'#1A1A1A':'#fff';
+    const bodyColor = isLight?'rgba(30,30,30,.6)':'rgba(255,255,255,.65)';
+    const tagColor = isLight?'rgba(30,30,30,.4)':'rgba(255,255,255,.5)';
+    const footerColor = isLight?'rgba(30,30,30,.2)':'rgba(255,255,255,.2)';
+
+    const [hAlign, vAlign] = scene.pos.split('-');
+    let posStyle = '';
+    const padX = px(80), padBottom = px(140);
+    if (vAlign==='top') posStyle += `top:${px(100)};`;
+    else if (vAlign==='center') posStyle += `top:50%;transform:translateY(-50%);`;
+    else posStyle += `bottom:${padBottom};`;
+    if (hAlign==='left') posStyle += `left:${padX};right:auto;text-align:left;`;
+    else if (hAlign==='right') posStyle += `right:${padX};left:auto;text-align:right;`;
+    else posStyle += `left:${padX};right:${padX};text-align:center;`;
+
+    textHTML = `<div class="text-overlay" style="${posStyle}">
+      <h2 style="font-size:${px(tFs)};color:${titleColor};margin-bottom:${px(24)}">${fmtTitle(scene.title)}</h2>
+      ${scene.body?`<div class="body-text" style="font-size:${px(bFs)};color:${bodyColor}">${fmtBody(scene.body)}</div>`:''}
+    </div>`;
+
+    if (scene.tag) {
+      textHTML += `<div class="tag-label" style="top:${px(60)};left:${px(80)};font-size:${px(20)};color:${tagColor};padding-left:${px(14)};border-left:${px(3)} solid ${ACCENT};letter-spacing:${px(2.5)}">${esc(scene.tag)}</div>`;
+    }
+    if (footer) {
+      textHTML += `<div class="footer-el" style="bottom:${px(50)};font-size:${px(18)};color:${footerColor};letter-spacing:${px(1)}">${esc(footer)}</div>`;
+    }
+  }
+
+  // Build frame
+  frame.innerHTML = '';
+  if (hasVid) {
+    // Manage which video elements are in DOM
+    Object.values(sceneVideos).forEach(v => { if (v.parentNode) v.parentNode.removeChild(v); v.pause(); });
+    frame.appendChild(vid);
+    if (isPlaying) vid.play().catch(()=>{});
+  } else {
+    frame.innerHTML = '<div class="phone-no-video"><span>&#9654;</span>No video for this scene</div>';
+  }
+
+  frame.insertAdjacentHTML('beforeend', `
+    <div class="overlay-grad" style="${gradStyle}"></div>
+    ${decoHTML}
+    ${cornerHTML}
+    ${muteHTML}
+    ${bar?`<div class="top-bar-el" style="height:${px(6)};background:${ACCENT}"></div>`:''}
+    ${textHTML}
+  `);
+}
+
+// ── Playback ──
+function getCurrentPlayTime() {
+  if (!isPlaying) return state.scenes[state.cur]?.start || 0;
+  return playStartTime + (performance.now() - playStartWall) / 1000;
+}
+
+function seekToScene(i) {
+  if (isPlaying) stopPlay();
+  playStartTime = state.scenes[i]?.start || 0;
+  updateTimeDisplay();
+  renderPreview();
+}
+
+function togglePlay() {
+  if (isPlaying) { stopPlay(); return; }
+  isPlaying = true;
+  playStartWall = performance.now();
+  playStartTime = state.scenes[state.cur]?.start || 0;
+  document.getElementById('playBtn').innerHTML = '&#9646;&#9646;';
+  // Start the current scene's video
+  const vid = sceneVideos[state.cur];
+  if (vid) vid.play().catch(()=>{});
+  playTick();
+}
+
+function stopPlay() {
+  isPlaying = false;
+  if (playTimer) { cancelAnimationFrame(playTimer); playTimer = null; }
+  document.getElementById('playBtn').innerHTML = '&#9654;';
+  Object.values(sceneVideos).forEach(v => v.pause());
+}
+
+function playTick() {
+  if (!isPlaying) return;
+  const t = getCurrentPlayTime();
+  const total = getTotalDuration();
+  if (t >= total) { stopPlay(); state.cur = 0; renderSceneList(); renderEditArea(); renderPreview(); renderTimeline(); return; }
+
+  const idx = getSceneIdxAt(t);
+  if (idx >= 0 && idx !== state.cur) {
+    // Scene changed — switch video
+    const oldVid = sceneVideos[state.cur];
+    if (oldVid) oldVid.pause();
+    state.cur = idx;
+    renderSceneList();
+    renderEditArea();
+    const newVid = sceneVideos[idx];
+    if (newVid) newVid.play().catch(()=>{});
+  }
+
+  updateTimeDisplay();
+  renderPreview();
+  playTimer = requestAnimationFrame(playTick);
+}
+
+// ── Timeline ──
+function renderTimeline() {
+  const bar = document.getElementById('timelineBar');
+  const total = getTotalDuration();
+  bar.innerHTML = state.scenes.map((s,i) => {
+    const left = (s.start/total*100);
+    const width = ((s.end-s.start)/total*100);
+    const color = SCENE_COLORS[i % SCENE_COLORS.length];
+    const label = cleanLabel(s.title).slice(0,12);
+    return `<div class="timeline-scene ${state.cur===i?'active':''}" style="left:${left}%;width:${width}%;background:${color}" onclick="event.stopPropagation();selectScene(${i})">${label}</div>`;
+  }).join('') + '<div class="timeline-playhead" id="playhead" style="left:0%"></div>';
+  document.getElementById('tlEnd').textContent = fmtTime(total);
+  updateTimeDisplay();
+}
+
+function timelineClick(e) {
+  const bar = document.getElementById('timelineBar');
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  const t = pct * getTotalDuration();
+  if (isPlaying) stopPlay();
+  playStartTime = t;
+  const idx = getSceneIdxAt(t);
+  if (idx >= 0) { state.cur = idx; renderSceneList(); renderEditArea(); }
+  updateTimeDisplay();
+  renderPreview();
+}
+
+function updateTimeDisplay() {
+  const t = isPlaying ? getCurrentPlayTime() : playStartTime;
+  const total = getTotalDuration();
+  document.getElementById('timeDisplay').textContent = `${fmtTime(t)} / ${fmtTime(total)}`;
+  const ph = document.getElementById('playhead');
+  if (ph) ph.style.left = `${(t/total*100)}%`;
+}
+
+// ── Canvas Export ──
+function parseFmt(text){
+  return(text||'').split('\n').map(line=>{
+    const segs=[];let rem=line;
+    while(rem.length){
+      const bm=rem.match(/\*\*(.+?)\*\*/),hm=rem.match(/\{\{(.+?)\}\}/);
+      let fm=null,fi=rem.length;
+      if(bm&&bm.index<fi){fm='b';fi=bm.index;}
+      if(hm&&hm.index<fi){fm='h';fi=hm.index;}
+      if(!fm){if(rem)segs.push({text:rem,bold:false,hl:false});break;}
+      if(fi>0)segs.push({text:rem.substring(0,fi),bold:false,hl:false});
+      if(fm==='b'){segs.push({text:bm[1],bold:true,hl:false});rem=rem.substring(fi+bm[0].length);}
+      else{segs.push({text:hm[1],bold:false,hl:true});rem=rem.substring(fi+hm[0].length);}
+    }
+    return segs;
+  });
+}
+
+function drawFrame(ctx, time, exportVideos) {
+  const bar = document.getElementById('showTopBar').checked;
+  const corners = document.getElementById('showCorners').checked;
+  const mute = document.getElementById('showMute').checked;
+  const footer = document.getElementById('footerText').value;
+  const scene = getSceneAt(time);
+  const sceneIdx = getSceneIdxAt(time);
+  const isLight = state.grad==='light';
+  const videoEl = sceneIdx >= 0 && exportVideos ? exportVideos[sceneIdx] : null;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0A0A0A'; ctx.fillRect(0,0,W,H);
+
+  // Video bg
+  if (videoEl) {
+    const vw=videoEl.videoWidth,vh=videoEl.videoHeight;
+    if(vw&&vh){const sc=Math.max(W/vw,H/vh),sw=vw*sc,sh=vh*sc;ctx.drawImage(videoEl,(W-sw)/2,(H-sh)/2,sw,sh);}
+  }
+
+  // Gradient
+  const grd=ctx.createLinearGradient(0,0,0,H);
+  if(state.grad==='dark'){grd.addColorStop(0,'rgba(0,0,0,0)');grd.addColorStop(.2,'rgba(0,0,0,.1)');grd.addColorStop(.55,'rgba(0,0,0,.6)');grd.addColorStop(.75,'rgba(0,0,0,.85)');grd.addColorStop(1,'rgba(0,0,0,.9)');}
+  else if(state.grad==='light'){grd.addColorStop(0,'rgba(255,255,255,0)');grd.addColorStop(.6,'rgba(255,255,255,.5)');grd.addColorStop(.8,'rgba(255,255,255,.85)');grd.addColorStop(1,'rgba(255,255,255,.9)');}
+  else if(state.grad==='green'){grd.addColorStop(0,'rgba(0,255,136,0)');grd.addColorStop(.5,'rgba(0,255,136,.3)');grd.addColorStop(.75,'rgba(0,255,136,.8)');grd.addColorStop(.9,ACCENT);grd.addColorStop(1,ACCENT);}
+  else{grd.addColorStop(0,'rgba(0,0,0,0)');grd.addColorStop(1,'rgba(0,0,0,0)');}
+  ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);
+
+  // Deco
+  if(state.deco==='grid'){ctx.save();ctx.globalAlpha=state.grad==='green'?.06:.04;ctx.strokeStyle=state.grad==='green'?'#fff':ACCENT;ctx.lineWidth=1;for(let x=0;x<=W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}for(let y=0;y<=H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}ctx.restore();}
+  else if(state.deco==='dots'){ctx.save();ctx.globalAlpha=state.grad==='green'?.08:.06;ctx.fillStyle=state.grad==='green'?'#fff':ACCENT;for(let x=20;x<W;x+=40)for(let y=20;y<H;y+=40){ctx.beginPath();ctx.arc(x,y,1.2,0,Math.PI*2);ctx.fill();}ctx.restore();}
+
+  if(bar){ctx.fillStyle=state.grad==='green'?'#fff':ACCENT;ctx.fillRect(0,0,W,6);}
+
+  const cColor = state.grad==='green'?'rgba(255,255,255,.15)':'rgba(0,255,136,.15)';
+  if(corners){ctx.save();ctx.strokeStyle=cColor;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(50,90);ctx.lineTo(50,50);ctx.lineTo(90,50);ctx.stroke();ctx.beginPath();ctx.moveTo(W-90,H-100);ctx.lineTo(W-50,H-100);ctx.lineTo(W-50,H-140);ctx.stroke();ctx.restore();}
+
+  if(mute&&videoEl){ctx.save();ctx.fillStyle='rgba(0,0,0,.45)';ctx.beginPath();ctx.arc(W-64,80,20,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,255,255,.7)';ctx.fillRect(W-72,74,6,12);ctx.beginPath();ctx.moveTo(W-66,74);ctx.lineTo(W-60,68);ctx.lineTo(W-60,92);ctx.lineTo(W-66,86);ctx.fill();ctx.restore();}
+
+  if (!scene) return;
+
+  // Tag
+  const tagColor = isLight?'rgba(30,30,30,.4)':'rgba(255,255,255,.5)';
+  if(scene.tag){ctx.save();ctx.fillStyle=ACCENT;ctx.fillRect(80,60,3,24);ctx.font='700 20px Pretendard,Inter,sans-serif';ctx.fillStyle=tagColor;ctx.fillText(scene.tag.toUpperCase(),97,80);ctx.restore();}
+
+  // Text
+  const sizes = { default:[56,28], large:[72,32], huge:[90,36] };
+  const [tFs, bFs] = sizes[scene.style] || sizes.default;
+  const titleColor = isLight?'#1A1A1A':'#fff';
+  const bodyColor = isLight?'rgba(30,30,30,.6)':'rgba(255,255,255,.65)';
+  const strongColor = isLight?'#1A1A1A':'#fff';
+
+  const tLines = parseFmt(scene.title), bLines = scene.body?parseFmt(scene.body):[];
+  const tLH = tFs*1.35, bLH = bFs*1.75;
+  const totalTextH = tLines.length*tLH + (bLines.length>0?24+bLines.length*bLH:0);
+
+  const [hAlign, vAlign] = scene.pos.split('-');
+  const textAlign = hAlign==='left'?'left':hAlign==='right'?'right':'center';
+
+  let blockY;
+  if (vAlign==='top') blockY = 120;
+  else if (vAlign==='center') blockY = (H - totalTextH)/2;
+  else blockY = H - 160 - totalTextH;
+
+  let anchorX;
+  if (hAlign==='left') anchorX = 80;
+  else if (hAlign==='right') anchorX = W-80;
+  else anchorX = W/2;
+
+  ctx.save();
+  ctx.textAlign = textAlign;
+  ctx.shadowColor = 'rgba(0,0,0,.5)';
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetY = 2;
+
+  let cy = blockY + tLH;
+  for (const line of tLines) {
+    if (textAlign==='center') {
+      let totalW=0;
+      const measured = line.map(seg=>{ctx.font=`800 ${tFs}px Pretendard,Inter,sans-serif`;const w=ctx.measureText(seg.text).width;totalW+=w;return{...seg,w};});
+      let x=anchorX-totalW/2; ctx.textAlign='left';
+      for(const seg of measured){ctx.font=`800 ${tFs}px Pretendard,Inter,sans-serif`;ctx.fillStyle=seg.hl?ACCENT:titleColor;ctx.fillText(seg.text,x,cy);x+=seg.w;}
+      ctx.textAlign=textAlign;
+    } else {
+      let x=anchorX;
+      if(textAlign==='right'){let tw=0;line.forEach(seg=>{ctx.font=`800 ${tFs}px Pretendard,Inter,sans-serif`;tw+=ctx.measureText(seg.text).width;});x=anchorX-tw;ctx.textAlign='left';}
+      for(const seg of line){ctx.font=`800 ${tFs}px Pretendard,Inter,sans-serif`;ctx.fillStyle=seg.hl?ACCENT:titleColor;ctx.fillText(seg.text,x,cy);x+=ctx.measureText(seg.text).width;}
+      ctx.textAlign=textAlign;
+    }
+    cy += tLH;
+  }
+
+  if (bLines.length) {
+    cy += 24; ctx.shadowBlur = 10;
+    for (const line of bLines) {
+      if (textAlign==='center') {
+        let totalW=0;
+        const measured = line.map(seg=>{ctx.font=`${seg.bold?700:400} ${bFs}px Pretendard,Inter,sans-serif`;const w=ctx.measureText(seg.text).width;totalW+=w;return{...seg,w};});
+        let x=anchorX-totalW/2; ctx.textAlign='left';
+        for(const seg of measured){ctx.font=`${seg.bold?700:400} ${bFs}px Pretendard,Inter,sans-serif`;ctx.fillStyle=seg.hl?ACCENT:seg.bold?strongColor:bodyColor;ctx.fillText(seg.text,x,cy);x+=seg.w;}
+        ctx.textAlign=textAlign;
+      } else {
+        let x=anchorX;
+        if(textAlign==='right'){let tw=0;line.forEach(seg=>{ctx.font=`${seg.bold?700:400} ${bFs}px Pretendard,Inter,sans-serif`;tw+=ctx.measureText(seg.text).width;});x=anchorX-tw;ctx.textAlign='left';}
+        for(const seg of line){ctx.font=`${seg.bold?700:400} ${bFs}px Pretendard,Inter,sans-serif`;ctx.fillStyle=seg.hl?ACCENT:seg.bold?strongColor:bodyColor;ctx.fillText(seg.text,x,cy);x+=ctx.measureText(seg.text).width;}
+        ctx.textAlign=textAlign;
+      }
+      cy += bLH;
+    }
+  }
+  ctx.restore();
+
+  const footerColor = isLight?'rgba(30,30,30,.2)':'rgba(255,255,255,.2)';
+  if(footer){ctx.save();ctx.font='italic 500 18px Pretendard,Inter,sans-serif';ctx.fillStyle=footerColor;ctx.textAlign='center';ctx.shadowColor='rgba(0,0,0,.3)';ctx.shadowBlur=6;ctx.fillText(footer,W/2,H-50);ctx.restore();}
+}
+
+// ── Export ──
+async function exportVideo() {
+  const p = document.getElementById('downloadProgress');
+  const hasAnyVideo = state.scenes.some(s => s.videoUrl);
+  if (!hasAnyVideo) { p.textContent='Add at least one background video!'; setTimeout(()=>p.textContent='',3000); return; }
+
+  p.textContent = 'Preparing videos...';
+  const canvas = document.getElementById('exportCanvas');
+  const ctx = canvas.getContext('2d');
+  const total = getTotalDuration();
+
+  // Load all scene videos for export
+  const exportVids = {};
+  for (let i=0; i<state.scenes.length; i++) {
+    const s = state.scenes[i];
+    if (!s.videoUrl) continue;
+    const vid = document.createElement('video');
+    vid.crossOrigin = 'anonymous';
+    vid.src = s.videoUrl;
+    vid.muted = true; vid.loop = true; vid.playsInline = true;
+    try {
+      await new Promise((res,rej)=>{vid.oncanplaythrough=res;vid.onerror=rej;vid.load();});
+      vid.currentTime = 0;
+      await vid.play();
+      exportVids[i] = vid;
+    } catch(e) { console.error(`Video ${i} load error:`, e); }
+  }
+
+  p.textContent = 'Recording...';
+  const stream = canvas.captureStream(30);
+  const rec = new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9',videoBitsPerSecond:8000000});
+  const chunks = [];
+  rec.ondataavailable = e => { if(e.data.size>0)chunks.push(e.data); };
+
+  // During export, only play the video for the current scene
+  let lastSceneIdx = -1;
+
+  await new Promise(resolve => {
+    rec.onstop = () => {
+      Object.values(exportVids).forEach(v => v.pause());
+      resolve();
+    };
+    rec.start();
+    const t0 = performance.now(), ms = total*1000;
+    let lastSec = -1;
+    (function frame() {
+      const elapsed = (performance.now()-t0)/1000;
+      const curIdx = getSceneIdxAt(elapsed);
+
+      // Switch playing video on scene change
+      if (curIdx !== lastSceneIdx) {
+        if (lastSceneIdx >= 0 && exportVids[lastSceneIdx]) exportVids[lastSceneIdx].pause();
+        if (curIdx >= 0 && exportVids[curIdx]) { exportVids[curIdx].currentTime = 0; exportVids[curIdx].play().catch(()=>{}); }
+        lastSceneIdx = curIdx;
+      }
+
+      if (Math.floor(elapsed) !== lastSec) { lastSec=Math.floor(elapsed); p.textContent=`Recording... ${fmtTime(elapsed)} / ${fmtTime(total)}`; }
+      drawFrame(ctx, elapsed, exportVids);
+      if (performance.now()-t0 < ms) requestAnimationFrame(frame);
+      else rec.stop();
+    })();
+  });
+
+  const blob = new Blob(chunks,{type:'video/webm'});
+  const u = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.download = 'bdm_reels.webm';
+  a.href = u; a.click();
+  URL.revokeObjectURL(u);
+  p.textContent = 'Done!';
+  setTimeout(()=>p.textContent='',3000);
+}
+
+async function exportCurrentPNG() {
+  const p = document.getElementById('downloadProgress');
+  const canvas = document.getElementById('exportCanvas');
+  const ctx = canvas.getContext('2d');
+  p.textContent = 'Rendering...';
+  const t = isPlaying ? getCurrentPlayTime() : (state.scenes[state.cur]?.start || 0);
+  const sceneIdx = getSceneIdxAt(t);
+
+  // Prepare video for this scene
+  const exportVids = {};
+  if (sceneIdx >= 0 && state.scenes[sceneIdx].videoUrl) {
+    const vid = document.createElement('video');
+    vid.crossOrigin='anonymous'; vid.src=state.scenes[sceneIdx].videoUrl; vid.muted=true;
+    await new Promise(r=>{vid.onloadeddata=r;vid.load();});
+    vid.currentTime = 1;
+    await new Promise(r=>setTimeout(r,300));
+    exportVids[sceneIdx] = vid;
+  }
+
+  drawFrame(ctx, t, exportVids);
+  const a = document.createElement('a');
+  a.download = 'bdm_reels_frame.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+  p.textContent = 'Done!';
+  setTimeout(()=>p.textContent='',2000);
+}
+
+// ── Guide Modal ──
+function showGuide() { document.getElementById('guideModal').classList.remove('hidden'); }
+function closeGuide() { document.getElementById('guideModal').classList.add('hidden'); localStorage.setItem('bdm_reels_guided','1'); }
+
+// ── Init ──
+document.getElementById('apiKeyInput').value = apiKey;
+document.getElementById('apiDot').className = 'status-dot ' + (apiKey ? 'ok' : 'idle');
+renderSceneList();
+renderEditArea();
+renderGradButtons();
+renderDecoButtons();
+renderPreview();
+renderTimeline();
+
+// Show guide on first visit
+if (!localStorage.getItem('bdm_reels_guided')) showGuide();
+</script>
+</body>
+</html>

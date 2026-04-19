@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Carousel — 네이버 생존의 열쇠 (DBR 기고) v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1a1a1a; display:flex; flex-wrap:wrap; gap:24px; padding:32px; justify-content:center; font-family:'Noto Sans KR',sans-serif; }
+  h2.sec { width:100%; text-align:center; font-family:'Outfit',sans-serif; font-size:20px; font-weight:700; color:#F5F5F4; margin:16px 0 8px; }
+  .s { width:360px; height:450px; border-radius:6px; overflow:hidden; position:relative; display:flex; flex-direction:column; padding:40px 36px; }
+  /* Light */
+  .L { background:#FAFAF9; color:#1C1917; }
+  .L .lbl { color:#059669; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .L .h1 { font-size:26px; font-weight:900; line-height:1.32; letter-spacing:-0.8px; }
+  .L .p { font-size:13px; line-height:1.75; color:#57534E; }
+  .L .acc { color:#059669; }
+  .L .bar { width:40px; height:3px; background:#059669; border-radius:2px; }
+  .L .card { background:#F5F5F4; border-radius:8px; padding:14px; }
+  .L .card-b { border:1px solid #E7E5E4; }
+  .L .card-g { background:#ECFDF5; border:1px solid #A7F3D0; }
+  .L .div { width:100%; height:1px; background:#E7E5E4; }
+  .L .mut { color:#A8A29E; }
+  .L .sub { color:#78716C; }
+  .L .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:#A8A29E; }
+  .L .nc { width:24px; height:24px; border-radius:50%; background:#059669; color:white; display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; flex-shrink:0; }
+  .L .badge { background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:4px; font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; display:inline-block; }
+  .L .red-b { background:#FEE2E2; color:#991B1B; padding:3px 8px; border-radius:4px; font-size:9px; font-weight:700; display:inline-block; }
+  .L .cta-t { font-family:'Outfit',sans-serif; font-weight:900; font-size:28px; color:#059669; letter-spacing:-1px; }
+  .L .cta-l { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#059669; }
+  .L .arrow { text-align:center; font-family:'Outfit',sans-serif; font-size:20px; font-weight:900; color:#059669; }
+  /* Dark */
+  .D { background:#0F0F0F; color:#F5F5F4; }
+  .D .lbl { color:#34d399; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .D .h1 { font-size:26px; font-weight:900; line-height:1.32; letter-spacing:-0.8px; }
+  .D .p { font-size:13px; line-height:1.75; color:#A8A29E; }
+  .D .acc { color:#34d399; }
+  .D .bar { width:40px; height:3px; background:#34d399; border-radius:2px; }
+  .D .card { background:#1A1A1A; border-radius:8px; padding:14px; }
+  .D .card-b { border:1px solid #2A2A2A; }
+  .D .card-g { background:#0d2e23; border:1px solid #065F46; }
+  .D .div { width:100%; height:1px; background:#2A2A2A; }
+  .D .mut { color:#6b7280; }
+  .D .sub { color:#9CA3AF; }
+  .D .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:#6b7280; }
+  .D .nc { width:24px; height:24px; border-radius:50%; background:#34d399; color:#0F0F0F; display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; flex-shrink:0; }
+  .D .badge { background:#78350F; color:#FDE68A; padding:4px 10px; border-radius:4px; font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; display:inline-block; }
+  .D .red-b { background:#7F1D1D; color:#FCA5A5; padding:3px 8px; border-radius:4px; font-size:9px; font-weight:700; display:inline-block; }
+  .D .cta-t { font-family:'Outfit',sans-serif; font-weight:900; font-size:28px; color:#34d399; letter-spacing:-1px; }
+  .D .cta-l { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#34d399; }
+  .D .arrow { text-align:center; font-family:'Outfit',sans-serif; font-size:20px; font-weight:900; color:#34d399; }
+  /* Accent */
+  .A { background:#059669; color:white; }
+  .A .lbl { color:rgba(255,255,255,.7); font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .A .h1 { font-size:24px; font-weight:900; line-height:1.35; color:white; }
+  .A .p { font-size:14px; line-height:1.8; color:rgba(255,255,255,.9); }
+  .A .bar { width:40px; height:3px; background:rgba(255,255,255,.5); border-radius:2px; }
+  .A .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:rgba(255,255,255,.5); }
+  /* utils */
+  .fc { display:flex; flex-direction:column; }
+  .fr { display:flex; flex-direction:row; }
+  .f1 { flex:1; } .g4{gap:4px} .g6{gap:6px} .g8{gap:8px} .g10{gap:10px} .g12{gap:12px} .g16{gap:16px} .g20{gap:20px}
+  .ac { align-items:center; } .jc { justify-content:center; } .jb { justify-content:space-between; }
+  .tc { text-align:center; } .w100 { width:100%; }
+  .ni { display:flex; gap:12px; align-items:flex-start; }
+  /* Image slide */
+  .img-slide { background-size:cover; background-position:center; }
+  .img-overlay { position:absolute; inset:0; }
+  .img-overlay-light { background: linear-gradient(to bottom, rgba(250,250,249,0.88) 0%, rgba(250,250,249,0.96) 55%); }
+  .img-overlay-dark { background: linear-gradient(to bottom, rgba(15,15,15,0.82) 0%, rgba(15,15,15,0.96) 55%); }
+  .flow-step { display:flex; align-items:center; gap:8px; }
+  .flow-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
+  .L .flow-icon { background:#ECFDF5; }
+  .D .flow-icon { background:#0d2e23; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LIGHT ═══════════ -->
+<h2 class="sec">Option A — Light</h2>
+
+<!-- S1: Hook — 일상 진입 -->
+<div class="s L">
+  <div class="fc g16 f1">
+    <div class="fr g8 ac"><span class="lbl">DBR 432호 기고</span><span class="badge">동아비즈니스리뷰</span></div>
+    <div class="bar"></div>
+    <div class="h1">
+      "아기 침대 추천"을<br>
+      <span class="acc">네이버</span>에<br>
+      검색하던 시절,<br>
+      기억나?
+    </div>
+    <div class="p">
+      5년 전이라면 당연히 네이버였다.<br><br>
+      지금은?<br>
+      인스타에서 육아 인플루언서 게시글을 보고<br>
+      "아 이거다" 하고 바로 산다.<br><br>
+      <strong>네이버가 위험한 이유가 여기 있다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>1 / 9 →</span></div>
+</div>
+
+<!-- S2: 네이버는 완벽했다 + 균열 -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">CONTEXT</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px">네이버는 한때<br>완벽한 성이었다</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      검색 → 블로그 → 쇼핑 → 결제까지<br>
+      한 번도 밖으로 나갈 필요가 없는 구조.
+    </div>
+    <div class="card card-b" style="margin-top:8px; padding:12px;">
+      <div class="fc g6">
+        <div class="fr ac g6" style="font-size:11px;">
+          <span>🔍</span><span><strong>초록창</strong>에 검색</span>
+        </div>
+        <div style="text-align:center; font-size:12px; color:#059669;">↓</div>
+        <div class="fr ac g6" style="font-size:11px;">
+          <span>📝</span><span><strong>블로그</strong>에서 정보 확인</span>
+        </div>
+        <div style="text-align:center; font-size:12px; color:#059669;">↓</div>
+        <div class="fr ac g6" style="font-size:11px;">
+          <span>🛒</span><span><strong>스마트스토어</strong>에서 비교</span>
+        </div>
+        <div style="text-align:center; font-size:12px; color:#059669;">↓</div>
+        <div class="fr ac g6" style="font-size:11px;">
+          <span>💳</span><span><strong>네이버페이</strong>로 결제</span>
+        </div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:10px;"></div>
+    <div class="p" style="margin-top:8px; font-size:12px;">
+      완벽한 폐쇄형 생태계.<br>
+      <strong>근데 이 성에 금이 가기 시작했다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>2 / 9 →</span></div>
+</div>
+
+<!-- S3: 문제 — 첫 마음을 빼앗겼다 -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">PROBLEM</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:22px">"첫 마음"을<br>빼앗겼다</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      소비자가 <strong>뭔가 사고 싶다고 느끼는 순간</strong>,<br>
+      그 출발점이 더 이상 네이버가 아니다.
+    </div>
+    <div class="fc g8" style="margin-top:8px;">
+      <div class="card card-b" style="padding:10px;">
+        <div class="fr ac g8">
+          <span class="red-b">과거</span>
+          <span style="font-size:11px; color:#78716C;">"아기 침대 추천" → <strong>네이버 검색</strong></span>
+        </div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="card card-g" style="padding:10px; border-color:#059669;">
+        <div class="fr ac g8">
+          <span style="font-size:9px; font-weight:700; background:#059669; color:white; padding:3px 8px; border-radius:4px;">현재</span>
+          <span style="font-size:11px; color:#059669; font-weight:600;">인스타 피드에서 "어 이거 뭐야?" 클릭</span>
+        </div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:10px;"></div>
+    <div class="p" style="margin-top:8px; font-size:12px;">
+      구매의 시작이 '검색'이 아니라 '발견'으로 바뀌었다.<br><br>
+      <strong>네이버는 어떻게 해야 할까?</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>3 / 9 →</span></div>
+</div>
+
+<!-- S4: Accent — 세 가지 열쇠 -->
+<div class="s A">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">3 KEYS</span>
+    <div class="bar"></div>
+    <div class="h1">네이버 생존의<br>세 가지 열쇠</div>
+    <div class="p" style="margin-top:12px; line-height:2.2;">
+      <strong style="font-size:16px;">1.</strong> 검색 전에 '발견'을 먼저<br>
+      <strong style="font-size:16px;">2.</strong> 초록창을 '결정창'으로<br>
+      <strong style="font-size:16px;">3.</strong> 광고 말고 '신뢰'를 팔아라
+    </div>
+    <div style="margin-top:16px; font-size:12px; color:rgba(255,255,255,.7); font-style:italic;">
+      하나씩 풀어보자 →
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>4 / 9 →</span></div>
+</div>
+
+<!-- S5: 열쇠 1 — 발견이 먼저다 -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <div class="fr g8 ac">
+      <span class="lbl">KEY 1</span>
+      <div class="nc">1</div>
+    </div>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px;">네이버를 열면<br>'검색창'이 먼저 보인다</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      인스타를 열면? <strong>피드</strong>가 먼저 보인다.<br>
+      이 차이가 치명적이다.
+    </div>
+    <div class="card card-g" style="margin-top:8px; padding:12px;">
+      <div style="font-size:11px; font-weight:700; color:#059669; margin-bottom:6px;">바꿔야 할 것</div>
+      <div style="font-size:12px; color:#1C1917; line-height:1.6;">
+        메인 화면 최상단을<br>
+        <strong>개인화된 '발견 피드'</strong>가 차지하게 하고,<br>
+        검색창은 보조 도구로 물러나게.
+      </div>
+    </div>
+    <div class="fc g4" style="margin-top:8px;">
+      <div class="flow-step">
+        <div class="flow-icon">📱</div>
+        <span style="font-size:10px; color:#78716C;"><strong>행동 신호:</strong> 저장, 위시, 장바구니</span>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">🌦</div>
+        <span style="font-size:10px; color:#78716C;"><strong>맥락 신호:</strong> 날씨, 위치, 계절</span>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">💰</div>
+        <span style="font-size:10px; color:#78716C;"><strong>거래 신호:</strong> 가격 변동, 재고</span>
+      </div>
+    </div>
+    <div class="p" style="font-size:11px; margin-top:6px;">
+      <strong>세 가지를 합치면 → "검색 전에 제안"이 가능해진다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>5 / 9 →</span></div>
+</div>
+
+<!-- S6: 열쇠 2 — 결정창 -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <div class="fr g8 ac">
+      <span class="lbl">KEY 2</span>
+      <div class="nc">2</div>
+    </div>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px;">초록창을<br>'결정창'으로 바꿔라</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      지금의 초록창: 링크 10개 나열.<br>
+      사용자는 직접 비교하고, 직접 고른다.<br><br>
+      <strong>이걸 한 번의 대화로 끝내라.</strong>
+    </div>
+    <div class="card card-b" style="margin-top:8px; padding:12px;">
+      <div style="font-size:10px; font-weight:700; color:#059669; margin-bottom:6px;">💬 대화형 검색 예시</div>
+      <div style="font-size:11px; font-style:italic; color:#78716C; margin-bottom:8px;">"여름 캠핑 2인용 텐트 20만원대?"</div>
+      <div class="fc g4">
+        <div class="fr ac g6">
+          <span style="font-size:11px;">①</span>
+          <span style="font-size:10px;">AI가 비교 기준 제시</span>
+        </div>
+        <div class="fr ac g6">
+          <span style="font-size:11px;">②</span>
+          <span style="font-size:10px;">후보 3개로 압축</span>
+        </div>
+        <div class="fr ac g6">
+          <span style="font-size:11px;">③</span>
+          <span style="font-size:10px;">리뷰 + 반품/AS 요약</span>
+        </div>
+        <div class="fr ac g6">
+          <span style="font-size:11px; color:#059669; font-weight:700;">④</span>
+          <span style="font-size:10px; color:#059669; font-weight:700;">네이버페이로 결제 완료</span>
+        </div>
+      </div>
+    </div>
+    <div class="p" style="font-size:11px; margin-top:8px;">
+      질문 → 비교 → 결정 → 결제.<br>
+      <strong>한 번도 이탈 없이 끝.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>6 / 9 →</span></div>
+</div>
+
+<!-- S7: 열쇠 3 — 추천의 신뢰 -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <div class="fr g8 ac">
+      <span class="lbl">KEY 3</span>
+      <div class="nc">3</div>
+    </div>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px;">광고 말고<br>'신뢰'를 팔아라</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      AI 시대에 플랫폼의 가치는<br>
+      "얼마나 많이 보여주느냐"가 아니라<br>
+      <strong>"얼마나 믿을 수 있느냐"</strong>다.
+    </div>
+    <div class="fc g6" style="margin-top:8px;">
+      <div class="card card-b" style="padding:10px;">
+        <div style="font-size:10px; font-weight:700; color:#059669;">① 신뢰 자산 구축</div>
+        <div style="font-size:10px; color:#78716C; line-height:1.5; margin-top:2px;">제품 정보를 AI가 인용할 수 있게 구조화</div>
+      </div>
+      <div class="card card-b" style="padding:10px;">
+        <div style="font-size:10px; font-weight:700; color:#059669;">② 리뷰를 '증거'로 격상</div>
+        <div style="font-size:10px; color:#78716C; line-height:1.5; margin-top:2px;">검증 배지 + AI 요약 → 객관적 근거</div>
+      </div>
+      <div class="card card-g" style="padding:10px; border-color:#059669;">
+        <div style="font-size:10px; font-weight:700; color:#059669;">③ 과금 모델 전환</div>
+        <div style="font-size:10px; color:#059669; line-height:1.5; margin-top:2px;">클릭당 과금 → <strong>구매 기반 과금</strong></div>
+      </div>
+    </div>
+    <div class="p" style="font-size:11px; margin-top:8px;">
+      <strong>사용자가 "네이버가 추천했으니 사자"라고<br>느끼게 만들어야 한다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>7 / 9 →</span></div>
+</div>
+
+<!-- S8: Big Picture — 한 문장 전환 -->
+<div class="s L">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">BIG PICTURE</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:19px;">결국 한 문장이다</div>
+    <div class="fc g10" style="margin-top:4px;">
+      <div class="card" style="padding:14px; text-align:center; background:#F5F5F4;">
+        <div style="font-size:9px; color:#A8A29E; margin-bottom:3px;">FROM</div>
+        <div style="font-size:14px; font-weight:700; color:#A8A29E; text-decoration:line-through;">질문에 답하는 플랫폼</div>
+      </div>
+      <div class="arrow" style="font-size:24px;">↓</div>
+      <div class="card card-g" style="padding:14px; text-align:center; border-color:#059669;">
+        <div style="font-size:9px; color:#059669; margin-bottom:3px;">TO</div>
+        <div style="font-size:14px; font-weight:900; color:#059669;">먼저 제안하고, 끝까지 책임지는 플랫폼</div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:8px;"></div>
+    <div class="p" style="font-size:12px; margin-top:8px;">
+      사용자가 믿고 따르는 건<br>
+      검색 결과 상단 노출이 아니라<br>
+      <strong><span class="acc">신뢰할 수 있는 추천</span></strong>이다.<br><br>
+      네이버가 이걸 못 하면,<br>
+      <strong>인스타와 AI에게 완전히 밀린다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>8 / 9 →</span></div>
+</div>
+
+<!-- S9: CTA -->
+<div class="s L" style="justify-content:center; align-items:center; text-align:center;">
+  <div class="fc g16 ac">
+    <span class="badge" style="font-size:11px; padding:6px 14px;">DBR 432호 기고</span>
+    <div class="cta-t">BDM</div>
+    <div style="font-size:13px; font-weight:700; color:#1C1917;">빅데이터 마케팅 랩</div>
+    <div class="div" style="width:60px;"></div>
+    <div class="fc g8">
+      <div style="font-size:11px; color:#78716C; line-height:1.7;">
+        이 글의 전문은 <strong>동아비즈니스리뷰(DBR)</strong><br>
+        432호에서 읽을 수 있습니다
+      </div>
+      <div class="cta-l">📖 dbr.donga.com/article/view/1904/article_no/11961</div>
+    </div>
+    <div class="div" style="width:60px;"></div>
+    <div class="fc g6">
+      <div style="font-size:11px; color:#78716C;">더 깊은 분석은 웹사이트에서</div>
+      <div class="cta-l">🔗 bigdatamarketinglab.com</div>
+      <div style="font-size:10px; color:#A8A29E;">@bdm.lab</div>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>9 / 9</span></div>
+</div>
+
+
+<!-- ═══════════ DARK ═══════════ -->
+<h2 class="sec" style="margin-top:40px;">Option B — Dark Bold</h2>
+
+<!-- Dark S1: Hook -->
+<div class="s D">
+  <div class="fc g16 f1">
+    <div class="fr g8 ac"><span class="lbl">DBR 432호 기고</span><span class="badge">동아비즈니스리뷰</span></div>
+    <div class="bar"></div>
+    <div class="h1">
+      "아기 침대 추천"을<br>
+      <span class="acc">네이버</span>에<br>
+      검색하던 시절,<br>
+      기억나?
+    </div>
+    <div class="p">
+      5년 전이라면 당연히 네이버였다.<br><br>
+      지금은?<br>
+      인스타에서 육아 인플루언서 게시글을 보고<br>
+      "아 이거다" 하고 바로 산다.<br><br>
+      <strong style="color:#F5F5F4;">네이버가 위험한 이유가 여기 있다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>1 / 9 →</span></div>
+</div>
+
+<!-- Dark S2: 네이버는 완벽했다 -->
+<div class="s D">
+  <div class="fc g12 f1">
+    <span class="lbl">CONTEXT</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px">네이버는 한때<br>완벽한 성이었다</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      검색 → 블로그 → 쇼핑 → 결제까지<br>
+      한 번도 밖으로 나갈 필요가 없는 구조.
+    </div>
+    <div class="card card-b" style="margin-top:8px; padding:12px;">
+      <div class="fc g6">
+        <div class="fr ac g6" style="font-size:11px; color:#F5F5F4;">
+          <span>🔍</span><span><strong>초록창</strong>에 검색</span>
+        </div>
+        <div style="text-align:center; font-size:12px; color:#34d399;">↓</div>
+        <div class="fr ac g6" style="font-size:11px; color:#F5F5F4;">
+          <span>📝</span><span><strong>블로그</strong>에서 정보 확인</span>
+        </div>
+        <div style="text-align:center; font-size:12px; color:#34d399;">↓</div>
+        <div class="fr ac g6" style="font-size:11px; color:#F5F5F4;">
+          <span>🛒</span><span><strong>스마트스토어</strong>에서 비교</span>
+        </div>
+        <div style="text-align:center; font-size:12px; color:#34d399;">↓</div>
+        <div class="fr ac g6" style="font-size:11px; color:#F5F5F4;">
+          <span>💳</span><span><strong>네이버페이</strong>로 결제</span>
+        </div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:10px;"></div>
+    <div class="p" style="margin-top:8px; font-size:12px;">
+      완벽한 폐쇄형 생태계.<br>
+      <strong style="color:#F5F5F4;">근데 이 성에 금이 가기 시작했다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>2 / 9 →</span></div>
+</div>
+
+<!-- Dark S3: 문제 — 첫 마음을 빼앗겼다 -->
+<div class="s D">
+  <div class="fc g12 f1">
+    <span class="lbl">PROBLEM</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:22px">"첫 마음"을<br>빼앗겼다</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      소비자가 <strong style="color:#F5F5F4;">뭔가 사고 싶다고 느끼는 순간</strong>,<br>
+      그 출발점이 더 이상 네이버가 아니다.
+    </div>
+    <div class="fc g8" style="margin-top:8px;">
+      <div class="card card-b" style="padding:10px;">
+        <div class="fr ac g8">
+          <span class="red-b">과거</span>
+          <span style="font-size:11px; color:#9CA3AF;">"아기 침대 추천" → <strong style="color:#F5F5F4;">네이버 검색</strong></span>
+        </div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="card card-g" style="padding:10px; border-color:#34d399;">
+        <div class="fr ac g8">
+          <span style="font-size:9px; font-weight:700; background:#34d399; color:#0F0F0F; padding:3px 8px; border-radius:4px;">현재</span>
+          <span style="font-size:11px; color:#34d399; font-weight:600;">인스타 피드에서 "어 이거 뭐야?" 클릭</span>
+        </div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:10px;"></div>
+    <div class="p" style="margin-top:8px; font-size:12px;">
+      구매의 시작이 '검색'이 아니라 '발견'으로 바뀌었다.<br><br>
+      <strong style="color:#F5F5F4;">네이버는 어떻게 해야 할까?</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>3 / 9 →</span></div>
+</div>
+
+<!-- Dark S4: Accent — 세 가지 열쇠 -->
+<div class="s A">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">3 KEYS</span>
+    <div class="bar"></div>
+    <div class="h1">네이버 생존의<br>세 가지 열쇠</div>
+    <div class="p" style="margin-top:12px; line-height:2.2;">
+      <strong style="font-size:16px;">1.</strong> 검색 전에 '발견'을 먼저<br>
+      <strong style="font-size:16px;">2.</strong> 초록창을 '결정창'으로<br>
+      <strong style="font-size:16px;">3.</strong> 광고 말고 '신뢰'를 팔아라
+    </div>
+    <div style="margin-top:16px; font-size:12px; color:rgba(255,255,255,.7); font-style:italic;">
+      하나씩 풀어보자 →
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>4 / 9 →</span></div>
+</div>
+
+<!-- Dark S5: 열쇠 1 — 발견이 먼저다 -->
+<div class="s D">
+  <div class="fc g12 f1">
+    <div class="fr g8 ac">
+      <span class="lbl">KEY 1</span>
+      <div class="nc">1</div>
+    </div>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px;">네이버를 열면<br>'검색창'이 먼저 보인다</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      인스타를 열면? <strong style="color:#F5F5F4;">피드</strong>가 먼저 보인다.<br>
+      이 차이가 치명적이다.
+    </div>
+    <div class="card card-g" style="margin-top:8px; padding:12px; border-color:#34d399;">
+      <div style="font-size:11px; font-weight:700; color:#34d399; margin-bottom:6px;">바꿔야 할 것</div>
+      <div style="font-size:12px; color:#F5F5F4; line-height:1.6;">
+        메인 화면 최상단을<br>
+        <strong>개인화된 '발견 피드'</strong>가 차지하게 하고,<br>
+        검색창은 보조 도구로 물러나게.
+      </div>
+    </div>
+    <div class="fc g4" style="margin-top:8px;">
+      <div class="flow-step">
+        <div class="flow-icon">📱</div>
+        <span style="font-size:10px; color:#9CA3AF;"><strong style="color:#F5F5F4;">행동 신호:</strong> 저장, 위시, 장바구니</span>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">🌦</div>
+        <span style="font-size:10px; color:#9CA3AF;"><strong style="color:#F5F5F4;">맥락 신호:</strong> 날씨, 위치, 계절</span>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">💰</div>
+        <span style="font-size:10px; color:#9CA3AF;"><strong style="color:#F5F5F4;">거래 신호:</strong> 가격 변동, 재고</span>
+      </div>
+    </div>
+    <div class="p" style="font-size:11px; margin-top:6px;">
+      <strong style="color:#F5F5F4;">세 가지를 합치면 → "검색 전에 제안"이 가능해진다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>5 / 9 →</span></div>
+</div>
+
+<!-- Dark S6: 열쇠 2 — 결정창 -->
+<div class="s D">
+  <div class="fc g12 f1">
+    <div class="fr g8 ac">
+      <span class="lbl">KEY 2</span>
+      <div class="nc">2</div>
+    </div>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px;">초록창을<br>'결정창'으로 바꿔라</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      지금의 초록창: 링크 10개 나열.<br>
+      사용자는 직접 비교하고, 직접 고른다.<br><br>
+      <strong style="color:#F5F5F4;">이걸 한 번의 대화로 끝내라.</strong>
+    </div>
+    <div class="card card-b" style="margin-top:8px; padding:12px;">
+      <div style="font-size:10px; font-weight:700; color:#34d399; margin-bottom:6px;">💬 대화형 검색 예시</div>
+      <div style="font-size:11px; font-style:italic; color:#9CA3AF; margin-bottom:8px;">"여름 캠핑 2인용 텐트 20만원대?"</div>
+      <div class="fc g4">
+        <div class="fr ac g6">
+          <span style="font-size:11px; color:#F5F5F4;">①</span>
+          <span style="font-size:10px; color:#F5F5F4;">AI가 비교 기준 제시</span>
+        </div>
+        <div class="fr ac g6">
+          <span style="font-size:11px; color:#F5F5F4;">②</span>
+          <span style="font-size:10px; color:#F5F5F4;">후보 3개로 압축</span>
+        </div>
+        <div class="fr ac g6">
+          <span style="font-size:11px; color:#F5F5F4;">③</span>
+          <span style="font-size:10px; color:#F5F5F4;">리뷰 + 반품/AS 요약</span>
+        </div>
+        <div class="fr ac g6">
+          <span style="font-size:11px; color:#34d399; font-weight:700;">④</span>
+          <span style="font-size:10px; color:#34d399; font-weight:700;">네이버페이로 결제 완료</span>
+        </div>
+      </div>
+    </div>
+    <div class="p" style="font-size:11px; margin-top:8px;">
+      질문 → 비교 → 결정 → 결제.<br>
+      <strong style="color:#F5F5F4;">한 번도 이탈 없이 끝.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>6 / 9 →</span></div>
+</div>
+
+<!-- Dark S7: 열쇠 3 — 추천의 신뢰 -->
+<div class="s D">
+  <div class="fc g12 f1">
+    <div class="fr g8 ac">
+      <span class="lbl">KEY 3</span>
+      <div class="nc">3</div>
+    </div>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px;">광고 말고<br>'신뢰'를 팔아라</div>
+    <div class="p" style="font-size:12px; margin-top:4px;">
+      AI 시대에 플랫폼의 가치는<br>
+      "얼마나 많이 보여주느냐"가 아니라<br>
+      <strong style="color:#F5F5F4;">"얼마나 믿을 수 있느냐"</strong>다.
+    </div>
+    <div class="fc g6" style="margin-top:8px;">
+      <div class="card card-b" style="padding:10px;">
+        <div style="font-size:10px; font-weight:700; color:#34d399;">① 신뢰 자산 구축</div>
+        <div style="font-size:10px; color:#9CA3AF; line-height:1.5; margin-top:2px;">제품 정보를 AI가 인용할 수 있게 구조화</div>
+      </div>
+      <div class="card card-b" style="padding:10px;">
+        <div style="font-size:10px; font-weight:700; color:#34d399;">② 리뷰를 '증거'로 격상</div>
+        <div style="font-size:10px; color:#9CA3AF; line-height:1.5; margin-top:2px;">검증 배지 + AI 요약 → 객관적 근거</div>
+      </div>
+      <div class="card card-g" style="padding:10px; border-color:#34d399;">
+        <div style="font-size:10px; font-weight:700; color:#34d399;">③ 과금 모델 전환</div>
+        <div style="font-size:10px; color:#34d399; line-height:1.5; margin-top:2px;">클릭당 과금 → <strong>구매 기반 과금</strong></div>
+      </div>
+    </div>
+    <div class="p" style="font-size:11px; margin-top:8px;">
+      <strong style="color:#F5F5F4;">사용자가 "네이버가 추천했으니 사자"라고<br>느끼게 만들어야 한다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>7 / 9 →</span></div>
+</div>
+
+<!-- Dark S8: Big Picture -->
+<div class="s D">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">BIG PICTURE</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:19px;">결국 한 문장이다</div>
+    <div class="fc g10" style="margin-top:4px;">
+      <div class="card" style="padding:14px; text-align:center; background:#1A1A1A; border:1px solid #2A2A2A;">
+        <div style="font-size:9px; color:#6b7280; margin-bottom:3px;">FROM</div>
+        <div style="font-size:14px; font-weight:700; color:#6b7280; text-decoration:line-through;">질문에 답하는 플랫폼</div>
+      </div>
+      <div class="arrow" style="font-size:24px;">↓</div>
+      <div class="card card-g" style="padding:14px; text-align:center; border-color:#34d399;">
+        <div style="font-size:9px; color:#34d399; margin-bottom:3px;">TO</div>
+        <div style="font-size:14px; font-weight:900; color:#34d399;">먼저 제안하고, 끝까지 책임지는 플랫폼</div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:8px;"></div>
+    <div class="p" style="font-size:12px; margin-top:8px;">
+      사용자가 믿고 따르는 건<br>
+      검색 결과 상단 노출이 아니라<br>
+      <strong style="color:#F5F5F4;"><span class="acc">신뢰할 수 있는 추천</span></strong>이다.<br><br>
+      네이버가 이걸 못 하면,<br>
+      <strong style="color:#F5F5F4;">인스타와 AI에게 완전히 밀린다.</strong>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>8 / 9 →</span></div>
+</div>
+
+<!-- Dark S9: CTA -->
+<div class="s D" style="justify-content:center; align-items:center; text-align:center;">
+  <div class="fc g16 ac">
+    <span class="badge" style="font-size:11px; padding:6px 14px;">DBR 432호 기고</span>
+    <div class="cta-t">BDM</div>
+    <div style="font-size:13px; font-weight:700; color:#F5F5F4;">빅데이터 마케팅 랩</div>
+    <div class="div" style="width:60px;"></div>
+    <div class="fc g8">
+      <div style="font-size:11px; color:#9CA3AF; line-height:1.7;">
+        이 글의 전문은 <strong style="color:#F5F5F4;">동아비즈니스리뷰(DBR)</strong><br>
+        432호에서 읽을 수 있습니다
+      </div>
+      <div class="cta-l">📖 dbr.donga.com/article/view/1904/article_no/11961</div>
+    </div>
+    <div class="div" style="width:60px;"></div>
+    <div class="fc g6">
+      <div style="font-size:11px; color:#9CA3AF;">더 깊은 분석은 웹사이트에서</div>
+      <div class="cta-l">🔗 bigdatamarketinglab.com</div>
+      <div style="font-size:10px; color:#6b7280;">@bdm.lab</div>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>9 / 9</span></div>
+</div>
+
+</body>
+</html>

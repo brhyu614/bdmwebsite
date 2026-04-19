@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Lab — Instagram Branding Kit v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #f5f5f4; font-family: 'Noto Sans KR', sans-serif; padding: 40px 48px; color: #1c1917; max-width: 1400px; margin: 0 auto; }
+
+.page-header { margin-bottom: 56px; }
+.page-header h1 { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+.page-header p { font-size: 14px; color: #78716c; line-height: 1.7; }
+
+.section { margin-bottom: 72px; }
+.section-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+  color: #059669; letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-desc { font-size: 14px; color: #78716c; margin-bottom: 28px; line-height: 1.7; }
+
+/* ===== DIRECTION COMPARISON ===== */
+.direction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px; }
+.direction-card {
+  background: white; border-radius: 20px; padding: 36px;
+  border: 2px solid #e7e5e4; position: relative;
+}
+.direction-card.recommended { border-color: #059669; }
+.direction-card.recommended::after {
+  content: 'RECOMMENDED';
+  position: absolute; top: -10px; right: 24px;
+  background: #059669; color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 600; letter-spacing: 1px;
+  padding: 3px 12px; border-radius: 4px;
+}
+.direction-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: #a8a29e; font-weight: 600; letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.direction-name {
+  font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800;
+  margin-bottom: 6px;
+}
+.direction-handle { font-size: 14px; color: #78716c; margin-bottom: 20px; }
+.direction-pros { list-style: none; }
+.direction-pros li {
+  font-size: 13px; line-height: 1.8; padding-left: 18px; position: relative;
+}
+.direction-pros li::before { content: '✓'; position: absolute; left: 0; color: #059669; font-weight: 700; }
+.direction-cons li::before { content: '✗'; color: #dc2626; }
+
+/* ===== LOGO GRID ===== */
+.logo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
+.logo-card {
+  background: white; border-radius: 16px; padding: 24px; text-align: center;
+  border: 1px solid #e7e5e4;
+}
+.logo-card .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: #a8a29e; font-weight: 600;
+  letter-spacing: 1px; margin-bottom: 16px;
+}
+.logo-card .desc { font-size: 12px; color: #78716c; margin-top: 14px; line-height: 1.5; }
+.logo-container {
+  width: 160px; height: 160px; margin: 0 auto;
+  border-radius: 50%; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; position: relative;
+}
+
+/* BDM logos */
+.bdm-bold { background: #0a0a0a; }
+.bdm-bold .text {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px;
+  color: white; letter-spacing: -3px; line-height: 1;
+}
+.bdm-bold .dot { color: #059669; }
+
+.bdm-mono { background: #0a0a0a; gap: 4px; }
+.bdm-mono .top {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
+  color: #059669; letter-spacing: 3px;
+}
+.bdm-mono .main {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 50px;
+  color: white; letter-spacing: -2px; line-height: 1;
+}
+.bdm-mono .bar { width: 32px; height: 2px; background: #059669; margin-top: 2px; }
+
+.bdm-data { background: #0a0a0a; gap: 3px; }
+.bdm-data .grid-row { display: flex; gap: 2px; }
+.bdm-data .cell { width: 6px; height: 6px; border-radius: 1px; }
+.bdm-data .cell.on { background: #059669; }
+.bdm-data .cell.dim { background: #1a3a2e; }
+.bdm-data .cell.off { background: #1a1a1a; }
+.bdm-data .brand {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 36px;
+  color: white; letter-spacing: -2px; margin-top: 4px;
+}
+.bdm-data .sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 7px;
+  color: #059669; letter-spacing: 2px;
+}
+
+.bdm-bracket { background: #0a0a0a; flex-direction: row; gap: 6px; }
+.bdm-bracket .br {
+  font-family: 'JetBrains Mono', monospace; font-weight: 600;
+  font-size: 14px; color: #059669;
+}
+.bdm-bracket .text {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 52px;
+  color: white; letter-spacing: -2px; line-height: 1;
+}
+
+.bdm-white { background: #ffffff; border: 3px solid #0a0a0a; }
+.bdm-white .main {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 46px;
+  color: #0a0a0a; letter-spacing: -2px; line-height: 1;
+}
+.bdm-white .line { width: 40px; height: 3px; background: #059669; margin: 5px 0; }
+.bdm-white .sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 7px;
+  color: #78716c; letter-spacing: 2px;
+}
+
+.bdm-ring { background: #0a0a0a; }
+.bdm-ring::before {
+  content: ''; position: absolute; inset: 4px; border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #059669, #34d399, #059669) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.bdm-ring .text {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 50px;
+  color: white; letter-spacing: -2px; z-index: 1;
+}
+
+.bdm-stacked { background: #0a0a0a; gap: 2px; }
+.bdm-stacked .l1 {
+  font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 10px;
+  color: #78716c; letter-spacing: 4px;
+}
+.bdm-stacked .l2 {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 44px;
+  color: white; letter-spacing: -2px; line-height: 1;
+}
+.bdm-stacked .l3 {
+  font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 10px;
+  color: #059669; letter-spacing: 4px;
+}
+
+.bdm-signal { background: #0a0a0a; gap: 6px; }
+.bdm-signal .bars { display: flex; align-items: flex-end; gap: 3px; height: 28px; }
+.bdm-signal .bar-item { width: 5px; border-radius: 1px; }
+.bdm-signal .b1 { height: 8px; background: #059669; }
+.bdm-signal .b2 { height: 14px; background: #059669; }
+.bdm-signal .b3 { height: 22px; background: #059669; }
+.bdm-signal .b4 { height: 28px; background: #059669; }
+.bdm-signal .b5 { height: 18px; background: #1a3a2e; }
+.bdm-signal .b6 { height: 10px; background: #1a3a2e; }
+.bdm-signal .text {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 40px;
+  color: white; letter-spacing: -2px; line-height: 1;
+}
+
+/* AD logos */
+.ad-bold { background: #0a0a0a; }
+.ad-bold .text {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 64px;
+  color: white; letter-spacing: -3px;
+}
+.ad-bold .dot { color: #059669; }
+
+.ad-decode { background: #0a0a0a; gap: 4px; }
+.ad-decode .top {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
+  color: #059669; letter-spacing: 3px;
+}
+.ad-decode .main {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px;
+  color: white; letter-spacing: -3px; line-height: 1;
+}
+.ad-decode .bar { width: 32px; height: 2px; background: #059669; }
+
+.ad-bracket { background: #0a0a0a; flex-direction: row; gap: 4px; }
+.ad-bracket .br {
+  font-family: 'JetBrains Mono', monospace; font-weight: 600;
+  font-size: 14px; color: #059669;
+}
+.ad-bracket .text {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 58px;
+  color: white; letter-spacing: -3px; line-height: 1;
+}
+
+.ad-ring { background: #0a0a0a; }
+.ad-ring::before {
+  content: ''; position: absolute; inset: 4px; border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #059669, #34d399, #059669) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.ad-ring .text {
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px;
+  color: white; letter-spacing: -3px; z-index: 1;
+}
+
+/* ===== BIO SECTION ===== */
+.bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.bio-card {
+  background: white; border-radius: 16px; padding: 28px;
+  border: 1px solid #e7e5e4;
+}
+.bio-card .num {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: #059669; font-weight: 600; margin-bottom: 16px;
+}
+.bio-field { margin-bottom: 12px; }
+.bio-field:last-child { margin-bottom: 0; }
+.bio-field .fl {
+  font-size: 10px; color: #a8a29e; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+}
+.bio-field .fv { font-size: 14px; line-height: 1.7; }
+.bio-field .fv.bold { font-weight: 700; font-size: 15px; }
+.bio-field .fv .handle { color: #78716c; font-size: 13px; }
+.bio-mockup {
+  background: #fafaf9; border-radius: 12px; padding: 20px; margin-top: 16px;
+  border: 1px solid #f0efed; font-size: 13px; line-height: 1.8;
+}
+.bio-mockup .mock-name { font-weight: 800; font-size: 14px; margin-bottom: 4px; }
+
+/* ===== SLOGAN SECTION ===== */
+.slogan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.slogan-card {
+  background: white; border-radius: 12px; padding: 20px 24px;
+  border: 1px solid #e7e5e4; display: flex; align-items: flex-start; gap: 16px;
+}
+.slogan-card .idx {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: #059669; font-weight: 600; min-width: 24px; padding-top: 2px;
+}
+.slogan-card .text { font-size: 15px; font-weight: 600; line-height: 1.6; }
+.slogan-card .note { font-size: 12px; color: #a8a29e; margin-top: 4px; font-weight: 400; }
+.slogan-card.pick { border-color: #059669; background: #f0fdf4; }
+
+/* ===== PROFILE MOCKUP ===== */
+.profile-mockup-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+.profile-mock {
+  background: white; border-radius: 16px; padding: 28px; text-align: center;
+  border: 1px solid #e7e5e4;
+}
+.profile-mock .pm-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: #a8a29e; font-weight: 600; letter-spacing: 1px; margin-bottom: 20px;
+}
+.profile-mock .pm-pic {
+  width: 88px; height: 88px; border-radius: 50%;
+  margin: 0 auto 12px; display: flex; align-items: center;
+  justify-content: center; flex-direction: column;
+}
+.profile-mock .pm-name { font-weight: 800; font-size: 14px; margin-bottom: 2px; }
+.profile-mock .pm-handle { font-size: 13px; color: #78716c; margin-bottom: 10px; }
+.profile-mock .pm-bio { font-size: 12px; line-height: 1.7; color: #44403c; text-align: center; }
+.profile-mock .pm-stats {
+  display: flex; justify-content: center; gap: 24px; margin-top: 14px;
+  padding-top: 14px; border-top: 1px solid #f0efed;
+}
+.profile-mock .pm-stat { text-align: center; }
+.profile-mock .pm-stat .n { font-weight: 800; font-size: 14px; }
+.profile-mock .pm-stat .l { font-size: 11px; color: #a8a29e; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Instagram Branding Kit v2</h1>
+  <p>BDM Lab 인스타그램 브랜딩 — 로고, 바이오, 슬로건 시안</p>
+</div>
+
+<!-- ===== SECTION 1: DIRECTION ===== -->
+<div class="section">
+  <div class="section-title">01 — DIRECTION</div>
+  <div class="section-desc">BDM Lab vs Algorithm Decode — 어떤 이름이 메인 브랜드가 되어야 하는가</div>
+
+  <div class="direction-grid">
+    <div class="direction-card recommended">
+      <div class="direction-label">OPTION A</div>
+      <div class="direction-name">BDM Lab</div>
+      <div class="direction-handle">@bdm.lab · 디스플레이: BDM Lab | 빅데이터마케팅랩</div>
+      <ul class="direction-pros">
+        <li>알고리즘 디코드 + 랩 리서치 모든 시리즈 포괄</li>
+        <li>웹사이트(bigdatamarketinglab.com)와 브랜드 일치</li>
+        <li>추후 시리즈 추가해도 어색하지 않음</li>
+        <li>학술적 권위감 + 연구실 정체성</li>
+      </ul>
+    </div>
+    <div class="direction-card">
+      <div class="direction-label">OPTION B</div>
+      <div class="direction-name">Algorithm Decode</div>
+      <div class="direction-handle">@algorithm_decode · 디스플레이: 알고리즘 디코드</div>
+      <ul class="direction-pros">
+        <li>이미 만든 핸들 — 변경 불필요</li>
+        <li>콘텐츠 정체성이 이름에서 바로 드러남</li>
+        <li>더 캐치한 이름 (호기심 유발)</li>
+        <li style="color:#dc2626;">△ 랩 리서치 콘텐츠 올릴 때 약간 어색</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 2: BDM LOGOS ===== -->
+<div class="section">
+  <div class="section-title">02 — LOGO: BDM 방향</div>
+  <div class="section-desc">BDM 3글자 — 인스타 프로필 사진(110px 원형)에서도 읽히는 심플한 타이포 로고</div>
+
+  <div class="logo-grid">
+    <div class="logo-card">
+      <div class="label">BDM-1 · BOLD</div>
+      <div class="logo-container bdm-bold">
+        <span class="text">BDM<span class="dot">.</span></span>
+      </div>
+      <div class="desc">가장 심플. 녹색 마침표가 시그니처.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">BDM-2 · LAB LABEL</div>
+      <div class="logo-container bdm-mono">
+        <span class="top">LAB</span>
+        <span class="main">BDM</span>
+        <div class="bar"></div>
+      </div>
+      <div class="desc">LAB 레이블 + 녹색 라인. 연구실 톤.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">BDM-3 · DATA GRID</div>
+      <div class="logo-container bdm-data">
+        <div class="grid-row">
+          <div class="cell on"></div><div class="cell dim"></div><div class="cell off"></div><div class="cell on"></div><div class="cell off"></div><div class="cell dim"></div><div class="cell on"></div><div class="cell off"></div>
+        </div>
+        <div class="grid-row">
+          <div class="cell off"></div><div class="cell on"></div><div class="cell on"></div><div class="cell dim"></div><div class="cell on"></div><div class="cell off"></div><div class="cell dim"></div><div class="cell on"></div>
+        </div>
+        <div class="grid-row">
+          <div class="cell dim"></div><div class="cell off"></div><div class="cell dim"></div><div class="cell on"></div><div class="cell dim"></div><div class="cell on"></div><div class="cell off"></div><div class="cell dim"></div>
+        </div>
+        <span class="brand">BDM</span>
+        <span class="sub">BIG DATA MKTG</span>
+      </div>
+      <div class="desc">데이터 매트릭스. 분석가 정체성.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">BDM-4 · BRACKET</div>
+      <div class="logo-container bdm-bracket">
+        <span class="br">{</span>
+        <span class="text">BDM</span>
+        <span class="br">}</span>
+      </div>
+      <div class="desc">코드 브라켓. 알고리즘 해독 느낌.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">BDM-5 · WHITE</div>
+      <div class="logo-container bdm-white">
+        <span class="main">BDM</span>
+        <div class="line"></div>
+        <span class="sub">MARKETING LAB</span>
+      </div>
+      <div class="desc">라이트 모드. 웹사이트 톤 매칭.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">BDM-6 · RING</div>
+      <div class="logo-container bdm-ring">
+        <span class="text">BDM</span>
+      </div>
+      <div class="desc">녹색 그라데이션 테두리. 프리미엄.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">BDM-7 · STACKED</div>
+      <div class="logo-container bdm-stacked">
+        <span class="l1">BIG DATA</span>
+        <span class="l2">BDM</span>
+        <span class="l3">MKTG LAB</span>
+      </div>
+      <div class="desc">풀네임 스택. 브랜드 인지도.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">BDM-8 · SIGNAL</div>
+      <div class="logo-container bdm-signal">
+        <div class="bars">
+          <div class="bar-item b1"></div>
+          <div class="bar-item b2"></div>
+          <div class="bar-item b3"></div>
+          <div class="bar-item b4"></div>
+          <div class="bar-item b5"></div>
+          <div class="bar-item b6"></div>
+        </div>
+        <span class="text">BDM</span>
+      </div>
+      <div class="desc">시그널 바 차트. 데이터 + 트렌드.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 3: AD LOGOS ===== -->
+<div class="section">
+  <div class="section-title">03 — LOGO: AD 방향 (참고용)</div>
+  <div class="section-desc">Algorithm Decode 방향으로 갈 경우의 로고 옵션</div>
+
+  <div class="logo-grid">
+    <div class="logo-card">
+      <div class="label">AD-1 · BOLD</div>
+      <div class="logo-container ad-bold">
+        <span class="text">AD<span class="dot">.</span></span>
+      </div>
+      <div class="desc">심플 모노그램 + 녹색 점.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">AD-2 · DECODE</div>
+      <div class="logo-container ad-decode">
+        <span class="top">DECODE</span>
+        <span class="main">AD</span>
+        <div class="bar"></div>
+      </div>
+      <div class="desc">DECODE 레이블. 정체성 강화.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">AD-3 · BRACKET</div>
+      <div class="logo-container ad-bracket">
+        <span class="br">{</span>
+        <span class="text">AD</span>
+        <span class="br">}</span>
+      </div>
+      <div class="desc">코드 브라켓. 해독하는 느낌.</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="label">AD-4 · RING</div>
+      <div class="logo-container ad-ring">
+        <span class="text">AD</span>
+      </div>
+      <div class="desc">녹색 링. 프리미엄 클린.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 4: BIO ===== -->
+<div class="section">
+  <div class="section-title">04 — BIO OPTIONS</div>
+  <div class="section-desc">모두 "BDM Lab · 한양대학교"로 마무리. 인스타 바이오 150자 제한 고려.</div>
+
+  <div class="bio-grid">
+
+    <div class="bio-card">
+      <div class="num">BIO #1 — 브랜드 철학 중심</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab | 빅데이터마케팅랩</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">감 대신 근거. 과장 대신 데이터.<br>알고리즘을 해부하고, 구조를 읽습니다.<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab | 빅데이터마케팅랩</div>
+        감 대신 근거. 과장 대신 데이터.<br>
+        알고리즘을 해부하고, 구조를 읽습니다.<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <div class="num">BIO #2 — 콘텐츠 정체성</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab | 빅데이터마케팅랩</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">왜 퍼졌는지를 해부합니다.<br>알고리즘 · 바이럴 · 데이터 · 플랫폼 전략<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab | 빅데이터마케팅랩</div>
+        왜 퍼졌는지를 해부합니다.<br>
+        알고리즘 · 바이럴 · 데이터 · 플랫폼 전략<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <div class="num">BIO #3 — 교수 보이스</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab | 임보람</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">마케팅 교수가 알고리즘을 해부합니다.<br>감 대신 근거. 구조로 읽는 트렌드.<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab | 임보람</div>
+        마케팅 교수가 알고리즘을 해부합니다.<br>
+        감 대신 근거. 구조로 읽는 트렌드.<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <div class="num">BIO #4 — 대비 구조</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab | 빅데이터마케팅랩</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">모두가 보는 트렌드, 아무도 모르는 구조.<br>데이터로 해부합니다.<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab | 빅데이터마케팅랩</div>
+        모두가 보는 트렌드, 아무도 모르는 구조.<br>
+        데이터로 해부합니다.<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <div class="num">BIO #5 — 질문형 후킹</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab | 빅데이터마케팅랩</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">왜 팔렸나. 왜 퍼졌나. 왜 사라졌나.<br>알고리즘과 데이터로 답합니다.<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab | 빅데이터마케팅랩</div>
+        왜 팔렸나. 왜 퍼졌나. 왜 사라졌나.<br>
+        알고리즘과 데이터로 답합니다.<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <div class="num">BIO #6 — 미니멀 핵심</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">알고리즘은 감정을 보상한다.<br>그 구조를 데이터로 증명합니다.<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab</div>
+        알고리즘은 감정을 보상한다.<br>
+        그 구조를 데이터로 증명합니다.<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <div class="num">BIO #7 — 숫자 강조</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab | 빅데이터마케팅랩</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">숫자가 말하게 합니다.<br>바이럴 해부 · 알고리즘 분석 · 플랫폼 전략<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab | 빅데이터마케팅랩</div>
+        숫자가 말하게 합니다.<br>
+        바이럴 해부 · 알고리즘 분석 · 플랫폼 전략<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+    <div class="bio-card">
+      <div class="num">BIO #8 — 표면 vs 구조</div>
+      <div class="bio-field">
+        <div class="fl">Name</div>
+        <div class="fv bold">BDM Lab | 빅데이터마케팅랩</div>
+      </div>
+      <div class="bio-field">
+        <div class="fl">Bio</div>
+        <div class="fv">표면이 아니라 구조를 봅니다.<br>감 대신 근거. 과장 대신 데이터.<br>BDM Lab · 한양대학교</div>
+      </div>
+      <div class="bio-mockup">
+        <div class="mock-name">BDM Lab | 빅데이터마케팅랩</div>
+        표면이 아니라 구조를 봅니다.<br>
+        감 대신 근거. 과장 대신 데이터.<br>
+        BDM Lab · 한양대학교
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== SECTION 5: SLOGAN ===== -->
+<div class="section">
+  <div class="section-title">05 — SLOGAN / TAGLINE</div>
+  <div class="section-desc">"감 대신 근거. 과장 대신 데이터." 기본 철학 + 알고리즘 느낌을 살린 변주들</div>
+
+  <div class="slogan-grid">
+    <div class="slogan-card pick">
+      <div class="idx">S1</div>
+      <div>
+        <div class="text">"감 대신 근거. 과장 대신 데이터."</div>
+        <div class="note">원본 — 브랜드 철학. 깔끔하고 강함.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S2</div>
+      <div>
+        <div class="text">"감 대신 근거. 알고리즘 대신 구조."</div>
+        <div class="note">알고리즘 단어 직접 삽입. 해독 느낌.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S3</div>
+      <div>
+        <div class="text">"알고리즘을 해부하고, 구조로 증명한다."</div>
+        <div class="note">알고리즘 + 데이터 분석 정체성.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S4</div>
+      <div>
+        <div class="text">"감 대신 근거. 과장 대신 구조."</div>
+        <div class="note">'데이터'를 '구조'로 교체. 알고리즘 해독 톤.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S5</div>
+      <div>
+        <div class="text">"트렌드를 보지 말고, 구조를 읽어라."</div>
+        <div class="note">명령형. 도발적. 차별화 강함.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S6</div>
+      <div>
+        <div class="text">"알고리즘은 감정을 보상한다."</div>
+        <div class="note">인사이트 자체가 슬로건. 기억에 남음.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S7</div>
+      <div>
+        <div class="text">"왜 퍼졌는지를 해부합니다."</div>
+        <div class="note">콘텐츠 정체성 직접 표현.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S8</div>
+      <div>
+        <div class="text">"구조를 알면, 알고리즘이 보인다."</div>
+        <div class="note">알고리즘 + 구조 결합. 교육적 톤.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S9</div>
+      <div>
+        <div class="text">"감 대신 근거. 표면 대신 알고리즘."</div>
+        <div class="note">'과장'→'표면', '데이터'→'알고리즘' 교체.</div>
+      </div>
+    </div>
+
+    <div class="slogan-card">
+      <div class="idx">S10</div>
+      <div>
+        <div class="text">"데이터로 해부하고, 구조로 설명한다."</div>
+        <div class="note">동사 대구. 분석 프로세스 표현.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 6: PROFILE MOCKUP ===== -->
+<div class="section">
+  <div class="section-title">06 — PROFILE MOCKUP (조합 예시)</div>
+  <div class="section-desc">로고 + 바이오 + 슬로건을 조합한 인스타 프로필 미리보기</div>
+
+  <div class="profile-mockup-row">
+    <div class="profile-mock">
+      <div class="pm-label">COMBO A — 심플 볼드</div>
+      <div class="pm-pic bdm-bold" style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#0a0a0a;margin:0 auto 12px;">
+        <span style="font-family:'Outfit';font-weight:900;font-size:32px;color:white;letter-spacing:-2px;">BDM<span style="color:#059669">.</span></span>
+      </div>
+      <div class="pm-name">BDM Lab | 빅데이터마케팅랩</div>
+      <div class="pm-handle">@bdm.lab</div>
+      <div class="pm-bio">감 대신 근거. 과장 대신 데이터.<br>알고리즘을 해부하고, 구조를 읽습니다.<br>BDM Lab · 한양대학교</div>
+      <div class="pm-stats">
+        <div class="pm-stat"><div class="n">42</div><div class="l">게시물</div></div>
+        <div class="pm-stat"><div class="n">1.2만</div><div class="l">팔로워</div></div>
+        <div class="pm-stat"><div class="n">128</div><div class="l">팔로잉</div></div>
+      </div>
+    </div>
+
+    <div class="profile-mock">
+      <div class="pm-label">COMBO B — LAB + 교수 보이스</div>
+      <div class="pm-pic bdm-mono" style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:50%;background:#0a0a0a;margin:0 auto 12px;gap:2px;">
+        <span style="font-family:'JetBrains Mono';font-size:7px;color:#059669;letter-spacing:2px;">LAB</span>
+        <span style="font-family:'Outfit';font-weight:900;font-size:30px;color:white;letter-spacing:-1px;">BDM</span>
+        <div style="width:20px;height:1.5px;background:#059669;"></div>
+      </div>
+      <div class="pm-name">BDM Lab | 임보람</div>
+      <div class="pm-handle">@bdm.lab</div>
+      <div class="pm-bio">마케팅 교수가 알고리즘을 해부합니다.<br>감 대신 근거. 구조로 읽는 트렌드.<br>BDM Lab · 한양대학교</div>
+      <div class="pm-stats">
+        <div class="pm-stat"><div class="n">42</div><div class="l">게시물</div></div>
+        <div class="pm-stat"><div class="n">1.2만</div><div class="l">팔로워</div></div>
+        <div class="pm-stat"><div class="n">128</div><div class="l">팔로잉</div></div>
+      </div>
+    </div>
+
+    <div class="profile-mock">
+      <div class="pm-label">COMBO C — 데이터 + 질문형</div>
+      <div class="pm-pic" style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:50%;background:#0a0a0a;margin:0 auto 12px;gap:2px;">
+        <div style="display:flex;gap:1.5px;">
+          <div style="width:4px;height:4px;border-radius:1px;background:#059669;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#1a3a2e;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#1a1a1a;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#059669;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#1a1a1a;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#059669;"></div>
+        </div>
+        <div style="display:flex;gap:1.5px;">
+          <div style="width:4px;height:4px;border-radius:1px;background:#1a1a1a;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#059669;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#1a3a2e;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#059669;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#1a3a2e;"></div>
+          <div style="width:4px;height:4px;border-radius:1px;background:#1a1a1a;"></div>
+        </div>
+        <span style="font-family:'Outfit';font-weight:900;font-size:22px;color:white;letter-spacing:-1px;margin-top:2px;">BDM</span>
+        <span style="font-family:'JetBrains Mono';font-size:5px;color:#059669;letter-spacing:1.5px;">BIG DATA MKTG</span>
+      </div>
+      <div class="pm-name">BDM Lab | 빅데이터마케팅랩</div>
+      <div class="pm-handle">@bdm.lab</div>
+      <div class="pm-bio">왜 팔렸나. 왜 퍼졌나. 왜 사라졌나.<br>알고리즘과 데이터로 답합니다.<br>BDM Lab · 한양대학교</div>
+      <div class="pm-stats">
+        <div class="pm-stat"><div class="n">42</div><div class="l">게시물</div></div>
+        <div class="pm-stat"><div class="n">1.2만</div><div class="l">팔로워</div></div>
+        <div class="pm-stat"><div class="n">128</div><div class="l">팔로잉</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

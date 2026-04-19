@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Lab Carousel — 치킨집 349개 데이터</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #e5e5e5; font-family: 'Noto Sans KR', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 60px; }
+  h2.section-title { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: #1C1917; margin-bottom: 10px; text-align: center; }
+  p.section-desc { font-size: 14px; color: #78716C; text-align: center; margin-bottom: 30px; }
+  .slides-row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 100%; }
+  .slide { width: 360px; height: 450px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); position: relative; flex-shrink: 0; }
+  .slide-number { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.5); color: white; font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; z-index: 10; }
+
+  /* OPTION A - LIGHT */
+  .opt-a { background: #FAFAF9; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+  .opt-a .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #059669; margin-bottom: 24px; }
+  .opt-a .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #1C1917; word-break: keep-all; }
+  .opt-a .main-text em { font-style: normal; color: #059669; }
+  .opt-a .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #78716C; margin-top: 20px; word-break: keep-all; }
+  .opt-a .accent-line { width: 40px; height: 3px; background: #059669; margin: 20px auto; border-radius: 2px; }
+  .opt-a .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #A8A29E; text-transform: uppercase; }
+  .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+  .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+  .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+  .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+  .opt-a .compare-label { font-size: 12px; color: #78716C; }
+  .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+  .opt-a .num-list { text-align: left; width: 100%; }
+  .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+  .opt-a .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-a .num-text { font-size: 13px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+  .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+  .opt-a .arrow-flow { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+  .opt-a .arrow-box { background: #F5F5F4; border-radius: 8px; padding: 10px 16px; font-size: 12px; font-weight: 600; color: #1C1917; flex: 1; text-align: center; }
+  .opt-a .arrow-box.active { background: #059669; color: white; }
+  .opt-a .arrow-icon { font-size: 18px; color: #A8A29E; }
+
+  /* OPTION B - DARK */
+  .opt-b { background: #0F0F0F; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+  .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+  .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+  .opt-b .main-text em { font-style: normal; color: #34d399; }
+  .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+  .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+  .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+  .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+  .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+  .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+  .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+  .opt-b .compare-label { font-size: 12px; color: #78716C; }
+  .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+  .opt-b .num-list { text-align: left; width: 100%; }
+  .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+  .opt-b .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-b .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+  .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+  .opt-b .arrow-flow { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+  .opt-b .arrow-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 8px; padding: 10px 16px; font-size: 12px; font-weight: 600; color: #E7E5E4; flex: 1; text-align: center; }
+  .opt-b .arrow-box.active { background: #059669; border-color: #059669; color: white; }
+  .opt-b .arrow-icon { font-size: 18px; color: #57534E; }
+  .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     OPTION A — LIGHT
+     ============================================================ -->
+<h2 class="section-title">Option A — Light</h2>
+<p class="section-desc">치킨집 349개 데이터 — 매출을 결정하는 건 리뷰가 아니다 (9 slides)</p>
+
+<div class="slides-row">
+
+  <!-- A-1: HOOK -->
+  <div class="slide opt-a">
+    <div class="slide-number">1/9</div>
+    <div class="top-label">Lab Research</div>
+    <div class="main-text" style="font-size: 22px;">
+      치킨 매장 <em>349개</em>.<br>
+      3년치 데이터.
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text">
+      배달 매출 1위 예측 변수는<br>
+      <strong style="color: #1C1917;">리뷰도 경쟁도 아니었다.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-2: 뭘 한 건가 -->
+  <div class="slide opt-a">
+    <div class="slide-number">2/9</div>
+    <div class="top-label">Lab Research</div>
+    <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+      <em>BDM Lab</em>이 뭘 한 건가
+    </div>
+    <div class="num-list">
+      <div class="num-item">
+        <div class="num-circle">1</div>
+        <div class="num-text">실제 프랜차이즈의 <strong>배달/포장/매장 식사</strong> 매출을 주 단위로 분리 분석</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">2</div>
+        <div class="num-text">리뷰를 <strong>GPT-4로 의미 분석</strong></div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">3</div>
+        <div class="num-text"><strong>인구통계, 경쟁, 날씨, 경제지표</strong> 전부 투입</div>
+      </div>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-3: ACCENT GREEN — 1인 가구가 압도적 -->
+  <div class="slide opt-a" style="background: #059669;">
+    <div class="slide-number">3/9</div>
+    <div class="top-label" style="color: rgba(255,255,255,0.7);">핵심 결과</div>
+    <div class="main-text" style="color: white; font-size: 32px;">
+      1인 가구 비율
+    </div>
+    <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.9); font-size: 15px; font-weight: 600;">
+      배달 매출 예측에서<br>가장 큰 점프를 만든 변수
+    </div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.75); font-size: 13px;">
+      혼자 사는 사람은 요리를 덜 한다.<br>
+      선호가 아니라 <strong style="color: white;">생활 구조</strong>의 문제.
+    </div>
+    <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+  </div>
+
+  <!-- A-4: 유동 인구는? -->
+  <div class="slide opt-a">
+    <div class="slide-number">4/9</div>
+    <div class="top-label">유동 인구는?</div>
+    <div class="main-text" style="font-size: 20px;">
+      "사람 많은 곳 =<br>매출 높은 곳"?
+    </div>
+    <div class="accent-line"></div>
+    <div class="main-text" style="font-size: 22px;">
+      배달에서는 <em>틀렸다.</em>
+    </div>
+    <div class="sub-text">
+      배달 주문은 집에서 한다.<br>
+      거리에 사람이 많은 것과<br>
+      집에서 배달을 시키는 것은<br>
+      <strong style="color: #1C1917;">다른 행동.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-5: 채널마다 다른 게임 (COMPARE) -->
+  <div class="slide opt-a">
+    <div class="slide-number">5/9</div>
+    <div class="top-label">채널마다 다른 게임</div>
+    <div class="compare-box">
+      <div class="compare-row">
+        <div class="compare-label">배달</div>
+        <div class="compare-value" style="color: #059669;">1인 가구 비율</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">포장</div>
+        <div class="compare-value" style="color: #059669;">1인 가구 비율</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">매장 식사</div>
+        <div class="compare-value" style="color: #059669;">고령화 지수</div>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-weight: 600;">
+      같은 브랜드라도<br>
+      <strong style="color: #059669;">채널 전략이 달라야</strong> 한다.
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-6: 리뷰의 진실 -->
+  <div class="slide opt-a">
+    <div class="slide-number">6/9</div>
+    <div class="top-label">리뷰의 진실</div>
+    <div class="compare-box">
+      <div class="compare-row">
+        <div class="compare-label">매장 식사</div>
+        <div class="compare-value" style="color: #78716C;">리뷰 효과 거의 없음</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">배달</div>
+        <div class="compare-value" style="color: #059669;">리뷰 효과 유의미</div>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text">
+      단, <span class="strike">별점</span>이 아니라<br>
+      <strong style="color: #059669;">"음식이 맛있다"</strong>는 구체적 언급이 핵심.
+    </div>
+    <div class="sub-text" style="font-size: 12px;">
+      음식 품질 멘션 >> 서비스/가격 멘션
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-7: 가장 위험한 경쟁자 -->
+  <div class="slide opt-a">
+    <div class="slide-number">7/9</div>
+    <div class="top-label">가장 위험한 경쟁자</div>
+    <div class="main-text" style="font-size: 22px;">
+      옆집 교촌이 <em>아니다.</em>
+    </div>
+    <div class="accent-line"></div>
+    <div class="main-text" style="font-size: 20px;">
+      같은 브랜드의<br><em>다른 매장</em>이다.
+    </div>
+    <div class="sub-text">
+      배달앱에서 동시에 뜨면 완벽한 대체재.<br>
+      &rarr; <strong style="color: #1C1917;">자사 매장 간 자기잠식 발생.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-8: 핵심 3줄 요약 -->
+  <div class="slide opt-a">
+    <div class="slide-number">8/9</div>
+    <div class="top-label">핵심 3줄 요약</div>
+    <div class="num-list">
+      <div class="num-item">
+        <div class="num-circle">1</div>
+        <div class="num-text">출점은 <strong>1인 가구 밀도</strong>부터 보라</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">2</div>
+        <div class="num-text">리뷰 관리는 <strong>"음식 맛있다"</strong>에 집중하라</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">3</div>
+        <div class="num-text">가장 위험한 경쟁자는 <strong>우리 브랜드</strong>다</div>
+      </div>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- A-9: CTA -->
+  <div class="slide opt-a">
+    <div class="slide-number">9/9</div>
+    <div style="margin-bottom: 20px;">
+      <svg width="64" height="64" viewBox="0 0 500 500"><circle cx="250" cy="250" r="248" fill="#0a0a0a"/><circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/><rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/><rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/><rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/><rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/><text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text></svg>
+    </div>
+    <div class="main-text" style="font-size: 20px;">
+      직감이 놓치는 변수.<br>데이터가 찾아낸 구조.
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-weight: 600; color: #059669;">
+      349개 매장이<br>3년간 말해준 것.
+    </div>
+    <div style="margin-top: 20px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #78716C; letter-spacing: 1px;">
+      bigdatamarketinglab.com
+    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #A8A29E; margin-top: 4px;">
+      @bdm.lab
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     OPTION B — DARK
+     ============================================================ -->
+<h2 class="section-title">Option B — Dark</h2>
+<p class="section-desc">치킨집 349개 데이터 — 매출을 결정하는 건 리뷰가 아니다 (9 slides)</p>
+
+<div class="slides-row">
+
+  <!-- B-1: HOOK -->
+  <div class="slide opt-b">
+    <div class="slide-number">1/9</div>
+    <div class="top-label">Lab Research</div>
+    <div class="main-text" style="font-size: 22px;">
+      치킨 매장 <em>349개</em>.<br>
+      3년치 데이터.
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text">
+      배달 매출 1위 예측 변수는<br>
+      <strong style="color: #FAFAF9;">리뷰도 경쟁도 아니었다.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-2: 뭘 한 건가 -->
+  <div class="slide opt-b">
+    <div class="slide-number">2/9</div>
+    <div class="top-label">Lab Research</div>
+    <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+      <em>BDM Lab</em>이 뭘 한 건가
+    </div>
+    <div class="num-list">
+      <div class="num-item">
+        <div class="num-circle">1</div>
+        <div class="num-text">실제 프랜차이즈의 <strong>배달/포장/매장 식사</strong> 매출을 주 단위로 분리 분석</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">2</div>
+        <div class="num-text">리뷰를 <strong>GPT-4로 의미 분석</strong></div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">3</div>
+        <div class="num-text"><strong>인구통계, 경쟁, 날씨, 경제지표</strong> 전부 투입</div>
+      </div>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-3: ACCENT GREEN — 1인 가구가 압도적 -->
+  <div class="slide opt-b" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+    <div class="slide-number">3/9</div>
+    <div class="top-label" style="color: rgba(255,255,255,0.7);">핵심 결과</div>
+    <div class="main-text" style="color: white; font-size: 32px;">
+      1인 가구 비율
+    </div>
+    <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.9); font-size: 15px; font-weight: 600;">
+      배달 매출 예측에서<br>가장 큰 점프를 만든 변수
+    </div>
+    <div class="sub-text" style="color: rgba(255,255,255,0.75); font-size: 13px;">
+      혼자 사는 사람은 요리를 덜 한다.<br>
+      선호가 아니라 <strong style="color: white;">생활 구조</strong>의 문제.
+    </div>
+    <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+  </div>
+
+  <!-- B-4: 유동 인구는? -->
+  <div class="slide opt-b">
+    <div class="slide-number">4/9</div>
+    <div class="top-label">유동 인구는?</div>
+    <div class="main-text" style="font-size: 20px;">
+      "사람 많은 곳 =<br>매출 높은 곳"?
+    </div>
+    <div class="accent-line"></div>
+    <div class="main-text" style="font-size: 22px;">
+      배달에서는 <em>틀렸다.</em>
+    </div>
+    <div class="sub-text">
+      배달 주문은 집에서 한다.<br>
+      거리에 사람이 많은 것과<br>
+      집에서 배달을 시키는 것은<br>
+      <strong style="color: #FAFAF9;">다른 행동.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-5: 채널마다 다른 게임 (COMPARE) -->
+  <div class="slide opt-b">
+    <div class="slide-number">5/9</div>
+    <div class="top-label">채널마다 다른 게임</div>
+    <div class="compare-box">
+      <div class="compare-row">
+        <div class="compare-label">배달</div>
+        <div class="compare-value" style="color: #34d399;">1인 가구 비율</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">포장</div>
+        <div class="compare-value" style="color: #34d399;">1인 가구 비율</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">매장 식사</div>
+        <div class="compare-value" style="color: #34d399;">고령화 지수</div>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-weight: 600;">
+      같은 브랜드라도<br>
+      <strong style="color: #34d399;">채널 전략이 달라야</strong> 한다.
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-6: 리뷰의 진실 -->
+  <div class="slide opt-b">
+    <div class="slide-number">6/9</div>
+    <div class="top-label">리뷰의 진실</div>
+    <div class="compare-box">
+      <div class="compare-row">
+        <div class="compare-label">매장 식사</div>
+        <div class="compare-value" style="color: #78716C;">리뷰 효과 거의 없음</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-label">배달</div>
+        <div class="compare-value" style="color: #34d399;">리뷰 효과 유의미</div>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text">
+      단, <span class="strike">별점</span>이 아니라<br>
+      <strong style="color: #34d399;">"음식이 맛있다"</strong>는 구체적 언급이 핵심.
+    </div>
+    <div class="sub-text" style="font-size: 12px;">
+      음식 품질 멘션 >> 서비스/가격 멘션
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-7: 가장 위험한 경쟁자 -->
+  <div class="slide opt-b">
+    <div class="slide-number">7/9</div>
+    <div class="top-label">가장 위험한 경쟁자</div>
+    <div class="main-text" style="font-size: 22px;">
+      옆집 교촌이 <em>아니다.</em>
+    </div>
+    <div class="accent-line"></div>
+    <div class="main-text" style="font-size: 20px;">
+      같은 브랜드의<br><em>다른 매장</em>이다.
+    </div>
+    <div class="sub-text">
+      배달앱에서 동시에 뜨면 완벽한 대체재.<br>
+      &rarr; <strong style="color: #FAFAF9;">자사 매장 간 자기잠식 발생.</strong>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-8: 핵심 3줄 요약 -->
+  <div class="slide opt-b">
+    <div class="slide-number">8/9</div>
+    <div class="top-label">핵심 3줄 요약</div>
+    <div class="num-list">
+      <div class="num-item">
+        <div class="num-circle">1</div>
+        <div class="num-text">출점은 <strong>1인 가구 밀도</strong>부터 보라</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">2</div>
+        <div class="num-text">리뷰 관리는 <strong>"음식 맛있다"</strong>에 집중하라</div>
+      </div>
+      <div class="num-item">
+        <div class="num-circle">3</div>
+        <div class="num-text">가장 위험한 경쟁자는 <strong>우리 브랜드</strong>다</div>
+      </div>
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+  <!-- B-9: CTA -->
+  <div class="slide opt-b">
+    <div class="slide-number">9/9</div>
+    <div style="margin-bottom: 20px;">
+      <svg width="64" height="64" viewBox="0 0 500 500"><circle cx="250" cy="250" r="248" fill="#1A1A1A"/><circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/><rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/><rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/><rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/><rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/><text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text></svg>
+    </div>
+    <div class="main-text" style="font-size: 20px;">
+      직감이 놓치는 변수.<br>데이터가 찾아낸 구조.
+    </div>
+    <div class="accent-line"></div>
+    <div class="sub-text" style="font-weight: 600; color: #34d399;">
+      349개 매장이<br>3년간 말해준 것.
+    </div>
+    <div style="margin-top: 20px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #A8A29E; letter-spacing: 1px;">
+      bigdatamarketinglab.com
+    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #57534E; margin-top: 4px;">
+      @bdm.lab
+    </div>
+    <div class="bottom-brand">BDM Lab</div>
+  </div>
+
+</div>
+
+</body>
+</html>

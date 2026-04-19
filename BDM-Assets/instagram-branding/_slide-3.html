@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><style>
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-Regular.ttf'); font-weight: 400; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-Medium.ttf'); font-weight: 500; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-SemiBold.ttf'); font-weight: 600; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-Bold.ttf'); font-weight: 700; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-ExtraBold.ttf'); font-weight: 800; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; word-break: keep-all; overflow-wrap: break-word; }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: #000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 32px;
+    justify-content: center;
+  }
+
+  .slide {
+    width: 1080px;
+    height: 1350px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* ── Shared media area (top ~55%) ── */
+  .media {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 58%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
+  .media-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 58%;
+    z-index: 1;
+  }
+
+  /* ── Shared text card (bottom ~42%) ── */
+  .card {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 45%;
+    padding: 56px 80px 80px;
+    z-index: 2;
+  }
+  .card .slide-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 28px;
+  }
+  .card h2 {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+  .card .body {
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.85;
+  }
+  .card .body strong { font-weight: 700; }
+
+  /* ── Footer ── */
+  .footer {
+    position: absolute;
+    bottom: 32px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    z-index: 3;
+  }
+
+  /* ── Mute icon (video feel) ── */
+  .mute-icon {
+    position: absolute;
+    bottom: calc(45% + 20px);
+    right: 28px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mute-icon::after {
+    content: '';
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.7);
+    border-radius: 2px;
+    background: transparent;
+  }
+
+  /* ============================================
+     SLIDE 1 – COVER (full-bleed image + text overlay)
+     ============================================ */
+  .s1 { background: #0A0A0A; }
+  .s1 .media { height: 100%; }
+  .s1 .media-overlay {
+    height: 100%;
+    background: linear-gradient(180deg, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.15) 35%, rgba(10,10,10,0.75) 60%, rgba(10,10,10,0.95) 80%, #0A0A0A 100%);
+  }
+  .s1 .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: #00D4A0;
+    z-index: 4;
+  }
+  .s1 .badge {
+    position: absolute;
+    top: 48px; left: 64px;
+    z-index: 4;
+  }
+  .s1 .badge .cat-label {
+    display: inline-block;
+    padding: 8px 16px;
+    border-left: 3px solid #00D4A0;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 1.5px;
+  }
+  .s1 .content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 0 80px 100px;
+    z-index: 3;
+  }
+  .s1 .source-tag {
+    font-size: 20px;
+    font-weight: 600;
+    color: #00D4A0;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .s1 h1 {
+    font-size: 78px;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #fff;
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+  }
+  .s1 h1 .acc { color: #00D4A0; }
+  .s1 .sub {
+    font-size: 30px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+  }
+  .s1 .brand-footer {
+    position: absolute;
+    bottom: 36px; left: 0; right: 0;
+    text-align: center;
+    z-index: 4;
+  }
+  .s1 .brand-footer span {
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 2px;
+  }
+
+  /* ============================================
+     SLIDE 2~7 – CONTENT SLIDES
+     Dark card variant
+     ============================================ */
+  .dark-card .card {
+    background: #111;
+  }
+  .dark-card .card .slide-num {
+    background: rgba(0,212,160,0.15);
+    color: #00D4A0;
+  }
+  .dark-card .card h2 { color: #fff; }
+  .dark-card .card h2 .acc { color: #00D4A0; }
+  .dark-card .card .body { color: rgba(255,255,255,0.5); }
+  .dark-card .card .body strong { color: #fff; }
+  .dark-card .card .body .hl { color: #00D4A0; font-weight: 700; }
+  .dark-card .footer { color: rgba(255,255,255,0.15); }
+
+  /* Light card variant */
+  .light-card .card {
+    background: #FAFAFA;
+  }
+  .light-card .card .slide-num {
+    background: rgba(0,212,160,0.12);
+    color: #00D4A0;
+  }
+  .light-card .card h2 { color: #1A1A1A; }
+  .light-card .card h2 .acc { color: #00D4A0; }
+  .light-card .card .body { color: rgba(30,30,30,0.5); }
+  .light-card .card .body strong { color: #1A1A1A; }
+  .light-card .card .body .hl { color: #00D4A0; font-weight: 700; }
+  .light-card .footer { color: rgba(30,30,30,0.15); }
+
+  /* Green card variant */
+  .green-card .card {
+    background: #00D4A0;
+  }
+  .green-card .card .slide-num {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+  }
+  .green-card .card h2 { color: #fff; }
+  .green-card .card .body { color: rgba(255,255,255,0.8); }
+  .green-card .card .body strong { color: #fff; }
+  .green-card .footer { color: rgba(255,255,255,0.35); }
+
+  /* ============================================
+     SLIDE 8 – OUTRO
+     ============================================ */
+  .s8 { background: #0A0A0A; }
+  .s8 .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: #00D4A0;
+  }
+  .s8 .content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px;
+  }
+  .s8 .source { font-size: 24px; font-weight: 600; color: #00D4A0; letter-spacing: 1px; margin-bottom: 48px; }
+  .s8 .brand-name { font-size: 96px; font-weight: 800; color: #00D4A0; letter-spacing: 6px; margin-bottom: 8px; }
+  .s8 .brand-sub { font-size: 28px; font-weight: 500; color: rgba(255,255,255,0.4); margin-bottom: 56px; }
+  .s8 .divider { width: 48px; height: 3px; background: rgba(255,255,255,0.12); margin: 0 auto 48px; }
+  .s8 .closing { font-size: 36px; font-weight: 400; line-height: 1.8; color: rgba(255,255,255,0.35); margin-bottom: 44px; }
+  .s8 .cta { font-size: 48px; font-weight: 700; line-height: 1.5; color: #fff; margin-bottom: 52px; }
+  .s8 .cta .acc { color: #00D4A0; }
+  .s8 .links { font-size: 24px; color: #00D4A0; font-weight: 500; line-height: 2; }
+  .s8 .handle { font-size: 22px; color: rgba(255,255,255,0.2); margin-top: 8px; }
+  .s8 .footer { color: rgba(255,255,255,0.2); }
+</style></head>
+<body style="margin:0;padding:0;background:#FAFAFA;width:1080px;height:1350px;overflow:hidden;">
+<!-- ====== SLIDE 3 – CONTEXT ====== -->
+<div class="slide light-card" id="slide-3">
+  <div class="media" style="background-image: url('https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1200&q=85'); background-position: center 20%;"></div>
+  <div class="media-overlay" style="background: linear-gradient(180deg, transparent 60%, #FAFAFA 100%);"></div>
+  <div class="mute-icon"></div>
+  <div class="card">
+    <div class="slide-num">2</div>
+    <h2><span class="acc">'발견(Discovery)'</span>이<br>먼저 일어나는 시대</h2>
+    <div class="body">
+      과거의 소비자는 '네이버'에서 쇼핑을 시작했습니다.
+    </div>
+    <div style="height:8px;"></div>
+    <div class="body">
+      하지만 지금은 다릅니다. 인스타, 유튜브 숏폼을 내리다가 <strong>"나 이거 필요했네?"</strong> 하고 우연히 인지합니다.
+    </div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+</body></html>

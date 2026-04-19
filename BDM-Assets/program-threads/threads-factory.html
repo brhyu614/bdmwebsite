@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Threads Factory</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+  :root { --accent: #00FF88; --bg: #0a0a0a; --sidebar: #111; --card: #161616; --border: #222; --border-hover: #333; --text: #e0e0e0; --dim: #777; --muted: #555; --danger: #ff4466; --warn: #ffaa00; }
+  * { margin:0; padding:0; box-sizing:border-box; word-break:keep-all; }
+  body { font-family:'Pretendard',-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  /* Layout */
+  .app { display:grid; grid-template-columns:400px 1fr; min-height:100vh; }
+  @media(max-width:900px) { .app { grid-template-columns:1fr; } .preview { border-left:none; border-top:1px solid var(--border); } }
+
+  /* Sidebar */
+  .sidebar { background:var(--sidebar); border-right:1px solid #1e1e1e; padding:20px; overflow-y:auto; max-height:100vh; }
+  .logo { color:var(--accent); font-size:20px; font-weight:800; letter-spacing:2px; margin-bottom:2px; }
+  .logo-sub { font-size:11px; color:var(--muted); margin-bottom:20px; }
+
+  .section-title { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin:18px 0 8px; }
+
+  /* API Key */
+  .api-row { display:flex; gap:6px; margin-bottom:10px; }
+  .api-row label { font-size:10px; color:var(--muted); font-weight:600; min-width:52px; margin-top:9px; }
+  .api-row input { flex:1; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:8px 10px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
+  .api-row input:focus { border-color:var(--accent); }
+  .dot { width:10px; height:10px; border-radius:50%; margin-top:10px; flex-shrink:0; background:var(--border); }
+  .dot.ok { background:var(--accent); }
+
+  /* Source tabs */
+  .source-tabs { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+  .source-tab { padding:10px; border:2px solid var(--border); border-radius:8px; background:var(--card); color:var(--dim);
+    cursor:pointer; font-size:12px; font-weight:600; text-align:center; transition:all .15s; }
+  .source-tab:hover { border-color:var(--border-hover); }
+  .source-tab.active { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.04); }
+
+  /* Article list */
+  .article-list { max-height:280px; overflow-y:auto; margin-bottom:10px; }
+  .article-item { padding:8px 10px; border:1px solid var(--border); border-radius:6px; margin-bottom:4px;
+    cursor:pointer; font-size:12px; transition:all .15s; display:flex; justify-content:space-between; align-items:center; }
+  .article-item:hover { border-color:#444; background:var(--card); }
+  .article-item.selected { border-color:var(--accent); background:rgba(0,255,136,.04); }
+  .article-item .date { color:var(--muted); font-size:10px; flex-shrink:0; margin-left:8px; }
+
+  /* Fields */
+  .field { margin-bottom:10px; }
+  .field label { display:block; font-size:11px; font-weight:500; color:var(--muted); margin-bottom:4px; }
+  .field textarea { width:100%; background:var(--card); border:1px solid var(--border); border-radius:8px;
+    padding:8px 10px; color:var(--text); font-size:13px; font-family:inherit; resize:vertical; outline:none; min-height:120px; line-height:1.7; }
+  .field textarea:focus { border-color:var(--accent); }
+
+  /* Image upload */
+  .drop-zone { border:2px dashed var(--border); border-radius:10px; padding:16px; text-align:center;
+    color:var(--muted); font-size:12px; cursor:pointer; transition:all .2s; margin-bottom:10px; }
+  .drop-zone:hover, .drop-zone.drag { border-color:var(--accent); color:var(--accent); }
+  .drop-zone input { display:none; }
+  .image-preview { margin-bottom:10px; }
+  .image-preview img { max-width:100%; max-height:120px; border-radius:8px; border:1px solid var(--border); }
+  .image-preview .remove-img { background:var(--danger); color:#fff; border:none; border-radius:4px; padding:2px 8px; font-size:10px; cursor:pointer; margin-left:8px; vertical-align:top; }
+
+  /* Buttons */
+  .btn { width:100%; padding:12px; border:none; border-radius:10px; font-size:14px; font-weight:700;
+    cursor:pointer; font-family:inherit; transition:all .15s; }
+  .btn-primary { background:var(--accent); color:#000; }
+  .btn-primary:hover { background:#00cc6a; }
+  .btn-primary:disabled { background:#333; color:#555; cursor:not-allowed; }
+  .btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); margin-top:6px; }
+  .btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-sm { padding:8px 14px; font-size:12px; width:auto; border-radius:6px; }
+
+  /* Learnings */
+  .learnings { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:14px; }
+  .learnings h4 { font-size:11px; color:var(--muted); margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; }
+  .learnings .rule { font-size:11px; color:var(--dim); padding:4px 0; border-bottom:1px solid #1e1e1e; display:flex; justify-content:space-between; align-items:center; }
+  .learnings .rule:last-child { border-bottom:none; }
+  .learnings .rule .del-rule { background:none; border:none; color:var(--muted); cursor:pointer; font-size:12px; }
+  .learnings .rule .del-rule:hover { color:var(--danger); }
+  .add-rule-row { display:flex; gap:4px; margin-top:6px; }
+  .add-rule-row input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:5px 8px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
+  .add-rule-row button { padding:5px 10px; background:var(--accent); color:#000; border:none; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; font-family:inherit; }
+
+  /* Status */
+  .status { padding:10px 14px; border-radius:8px; font-size:12px; margin-bottom:10px; display:none; }
+  .status.show { display:block; }
+  .status.loading { background:rgba(0,255,136,.08); color:var(--accent); }
+  .status.error { background:rgba(255,68,102,.1); color:var(--danger); }
+  .status.success { background:rgba(0,255,136,.08); color:var(--accent); }
+
+  .spinner { display:inline-block; width:14px; height:14px; border:2px solid var(--border); border-top-color:var(--accent);
+    border-radius:50%; animation:spin .6s linear infinite; vertical-align:middle; margin-right:6px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* ═══ Preview ═══ */
+  .preview { background:var(--bg); padding:24px; overflow-y:auto; max-height:100vh; }
+  .preview-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .preview-header h2 { font-size:16px; font-weight:700; }
+
+  /* Threads post card */
+  .threads-card { background:#fff; border-radius:16px; padding:20px; margin-bottom:16px; color:#000; max-width:540px; cursor:pointer; border:3px solid transparent; transition:border-color .15s; }
+  .threads-card:hover { border-color:#ddd; }
+  .threads-card.selected { border-color:var(--accent); box-shadow:0 0 20px rgba(0,255,136,.15); }
+  .threads-profile { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .threads-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#059669,#00FF88); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; color:#fff; flex-shrink:0; }
+  .threads-name { font-weight:700; font-size:14px; }
+  .threads-handle { font-size:12px; color:#999; }
+  .threads-time { font-size:11px; color:#bbb; margin-left:auto; }
+  .threads-text { font-size:15px; line-height:1.7; margin-bottom:12px; white-space:pre-wrap; color:#1a1a1a; }
+  .threads-image { width:100%; border-radius:12px; margin-bottom:12px; max-height:300px; object-fit:cover; }
+  .threads-hashtags { font-size:13px; color:#0095f6; margin-bottom:12px; }
+  .threads-actions { display:flex; gap:20px; color:#999; font-size:13px; padding-top:10px; border-top:1px solid #eee; }
+  .threads-actions span { cursor:pointer; }
+  .threads-badge { display:inline-block; background:rgba(0,255,136,.15); color:var(--accent); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; margin-bottom:8px; }
+  .threads-img-keyword { font-size:11px; color:#999; margin-top:4px; }
+
+  /* Review panel */
+  .review-panel { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:16px; max-width:540px; }
+  .review-panel h3 { font-size:14px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .score-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:12px; }
+  .score-item { text-align:center; }
+  .score-label { font-size:11px; color:var(--muted); margin-bottom:4px; }
+  .score-value { font-size:28px; font-weight:800; }
+  .score-value.high { color:var(--accent); }
+  .score-value.mid { color:var(--warn); }
+  .score-value.low { color:var(--danger); }
+  .total-score { text-align:center; padding:12px; background:var(--bg); border-radius:8px; margin-bottom:12px; }
+  .total-score .big { font-size:36px; font-weight:800; color:var(--accent); }
+  .total-score .of { font-size:14px; color:var(--muted); }
+  .review-feedback { font-size:13px; color:var(--dim); line-height:1.7; padding:10px; background:var(--bg); border-radius:8px; }
+  .best-badge { display:inline-block; background:var(--accent); color:#000; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; margin-bottom:8px; }
+
+  /* Feedback area */
+  .feedback-area { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:16px; max-width:540px; }
+  .feedback-area h3 { font-size:13px; font-weight:700; margin-bottom:8px; }
+  .feedback-area textarea { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px;
+    padding:8px 10px; color:var(--text); font-size:13px; font-family:inherit; resize:vertical; outline:none; min-height:60px; }
+  .feedback-area textarea:focus { border-color:var(--accent); }
+  .feedback-actions { display:flex; gap:8px; margin-top:10px; }
+
+  /* Copy button */
+  .copy-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:var(--card); color:var(--text);
+    border:1px solid var(--border); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .15s; font-family:inherit; }
+  .copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .copy-btn.copied { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.08); }
+
+  .empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+  .empty-state .icon { font-size:48px; margin-bottom:12px; }
+  .empty-state p { font-size:13px; line-height:1.8; }
+
+  .hidden { display:none !important; }
+
+  /* Modal */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:1000; display:flex; align-items:center; justify-content:center; }
+  .modal-overlay.hidden { display:none; }
+  .modal { background:var(--sidebar); border:1px solid var(--border); border-radius:16px; width:90vw; max-width:800px; max-height:85vh; display:flex; flex-direction:column; }
+  .modal-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); }
+  .modal-header h2 { font-size:16px; font-weight:700; }
+  .modal-close { background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; padding:4px 8px; }
+  .modal-close:hover { color:var(--text); }
+  .modal-body { flex:1; overflow:hidden; display:flex; flex-direction:column; min-height:0; }
+  .modal-tabs { display:flex; gap:0; border-bottom:1px solid var(--border); }
+  .modal-tab { padding:10px 16px; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer;
+    background:none; border:none; border-bottom:2px solid transparent; font-family:inherit; transition:all .15s; }
+  .modal-tab:hover { color:var(--text); }
+  .modal-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .modal-editor { flex:1; padding:16px; display:flex; flex-direction:column; overflow:hidden; }
+  .modal-editor textarea { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px;
+    color:var(--text); font-size:12px; font-family:'Pretendard',monospace; line-height:1.7; resize:none; outline:none; min-height:300px; }
+  .modal-editor textarea:focus { border-color:var(--accent); }
+  .modal-footer { display:flex; gap:8px; justify-content:flex-end; padding:12px 20px; border-top:1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <div class="logo">BDM THREADS</div>
+  <div class="logo-sub">Threads Post Generator</div>
+
+  <!-- API Key -->
+  <div class="section-title">API KEY</div>
+  <div class="api-row">
+    <label>Gemini</label>
+    <input type="password" id="geminiKey" placeholder="AIza..." />
+    <div class="dot" id="geminiDot"></div>
+  </div>
+
+  <!-- Content Source -->
+  <div class="section-title">CONTENT SOURCE</div>
+  <div class="source-tabs">
+    <div class="source-tab active" data-source="article" onclick="switchSource('article')">아티클 선택</div>
+    <div class="source-tab" data-source="text" onclick="switchSource('text')">직접 입력</div>
+  </div>
+
+  <div id="articlePanel">
+    <div class="article-list" id="articleList"></div>
+  </div>
+
+  <div id="textPanel" class="hidden">
+    <div class="field">
+      <label>콘텐츠 내용 (제목 + 핵심 내용)</label>
+      <textarea id="directInput" placeholder="Threads에 올리고 싶은 내용을 입력하세요. 아티클 제목과 핵심 데이터/인사이트를 포함하면 좋습니다."></textarea>
+    </div>
+  </div>
+
+  <!-- Image -->
+  <div class="section-title">IMAGE (OPTIONAL)</div>
+  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    이미지 드래그 앤 드롭 또는 클릭
+    <input type="file" id="fileInput" accept="image/*" />
+  </div>
+  <div class="image-preview" id="imagePreview"></div>
+
+  <!-- Status -->
+  <div class="status" id="status"></div>
+
+  <!-- Generate -->
+  <button class="btn btn-primary" id="generateBtn" onclick="generate()">Threads 포스트 생성</button>
+  <button class="btn btn-secondary" onclick="openPromptEditor()">프롬프트 설정</button>
+
+  <!-- Learnings -->
+  <div class="learnings">
+    <h4>학습 규칙 <span style="font-size:9px;color:var(--muted)" id="ruleCount">0</span></h4>
+    <div id="rulesList"></div>
+    <div class="add-rule-row">
+      <input type="text" id="newRuleInput" placeholder="새 규칙 추가..." onkeydown="if(event.key==='Enter')addRule()" />
+      <button onclick="addRule()">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PREVIEW ═══ -->
+<div class="preview">
+  <div class="preview-header">
+    <h2>Preview</h2>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="copy-btn hidden" id="copyBtn" onclick="copySelected()">텍스트 복사</button>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" id="emptyState">
+    <div class="icon">🧵</div>
+    <p>아티클을 선택하거나 내용을 입력하고<br />"Threads 포스트 생성" 버튼을 누르세요.</p>
+  </div>
+
+  <!-- Variations -->
+  <div id="variationsArea" class="hidden"></div>
+
+  <!-- Review -->
+  <div id="reviewArea" class="hidden"></div>
+
+  <!-- Feedback -->
+  <div id="feedbackArea" class="hidden">
+    <div class="feedback-area">
+      <h3>피드백 / 수정 요청</h3>
+      <textarea id="feedbackText" placeholder="수정하고 싶은 점을 입력하세요..."></textarea>
+      <div class="feedback-actions">
+        <button class="btn btn-primary btn-sm" onclick="regenerate()">재생성</button>
+        <button class="btn btn-secondary btn-sm" style="background:rgba(0,255,136,.1);color:var(--accent);border-color:var(--accent)" onclick="approve()">승인</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ PROMPT EDITOR MODAL ═══ -->
+<div class="modal-overlay hidden" id="promptModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>프롬프트 설정</h2>
+      <button class="modal-close" onclick="closePromptEditor()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-prompt="generate" onclick="switchPromptTab('generate',this)">생성 프롬프트</button>
+        <button class="modal-tab" data-prompt="review" onclick="switchPromptTab('review',this)">리뷰 프롬프트</button>
+      </div>
+      <div class="modal-editor">
+        <textarea id="promptEditor" spellcheck="false"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" onclick="resetCurrentPrompt()">기본값 복원</button>
+      <button class="btn btn-primary btn-sm" onclick="closePromptEditor()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// Articles (23 hardcoded)
+// ═══════════════════════════════════════
+const ARTICLES = [
+  {slug:'2026-04-12-ai-revenue-prediction-977', title:'AI로 매출을 97.7% 맞추다 — 한 프랜차이즈 기업의 매출 예측 프로젝트'},
+  {slug:'2026-04-12-from-81-to-97', title:'81%에서 97%로 — 매출 예측 정확도를 6번 만에 끌어올린 과정'},
+  {slug:'2026-04-12-when-ai-prediction-fails', title:'AI가 예측을 틀릴 때 — 4,042건 중 오차가 큰 케이스를 전수 조사했다'},
+  {slug:'2026-03-10-buddharoid-ai-embodiment', title:'합장하는 로봇 앞에서 인간에게 벌어지는 일'},
+  {slug:'2026-03-09-punch-monkey-ikea-trust-cost', title:'펀치 몽키와 IKEA 의자의 공통점'},
+  {slug:'2026-03-08-crying-horse-imperfection', title:'우는 말 그림이 사람을 멈추게 하는 이유'},
+  {slug:'2026-03-07-claude-superbowl-ad-war', title:'슈퍼볼 광고 전쟁을 Claude에게 심판 맡기면'},
+  {slug:'2026-03-06-forecasting-restaurant-sales', title:'치킨집 349개의 매출을 예측하는 진짜 변수'},
+  {slug:'2026-03-05-agentic-commerce', title:'AI가 대신 사주는 세상: 에이전틱 커머스의 두 얼굴'},
+  {slug:'2026-03-04-discovery-commerce', title:'검색 없이 사는 시대: 발견형 쇼핑의 부상'},
+  {slug:'2026-03-03-intra-brand-cannibalization', title:'같은 브랜드가 같은 브랜드를 잡아먹는다'},
+  {slug:'2026-03-02-instagram-algorithm', title:'인스타가 당신의 팔로워를 보여주지 않는 진짜 이유'},
+  {slug:'2026-02-28-tiktok-serial-content', title:'틱톡에서 시리즈물이 먹히는 진짜 이유'},
+  {slug:'2026-02-26-dawn-delivery-effect', title:'새벽배송이 바꾼 장보기의 구조'},
+  {slug:'2026-02-25-commerce-membership', title:'쿠팡 로켓와우에 가입하는 사람의 조건'},
+  {slug:'2026-02-23-location-data', title:'위치 데이터가 말해주는 것'},
+  {slug:'2026-02-20-pattern-interrupt-algorithm', title:'알고리즘이 좋아하는 패턴 인터럽트'},
+  {slug:'2026-02-15-aeo-enterprise', title:'AEO 시대, 기업은 어떻게 대비해야 하는가'},
+  {slug:'2026-02-12-stanley-cup-viral', title:'스탠리 텀블러는 어떻게 바이럴 되었나'},
+  {slug:'2026-02-08-ryanair-tone-algorithm', title:'라이언에어의 막말이 알고리즘을 이기는 법'},
+  {slug:'2026-02-05-demure-template-meme', title:'Demure 밈이 브랜드 템플릿이 된 과정'},
+  {slug:'2026-01-30-tarte-brand-trip-fairness', title:'타르트의 브랜드 트립은 공정한가'},
+  {slug:'2026-01-25-pinkydoll-npc-dwell-time', title:'NPC 스트리머와 체류시간의 경제학'},
+];
+
+// ═══════════════════════════════════════
+// Default Prompts
+// ═══════════════════════════════════════
+const DEFAULT_PROMPTS = {
+  generate: `당신은 BDM Lab의 Threads(Meta) 콘텐츠 전략가입니다.
+
+## 사실 준수 원칙 (최우선 규칙)
+- 제공된 글/본문에 있는 내용만 사용. 원문에 없는 사실/수치/예시를 창작 금지
+- 본문이 없고 제목만 있는 경우: 구체적 수치/통계/매출액/팔로워수를 지어내지 말 것
+- 숫자/통계는 반드시 원문에 있는 것만 사용
+- 원문에 없는 브랜드 활동/인물명/캠페인 추가 금지
+- 불확실한 정보는 "~로 알려져 있다" "~한 경향" 같은 추정 표현 사용
+
+## BDM Lab 톤
+- 데이터 기반. 과장 금지.
+- Threads는 짧고 날카로운 인사이트 한 방.
+- 학술적 권위 + 접근 가능한 언어
+
+## 언어 규칙 (매우 중요)
+- **모든 영어 단어/표현/전문용어에는 반드시 한국어 번역을 괄호로 병기**
+- 형식: "영어단어(한국어 번역)" 또는 "영어표현(한국어 설명)"
+- 예시:
+  - ❌ 이들은 'hydration tracking'과 'aesthetic'을 중요시했습니다
+  - ✅ 이들은 'hydration tracking(수분 섭취 추적)'과 'aesthetic(미적 감각)'을 중요시했습니다
+  - ❌ TikTok에서 viral 되었다
+  - ✅ TikTok(틱톡)에서 viral(입소문) 되었다
+- 고유명사(브랜드명, 사람이름)는 예외: Stanley, Ryanair, IKEA 그대로 가능
+- 한국인 독자가 영어를 모른다는 전제로 작성. 처음 나오는 영어마다 번역 필수
+
+## Threads 규칙
+1. 500자 이내 (짧을수록 좋음. 300자 이하 권장)
+2. 핵심 인사이트 딱 하나만 전달
+3. 첫 문장이 전부: 스크롤 멈추게 하는 한 줄
+4. 데이터/숫자가 있으면 임팩트 극대화
+5. 마지막에 질문이나 생각할 거리 (댓글 유도)
+6. 해시태그 3-5개
+7. 이미지 추천: 가장 어울리는 이미지 1장 키워드
+
+## 구조
+- 훅 (첫 1-2문장): 의외성 or 숫자
+- 핵심 (2-3문장): 데이터 기반 인사이트
+- 마무리 (1문장): 질문 or 생각할 거리
+
+## 출력 JSON
+{"variations":[{"text":"변형1","hashtags":"#태그1 #태그2","image_keyword":"english keyword"},{"text":"변형2","hashtags":"#태그","image_keyword":"keyword"},{"text":"변형3","hashtags":"#태그","image_keyword":"keyword"}]}`,
+
+  review: `인스타 Threads 전문 편집장입니다. 아래 3개의 Threads 포스트 변형을 평가하세요.
+
+각 변형에 대해:
+1. 임팩트 (1-5): 첫 문장에 멈추는가?
+2. 데이터 근거 (1-5)
+3. 공유 유발 (1-5): 보여주고 싶은가?
+
+그리고 가장 좋은 변형 번호와, 전체 피드백을 주세요.
+
+JSON으로만 답하세요:
+{"impact":N,"data":N,"share":N,"total":N,"feedback":"구체적 피드백","best_variation":1}`
+};
+
+// ═══════════════════════════════════════
+// State
+// ═══════════════════════════════════════
+let state = {
+  selectedArticle: null,
+  image: null,          // {file, url}
+  variations: [],       // [{text, hashtags, image_keyword}]
+  selectedVariation: 0,
+  review: null,
+  approved: false,
+};
+
+let prompts = {
+  generate: localStorage.getItem('bdm_threads_prompt_generate') || DEFAULT_PROMPTS.generate,
+  review: localStorage.getItem('bdm_threads_prompt_review') || DEFAULT_PROMPTS.review,
+};
+let currentPromptTab = 'generate';
+
+let learnings = JSON.parse(localStorage.getItem('bdm_threads_learnings') || '{"rules":[]}');
+
+// ═══════════════════════════════════════
+// Init
+// ═══════════════════════════════════════
+const DEFAULT_GEMINI_KEY = 'AIzaSyA45unOPuZdVDUGGD9R-2O0Kzq6zuCLdys';
+const DEFAULT_CLAUDE_KEY = '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';
+
+window.addEventListener('DOMContentLoaded', () => {
+  // Load API key
+  const gk = localStorage.getItem('bdm_threads_gemini_key') || DEFAULT_GEMINI_KEY;
+  document.getElementById('geminiKey').value = gk;
+  updateDots();
+
+  document.getElementById('geminiKey').addEventListener('input', () => {
+    localStorage.setItem('bdm_threads_gemini_key', document.getElementById('geminiKey').value.trim());
+    updateDots();
+  });
+
+  // Image drag/drop
+  const dz = document.getElementById('dropZone');
+  const fi = document.getElementById('fileInput');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+  dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); handleImage(e.dataTransfer.files[0]); });
+  fi.addEventListener('change', e => { if (e.target.files[0]) handleImage(e.target.files[0]); });
+
+  renderArticles();
+  renderLearnings();
+});
+
+function updateDots() {
+  const gk = document.getElementById('geminiKey').value.trim();
+  document.getElementById('geminiDot').className = 'dot' + (gk.startsWith('AIza') ? ' ok' : '');
+}
+
+// ═══════════════════════════════════════
+// Source
+// ═══════════════════════════════════════
+function switchSource(type) {
+  document.querySelectorAll('.source-tab').forEach(t => t.classList.toggle('active', t.dataset.source === type));
+  document.getElementById('articlePanel').classList.toggle('hidden', type !== 'article');
+  document.getElementById('textPanel').classList.toggle('hidden', type !== 'text');
+}
+
+function renderArticles() {
+  const list = document.getElementById('articleList');
+  list.innerHTML = '';
+  ARTICLES.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'article-item';
+    div.innerHTML = `<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.title}</span><span class="date">${a.slug.substring(0,10)}</span>`;
+    div.onclick = () => {
+      document.querySelectorAll('.article-item').forEach(e => e.classList.remove('selected'));
+      div.classList.add('selected');
+      state.selectedArticle = a;
+      setStatus('success', `"${a.title}" 선택됨`);
+    };
+    list.appendChild(div);
+  });
+}
+
+// ═══════════════════════════════════════
+// Image
+// ═══════════════════════════════════════
+function handleImage(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  state.image = { file, url: URL.createObjectURL(file) };
+  renderImage();
+}
+
+function renderImage() {
+  const p = document.getElementById('imagePreview');
+  if (!state.image) { p.innerHTML = ''; return; }
+  p.innerHTML = `<img src="${state.image.url}" /><button class="remove-img" onclick="removeImage()">삭제</button>`;
+}
+
+function removeImage() {
+  if (state.image) URL.revokeObjectURL(state.image.url);
+  state.image = null;
+  renderImage();
+  document.getElementById('fileInput').value = '';
+}
+
+// ═══════════════════════════════════════
+// Status
+// ═══════════════════════════════════════
+function setStatus(type, msg) {
+  const el = document.getElementById('status');
+  el.className = 'status show ' + type;
+  el.innerHTML = (type === 'loading' ? '<span class="spinner"></span>' : '') + msg;
+}
+function clearStatus() { document.getElementById('status').className = 'status'; }
+
+// ═══════════════════════════════════════
+// API Calls
+// ═══════════════════════════════════════
+function getGeminiKey() {
+  const key = document.getElementById('geminiKey').value.trim();
+  return key || DEFAULT_GEMINI_KEY;
+}
+
+async function callGemini(systemPrompt, userMessage) {
+  const geminiKey = getGeminiKey();
+  if (!geminiKey) throw new Error('Gemini API Key를 입력하세요');
+
+  const prompt = systemPrompt + '\n\n' + userMessage;
+
+  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 4096 },
+    }),
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || `Gemini API Error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.candidates[0].content.parts[0].text.trim();
+}
+
+async function callClaude(systemPrompt, userMessage) {
+  const claudeKey = DEFAULT_CLAUDE_KEY;
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': claudeKey,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4096,
+      system: systemPrompt + '\n\nYou must respond with valid JSON only, no other text.',
+      messages: [{ role: 'user', content: userMessage }]
+    })
+  });
+  if (!resp.ok) throw new Error(`Claude API error: ${resp.status}`);
+  const data = await resp.json();
+  let text = data.content[0].text.trim();
+  const m = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (m) text = m[1].trim();
+  return JSON.parse(text);
+}
+
+function extractJSON(text) {
+  // Try to find JSON in response
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    try { return JSON.parse(jsonMatch[0]); } catch(e) {}
+  }
+  // Try cleaning markdown code blocks
+  const cleaned = text.replace(/```json?\s*/g, '').replace(/```/g, '').trim();
+  const jsonMatch2 = cleaned.match(/\{[\s\S]*\}/);
+  if (jsonMatch2) {
+    try { return JSON.parse(jsonMatch2[0]); } catch(e) {}
+  }
+  throw new Error('JSON 파싱 실패');
+}
+
+// ═══════════════════════════════════════
+// Generate
+// ═══════════════════════════════════════
+async function generate() {
+  // Get content
+  const isArticle = document.querySelector('.source-tab.active').dataset.source === 'article';
+  let content = '';
+  if (isArticle) {
+    if (!state.selectedArticle) { setStatus('error', '아티클을 선택하세요'); return; }
+    content = `아티클 제목: ${state.selectedArticle.title}\n슬러그: ${state.selectedArticle.slug}`;
+  } else {
+    content = document.getElementById('directInput').value.trim();
+    if (!content) { setStatus('error', '내용을 입력하세요'); return; }
+  }
+
+  // Add learnings
+  let rulesText = '';
+  if (learnings.rules.length > 0) {
+    rulesText = '\n\n## 추가 규칙 (반드시 따르세요)\n' + learnings.rules.map((r,i) => `${i+1}. ${r}`).join('\n');
+  }
+
+  const systemPrompt = prompts.generate + rulesText;
+  const userMessage = `다음 콘텐츠를 Threads 포스트 3개 변형으로 만들어주세요.\n\n${content}\n\nJSON으로만 답하세요.`;
+
+  // UI
+  document.getElementById('generateBtn').disabled = true;
+  document.getElementById('generateBtn').textContent = '생성 중...';
+  setStatus('loading', 'Claude로 Threads 포스트 생성 중...');
+  document.getElementById('emptyState').classList.add('hidden');
+  document.getElementById('variationsArea').classList.add('hidden');
+  document.getElementById('reviewArea').classList.add('hidden');
+  document.getElementById('feedbackArea').classList.add('hidden');
+  document.getElementById('copyBtn').classList.add('hidden');
+  state.variations = [];
+  state.review = null;
+  state.approved = false;
+
+  try {
+    // Step 1: Generate with Claude
+    const result = await callClaude(systemPrompt, userMessage);
+
+    if (!result.variations || !Array.isArray(result.variations)) {
+      throw new Error('응답에 variations 배열이 없습니다');
+    }
+
+    state.variations = result.variations;
+    state.selectedVariation = 0;
+    renderVariations();
+
+    // Step 2: Review with Gemini (self-review)
+    setStatus('loading', 'Gemini로 자동 리뷰 중...');
+    try {
+      const reviewUserMsg = state.variations.map((v, i) =>
+        `[변형 ${i+1}]\n${v.text}\n${v.hashtags || ''}`
+      ).join('\n\n');
+
+      const reviewRaw = await callGemini(prompts.review, reviewUserMsg);
+      state.review = extractJSON(reviewRaw);
+      renderReview();
+    } catch (reviewErr) {
+      console.warn('Gemini review skipped (quota or error):', reviewErr);
+      // Review is optional — if Gemini fails, skip gracefully
+    }
+
+    setStatus('success', '생성 완료! 변형을 선택하고 복사하세요.');
+    document.getElementById('feedbackArea').classList.remove('hidden');
+    document.getElementById('copyBtn').classList.remove('hidden');
+
+  } catch (err) {
+    setStatus('error', '오류: ' + err.message);
+  } finally {
+    document.getElementById('generateBtn').disabled = false;
+    document.getElementById('generateBtn').textContent = 'Threads 포스트 생성';
+  }
+}
+
+// ═══════════════════════════════════════
+// Render Variations
+// ═══════════════════════════════════════
+function renderVariations() {
+  const area = document.getElementById('variationsArea');
+  area.classList.remove('hidden');
+  area.innerHTML = '';
+
+  state.variations.forEach((v, i) => {
+    const card = document.createElement('div');
+    card.className = 'threads-card' + (i === state.selectedVariation ? ' selected' : '');
+    card.onclick = () => {
+      state.selectedVariation = i;
+      document.querySelectorAll('.threads-card').forEach((c, j) => c.classList.toggle('selected', j === i));
+    };
+
+    let imageHtml = '';
+    if (state.image) {
+      imageHtml = `<img class="threads-image" src="${state.image.url}" />`;
+    }
+
+    const bestBadge = (state.review && state.review.best_variation === i + 1)
+      ? '<span class="best-badge">BEST</span> ' : '';
+
+    card.innerHTML = `
+      <div class="threads-badge">변형 ${i+1}</div>
+      ${bestBadge}
+      <div class="threads-profile">
+        <div class="threads-avatar">B</div>
+        <div>
+          <div class="threads-name">BDM Lab</div>
+          <div class="threads-handle">@bdm.lab</div>
+        </div>
+        <div class="threads-time">방금</div>
+      </div>
+      <div class="threads-text">${escapeHtml(v.text)}</div>
+      ${imageHtml}
+      <div class="threads-hashtags">${escapeHtml(v.hashtags || '')}</div>
+      <div class="threads-img-keyword">이미지 키워드: ${escapeHtml(v.image_keyword || '-')}</div>
+      <div class="threads-actions">
+        <span>♡ 좋아요</span>
+        <span>💬 댓글</span>
+        <span>🔁 리포스트</span>
+        <span>✈️ 공유</span>
+      </div>
+      <div style="margin-top:8px;text-align:right">
+        <span style="font-size:10px;color:#999">${(v.text||'').length}자</span>
+      </div>
+    `;
+    area.appendChild(card);
+  });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ═══════════════════════════════════════
+// Render Review
+// ═══════════════════════════════════════
+function renderReview() {
+  if (!state.review) return;
+  const area = document.getElementById('reviewArea');
+  area.classList.remove('hidden');
+  const r = state.review;
+
+  const scoreClass = (n) => n >= 4 ? 'high' : n >= 3 ? 'mid' : 'low';
+
+  area.innerHTML = `
+    <div class="review-panel">
+      <h3>Gemini 자동 리뷰</h3>
+      <div class="score-grid">
+        <div class="score-item">
+          <div class="score-label">임팩트</div>
+          <div class="score-value ${scoreClass(r.impact)}">${r.impact || '-'}</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">데이터 근거</div>
+          <div class="score-value ${scoreClass(r.data)}">${r.data || '-'}</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">공유 유발</div>
+          <div class="score-value ${scoreClass(r.share)}">${r.share || '-'}</div>
+        </div>
+      </div>
+      <div class="total-score">
+        <span class="big">${r.total || '-'}</span>
+        <span class="of"> / 15</span>
+      </div>
+      ${r.best_variation ? `<div style="text-align:center;margin-bottom:10px;font-size:12px;color:var(--accent)">추천: 변형 ${r.best_variation}</div>` : ''}
+      <div class="review-feedback">${escapeHtml(r.feedback || '')}</div>
+    </div>
+  `;
+
+  // Update BEST badge on variations if needed
+  if (r.best_variation) {
+    state.selectedVariation = r.best_variation - 1;
+    renderVariations();
+  }
+}
+
+// ═══════════════════════════════════════
+// Regenerate / Approve / Copy
+// ═══════════════════════════════════════
+async function regenerate() {
+  const feedback = document.getElementById('feedbackText').value.trim();
+  if (feedback) {
+    // Add feedback as temporary context
+    const origContent = document.querySelector('.source-tab.active').dataset.source === 'article'
+      ? (state.selectedArticle ? state.selectedArticle.title : '')
+      : document.getElementById('directInput').value.trim();
+
+    // Modify the user message to include feedback
+    const prevText = state.variations.map((v,i) => `변형${i+1}: ${v.text}`).join('\n');
+    const systemPrompt = prompts.generate +
+      (learnings.rules.length > 0 ? '\n\n## 추가 규칙\n' + learnings.rules.map((r,i) => `${i+1}. ${r}`).join('\n') : '');
+
+    const userMessage = `이전 생성 결과:\n${prevText}\n\n피드백: ${feedback}\n\n원본 콘텐츠: ${origContent}\n\n피드백을 반영해서 다시 3개 변형을 만들어주세요. JSON으로만 답하세요.`;
+
+    document.getElementById('generateBtn').disabled = true;
+    document.getElementById('generateBtn').textContent = '재생성 중...';
+    setStatus('loading', 'Claude로 피드백 반영하여 재생성 중...');
+
+    try {
+      const result = await callClaude(systemPrompt, userMessage);
+      if (result.variations) {
+        state.variations = result.variations;
+        state.selectedVariation = 0;
+        state.review = null;
+        renderVariations();
+        document.getElementById('reviewArea').classList.add('hidden');
+
+        // Re-review with Gemini
+        setStatus('loading', 'Gemini로 자동 리뷰 중...');
+        try {
+          const reviewUserMsg = state.variations.map((v, i) =>
+            `[변형 ${i+1}]\n${v.text}\n${v.hashtags || ''}`
+          ).join('\n\n');
+          const reviewRaw = await callGemini(prompts.review, reviewUserMsg);
+          state.review = extractJSON(reviewRaw);
+          renderReview();
+        } catch(e) { console.warn('Gemini review skipped (quota or error):', e); }
+
+        setStatus('success', '재생성 완료!');
+        document.getElementById('feedbackText').value = '';
+      }
+    } catch(err) {
+      setStatus('error', '오류: ' + err.message);
+    } finally {
+      document.getElementById('generateBtn').disabled = false;
+      document.getElementById('generateBtn').textContent = 'Threads 포스트 생성';
+    }
+  } else {
+    // No feedback, just regenerate
+    generate();
+  }
+}
+
+function approve() {
+  state.approved = true;
+  setStatus('success', '승인 완료! 텍스트를 복사하여 Threads에 게시하세요.');
+  document.getElementById('feedbackArea').classList.add('hidden');
+}
+
+async function copySelected() {
+  const v = state.variations[state.selectedVariation];
+  if (!v) return;
+  const text = v.text + '\n\n' + (v.hashtags || '');
+  try {
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById('copyBtn');
+    btn.classList.add('copied');
+    btn.textContent = '복사됨!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '텍스트 복사'; }, 2000);
+  } catch(e) {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '복사됨!';
+    setTimeout(() => { btn.textContent = '텍스트 복사'; }, 2000);
+  }
+}
+
+// ═══════════════════════════════════════
+// Learnings
+// ═══════════════════════════════════════
+function renderLearnings() {
+  const list = document.getElementById('rulesList');
+  list.innerHTML = '';
+  document.getElementById('ruleCount').textContent = learnings.rules.length;
+  learnings.rules.forEach((r, i) => {
+    const div = document.createElement('div');
+    div.className = 'rule';
+    div.innerHTML = `<span>${escapeHtml(r)}</span><button class="del-rule" onclick="deleteRule(${i})">&times;</button>`;
+    list.appendChild(div);
+  });
+}
+
+function addRule() {
+  const input = document.getElementById('newRuleInput');
+  const val = input.value.trim();
+  if (!val) return;
+  learnings.rules.push(val);
+  localStorage.setItem('bdm_threads_learnings', JSON.stringify(learnings));
+  input.value = '';
+  renderLearnings();
+}
+
+function deleteRule(i) {
+  learnings.rules.splice(i, 1);
+  localStorage.setItem('bdm_threads_learnings', JSON.stringify(learnings));
+  renderLearnings();
+}
+
+// ═══════════════════════════════════════
+// Prompt Editor
+// ═══════════════════════════════════════
+function openPromptEditor() {
+  document.getElementById('promptModal').classList.remove('hidden');
+  currentPromptTab = 'generate';
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.toggle('active', t.dataset.prompt === 'generate'));
+  document.getElementById('promptEditor').value = prompts.generate;
+}
+
+function closePromptEditor() {
+  // Save current
+  prompts[currentPromptTab] = document.getElementById('promptEditor').value;
+  localStorage.setItem('bdm_threads_prompt_' + currentPromptTab, prompts[currentPromptTab]);
+  document.getElementById('promptModal').classList.add('hidden');
+}
+
+function switchPromptTab(tab, btn) {
+  // Save current before switching
+  prompts[currentPromptTab] = document.getElementById('promptEditor').value;
+  localStorage.setItem('bdm_threads_prompt_' + currentPromptTab, prompts[currentPromptTab]);
+
+  currentPromptTab = tab;
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.toggle('active', t.dataset.prompt === tab));
+  document.getElementById('promptEditor').value = prompts[tab];
+}
+
+function resetCurrentPrompt() {
+  if (confirm('이 프롬프트를 기본값으로 복원하시겠습니까?')) {
+    prompts[currentPromptTab] = DEFAULT_PROMPTS[currentPromptTab];
+    localStorage.setItem('bdm_threads_prompt_' + currentPromptTab, prompts[currentPromptTab]);
+    document.getElementById('promptEditor').value = prompts[currentPromptTab];
+  }
+}
+</script>
+</body>
+</html>

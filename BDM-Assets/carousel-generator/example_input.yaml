@@ -1,0 +1,84 @@
+# BDM Carousel Generator - 예시 입력 파일
+# 사용법: python3 make_carousel.py example_input.yaml
+
+meta:
+  source: "DBR 432호 기고"
+  category: "MARKETING SHIFT"
+  accent: "#39FF14"
+  duration: 8
+  video_keyword_global: "digital marketing technology"
+  # 브랜드 헤더 (선택 - 기본값: BDM Lab)
+  brand_name: "BDM Lab"
+  brand_handle: "@bdm.lab"
+  brand_logo_text: "B"         # 원형 로고 안에 표시될 텍스트
+
+cover:
+  title: "네이버는\n**'계산기'**가\n되었다."
+  subtitle: "당신의 마케팅은 안전합니까?"
+  video_keyword: "neon technology abstract"
+  # 훅 넘버 (선택 - 큰 숫자/통계로 시선 끌기)
+  hook_number: "87%"
+  hook_label: "의 마케터가 아직 모르는 사실"
+
+slides:
+  - tag: "HOOK"
+    variant: "dark"
+    heading: "자사몰의 '검색 유입량'이\n줄어들고 있습니다"
+    body: |
+      최근 자사몰의 '검색 유입량'이 서서히 줄어드는 걸 느끼셨습니까?
+      마케팅 예산을 여전히 **'네이버 키워드 광고'**에만 쏟고 있다면, {{심각한 위기입니다.}}
+    video_keyword: "search engine analytics"
+
+  - tag: "DISCOVERY"
+    variant: "light"
+    heading: "{{발견(Discovery)}}이\n먼저 일어나는 시대"
+    body: |
+      과거의 소비자는 '네이버'에서 쇼핑을 시작했습니다. 하지만 지금은 다릅니다.
+      인스타, 유튜브 숏폼을 내리다가 **"나 이거 필요했네?"** 하고 우연히 인지합니다.
+
+      의도적 검색 없이 **'발견'**이 구매를 이끄는 시대가 된 것입니다.
+    video_keyword: "social media scrolling phone"
+
+  - tag: "PROBLEM"
+    variant: "green"
+    heading: "네이버는 단순한\n'계산기'로 전락했습니다"
+    body: |
+      소비자는 숏폼에서 '발견'한 제품이 진짜 최저가인지, 리뷰는 믿을만한지 확인하러 검색 포털에 들어옵니다.
+
+      네이버는 쇼핑의 출발점에서 단순한 **'계산기'**로 전락했습니다.
+    video_keyword: "online shopping comparison"
+
+  - tag: "INSIGHT"
+    variant: "dark"
+    heading: "검색할 때까지 기다리는\n마케팅은 이미 늦었습니다"
+    body: |
+      고객이 특정 '키워드'를 검색할 때까지 기다리는 마케팅은 이미 늦었습니다.
+
+      그들은 이미 알고리즘 피드에서 누군가 쥐여준 제품에 {{마음을 뺏겼으니까요.}}
+    video_keyword: "data analytics dashboard"
+
+  - tag: "SOLUTION"
+    variant: "light"
+    heading: "수요를 먼저\n{{창출(Create)}}하라"
+    body: |
+      기존의 검색 광고(Search Ad)는 이미 존재하는 수요를 낚는 그물에 불과합니다.
+
+      이제 브랜드는 숏폼과 개인화 알고리즘으로 소비자의 무의식 속에 숨겨진 **'수요를 먼저 창출(Create)'**해야 합니다.
+    video_keyword: "creative marketing content"
+
+  - tag: "ACTION"
+    variant: "dark"
+    heading: "기다리고 있습니까,\n먼저 침투하고 있습니까?"
+    body: |
+      고객이 굳이 우리를 검색하게 기다리고 있습니까?
+
+      아니면 고객의 알고리즘 피드에 {{먼저 침투}}하고 있습니까?
+    video_keyword: "algorithm artificial intelligence"
+
+outro:
+  brand_sub: "빅데이터 마케팅 랩"
+  closing: "검색에서 발견으로,\n쇼핑 주도권의 거대한 이동."
+  cta: "퍼널이 붕괴된 시대의\n{{생존 전략.}}"
+  links:
+    - "dbr.donga.com"
+    - "bigdatamarketinglab.com"

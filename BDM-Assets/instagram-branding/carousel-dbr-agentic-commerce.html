@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Carousel — 에이전틱 커머스 (DBR 기고) v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1a1a1a; display:flex; flex-wrap:wrap; gap:24px; padding:32px; justify-content:center; font-family:'Noto Sans KR',sans-serif; }
+  h2.sec { width:100%; text-align:center; font-family:'Outfit',sans-serif; font-size:20px; font-weight:700; color:#F5F5F4; margin:16px 0 8px; }
+  .s { width:360px; height:450px; border-radius:6px; overflow:hidden; position:relative; display:flex; flex-direction:column; padding:40px 36px; }
+  .L { background:#FAFAF9; color:#1C1917; }
+  .L .lbl { color:#059669; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .L .h1 { font-size:26px; font-weight:900; line-height:1.32; letter-spacing:-0.8px; }
+  .L .p { font-size:13px; line-height:1.75; color:#57534E; }
+  .L .acc { color:#059669; }
+  .L .bar { width:40px; height:3px; background:#059669; border-radius:2px; }
+  .L .card { background:#F5F5F4; border-radius:8px; padding:14px; }
+  .L .card-b { border:1px solid #E7E5E4; }
+  .L .card-g { background:#ECFDF5; border:1px solid #A7F3D0; }
+  .L .div { width:100%; height:1px; background:#E7E5E4; }
+  .L .mut { color:#A8A29E; }
+  .L .sub { color:#78716C; }
+  .L .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:#A8A29E; }
+  .L .nc { width:24px; height:24px; border-radius:50%; background:#059669; color:white; display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; flex-shrink:0; }
+  .L .badge { background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:4px; font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; display:inline-block; }
+  .L .cta-t { font-family:'Outfit',sans-serif; font-weight:900; font-size:28px; color:#059669; letter-spacing:-1px; }
+  .L .cta-l { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#059669; }
+  .D { background:#0F0F0F; color:#F5F5F4; }
+  .D .lbl { color:#34d399; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .D .h1 { font-size:26px; font-weight:900; line-height:1.32; letter-spacing:-0.8px; }
+  .D .p { font-size:13px; line-height:1.75; color:#A8A29E; }
+  .D .acc { color:#34d399; }
+  .D .bar { width:40px; height:3px; background:#34d399; border-radius:2px; }
+  .D .card { background:#1A1A1A; border-radius:8px; padding:14px; }
+  .D .card-b { border:1px solid #2A2A2A; }
+  .D .card-g { background:#0d2e23; border:1px solid #065F46; }
+  .D .div { width:100%; height:1px; background:#2A2A2A; }
+  .D .mut { color:#6b7280; }
+  .D .sub { color:#9CA3AF; }
+  .D .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:#6b7280; }
+  .D .nc { width:24px; height:24px; border-radius:50%; background:#34d399; color:#0F0F0F; display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; flex-shrink:0; }
+  .D .badge { background:#78350F; color:#FDE68A; padding:4px 10px; border-radius:4px; font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; display:inline-block; }
+  .D .cta-t { font-family:'Outfit',sans-serif; font-weight:900; font-size:28px; color:#34d399; letter-spacing:-1px; }
+  .D .cta-l { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#34d399; }
+  .A { background:#059669; color:white; }
+  .A .lbl { color:rgba(255,255,255,.7); font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .A .h1 { font-size:24px; font-weight:900; line-height:1.35; color:white; }
+  .A .p { font-size:14px; line-height:1.8; color:rgba(255,255,255,.9); }
+  .A .bar { width:40px; height:3px; background:rgba(255,255,255,.5); border-radius:2px; }
+  .A .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:rgba(255,255,255,.5); }
+  .fc { display:flex; flex-direction:column; } .fr { display:flex; flex-direction:row; }
+  .f1 { flex:1; } .g4{gap:4px} .g6{gap:6px} .g8{gap:8px} .g10{gap:10px} .g12{gap:12px} .g16{gap:16px}
+  .ac { align-items:center; } .jc { justify-content:center; } .tc { text-align:center; } .w100{width:100%}
+  .ni { display:flex; gap:12px; align-items:flex-start; }
+  /* Image slide */
+  .img-slide { background-size:cover; background-position:center; }
+  .img-overlay { position:absolute; inset:0; }
+  .img-overlay-light { background: linear-gradient(to bottom, rgba(250,250,249,0.85) 0%, rgba(250,250,249,0.95) 60%); }
+  .img-overlay-dark { background: linear-gradient(to bottom, rgba(15,15,15,0.8) 0%, rgba(15,15,15,0.95) 55%); }
+  .img-top { background-size:cover; background-position:center; border-radius:8px; width:100%; }
+  .comparison-table { width:100%; border-collapse:collapse; font-size:10px; }
+  .comparison-table th { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; text-align:left; padding:5px 3px; }
+  .comparison-table td { padding:4px 3px; font-size:10px; line-height:1.4; vertical-align:top; }
+  .L .comparison-table th { color:#059669; border-bottom:1px solid #E7E5E4; }
+  .L .comparison-table td { border-bottom:1px solid #F5F5F4; color:#57534E; }
+  .D .comparison-table th { color:#34d399; border-bottom:1px solid #2A2A2A; }
+  .D .comparison-table td { border-bottom:1px solid #1A1A1A; color:#A8A29E; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LIGHT ═══════════ -->
+<h2 class="sec">Option A — Light</h2>
+
+<!-- S1: Hook -->
+<div class="s L">
+  <div class="fc g16 f1">
+    <div class="fr g8 ac"><span class="lbl">DBR 432호 기고</span><span class="badge">동아비즈니스리뷰</span></div>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:22px"><span style="color:#78716C; font-size:14px; font-weight:500; display:block; margin-bottom:8px">"비 오는 날 미끄럽지 않고<br>통풍 되는 러닝화 추천해줘"</span>이 <span class="acc">한 문장</span>으로<br>쇼핑이 끝나는<br>시대가 왔다</div>
+    <div class="p" style="margin-top:4px">검색창에 키워드를 넣고<br>수백 개 결과를 비교하던 시절은 끝났다.<br><br>AI에게 <strong>말 한마디</strong>면 된다.</div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>1 / 9 →</span></div>
+</div>
+
+<!-- S2: Before/After -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">과거 vs 지금</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:19px">쇼핑 방식이<br>완전히 달라졌다</div>
+    <div class="card card-b" style="margin-top:8px; padding:12px">
+      <div style="font-size:10px; font-weight:700; color:#A8A29E; margin-bottom:6px">과거</div>
+      <div style="font-size:11px; line-height:1.6">"러닝화" 검색 → <strong>수천 개 결과</strong><br>→ 블로그 3개 읽기 → 유튜브 비교<br>→ 가격 비교 사이트 → 2시간 후 겨우 구매</div>
+    </div>
+    <div class="tc acc" style="font-size:16px; font-weight:900">↓</div>
+    <div class="card-g" style="padding:12px; border-radius:8px">
+      <div style="font-size:10px; font-weight:700; color:#059669; margin-bottom:6px">지금</div>
+      <div style="font-size:12px; font-weight:700; color:#059669; line-height:1.6">"장마철 러닝화 추천해줘" → AI가 대신 다 해줌<br>→ 3분 만에 결제 완료</div>
+    </div>
+    <div class="div" style="margin-top:10px"></div>
+    <div class="p" style="margin-top:8px; font-size:12px">이걸 <strong>에이전틱 커머스</strong>(Agentic Commerce)라 부른다.<br>AI가 대신 검색·비교·추천·주문까지 해주는 구조.<br><br><strong>지금 두 회사가 이걸 경쟁 중이다.</strong></div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>2 / 9 →</span></div>
+</div>
+
+<!-- S3: Amazon Rufus (with image area) -->
+<div class="s L img-slide" style="background-image:url('https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=720&h=900&fit=crop'); padding:0;">
+  <div class="img-overlay img-overlay-light"></div>
+  <div class="fc g12 f1" style="padding:40px 36px; position:relative; z-index:1;">
+    <span class="lbl">CASE 1 · 아마존</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px">루퍼스에게 물어보면<br>이렇게 된다</div>
+    <div class="fc g4" style="margin-top:8px">
+      <div class="card" style="padding:10px; background:rgba(255,255,255,0.9); border:1px solid #E7E5E4;">
+        <div style="font-size:11px">💬 <strong>"장마철 러닝화 추천해줘"</strong></div>
+      </div>
+      <div class="tc acc" style="font-size:11px">↓ AI가 기준부터 알려줌</div>
+      <div class="card" style="padding:10px; background:rgba(255,255,255,0.9); border:1px solid #E7E5E4;">
+        <div style="font-size:10px">📊 방수 등급, 밑창 미끄럼방지, 통풍성, 무게</div>
+      </div>
+      <div class="tc acc" style="font-size:11px">↓ 조건 맞는 후보 추천</div>
+      <div class="card" style="padding:10px; background:rgba(255,255,255,0.9); border:1px solid #E7E5E4;">
+        <div style="font-size:10px">🔄 "세탁기 써도 돼?" → 모델별 세척방법 비교</div>
+      </div>
+      <div class="tc acc" style="font-size:11px">↓</div>
+      <div style="padding:10px; background:#059669; color:white; border-radius:8px; text-align:center; font-size:12px; font-weight:700">💳 같은 앱에서 바로 결제 완료</div>
+    </div>
+    <div class="p" style="font-size:11px; margin-top:4px"><strong>다른 앱 필요 없음. 전부 아마존 안에서 끝.</strong><br>근데 여기에 함정이 있다.</div>
+  </div>
+  <div class="ft" style="z-index:1"><span>BDM Lab</span><span>3 / 9 →</span></div>
+</div>
+
+<!-- S4: Rufus Problem (Accent) -->
+<div class="s A">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">함정</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:22px">편하긴 한데...<br>전부 아마존 것이다</div>
+    <div class="p">질문 → 대화 → 구매가 한 흐름.<br>여러 탭 전전할 필요 없다.<br><br>근데 <strong>데이터도, 수수료도,<br>고객 관계도 전부 아마존이 가져간다.</strong><br><br>판매자는 아마존 안에 갇힌다.<br>소비자도 아마존 밖을 볼 이유가 없다.<br><br><strong>이 구조를 깬 회사가 있다.</strong></div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>4 / 9 →</span></div>
+</div>
+
+<!-- S5: OpenAI + Stripe (with image) -->
+<div class="s L img-slide" style="background-image:url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=720&h=900&fit=crop'); padding:0;">
+  <div class="img-overlay img-overlay-light"></div>
+  <div class="fc g12 f1" style="padding:40px 36px; position:relative; z-index:1;">
+    <span class="lbl">CASE 2 · 오픈AI + STRIPE</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:19px">챗GPT에서 대화하다가<br>물건을 산다</div>
+    <div class="fc g6" style="margin-top:8px">
+      <div class="card" style="padding:10px; background:rgba(255,255,255,0.92); border:1px solid #E7E5E4;">
+        <div style="font-size:11px; font-weight:700">💬 "가을 트렌치코트 추천해줘"</div>
+        <div style="font-size:10px" class="sub">→ 여러 브랜드 제품을 찾아서 보여줌</div>
+      </div>
+      <div class="card" style="padding:10px; background:rgba(255,255,255,0.92); border:1px solid #E7E5E4;">
+        <div style="font-size:11px; font-weight:700">🛒 각 상품 옆에 <span class="acc">'Buy with Stripe'</span> 버튼</div>
+        <div style="font-size:10px" class="sub">→ 광고 아님. 진짜 결제 버튼.</div>
+      </div>
+      <div style="padding:10px; background:#ECFDF5; border:1px solid #059669; border-radius:8px">
+        <div style="font-size:11px; font-weight:700; color:#059669">💳 대화창 안에서 주문→결제→확인 끝</div>
+        <div style="font-size:10px; color:#059669">쇼핑몰 방문 필요 없음. '대화 중 결제'.</div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:8px"></div>
+    <div class="p" style="font-size:11px; margin-top:6px"><strong>핵심 차이:</strong> 아마존과 달리<br><strong class="acc">판매자가 데이터와 고객을 직접 소유</strong>한다.<br>누구나 자기 가게를 AI에 연결할 수 있는 개방형.</div>
+  </div>
+  <div class="ft" style="z-index:1"><span>BDM Lab</span><span>5 / 9 →</span></div>
+</div>
+
+<!-- S6: Comparison -->
+<div class="s L">
+  <div class="fc g10 f1">
+    <span class="lbl">정리하면</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:18px">두 모델의 핵심 차이</div>
+    <div class="fr g8 ac" style="margin-top:6px">
+      <span style="background:#F5F5F4; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:700; border:1px solid #E7E5E4">🅰️ 아마존</span>
+      <span style="font-family:'Outfit'; font-weight:900; font-size:12px; color:#A8A29E">vs</span>
+      <span style="background:#ECFDF5; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:700; color:#059669; border:1px solid #A7F3D0">🅱️ 오픈AI</span>
+    </div>
+    <table class="comparison-table" style="margin-top:6px">
+      <tr><th style="width:22%">구분</th><th style="width:39%">아마존 (폐쇄형)</th><th style="width:39%">오픈AI (개방형)</th></tr>
+      <tr><td style="font-weight:600">구조</td><td>아마존 앱 안에서만</td><td>어떤 AI든 어떤 가게든 연결</td></tr>
+      <tr><td style="font-weight:600">데이터</td><td>아마존이 다 가져감</td><td><strong>판매자가 직접 소유</strong></td></tr>
+      <tr><td style="font-weight:600">비용</td><td>높은 플랫폼 수수료</td><td>결제 수수료만</td></tr>
+      <tr><td style="font-weight:600">강점</td><td>빠르고 일관된 경험</td><td>자유롭고 확장 가능</td></tr>
+    </table>
+    <div class="div" style="margin-top:8px"></div>
+    <div class="p" style="margin-top:8px; font-size:12px"><strong>어느 쪽이 이기든, 진짜 지는 건 따로 있다.</strong></div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>6 / 9 →</span></div>
+</div>
+
+<!-- S7: Real loser -->
+<div class="s L">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">IMPACT</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:22px">진짜 지는 건<br><span class="acc">검색 포털</span>이다</div>
+    <div class="div"></div>
+    <div class="p">'처음 만나는 접점'은<br>이미 SNS에 빼앗겼다.<br><br>이제 '마지막 결제'마저<br>AI 에이전트에게 넘어가고 있다.<br><br><strong>"누가 고객 접점을 소유하는가"</strong>의<br>게임이 바뀌고 있다.</div>
+    <div style="font-size:9px; font-family:'JetBrains Mono'; color:#A8A29E">— Harvard Business Review</div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>7 / 9 →</span></div>
+</div>
+
+<!-- S8: Takeaway -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">그래서</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px">기업이 지금<br>준비해야 할 것</div>
+    <div class="fc g10" style="margin-top:8px">
+      <div class="ni"><div class="nc">1</div><div><div style="font-size:12px; font-weight:700">AI가 읽을 수 있는 상품 데이터를 만들어라</div><div style="font-size:11px; line-height:1.5" class="sub">FAQ, 비교자료, 스펙을 구조화된 형태로</div></div></div>
+      <div class="ni"><div class="nc">2</div><div><div style="font-size:12px; font-weight:700">SEO 넘어 AEO 전략을 세워라</div><div style="font-size:11px; line-height:1.5" class="sub">AI가 당신 브랜드를 추천하게 만들어야 한다</div></div></div>
+      <div class="ni"><div class="nc">3</div><div><div style="font-size:12px; font-weight:700">대화형 구매 경험을 설계하라</div><div style="font-size:11px; line-height:1.5" class="sub">질문→비교→결제가 한 번의 대화에서 끝나도록</div></div></div>
+      <div class="ni"><div class="nc">4</div><div><div style="font-size:12px; font-weight:700">고객 데이터를 뺏기지 마라</div><div style="font-size:11px; line-height:1.5" class="sub">폐쇄형 플랫폼 의존 줄이고 자사 채널 강화</div></div></div>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>8 / 9 →</span></div>
+</div>
+
+<!-- S9: CTA -->
+<div class="s L" style="justify-content:center; align-items:center; text-align:center">
+  <div class="fc g14 ac">
+    <div class="badge" style="font-size:11px; padding:6px 14px">DBR 432호 기고</div>
+    <div class="cta-t">BDM</div>
+    <div style="font-size:13px; font-weight:700">빅데이터 마케팅 랩</div>
+    <div class="div" style="width:60px"></div>
+    <div class="fc g6"><div style="font-size:11px" class="sub">이 글의 전문은 <strong style="color:#1C1917">DBR 432호</strong>에서</div><div class="cta-l">📖 dbr.donga.com/article/view/1904/article_no/11961</div></div>
+    <div class="div" style="width:60px"></div>
+    <div class="fc g6"><div style="font-size:11px" class="sub">더 깊은 분석은 웹사이트에서</div><div class="cta-l">🔗 bigdatamarketinglab.com</div><div style="font-size:10px" class="mut">@bdm.lab</div></div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>9 / 9</span></div>
+</div>
+
+<!-- ═══════════ DARK ═══════════ -->
+<h2 class="sec" style="margin-top:40px">Option B — Dark</h2>
+
+<div class="s D"><div class="fc g16 f1"><div class="fr g8 ac"><span class="lbl">DBR 432호 기고</span><span class="badge">동아비즈니스리뷰</span></div><div class="bar"></div><div class="h1" style="font-size:22px"><span style="color:#9CA3AF; font-size:14px; font-weight:500; display:block; margin-bottom:8px">"비 오는 날 미끄럽지 않고<br>통풍 되는 러닝화 추천해줘"</span>이 <span class="acc">한 문장</span>으로<br>쇼핑이 끝나는<br>시대가 왔다</div><div class="p" style="margin-top:4px">검색창에 키워드를 넣고<br>수백 개 결과를 비교하던 시절은 끝났다.<br><br>AI에게 <strong style="color:#F5F5F4">말 한마디</strong>면 된다.</div></div><div class="ft"><span>BDM Lab</span><span>1 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g12 f1"><span class="lbl">과거 vs 지금</span><div class="bar"></div><div class="h1" style="font-size:19px">쇼핑 방식이<br>완전히 달라졌다</div><div class="card card-b" style="margin-top:8px; padding:12px"><div style="font-size:10px; font-weight:700; color:#6b7280; margin-bottom:6px">과거</div><div style="font-size:11px; line-height:1.6">"러닝화" 검색 → <strong style="color:#F5F5F4">수천 개 결과</strong><br>→ 블로그 3개 읽기 → 유튜브 비교<br>→ 가격 비교 사이트 → 2시간 후 겨우 구매</div></div><div class="tc acc" style="font-size:16px; font-weight:900">↓</div><div class="card-g" style="padding:12px; border-radius:8px"><div style="font-size:10px; font-weight:700; color:#34d399; margin-bottom:6px">지금</div><div style="font-size:12px; font-weight:700; color:#34d399; line-height:1.6">"장마철 러닝화 추천해줘" → AI가 대신 다 해줌<br>→ 3분 만에 결제 완료</div></div><div class="div" style="margin-top:10px"></div><div class="p" style="margin-top:8px; font-size:12px">이걸 <strong style="color:#F5F5F4">에이전틱 커머스</strong>(Agentic Commerce)라 부른다.<br>AI가 대신 검색·비교·추천·주문까지 해주는 구조.<br><br><strong style="color:#F5F5F4">지금 두 회사가 이걸 경쟁 중이다.</strong></div></div><div class="ft"><span>BDM Lab</span><span>2 / 9 →</span></div></div>
+
+<div class="s D img-slide" style="background-image:url('https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=720&h=900&fit=crop'); padding:0;"><div class="img-overlay img-overlay-dark"></div><div class="fc g12 f1" style="padding:40px 36px; position:relative; z-index:1;"><span class="lbl">CASE 1 · 아마존</span><div class="bar"></div><div class="h1" style="font-size:20px">루퍼스에게 물어보면<br>이렇게 된다</div><div class="fc g4" style="margin-top:8px"><div class="card" style="padding:10px; background:rgba(15,15,15,0.85); border:1px solid #2A2A2A;"><div style="font-size:11px">💬 <strong>"장마철 러닝화 추천해줘"</strong></div></div><div class="tc acc" style="font-size:11px">↓ AI가 기준부터 알려줌</div><div class="card" style="padding:10px; background:rgba(15,15,15,0.85); border:1px solid #2A2A2A;"><div style="font-size:10px">📊 방수 등급, 밑창 미끄럼방지, 통풍성, 무게</div></div><div class="tc acc" style="font-size:11px">↓ 조건 맞는 후보 추천</div><div class="card" style="padding:10px; background:rgba(15,15,15,0.85); border:1px solid #2A2A2A;"><div style="font-size:10px">🔄 "세탁기 써도 돼?" → 모델별 세척방법 비교</div></div><div class="tc acc" style="font-size:11px">↓</div><div style="padding:10px; background:#34d399; color:#0F0F0F; border-radius:8px; text-align:center; font-size:12px; font-weight:700">💳 같은 앱에서 바로 결제 완료</div></div><div class="p" style="font-size:11px; margin-top:4px"><strong style="color:#F5F5F4">다른 앱 필요 없음. 전부 아마존 안에서 끝.</strong><br>근데 여기에 함정이 있다.</div></div><div class="ft" style="z-index:1"><span>BDM Lab</span><span>3 / 9 →</span></div></div>
+
+<div class="s A"><div class="fc g16 f1 jc"><span class="lbl">함정</span><div class="bar"></div><div class="h1" style="font-size:22px">편하긴 한데...<br>전부 아마존 것이다</div><div class="p">질문 → 대화 → 구매가 한 흐름.<br>여러 탭 전전할 필요 없다.<br><br>근데 <strong>데이터도, 수수료도,<br>고객 관계도 전부 아마존이 가져간다.</strong><br><br>판매자는 아마존 안에 갇힌다.<br>소비자도 아마존 밖을 볼 이유가 없다.<br><br><strong>이 구조를 깬 회사가 있다.</strong></div></div><div class="ft"><span>BDM Lab</span><span>4 / 9 →</span></div></div>
+
+<div class="s D img-slide" style="background-image:url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=720&h=900&fit=crop'); padding:0;"><div class="img-overlay img-overlay-dark"></div><div class="fc g12 f1" style="padding:40px 36px; position:relative; z-index:1;"><span class="lbl">CASE 2 · 오픈AI + STRIPE</span><div class="bar"></div><div class="h1" style="font-size:19px">챗GPT에서 대화하다가<br>물건을 산다</div><div class="fc g6" style="margin-top:8px"><div class="card" style="padding:10px; background:rgba(15,15,15,0.88); border:1px solid #2A2A2A;"><div style="font-size:11px; font-weight:700">💬 "가을 트렌치코트 추천해줘"</div><div style="font-size:10px" class="mut">→ 여러 브랜드 제품을 찾아서 보여줌</div></div><div class="card" style="padding:10px; background:rgba(15,15,15,0.88); border:1px solid #2A2A2A;"><div style="font-size:11px; font-weight:700">🛒 각 상품 옆에 <span class="acc">'Buy with Stripe'</span> 버튼</div><div style="font-size:10px" class="mut">→ 광고 아님. 진짜 결제 버튼.</div></div><div style="padding:10px; background:#0d2e23; border:1px solid #34d399; border-radius:8px"><div style="font-size:11px; font-weight:700; color:#34d399">💳 대화창 안에서 주문→결제→확인 끝</div><div style="font-size:10px; color:#34d399">쇼핑몰 방문 필요 없음. '대화 중 결제'.</div></div></div><div class="div" style="margin-top:8px"></div><div class="p" style="font-size:11px; margin-top:6px"><strong style="color:#F5F5F4">핵심 차이:</strong> 아마존과 달리<br><strong class="acc">판매자가 데이터와 고객을 직접 소유</strong>한다.<br>누구나 자기 가게를 AI에 연결할 수 있는 개방형.</div></div><div class="ft" style="z-index:1"><span>BDM Lab</span><span>5 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g10 f1"><span class="lbl">정리하면</span><div class="bar"></div><div class="h1" style="font-size:18px">두 모델의 핵심 차이</div><div class="fr g8 ac" style="margin-top:6px"><span style="background:#1A1A1A; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:700; border:1px solid #2A2A2A">🅰️ 아마존</span><span style="font-family:'Outfit'; font-weight:900; font-size:12px; color:#6b7280">vs</span><span style="background:#0d2e23; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:700; color:#34d399; border:1px solid #065F46">🅱️ 오픈AI</span></div><table class="comparison-table" style="margin-top:6px"><tr><th style="width:22%">구분</th><th style="width:39%">아마존 (폐쇄형)</th><th style="width:39%">오픈AI (개방형)</th></tr><tr><td style="font-weight:600; color:#F5F5F4">구조</td><td>아마존 앱 안에서만</td><td>어떤 AI든 어떤 가게든 연결</td></tr><tr><td style="font-weight:600; color:#F5F5F4">데이터</td><td>아마존이 다 가져감</td><td><strong style="color:#34d399">판매자가 직접 소유</strong></td></tr><tr><td style="font-weight:600; color:#F5F5F4">비용</td><td>높은 플랫폼 수수료</td><td>결제 수수료만</td></tr><tr><td style="font-weight:600; color:#F5F5F4">강점</td><td>빠르고 일관된 경험</td><td>자유롭고 확장 가능</td></tr></table><div class="div" style="margin-top:8px"></div><div class="p" style="margin-top:8px; font-size:12px"><strong style="color:#F5F5F4">어느 쪽이 이기든, 진짜 지는 건 따로 있다.</strong></div></div><div class="ft"><span>BDM Lab</span><span>6 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g16 f1 jc"><span class="lbl">IMPACT</span><div class="bar"></div><div class="h1" style="font-size:22px">진짜 지는 건<br><span class="acc">검색 포털</span>이다</div><div class="div"></div><div class="p">'처음 만나는 접점'은<br>이미 SNS에 빼앗겼다.<br><br>이제 '마지막 결제'마저<br>AI 에이전트에게 넘어가고 있다.<br><br><strong style="color:#F5F5F4">"누가 고객 접점을 소유하는가"</strong>의<br>게임이 바뀌고 있다.</div><div style="font-size:9px; font-family:'JetBrains Mono'" class="mut">— Harvard Business Review</div></div><div class="ft"><span>BDM Lab</span><span>7 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g12 f1"><span class="lbl">그래서</span><div class="bar"></div><div class="h1" style="font-size:20px">기업이 지금<br>준비해야 할 것</div><div class="fc g10" style="margin-top:8px"><div class="ni"><div class="nc">1</div><div><div style="font-size:12px; font-weight:700">AI가 읽을 수 있는 상품 데이터를 만들어라</div><div style="font-size:11px; line-height:1.5" class="sub">FAQ, 비교자료, 스펙을 구조화된 형태로</div></div></div><div class="ni"><div class="nc">2</div><div><div style="font-size:12px; font-weight:700">SEO 넘어 AEO 전략을 세워라</div><div style="font-size:11px; line-height:1.5" class="sub">AI가 당신 브랜드를 추천하게 만들어야 한다</div></div></div><div class="ni"><div class="nc">3</div><div><div style="font-size:12px; font-weight:700">대화형 구매 경험을 설계하라</div><div style="font-size:11px; line-height:1.5" class="sub">질문→비교→결제가 한 번의 대화에서 끝나도록</div></div></div><div class="ni"><div class="nc">4</div><div><div style="font-size:12px; font-weight:700">고객 데이터를 뺏기지 마라</div><div style="font-size:11px; line-height:1.5" class="sub">폐쇄형 플랫폼 의존 줄이고 자사 채널 강화</div></div></div></div></div><div class="ft"><span>BDM Lab</span><span>8 / 9 →</span></div></div>
+
+<div class="s D" style="justify-content:center; align-items:center; text-align:center"><div class="fc g14 ac"><div class="badge" style="font-size:11px; padding:6px 14px">DBR 432호 기고</div><div class="cta-t">BDM</div><div style="font-size:13px; font-weight:700">빅데이터 마케팅 랩</div><div class="div" style="width:60px"></div><div class="fc g6"><div style="font-size:11px" class="sub">이 글의 전문은 <strong style="color:#F5F5F4">DBR 432호</strong>에서</div><div class="cta-l">📖 dbr.donga.com/article/view/1904/article_no/11961</div></div><div class="div" style="width:60px"></div><div class="fc g6"><div style="font-size:11px" class="sub">더 깊은 분석은 웹사이트에서</div><div class="cta-l">🔗 bigdatamarketinglab.com</div><div style="font-size:10px" class="mut">@bdm.lab</div></div></div><div class="ft"><span>BDM Lab</span><span>9 / 9</span></div></div>
+
+</body>
+</html>

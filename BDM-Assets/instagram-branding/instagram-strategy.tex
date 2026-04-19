@@ -1,0 +1,645 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── Packages ──
+\usepackage[utf8]{inputenc}
+\usepackage{kotex}                     % Korean support
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{fontspec}
+
+% ── Colors ──
+\definecolor{accent}{HTML}{059669}
+\definecolor{darkbg}{HTML}{1C1917}
+\definecolor{muted}{HTML}{A8A29E}
+\definecolor{lightgreen}{HTML}{ECFDF5}
+\definecolor{blue}{HTML}{06B6D4}
+
+% ── Hyperlinks ──
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  urlcolor=accent,
+  citecolor=accent
+}
+
+% ── Section styling ──
+\titleformat{\section}{\Large\bfseries\color{darkbg}}{}{0em}{}[\vspace{-0.5em}\textcolor{accent}{\rule{\textwidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{darkbg}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{accent}}{}{0em}{}
+
+% ── Header/Footer ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{muted}{@bdm.lab 인스타그램 운영 전략}}
+\fancyhead[R]{\small\textcolor{muted}{BDM Lab}}
+\fancyfoot[C]{\small\textcolor{muted}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── tcolorbox styles ──
+\tcbset{
+  colback=lightgreen,
+  colframe=accent,
+  fonttitle=\bfseries,
+  boxrule=0.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt
+}
+
+% ── Column type ──
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ══════════════════════════════════════════════════════════
+% TITLE PAGE
+% ══════════════════════════════════════════════════════════
+
+\begin{titlepage}
+\centering
+\vspace*{4cm}
+
+{\fontsize{14}{16}\selectfont\textcolor{accent}{\textbf{BDM Lab · 빅데이터마케팅 랩}}}
+
+\vspace{1cm}
+
+{\fontsize{28}{34}\selectfont\textbf{인스타그램 운영 전략}}
+
+\vspace{0.5cm}
+
+{\fontsize{14}{18}\selectfont\textcolor{muted}{캐러셀로 깊이, 릴스로 도달, 스토리로 관계.}}
+
+\vspace{3cm}
+
+\begin{tabular}{rl}
+\textcolor{muted}{계정} & \textbf{@bdm.lab} \\[4pt]
+\textcolor{muted}{작성일} & 2026년 3월 10일 \\[4pt]
+\textcolor{muted}{현황} & 릴스 1개 게시 (NPC 스트리머) \\
+ & 클로드 슈퍼볼 릴스 2편 제작 완료 \\
+ & 캐러셀 18개 디자인 완료 \\[4pt]
+\textcolor{muted}{웹사이트} & \href{https://bigdatamarketinglab.com}{bigdatamarketinglab.com}
+\end{tabular}
+
+\vfill
+{\small\textcolor{muted}{Confidential — Internal Use Only}}
+\end{titlepage}
+
+% ══════════════════════════════════════════════════════════
+% TABLE OF CONTENTS
+% ══════════════════════════════════════════════════════════
+
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════
+% 1. 전략 요약
+% ══════════════════════════════════════════════════════════
+
+\section{전략 요약}
+
+\subsection{핵심 목표}
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{팔로워 1,000명} — 3개월 내 달성 (인스타 인사이트 전체 기능 해금 기준)
+  \item \textbf{웹사이트 유입} — 인스타 → bigdatamarketinglab.com 트래픽 확보
+  \item \textbf{브랜드 포지셔닝} — ``마케팅을 데이터로 해석하는 교수'' 인식 구축
+  \item \textbf{비즈니스 리드} — 컨설팅/강연/교육 문의 유입
+\end{enumerate}
+
+\begin{tcolorbox}[title={한 줄 전략}]
+\centering\large\textbf{캐러셀로 깊이, 릴스로 도달, 스토리로 관계.}
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════
+% 2. 콘텐츠 믹스
+% ══════════════════════════════════════════════════════════
+
+\section{콘텐츠 믹스}
+
+\subsection{주간 게시 목표: 4\textasciitilde 5회}
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{l c Y Y}
+\toprule
+\textbf{콘텐츠 유형} & \textbf{주간 빈도} & \textbf{목적} & \textbf{알고리즘 효과} \\
+\midrule
+\textbf{캐러셀} & 3회 & 깊이 있는 인사이트 전달 & 체류시간↑ 저장↑ (가장 높은 인게이지먼트) \\
+\textbf{릴스} & 1\textasciitilde 2회 & 비팔로워 도달 확장 & 도달률 5배↑ (탐색탭 노출) \\
+\textbf{스토리} & 매일 1\textasciitilde 2회 & 팔로워 관계 유지 & 피드 상단 노출 유지 \\
+\bottomrule
+\end{tabularx}
+\caption{콘텐츠 유형별 역할}
+\end{table}
+
+\subsection{왜 이 비율인가?}
+
+\begin{itemize}[leftmargin=2em]
+  \item 2026년 인스타 알고리즘: \textbf{캐러셀이 릴스보다 인터랙션 12\% 높음}
+  \item 릴스는 비팔로워 도달이 5배 → \textbf{새 팔로워 유입}에 필수
+  \item 스토리가 없으면 기존 팔로워 피드에서 밀려남 → \textbf{매일 존재감 유지}
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════
+% 3. 게시 시간
+% ══════════════════════════════════════════════════════════
+
+\section{게시 시간 (한국 기준)}
+
+\subsection{최적 시간대}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{l c c}
+\toprule
+\textbf{요일} & \textbf{캐러셀} & \textbf{릴스} \\
+\midrule
+\textbf{화요일} & 12:00\textasciitilde 13:00 & — \\
+\textbf{수요일} & — & 19:00\textasciitilde 20:00 \\
+\textbf{목요일} & 12:00\textasciitilde 13:00 & 12:00\textasciitilde 13:00 \\
+\textbf{토요일} & 11:00\textasciitilde 12:00 & 10:00\textasciitilde 11:00 \\
+\textbf{일요일} & — & 11:00\textasciitilde 12:00 \\
+\bottomrule
+\end{tabular}
+\caption{요일별 최적 게시 시간}
+\end{table}
+
+\subsection{왜 이 시간인가?}
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{점심 (12\textasciitilde 13시)}: 직장인/마케터가 피드를 훑는 시간. 캐러셀은 ``읽을거리''이므로 여유 있는 점심에 최적
+  \item \textbf{저녁 (19\textasciitilde 20시)}: 퇴근 후 릴스 소비가 피크. 짧은 영상은 이 시간에 도달률 극대화
+  \item \textbf{주말 오전 (10\textasciitilde 12시)}: 여유롭게 스크롤하는 시간. 긴 캐러셀이나 릴스 모두 효과적
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════
+% 4. 캐러셀 게시 순서
+% ══════════════════════════════════════════════════════════
+
+\section{캐러셀 게시 순서 (전략적 배치)}
+
+\subsection{배치 원칙}
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{가장 바이럴 가능성 높은 주제 먼저} — 초기에 공유/저장 신호 축적
+  \item \textbf{알고리즘 디코드 ↔ 리서치 교차 배치} — 한 시리즈만 연속하면 지루
+  \item \textbf{가벼운 주제 → 무거운 주제 순환} — ``재밌다''로 유입, ``깊다''로 팔로우 유지
+  \item \textbf{시의성 있는 주제 우선} — AI, 알고리즘 관련은 지금 뜨거움
+\end{enumerate}
+
+\subsection{1라운드: 런칭 스프린트 (Week 1\textasciitilde 3)}
+
+\begin{tcolorbox}[colback=lightgreen, colframe=accent]
+\textbf{목표:} ``이 계정 뭔데?'' 호기심 유발 + 콘텐츠 라이브러리 구축
+\end{tcolorbox}
+
+\vspace{0.5em}
+
+\begin{longtable}{c l l l p{4.5cm} p{4cm}}
+\toprule
+\textbf{\#} & \textbf{날짜} & \textbf{요일} & \textbf{유형} & \textbf{주제} & \textbf{선정 이유} \\
+\midrule
+\endhead
+1 & 3/11 & 화 & 캐러셀 & 우는 말 인형 (Crying Horse) & 귀여운 동물 + 반전. 공유 유발 최강 \\
+2 & 3/12 & 수 & 릴스 & ``팔로워 10만인데 아무도 안 봐?'' & 인스타 알고리즘 훅 \\
+3 & 3/13 & 목 & \textcolor{blue}{\textbf{릴스}} & \textcolor{blue}{\textbf{클로드 슈퍼볼 1편}} & \textcolor{blue}{제작 완료. AI 시의성} \\
+4 & 3/15 & 토 & 캐러셀 & 인스타 알고리즘 & 릴스 훅 → 캐러셀 깊이 \\
+5 & 3/16 & 일 & \textcolor{blue}{\textbf{릴스}} & \textcolor{blue}{\textbf{클로드 슈퍼볼 2편}} & \textcolor{blue}{제작 완료. 1편 반응 이어가기} \\
+\midrule
+6 & 3/18 & 화 & 캐러셀 & 라이언에어 (Ryanair) & 재미있는 브랜드 사례 \\
+7 & 3/19 & 수 & 릴스 & ``불량 인형 2만개 팔린 이유'' & Crying Horse 숏버전 \\
+8 & 3/20 & 목 & 캐러셀 & 치킨집 349개 (리서치) & 첫 리서치. 구체적 숫자 \\
+9 & 3/22 & 토 & 캐러셀 & 스탠리 텀블러 & 누구나 아는 바이럴 사례 \\
+\midrule
+10 & 3/25 & 화 & 캐러셀 & 클로드 슈퍼볼 (캐러셀) & 릴스 2편 후속. 심층 분석 \\
+11 & 3/26 & 수 & 릴스 & ``배민에서 진짜 경쟁자'' & 반직관 연구결과 훅 \\
+12 & 3/27 & 목 & 캐러셀 & 뉴터 버터 & ``이상한'' 브랜드 전략 \\
+13 & 3/29 & 토 & 캐러셀 & 배민 자기잠식 (리서치) & 릴스 연계 풀버전 \\
+\bottomrule
+\caption{1라운드 — 런칭 스프린트 콘텐츠 캘린더}
+\end{longtable}
+
+\subsection{2라운드: 확장 (Week 4\textasciitilde 6)}
+
+\begin{tcolorbox}[colback=lightgreen, colframe=accent]
+\textbf{목표:} 시리즈 정체성 확립 + DM 공유 유도
+\end{tcolorbox}
+
+\vspace{0.5em}
+
+\begin{longtable}{c l l l p{4.5cm} p{4cm}}
+\toprule
+\textbf{\#} & \textbf{날짜} & \textbf{요일} & \textbf{유형} & \textbf{주제} & \textbf{선정 이유} \\
+\midrule
+\endhead
+14 & 4/1 & 화 & 캐러셀 & 타르트 브랜드 트립 & 드라마/논란. 감정 자극 \\
+15 & 4/2 & 수 & 릴스 & ``쿠팡플레이로 로켓와우?'' & 도발적 주장 \\
+16 & 4/3 & 목 & 캐러셀 & 쿠팡 멤버십 (리서치) & 릴스 연계 풀버전 \\
+17 & 4/5 & 토 & 캐러셀 & Demure 밈 & 밈 문화 분석 \\
+\midrule
+18 & 4/8 & 화 & 캐러셀 & TikTok 시리즈 콘텐츠 & 크리에이터 실용 \\
+19 & 4/9 & 수 & 릴스 & ``AI가 대신 쇼핑하는 시대'' & 에이전틱 훅 \\
+20 & 4/10 & 목 & 캐러셀 & 에이전틱 커머스 & 릴스 연계 풀버전 \\
+21 & 4/12 & 토 & 캐러셀 & 디스커버리 커머스 & 커머스 트렌드 \\
+\midrule
+22 & 4/15 & 화 & 캐러셀 & AEO 기업 전략 & 실무 가이드 \\
+23 & 4/16 & 수 & 릴스 & ``위치 데이터가 말해주는 것'' & 데이터 훅 \\
+24 & 4/17 & 목 & 캐러셀 & 새벽배송 (리서치) & 오프라인 연계 \\
+25 & 4/19 & 토 & 캐러셀 & 위치 데이터 (리서치) & 릴스 연계 풀버전 \\
+\bottomrule
+\caption{2라운드 — 확장기 콘텐츠 캘린더}
+\end{longtable}
+
+\subsection{3라운드: 안착 (Week 7)}
+
+\begin{longtable}{c l l l p{5cm}}
+\toprule
+\textbf{\#} & \textbf{날짜} & \textbf{요일} & \textbf{유형} & \textbf{주제} \\
+\midrule
+26 & 4/22 & 화 & 캐러셀 & NPC 스트리머 (캐러셀 버전) \\
+\bottomrule
+\caption{3라운드 — NPC 스트리머 캐러셀 (릴스는 이미 게시)}
+\end{longtable}
+
+% ══════════════════════════════════════════════════════════
+% 5. 릴스 전략
+% ══════════════════════════════════════════════════════════
+
+\section{릴스 전략}
+
+\subsection{릴스의 역할}
+
+캐러셀이 ``본편''이라면, 릴스는 \textbf{예고편}이자 \textbf{도달 엔진}. 비팔로워에게 노출되는 비율이 피드 게시물의 5배.
+
+\subsection{릴스 포맷 (30\textasciitilde 60초)}
+
+\subsubsection{포맷 A: 한 줄 훅 → 반전 → 풀버전 유도}
+
+\begin{quote}
+\texttt{[0\textasciitilde 3초]  텍스트 훅: ``치킨집 매출을 결정하는 건 리뷰가 아닙니다''} \\
+\texttt{[3\textasciitilde 20초] 핵심 데이터 1\textasciitilde 2개 시각화} \\
+\texttt{[20\textasciitilde 30초] ``전체 분석은 최신 캐러셀에서 → 프로필 링크''}
+\end{quote}
+
+\subsubsection{포맷 B: ``그거 아셨어요?'' 지식 공유형}
+
+\begin{quote}
+\texttt{[0\textasciitilde 3초]  ``팔로워 10만인데 게시물 도달이 2\%인 이유''} \\
+\texttt{[3\textasciitilde 45초] 핵심 메커니즘 설명 (자막 + 음성 or 자막 only)} \\
+\texttt{[45\textasciitilde 60초] ``더 깊은 분석 → 프로필 링크''}
+\end{quote}
+
+\subsubsection{포맷 C: ``비교'' 시리즈}
+
+\begin{quote}
+\texttt{[0\textasciitilde 3초]  Split screen 비교 이미지} \\
+\texttt{[3\textasciitilde 30초] A vs B 차이점 빠르게} \\
+\texttt{[30\textasciitilde 45초] ``왜 이런 차이가 나는지 → 캐러셀에서''}
+\end{quote}
+
+\subsection{릴스 제작 원칙}
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{처음 3초가 전부} — 3초 유지율 60\% 이상이어야 알고리즘이 밀어줌
+  \item \textbf{자막 필수} — 무음 시청 80\%+. 자막 없으면 스킵
+  \item \textbf{트렌딩 오디오 활용} — 인스타가 밀어주는 음악 사용
+  \item \textbf{오리지널 콘텐츠} — TikTok 워터마크 절대 금지 (알고리즘 페널티)
+  \item \textbf{Trial Reels 활용} — 비팔로워에게만 먼저 테스트 가능
+\end{enumerate}
+
+\subsection{릴스 아이디어 (캐러셀과 1:1 매칭)}
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{l l Y}
+\toprule
+\textbf{릴스} & \textbf{매칭 캐러셀} & \textbf{릴스 훅} \\
+\midrule
+R1 & 인스타 알고리즘 & ``팔로워 10만인데 왜 아무도 안 봐?'' \\
+R2 & 우는 말 인형 & ``공장에서 불량품이 나왔는데 2만개가 팔렸다'' \\
+R3 & 배민 자기잠식 & ``배민에서 진짜 경쟁자는 옆집 교촌이 아닙니다'' \\
+R4 & 쿠팡 멤버십 & ``쿠팡플레이 때문에 로켓와우 가입? 데이터는 아니라고 합니다'' \\
+R5 & 에이전틱 커머스 & ``2년 후, AI가 당신 대신 쇼핑합니다'' \\
+R6 & 위치 데이터 & ``위치 데이터로 알 수 있는 것, 알 수 없는 것'' \\
+R7 & 치킨집 연구 & ``치킨집 349개를 3년간 추적했습니다'' \\
+R8 & 클로드 슈퍼볼 & ``AI 회사가 슈퍼볼 광고에 70억을 쓴 진짜 이유'' (제작 완료 2편) \\
+\bottomrule
+\end{tabularx}
+\caption{릴스-캐러셀 매칭 표}
+\end{table}
+
+% ══════════════════════════════════════════════════════════
+% 6. 스토리 전략
+% ══════════════════════════════════════════════════════════
+
+\section{스토리 전략}
+
+\subsection{목적}
+
+\begin{itemize}[leftmargin=2em]
+  \item 매일 존재감 유지 (스토리 없으면 피드에서 밀림)
+  \item 팔로워와 양방향 소통
+  \item 캐러셀/릴스 게시 알림
+\end{itemize}
+
+\subsection{스토리 유형 (일주일 루틴)}
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{l l Y}
+\toprule
+\textbf{요일} & \textbf{스토리 유형} & \textbf{예시} \\
+\midrule
+\textbf{월} & 이번 주 프리뷰 & ``이번 주에 올라올 주제: \_\_\_'' (기대감) \\
+\textbf{화} & 캐러셀 알림 + 투표 & ``이 중에 뭐가 더 놀라웠어요?'' 투표 \\
+\textbf{수} & 릴스 공유 + 질문 & ``비슷한 경험 있나요?'' 질문 스티커 \\
+\textbf{목} & 캐러셀 알림 + 퀴즈 & ``매출을 가장 크게 좌우하는 건?'' 퀴즈 \\
+\textbf{금} & 비하인드/랩 일상 & 연구실, 논문, 데이터 분석 화면 \\
+\textbf{토} & 주말 콘텐츠 알림 & ``이번 주 가장 많이 저장된 게시물'' 공유 \\
+\textbf{일} & 가벼운 질문/여담 & ``가장 인상 깊었던 마케팅 뉴스는?'' \\
+\bottomrule
+\end{tabularx}
+\caption{요일별 스토리 루틴}
+\end{table}
+
+\begin{tcolorbox}
+\textbf{필수 요소:} 매 스토리에 인터랙션 스티커 1개 이상 (투표, 퀴즈, 질문, 슬라이더). \\
+인터랙션 = 알고리즘 신호. ``반응할 거리''를 줘야 다음 스토리도 상단에 노출된다.
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════
+% 7. 캡션 전략
+% ══════════════════════════════════════════════════════════
+
+\section{캡션 전략}
+
+\subsection{캡션 구조}
+
+\begin{tcolorbox}[colback=white, colframe=darkbg]
+\texttt{[훅 — 첫 문장. 피드에서 ``...더 보기'' 전에 보이는 부분]} \\[4pt]
+\texttt{[본문 — 3\textasciitilde 5문장. 핵심 인사이트 요약]} \\[4pt]
+\texttt{[CTA — 저장/공유/댓글 유도]} \\[4pt]
+\texttt{[해시태그 — 3\textasciitilde 5개]}
+\end{tcolorbox}
+
+\subsection{캡션 예시 (우는 말 인형)}
+
+\begin{quote}
+\textit{공장에서 입이 거꾸로 붙은 인형이 나왔다. 보통은 폐기한다. 이 회사는 그냥 팔았다.}
+
+\textit{하루 400개씩 나온 불량품이 20,000개 팔렸다. 정가보다 비싸게.}
+
+\textit{왜? 사람들이 이 인형을 ``발견''했기 때문이다. 알고리즘이 완벽한 제품보다 결함 있는 제품을 더 많이 보여준 구조를 분석했다.}
+
+💾 나중에 다시 볼 사람은 저장 \quad 📩 마케터 친구에게 공유
+
+\texttt{\#마케팅 \#알고리즘 \#바이럴마케팅 \#BDMLab \#빅데이터마케팅}
+\end{quote}
+
+\subsection{CTA 패턴 (돌려가며 사용)}
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{저장 유도}: ``💾 나중에 다시 보려면 저장'' / ``이 데이터 기억하고 싶으면 저장해두세요''
+  \item \textbf{공유 유도}: ``📩 마케터 친구한테 보내주세요'' / ``이 분석이 필요한 사람 태그''
+  \item \textbf{댓글 유도}: ``가장 놀라운 숫자는 몇 번? 댓글로'' / ``여러분의 경험은 어떤가요?''
+  \item \textbf{웹 유도}: ``전체 분석 + 출처 → 프로필 링크''
+\end{enumerate}
+
+\subsection{해시태그 전략 (3\textasciitilde 5개만)}
+
+2026년 인스타 알고리즘에서 해시태그는 ``분류 라벨'' 역할. 많이 쓰면 오히려 도달 감소.
+
+\vspace{0.5em}
+
+\textbf{고정 태그 (매번):}
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{\#BDMLab} (브랜드)
+  \item \texttt{\#빅데이터마케팅} (니치)
+\end{itemize}
+
+\textbf{회전 태그 (주제별 1\textasciitilde 3개):}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{l l}
+\toprule
+\textbf{계열} & \textbf{태그} \\
+\midrule
+알고리즘 & \texttt{\#알고리즘} \texttt{\#마케팅전략} \texttt{\#소셜미디어마케팅} \\
+리서치 & \texttt{\#데이터분석} \texttt{\#마케팅리서치} \texttt{\#소비자행동} \\
+AI & \texttt{\#AI마케팅} \texttt{\#AEO} \texttt{\#에이전틱커머스} \\
+브랜드 & \texttt{\#바이럴마케팅} \texttt{\#브랜드전략} \texttt{\#디지털마케팅} \\
+\bottomrule
+\end{tabular}
+\caption{주제별 회전 해시태그}
+\end{table}
+
+% ══════════════════════════════════════════════════════════
+% 8. 프로필 최적화
+% ══════════════════════════════════════════════════════════
+
+\section{프로필 최적화}
+
+\subsection{프로필 설정}
+
+\begin{tcolorbox}[colback=white, colframe=accent]
+\textbf{이름:} BDM Lab · 빅데이터마케팅 랩 \\
+\textbf{사용자명:} @bdm.lab \\
+\textbf{카테고리:} 교육 (Education) \\[8pt]
+\textbf{바이오:} \\
+감 대신 근거. 데이터로 읽는 마케팅. \\
+📊 한양대 빅데이터마케팅 랩 \\
+🔬 알고리즘 해독 · 소비자 행동 연구 \\
+👇 최신 분석 읽기 \\[4pt]
+\textbf{링크:} bigdatamarketinglab.com
+\end{tcolorbox}
+
+\subsection{하이라이트 구성}
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{l Y}
+\toprule
+\textbf{하이라이트} & \textbf{내용} \\
+\midrule
+📊 알고리즘 & 알고리즘 디코드 시리즈 주요 인사이트 스토리 \\
+🔬 리서치 & 랩 리서치 시리즈 주요 발견 스토리 \\
+🧑‍🏫 About & 교수 소개, 랩 소개, 연구 철학 \\
+💬 Q\&A & 팔로워 질문 + 답변 모음 \\
+📰 Media & 외부 출연/기고/인터뷰 \\
+\bottomrule
+\end{tabularx}
+\caption{스토리 하이라이트 구성}
+\end{table}
+
+% ══════════════════════════════════════════════════════════
+% 9. 인게이지먼트 활동
+% ══════════════════════════════════════════════════════════
+
+\section{인게이지먼트 활동 (콘텐츠 외)}
+
+\subsection{매일 15분 루틴}
+
+\subsubsection{게시 당일 (게시 후 1시간)}
+\begin{itemize}[leftmargin=2em]
+  \item 댓글에 전부 답글 달기 (첫 1시간 인게이지먼트가 도달을 결정)
+  \item 관련 계정 스토리 반응하기 3\textasciitilde 5개
+\end{itemize}
+
+\subsubsection{비게시일}
+\begin{itemize}[leftmargin=2em]
+  \item 타겟 팔로워가 모인 계정에서 의미 있는 댓글 5\textasciitilde 10개
+  \item 관련 해시태그 탐색 → 좋은 콘텐츠에 공감 댓글
+\end{itemize}
+
+\subsection{타겟 인게이지먼트 계정}
+\begin{itemize}[leftmargin=2em]
+  \item 마케팅 관련 인스타 계정
+  \item 비즈니스/스타트업 커뮤니티 계정
+  \item 대학원/연구 관련 계정
+  \item 데이터/AI 관련 교육 계정
+\end{itemize}
+
+\subsection{핵심 원칙}
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{의미 있는 댓글만}: ``좋아요!'' 한 줄 X → 구체적 의견 2\textasciitilde 3문장
+  \item ``이 데이터 흥미롭네요. 저희 랩에서도 비슷한 결과를...'' 식 전문성 어필
+  \item \textbf{팔로우 구걸 금지}: ``맞팔해요'' 절대 안 함. 콘텐츠로만 유입
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════
+% 10. KPI
+% ══════════════════════════════════════════════════════════
+
+\section{성과 추적 (KPI)}
+
+\subsection{주간 체크 지표}
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{l l Y}
+\toprule
+\textbf{지표} & \textbf{목표 (초기 3개월)} & \textbf{확인 방법} \\
+\midrule
+팔로워 수 & +50\textasciitilde 100/주 & 프로필 \\
+캐러셀 저장 수 & 게시물당 20+ & 인사이트 \\
+릴스 도달 & 게시물당 1,000+ & 인사이트 \\
+DM 공유 수 & 게시물당 10+ & 인사이트 \\
+프로필 방문 & 주 200+ & 인사이트 \\
+웹사이트 클릭 & 주 30+ & 인사이트 + Vercel Analytics \\
+스토리 인터랙션 & 스토리당 5\%+ & 인사이트 \\
+\bottomrule
+\end{tabularx}
+\caption{주간 KPI 대시보드}
+\end{table}
+
+\subsection{월간 리뷰}
+\begin{itemize}[leftmargin=2em]
+  \item 가장 저장 많은 게시물 TOP 3 → 비슷한 주제/포맷 확대
+  \item 가장 도달 높은 릴스 → 포맷 반복
+  \item 팔로워 유입 경로 분석
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════
+% 11. 워크플로우
+% ══════════════════════════════════════════════════════════
+
+\section{콘텐츠 제작 워크플로우}
+
+\subsection{캐러셀 (18개 디자인 완료)}
+\begin{enumerate}[leftmargin=2em]
+  \item HTML 파일에서 Light/Dark 중 선택
+  \item 각 슬라이드를 1080×1350px로 캡처
+  \item 캡션 작성 (Section 7 템플릿 참고)
+  \item 게시 (예약 가능: Meta Business Suite)
+\end{enumerate}
+
+\subsection{릴스}
+\begin{enumerate}[leftmargin=2em]
+  \item 캐러셀 핵심 인사이트에서 30초 스크립트 작성
+  \item 촬영: 교수 직접 출연 (신뢰도↑) or 텍스트+시각화 (제작 속도↑)
+  \item 편집: 자막 필수, 트렌딩 오디오 추가
+  \item Trial Reel로 먼저 테스트 → 반응 좋으면 전체 공개
+\end{enumerate}
+
+\subsection{스토리}
+\begin{itemize}[leftmargin=2em]
+  \item 즉흥 OK. 완벽할 필요 없음
+  \item 게시물 공유 + 한 줄 코멘트
+  \item 투표/퀴즈는 캐러셀 내용에서 추출
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════
+% 12. Phase 2
+% ══════════════════════════════════════════════════════════
+
+\section{Phase 2 이후 (기존 캐러셀 소진 후)}
+
+\subsection{콘텐츠 파이프라인}
+
+\begin{center}
+새 웹 아티클 발행 (주 1\textasciitilde 2회) \\
+$\downarrow$ \\
+캐러셀 제작 (아티클 핵심 요약) \\
+$\downarrow$ \\
+릴스 제작 (30초 훅 버전) \\
+$\downarrow$ \\
+인스타 게시 (화·목 캐러셀 / 수 릴스) \\
+$\downarrow$ \\
+스토리로 알림 + 인터랙션
+\end{center}
+
+\subsection{추가 콘텐츠 아이디어}
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{``1분 데이터''} 릴스 시리즈 — 매주 하나의 데이터 포인트를 60초로
+  \item \textbf{팔로워 Q\&A} — 질문 모아서 스토리 or 캐러셀로 답변
+  \item \textbf{``이번 주의 숫자''} — 매주 월요일 인상적인 마케팅 데이터 1개
+  \item \textbf{콜라보} — 마케팅 실무자/다른 교수 계정과 공동 라이브 or 캐러셀
+  \item \textbf{리서치 티저} — 진행 중인 연구의 중간 발견 공유
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════
+% 13. 첫 주 액션 리스트
+% ══════════════════════════════════════════════════════════
+
+\section{첫 주 액션 리스트}
+
+\begin{tcolorbox}[title={Week 1 (3/10\textasciitilde 3/16) 체크리스트}]
+\begin{itemize}[leftmargin=1.5em, label=$\square$]
+  \item 프로필 바이오 업데이트 (Section 8 참고)
+  \item 프로필 링크 → bigdatamarketinglab.com
+  \item 하이라이트 커버 이미지 준비
+  \item 3/11 (화) 우는 말 인형 캐러셀 게시 — 12\textasciitilde 13시
+  \item 3/12 (수) 인스타 알고리즘 릴스 게시 — 19\textasciitilde 20시
+  \item \textcolor{blue}{3/13 (목) 클로드 슈퍼볼 릴스 1편 게시 — 12\textasciitilde 13시}
+  \item 3/15 (토) 인스타 알고리즘 캐러셀 게시 — 11\textasciitilde 12시
+  \item \textcolor{blue}{3/16 (일) 클로드 슈퍼볼 릴스 2편 게시 — 11\textasciitilde 12시}
+  \item 매일 스토리 1개 이상 (투표/퀴즈 포함)
+  \item 매일 타겟 계정에 의미 있는 댓글 5개+
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{2em}
+
+\begin{center}
+\textcolor{muted}{\rule{0.5\textwidth}{0.4pt}}
+
+\vspace{1em}
+
+\textit{\textcolor{muted}{전략은 초기 2\textasciitilde 3주 데이터를 보고 조정합니다.}} \\
+\textit{\textcolor{muted}{인사이트에서 저장·공유 수가 높은 유형을 파악한 후 해당 포맷에 집중.}}
+\end{center}
+
+\end{document}

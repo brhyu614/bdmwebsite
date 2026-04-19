@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carousel – AI 비서의 쇼핑 전쟁</title>
+<style>
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-Regular.ttf'); font-weight: 400; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-Medium.ttf'); font-weight: 500; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-SemiBold.ttf'); font-weight: 600; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-Bold.ttf'); font-weight: 700; }
+  @font-face { font-family: 'Pretendard'; src: url('/Users/jeongseongyeong/Library/Fonts/Pretendard-ExtraBold.ttf'); font-weight: 800; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: #000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 32px;
+    justify-content: center;
+  }
+
+  /* ── Base slide (4:5) ── */
+  .slide {
+    width: 1080px;
+    height: 1350px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #141414;
+  }
+  .slide .bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+  .slide .bg.dark { filter: brightness(0.3) saturate(0.5); }
+  .slide .bg.bright { filter: brightness(1.05) saturate(0.85); }
+
+  .slide .overlay { position: absolute; inset: 0; }
+
+  /* ── Accent: Lemon-Ivory Gold ── */
+  .accent { color: #00D4A0; }
+  .orange { color: #FF9500; }
+
+  /* ── Category tag ── */
+  .cat-tag {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .cat-tag .bar {
+    width: 4px;
+    height: 28px;
+    border-radius: 2px;
+    background: #00D4A0;
+  }
+  .cat-tag .bar.orange { background: #FF9500; }
+  /* Dark slide: white label */
+  .cat-tag span {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+  }
+  /* Light slide variant */
+  .light .cat-tag span { color: rgba(30,30,30,0.7); }
+  .light .cat-tag .bar { background: #2A9DA8; }
+
+  /* ── Footer ── */
+  .footer {
+    position: absolute;
+    bottom: 44px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1.5px;
+    z-index: 3;
+  }
+  .light .footer { color: rgba(30,30,30,0.2); }
+
+  /* ── HR ── */
+  .hr {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+    margin: 36px 0;
+  }
+  .light .hr { background: rgba(30,30,30,0.1); }
+
+  /* ── Text – Dark slides ── */
+  h2 {
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1.4;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  .body {
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.55);
+  }
+  .body strong { color: #fff; font-weight: 700; }
+  .body .hl { color: #00D4A0; font-weight: 700; }
+
+  /* ── Text – Light slides ── */
+  .light h2 { color: #1A1A1A; }
+  .light .body { color: rgba(30,30,30,0.55); }
+  .light .body strong { color: #1A1A1A; font-weight: 700; }
+  .light .body .hl { color: #2A9DA8; font-weight: 700; }
+
+  /* ── Quote block ── */
+  .quote-block {
+    border-left: 4px solid #00D4A0;
+    padding-left: 28px;
+    margin: 28px 0;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+  }
+  .light .quote-block {
+    border-color: #2A9DA8;
+    color: rgba(30,30,30,0.7);
+  }
+
+  /* ── Key message box ── */
+  .key-msg {
+    padding: 28px 32px;
+    border-left: 4px solid;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.6;
+    border-radius: 0 12px 12px 0;
+  }
+  .key-msg.amazon {
+    border-color: #FF9500;
+    color: #FF9500;
+    background: rgba(255,149,0,0.06);
+  }
+  .key-msg.chatgpt {
+    border-color: #00D4A0;
+    color: #00D4A0;
+    background: rgba(212,185,106,0.06);
+  }
+  .light .key-msg.chatgpt {
+    border-color: #2A9DA8;
+    color: #2A9DA8;
+    background: rgba(154,125,46,0.08);
+  }
+  .key-msg .label {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 6px;
+  }
+
+  /* ── VS badge ── */
+  .vs-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.15);
+    font-size: 26px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.4);
+    margin: 12px 0;
+  }
+
+  /* ========== SLIDE 1 – TITLE COVER (dark) ========== */
+  .slide-1 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 72px 320px;
+    color: #fff;
+  }
+  .slide-1 h1 {
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -2px;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+
+  /* ========== SLIDE 2 – HOOK (LIGHT) ========== */
+  .slide-2 {
+    background: #F5F1EA;
+  }
+  .slide-2 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 100px 72px 0;
+  }
+
+  /* ========== SLIDE 3 – CONTEXT (dark) ========== */
+  .slide-3 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 72px 160px;
+    color: #fff;
+  }
+
+  /* ========== SLIDE 4 – AMAZON RUFUS (dark) ========== */
+  .slide-4 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 100px 72px 0;
+    color: #fff;
+  }
+  .rufus-section {
+    position: absolute;
+    bottom: 60px;
+    left: 72px;
+    right: 72px;
+    z-index: 5;
+  }
+  .rufus-section img {
+    width: 100%;
+    max-width: 936px;
+    border-radius: 16px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .rufus-caption {
+    font-size: 22px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  /* ========== SLIDE 5 – ChatGPT + Stripe (LIGHT) ========== */
+  .slide-5 {
+    background: #F5F1EA;
+  }
+  .slide-5 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 100px 72px 0;
+  }
+
+  /* ========== SLIDE 6 – INSIGHT (dark, chess bg) ========== */
+  .slide-6 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 72px 160px;
+    color: #fff;
+  }
+
+  /* ========== SLIDE 7 – ACTION (LIGHT) ========== */
+  .slide-7 {
+    background: #F5F1EA;
+  }
+  .slide-7 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 100px 72px 0;
+  }
+
+  /* ========== SLIDE 8 – OUTRO (dark) ========== */
+  .slide-8 .content {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 72px;
+    color: #fff;
+  }
+  .slide-8 .brand-name {
+    font-size: 88px;
+    font-weight: 800;
+    color: #00D4A0;
+    letter-spacing: 4px;
+    margin-bottom: 4px;
+  }
+  .slide-8 .brand-sub {
+    font-size: 30px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 48px;
+  }
+  .divider-line {
+    width: 60px;
+    height: 2px;
+    background: rgba(255,255,255,0.12);
+    margin: 0 auto 40px;
+  }
+  .slide-8 .closing {
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 40px;
+  }
+  .slide-8 .cta {
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.6;
+    color: #fff;
+  }
+  .slide-8 .cta .hl { color: #00D4A0; }
+  .slide-8 .links {
+    margin-top: 48px;
+    font-size: 25px;
+    color: #00D4A0;
+    font-weight: 500;
+    line-height: 2;
+  }
+  .slide-8 .handle {
+    font-size: 23px;
+    color: rgba(255,255,255,0.25);
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== SLIDE 1 – TITLE COVER (dark) ====== -->
+<div class="slide slide-1" id="slide-1">
+  <div class="bg dark" style="background-image: url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80')"></div>
+  <div class="overlay" style="background: linear-gradient(180deg, rgba(20,20,20,0.4) 0%, rgba(20,20,20,0.15) 30%, rgba(20,20,20,0.85) 60%, rgba(20,20,20,0.97) 100%);"></div>
+  <!-- Top badge -->
+  <div style="position:absolute;top:60px;left:72px;z-index:3;">
+    <div style="font-size:26px;font-weight:600;color:#00D4A0;letter-spacing:1px;margin-bottom:8px;">DBR 432호 기고</div>
+    <div style="width:48px;height:4px;background:#00D4A0;border-radius:2px;"></div>
+  </div>
+  <div class="content">
+    <div class="cat-tag">
+      <div class="bar"></div>
+      <span>AI TREND</span>
+    </div>
+    <h1 style="font-size:72px;font-weight:800;line-height:1.25;letter-spacing:-2px;color:#fff;margin-bottom:28px;">
+      쇼핑도 <span style="color:#00D4A0;">AI</span>가 대신해준다고?
+    </h1>
+    <div style="font-size:36px;font-weight:500;color:rgba(255,255,255,0.5);line-height:1.6;">
+      AI 비서의 쇼핑 전쟁, 아마존 vs ChatGPT
+    </div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+<!-- ====== SLIDE 2 – HOOK (LIGHT) ====== -->
+<div class="slide slide-2 light" id="slide-2">
+  <div class="bg bright" style="background-image: url('https://images.unsplash.com/photo-1557821552-17105176677c?w=1200&q=80')"></div>
+  <div class="overlay" style="background: linear-gradient(180deg, rgba(245,241,234,0.92) 0%, rgba(245,241,234,0.75) 40%, rgba(245,241,234,0.88) 100%);"></div>
+  <div class="content">
+    <div class="cat-tag">
+      <div class="bar" style="background:#00D4A0;"></div>
+      <span>HOOK</span>
+    </div>
+    <div class="quote-block" style="border-color:#00D4A0;">
+      "주말 강원도 캠핑용 2인용 방한 텐트,<br>
+      20만 원 이하로 찾아서<br>
+      목요일까지 오게 결제해 줘."
+    </div>
+    <div style="height: 32px;"></div>
+    <div class="body">
+      내 상황에 맞는 <strong>최적의 상품</strong>을 찾아<br>
+      <strong>결제까지</strong> 한 번에 완료하는 시대.
+    </div>
+    <div style="height: 28px;"></div>
+    <div class="body" style="font-size:36px;font-weight:600;color:rgba(30,30,30,0.8);white-space:nowrap;">
+      이것이 <span style="color:#00D4A0;font-weight:700;">'에이전틱 커머스(Agentic Commerce)'</span>입니다.
+    </div>
+
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+<!-- ====== SLIDE 3 – CONTEXT (dark) ====== -->
+<div class="slide slide-3" id="slide-3">
+  <div class="bg dark" style="background-image: url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&q=80')"></div>
+  <div class="overlay" style="background: linear-gradient(180deg, rgba(20,20,20,0.3) 0%, rgba(20,20,20,0.15) 30%, rgba(20,20,20,0.85) 60%, rgba(20,20,20,0.96) 100%);"></div>
+  <div class="content">
+    <div class="cat-tag">
+      <div class="bar"></div>
+      <span>CONTEXT</span>
+    </div>
+    <h2>
+      과거: <span style="color:rgba(255,255,255,0.35);">'비교와 선택'</span><br>
+      미래: 완벽한 <span class="accent">'위임'</span>
+    </h2>
+    <div class="hr"></div>
+    <div class="body">
+      소비자는 더 이상 상세페이지 10개를<br>
+      띄워놓고 스펙을 일일이 비교하지 않습니다.
+    </div>
+    <div style="height: 24px;"></div>
+    <div class="body">
+      의사결정의 주도권이 <strong>기계로 넘어간 지금,</strong><br>
+      이 판을 지배하기 위한<br>
+      <strong>거대한 전쟁이 시작되었습니다.</strong>
+    </div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+<!-- ====== SLIDE 4 – AMAZON RUFUS (dark, orange accent) ====== -->
+<div class="slide slide-4" id="slide-4">
+  <div style="position:absolute;inset:0;background:#141414;"></div>
+  <div class="content">
+    <div class="cat-tag">
+      <div class="bar orange"></div>
+      <span>AMAZON RUFUS</span>
+    </div>
+    <h2>
+      아마존의 AI 비서<br>
+      <span class="orange">'루퍼스(Rufus)'</span>
+    </h2>
+    <div style="height: 24px;"></div>
+    <div class="body">
+      방대한 리뷰와 구매 데이터를 바탕으로<br>
+      최적의 상품을 제안합니다.
+    </div>
+    <div style="height: 12px;"></div>
+    <div class="body">
+      단, 모든 탐색과 결제 과정은<br>
+      철저히 <strong>아마존 앱 내부에서만</strong> 끝납니다.
+    </div>
+    <div class="key-msg amazon" style="margin-top: 32px;">
+      <div class="label">목적</div>
+      유저를 생태계 안에 가두는 '락인(Lock-in)'
+    </div>
+  </div>
+  <div class="rufus-section">
+    <img src="carousel-images/c4/rufus-screenshot.jpg" alt="Amazon Rufus AI 쇼핑 비서">
+    <div class="rufus-caption">
+      아마존 앱 내 Rufus AI 채팅 화면 — 자연어로 상품을 탐색하고 추천받는다.
+    </div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+<!-- ====== SLIDE 5 – ChatGPT + Stripe (LIGHT) ====== -->
+<div class="slide slide-5 light" id="slide-5">
+  <div class="bg bright" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80')"></div>
+  <div class="overlay" style="background: linear-gradient(180deg, rgba(245,241,234,0.97) 0%, rgba(245,241,234,0.92) 40%, rgba(245,241,234,0.95) 100%);"></div>
+  <div class="content">
+    <div class="cat-tag">
+      <div class="bar"></div>
+      <span>CHATGPT + STRIPE</span>
+    </div>
+    <h2>
+      ChatGPT는<br>
+      글로벌 결제망과 손잡고<br>
+      전 세계 웹을<br>
+      <span style="color:#2A9DA8;">무대로 삼는다.</span>
+    </h2>
+    <div style="height: 24px;"></div>
+    <div class="body">
+      대화창을 벗어나지 않고도<br>
+      외부 자사몰(D2C) 제품을<br>
+      <strong>즉시 결제</strong>하게 만듭니다.
+    </div>
+    <div class="key-msg chatgpt" style="margin-top: 36px;">
+      <div class="label">목적</div>
+      플랫폼의 벽을 허물고<br><span style="font-size:32px;">세상의 모든 유통망을 연결하는 '절대 관문'</span>
+    </div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+<!-- ====== SLIDE 6 – INSIGHT (dark, chess bg) ====== -->
+<div class="slide slide-6" id="slide-6">
+  <div class="bg dark" style="background-image: url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=1200&q=80')"></div>
+  <div class="overlay" style="background: linear-gradient(180deg, rgba(20,20,20,0.25) 0%, rgba(20,20,20,0.1) 30%, rgba(20,20,20,0.8) 58%, rgba(20,20,20,0.96) 100%);"></div>
+  <div class="content">
+    <div class="cat-tag">
+      <div class="bar"></div>
+      <span>INSIGHT</span>
+    </div>
+    <h2>
+      생태계에 <span class="orange">가두려는 자</span><br>
+      <div class="vs-badge">vs</div>
+      모든 웹을 <span style="color:#2A9DA8;">연결하려는 자</span>
+    </h2>
+    <div class="hr"></div>
+    <div class="body">
+      이 전쟁의 본질은 글로벌 커머스 시장에서<br>
+      <span class="hl">'결제로 가는 마지막 길목'</span>을<br>
+      누가 통제하느냐입니다.
+    </div>
+    <div style="height: 24px;"></div>
+    <div class="body">
+      <span style="font-size:36px;">어느 쪽이 이기든, 직접 물건을 골라야 했던</span><br>
+      <strong>'검색 포털'은 직격탄을 맞습니다.</strong>
+    </div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+<!-- ====== SLIDE 7 – ACTION (LIGHT, data bg) ====== -->
+<div class="slide slide-7 light" id="slide-7">
+  <div class="bg bright" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80')"></div>
+  <div class="overlay" style="background: linear-gradient(180deg, rgba(245,241,234,0.97) 0%, rgba(245,241,234,0.92) 40%, rgba(245,241,234,0.95) 100%);"></div>
+  <div class="content">
+    <div class="cat-tag">
+      <div class="bar" style="background:#00D4A0;"></div>
+      <span>SO WHAT</span>
+    </div>
+    <h2>
+      그렇다면 브랜드는<br>
+      무엇을 준비해야 할까요?
+    </h2>
+    <div class="hr"></div>
+    <div class="body">
+      AI 에이전트는<br>
+      화려한 감성 배너에 혹하지 않습니다.
+    </div>
+    <div style="height: 20px;"></div>
+    <div class="body">
+      오직 기계가 읽어낼 수 있는<br>
+      <span style="color:#00D4A0;font-weight:700;">'팩트와 데이터'</span>만 긁어갑니다.
+    </div>
+    <div style="height: 28px;"></div>
+    <div class="body">
+      광고비로 만든 가짜 트래픽 대신,<br>
+      <span style="font-size:36px;">AI의 검증을 통과할 <span style="color:#00D4A0;font-weight:700;">'진짜 리뷰'</span>와 <span style="color:#00D4A0;font-weight:700;">'데이터 라이팅'</span>이</span><br>
+      당신의 생존을 결정합니다.
+    </div>
+    <div style="height: 36px;"></div>
+    <div class="body" style="font-size:32px;font-weight:500;color:rgba(30,30,30,0.4);">
+      구체적인 전략이 궁금하시다면 다음 편을 기다려주세요.
+    </div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+<!-- ====== SLIDE 8 – OUTRO (dark) ====== -->
+<div class="slide slide-8" id="slide-8">
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg, #141414 0%, #0F0F0F 100%);"></div>
+  <div class="content">
+    <div style="font-size:26px;font-weight:600;color:#00D4A0;letter-spacing:1px;margin-bottom:12px;">DBR 432호 기고</div>
+    <div style="width:48px;height:4px;background:#00D4A0;border-radius:2px;margin:0 auto 48px;"></div>
+    <div class="brand-name">BDM</div>
+    <div class="brand-sub">빅데이터 마케팅 랩</div>
+    <div class="divider-line"></div>
+    <div class="closing">
+      트래픽의 시대가 가고,<br>
+      AI 대리인의 시대가 옵니다.
+    </div>
+    <div class="cta">
+      당신의 브랜드는<br>
+      <span class="hl">기계를 설득할 준비</span>가<br>
+      되셨습니까?
+    </div>
+    <div style="width:60px;height:2px;background:rgba(255,255,255,0.1);margin:40px auto 0;"></div>
+    <div class="links">
+      dbr.donga.com<br>
+      bigdatamarketinglab.com
+    </div>
+    <div class="handle">@bdm.lab</div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+
+</body>
+</html>

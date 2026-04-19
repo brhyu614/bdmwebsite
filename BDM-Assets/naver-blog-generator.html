@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Naver Blog Generator</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  :root { --accent: #00FF88; --danger: #ff4466; --warn: #ffaa00; --info: #4488ff; --bg: #0a0a0a; --sidebar-bg: #111; --card: #161616; --border: #222; --border-hover: #333; --text: #e0e0e0; --text-dim: #777; --text-muted: #555; --text-faint: #333; --naver: #03C75A; }
+  * { margin:0; padding:0; box-sizing:border-box; word-break:keep-all; }
+  body { font-family:'Pretendard','Noto Sans KR',-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .app { display:grid; grid-template-columns:440px 1fr; min-height:100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar { background:var(--sidebar-bg); border-right:1px solid #1e1e1e; padding:20px; overflow-y:auto; max-height:100vh; }
+  .sidebar-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .sidebar-header .logo { color:var(--accent); font-size:22px; font-weight:800; letter-spacing:2px; }
+  .sidebar-header .sub { font-size:12px; color:var(--text-muted); font-weight:500; }
+  .auto-save-status { font-size:9px; color:var(--text-faint); margin-left:auto; white-space:nowrap; }
+  .icon-btn-sm { background:none; border:1px solid var(--border); color:var(--text-muted); width:26px; height:26px; border-radius:50%; cursor:pointer; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; transition:all .15s; flex-shrink:0; }
+  .icon-btn-sm:hover { border-color:var(--accent); color:var(--accent); }
+
+  .section-title { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); margin:18px 0 8px; display:flex; align-items:center; gap:6px; cursor:default; }
+  .section-title .collapse-arrow { cursor:pointer; font-size:9px; transition:transform .2s; display:inline-block; }
+  .section-title .collapse-arrow.collapsed { transform:rotate(-90deg); }
+
+  /* Mode Tabs */
+  .mode-tabs { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+  .mode-tab { padding:10px 8px; border:2px solid var(--border); border-radius:9px; background:var(--card); color:var(--text-dim); cursor:pointer; font-size:12px; font-weight:600; text-align:center; transition:all .15s; }
+  .mode-tab:hover { border-color:var(--border-hover); }
+  .mode-tab.active { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.04); }
+  .mode-tab .mode-icon { font-size:16px; display:block; margin-bottom:3px; }
+  .mode-tab .mode-desc { font-size:9px; color:var(--text-muted); margin-top:2px; font-weight:400; }
+
+  /* API Key */
+  .api-key-bar { display:flex; gap:6px; margin-bottom:14px; }
+  .api-key-bar input { flex:1; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:7px 10px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
+  .api-key-bar input:focus { border-color:var(--accent); }
+  .status-dot { width:10px; height:10px; border-radius:50%; margin-top:8px; flex-shrink:0; }
+  .status-dot.ok { background:var(--accent); }
+  .status-dot.idle { background:var(--text-faint); }
+
+  /* Fields */
+  .field { margin-bottom:7px; }
+  .field label { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:500; color:var(--text-muted); margin-bottom:3px; }
+  .field textarea, .field input[type="text"], .field select { width:100%; background:var(--card); border:1px solid var(--border); border-radius:7px; padding:8px 10px; color:var(--text); font-size:13px; font-family:inherit; resize:vertical; outline:none; transition:border-color .2s; }
+  .field textarea:focus, .field input[type="text"]:focus { border-color:var(--accent); }
+  .field textarea { min-height:55px; }
+  .field-hint { font-size:9px; color:#3a3a3a; margin-top:2px; }
+  .field-hint.seo-tip { color:var(--naver); opacity:.6; }
+
+  /* Topic Area */
+  .input-area { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:10px; padding:12px; margin-bottom:12px; }
+  .input-area textarea { min-height:160px; background:var(--card); border:1px solid var(--border); border-radius:7px; padding:10px; color:var(--text); font-size:12px; font-family:inherit; resize:vertical; outline:none; width:100%; line-height:1.7; }
+  .input-area textarea:focus { border-color:var(--accent); }
+
+  /* Tone */
+  .tone-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+  .tone-btn { border:2px solid var(--border); border-radius:6px; padding:6px 4px; background:var(--card); color:var(--text-dim); cursor:pointer; font-size:9px; font-weight:600; text-align:center; transition:all .15s; font-family:inherit; }
+  .tone-btn:hover { border-color:var(--border-hover); }
+  .tone-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.04); }
+
+  /* Buttons */
+  .btn-primary { width:100%; padding:12px; background:var(--accent); color:#0a0a0a; border:none; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; transition:all .2s; font-family:inherit; }
+  .btn-primary:hover { filter:brightness(1.1); }
+  .btn-primary:disabled { opacity:.4; cursor:not-allowed; filter:none; }
+  .btn-primary.loading { animation:pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+  .btn-secondary { width:100%; padding:9px; background:var(--card); color:var(--text-dim); border:1px solid var(--border); border-radius:8px; font-size:11px; font-weight:500; cursor:pointer; transition:all .2s; font-family:inherit; }
+  .btn-secondary:hover { background:#1e1e1e; color:#ccc; }
+
+  .btn-accent-outline { padding:5px 10px; background:transparent; color:var(--accent); border:1px solid rgba(0,255,136,.3); border-radius:6px; font-size:10px; font-weight:600; cursor:pointer; transition:all .15s; font-family:inherit; white-space:nowrap; }
+  .btn-accent-outline:hover { background:rgba(0,255,136,.08); border-color:var(--accent); }
+  .btn-accent-outline:disabled { opacity:.3; cursor:not-allowed; }
+
+  .btn-warn-outline { padding:5px 10px; background:transparent; color:var(--warn); border:1px solid rgba(255,170,0,.3); border-radius:6px; font-size:10px; font-weight:600; cursor:pointer; transition:all .15s; font-family:inherit; white-space:nowrap; }
+  .btn-warn-outline:hover { background:rgba(255,170,0,.08); border-color:var(--warn); }
+
+  /* Section List */
+  .section-list { display:flex; flex-direction:column; gap:3px; margin-bottom:6px; }
+  .section-item { display:flex; align-items:center; gap:5px; padding:8px 9px; background:var(--card); border-radius:7px; cursor:pointer; border:2px solid transparent; transition:all .12s; }
+  .section-item:hover { background:#1a1a1a; }
+  .section-item.active { border-color:var(--accent); background:rgba(0,255,136,.03); }
+  .section-item .num { font-size:10px; font-weight:700; color:var(--accent); min-width:14px; opacity:.5; }
+  .section-item .label { flex:1; font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#999; }
+  .section-item .sec-badge { font-size:7px; font-weight:600; padding:2px 4px; border-radius:3px; text-transform:uppercase; }
+  .section-item .sec-badge.has-media { color:var(--accent); background:rgba(0,255,136,.1); }
+  .section-item .delete-btn { background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:14px; padding:0 2px; }
+  .section-item .delete-btn:hover { color:var(--danger); }
+  .section-item .move-btn { background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:10px; padding:0 1px; }
+  .section-item .move-btn:hover { color:var(--text-dim); }
+
+  .add-section-btn { width:100%; padding:8px; border:1px dashed #2a2a2a; border-radius:7px; background:transparent; color:var(--text-muted); cursor:pointer; font-size:11px; font-weight:500; transition:all .2s; font-family:inherit; }
+  .add-section-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* Media Upload */
+  .media-area { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:8px; padding:10px; margin-top:8px; }
+  .media-btns { display:flex; gap:5px; margin-bottom:8px; }
+  .media-btn { flex:1; position:relative; padding:8px; border:1px dashed #2a2a2a; border-radius:6px; background:transparent; color:var(--text-muted); cursor:pointer; font-size:10px; font-weight:500; text-align:center; transition:all .15s; font-family:inherit; }
+  .media-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .media-btn input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .media-preview { display:flex; gap:6px; flex-wrap:wrap; }
+  .media-thumb { position:relative; width:70px; height:70px; border-radius:6px; overflow:hidden; border:2px solid var(--border); }
+  .media-thumb img, .media-thumb video { width:100%; height:100%; object-fit:cover; }
+  .media-thumb .media-remove { position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:rgba(0,0,0,.7); color:#fff; border:none; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; }
+  .media-thumb .media-remove:hover { background:var(--danger); }
+  .media-position { display:flex; gap:4px; margin-top:6px; }
+  .media-pos-btn { flex:1; padding:4px; border:1px solid var(--border); border-radius:5px; background:var(--card); color:var(--text-muted); cursor:pointer; font-size:9px; font-weight:600; text-align:center; transition:all .12s; font-family:inherit; }
+  .media-pos-btn:hover { border-color:var(--border-hover); }
+  .media-pos-btn.active { border-color:var(--accent); color:var(--accent); }
+
+  /* Pexels Search */
+  .pexels-row { display:flex; gap:5px; margin-bottom:8px; }
+  .pexels-row input { flex:1; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:6px 8px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
+  .pexels-row input:focus { border-color:var(--accent); }
+  .pexels-results { display:flex; gap:4px; overflow-x:auto; padding-bottom:4px; }
+  .pexels-thumb { width:52px; height:52px; border-radius:5px; overflow:hidden; cursor:pointer; border:2px solid transparent; flex-shrink:0; transition:border-color .15s; }
+  .pexels-thumb:hover { border-color:var(--border-hover); }
+  .pexels-thumb img { width:100%; height:100%; object-fit:cover; }
+
+  /* SEO Score Panel */
+  .seo-panel { background:#0d1a10; border:1px solid rgba(0,255,136,.15); border-radius:10px; padding:14px 16px; margin-bottom:16px; }
+  .seo-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .seo-score-circle { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:#fff; flex-shrink:0; }
+  .seo-score-circle.good { background:linear-gradient(135deg,#00cc6a,#00ff88); color:#0a0a0a; }
+  .seo-score-circle.ok { background:linear-gradient(135deg,#cc8800,#ffaa00); color:#0a0a0a; }
+  .seo-score-circle.bad { background:linear-gradient(135deg,#cc2244,#ff4466); }
+  .seo-title { font-size:13px; font-weight:700; color:var(--text); }
+  .seo-subtitle { font-size:10px; color:var(--text-muted); margin-top:2px; }
+  .seo-checks { display:flex; flex-direction:column; gap:5px; }
+  .seo-check { display:flex; align-items:center; gap:8px; font-size:11px; }
+  .seo-check .seo-icon { width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; flex-shrink:0; font-weight:700; }
+  .seo-check .seo-icon.pass { background:rgba(0,255,136,.15); color:var(--accent); }
+  .seo-check .seo-icon.warn { background:rgba(255,170,0,.15); color:var(--warn); }
+  .seo-check .seo-icon.fail { background:rgba(255,68,102,.15); color:var(--danger); }
+  .seo-check .seo-label { color:var(--text-dim); flex:1; }
+  .seo-check .seo-value { color:var(--text-muted); font-size:10px; font-weight:600; }
+
+  /* Audit Result */
+  .audit-panel { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:10px; padding:14px; margin-top:10px; }
+  .audit-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; cursor:pointer; }
+  .audit-header .audit-title { font-size:12px; font-weight:700; color:var(--text); flex:1; }
+  .audit-header .audit-toggle { color:var(--text-muted); font-size:10px; }
+  .audit-item { padding:8px 10px; background:var(--card); border-radius:6px; margin-bottom:4px; font-size:11px; line-height:1.6; color:var(--text-dim); }
+  .audit-item .audit-label { font-weight:600; color:var(--text); margin-bottom:2px; }
+  .audit-item.good { border-left:3px solid var(--accent); }
+  .audit-item.warn { border-left:3px solid var(--warn); }
+  .audit-item.bad { border-left:3px solid var(--danger); }
+
+  /* Title Suggestions */
+  .title-suggestions { margin-top:6px; display:flex; flex-direction:column; gap:3px; }
+  .title-suggestion { padding:7px 10px; background:var(--card); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:12px; color:var(--text-dim); transition:all .12s; }
+  .title-suggestion:hover { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.03); }
+
+  /* Toggle */
+  .toggle-row { display:flex; align-items:center; gap:7px; margin-top:5px; }
+  .toggle-row input[type="checkbox"] { accent-color:var(--accent); width:14px; height:14px; }
+  .toggle-row label { font-size:11px; color:var(--text-dim); cursor:pointer; }
+
+  /* History */
+  .history-list { display:flex; flex-direction:column; gap:3px; max-height:180px; overflow-y:auto; }
+  .history-item { display:flex; align-items:center; gap:8px; padding:7px 9px; background:var(--card); border-radius:7px; cursor:pointer; border:1px solid transparent; transition:all .12s; }
+  .history-item:hover { background:#1a1a1a; border-color:var(--border-hover); }
+  .history-item.active { border-color:var(--accent); }
+  .history-item .h-title { flex:1; font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#999; }
+  .history-item .h-date { font-size:9px; color:var(--text-muted); white-space:nowrap; }
+  .history-item .h-delete { background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:13px; padding:0 2px; }
+  .history-item .h-delete:hover { color:var(--danger); }
+
+  /* ── Preview Area ── */
+  .preview-area { display:flex; flex-direction:column; padding:24px 32px; overflow-y:auto; background:var(--bg); }
+  .preview-toolbar { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .preview-toolbar .pt-label { font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+  .preview-toolbar .pt-spacer { flex:1; }
+  .copy-btn { padding:7px 14px; background:var(--card); border:1px solid var(--border); border-radius:7px; color:var(--text-dim); cursor:pointer; font-size:10px; font-weight:600; transition:all .15s; font-family:inherit; }
+  .copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .copy-btn.copied { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.08); }
+
+  /* Blog Preview */
+  .blog-preview { width:100%; max-width:720px; margin:0 auto; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+  .blog-header { background:#03C75A; padding:10px 24px; display:flex; align-items:center; gap:8px; }
+  .blog-header .naver-logo { color:#fff; font-size:15px; font-weight:800; letter-spacing:1px; }
+  .blog-header .blog-label { color:rgba(255,255,255,.7); font-size:11px; }
+  .blog-content { padding:28px 32px 36px; font-family:'Noto Sans KR','Pretendard',sans-serif; }
+  .blog-title { font-size:24px; font-weight:700; color:#222; line-height:1.5; margin-bottom:8px; }
+  .blog-subtitle { font-size:14px; color:#888; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #eee; line-height:1.6; }
+  .blog-section { margin-bottom:24px; }
+  .blog-section-heading { font-size:17px; font-weight:700; color:#333; margin-bottom:10px; padding-left:12px; border-left:3px solid #03C75A; line-height:1.5; }
+  .blog-section-body { font-size:14.5px; color:#444; line-height:2; }
+  .blog-section-body p { margin-bottom:10px; }
+  .blog-section-body strong { color:#222; }
+  .blog-section-body i { font-style:italic; color:#555; }
+  .blog-section-body u { text-decoration:underline; text-underline-offset:3px; }
+  .blog-section-body em { color:#03C75A; font-style:normal; font-weight:600; }
+  .blog-section-body del { text-decoration:line-through; color:#999; }
+  .blog-section-media { margin:12px 0; border-radius:8px; overflow:hidden; }
+  .blog-section-media img { width:100%; display:block; border-radius:8px; }
+  .blog-section-media video { width:100%; display:block; border-radius:8px; }
+  .blog-section-media .media-caption { text-align:center; font-size:12px; color:#999; margin-top:6px; }
+  .blog-separator { width:60px; height:1px; background:#ddd; margin:24px auto; }
+  .blog-hashtags { padding:16px 0 0; border-top:1px solid #eee; margin-top:16px; display:flex; flex-wrap:wrap; gap:5px; }
+  .blog-hashtag { display:inline-block; padding:4px 10px; background:#f5f5f5; border-radius:20px; font-size:11px; color:#03C75A; font-weight:500; }
+  .blog-footer { padding:14px 32px; background:#fafafa; border-top:1px solid #eee; display:flex; align-items:center; gap:8px; }
+  .blog-footer .bf-name { font-size:11px; color:#666; font-weight:600; }
+  .blog-footer .bf-date { font-size:10px; color:#999; margin-left:auto; }
+
+  /* Spinner */
+  .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(0,0,0,.2); border-top-color:#0a0a0a; border-radius:50%; animation:spin .6s linear infinite; margin-right:6px; vertical-align:middle; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* Collapsible */
+  .collapsible-content { overflow:hidden; transition:max-height .3s ease; }
+  .collapsible-content.collapsed { max-height:0 !important; }
+
+  /* Thumbnail editor */
+  .thumb-editor { background:#0e0e0e; border:1px solid #1e1e1e; border-radius:10px; padding:12px; }
+  .thumb-canvas-wrap { position:relative; border-radius:8px; overflow:hidden; background:#222; aspect-ratio:1/1; }
+
+  /* Format buttons */
+  .fmt-btn { width:28px; height:26px; border:1px solid var(--border); border-radius:5px; background:var(--card); color:var(--text-dim); cursor:pointer; font-size:12px; font-family:inherit; display:flex; align-items:center; justify-content:center; transition:all .12s; }
+  .fmt-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(0,255,136,.04); }
+
+  @media (max-width:960px) { .app { grid-template-columns:1fr; } .preview-area { padding:16px; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <!-- Header -->
+    <div class="sidebar-header">
+      <span class="logo">BDM</span>
+      <span class="sub">Blog Generator</span>
+      <span class="auto-save-status" id="autoSaveStatus"></span>
+      <button class="icon-btn-sm" onclick="newProject()" title="새 프로젝트 (Ctrl+N)">&#x21BA;</button>
+      <button class="icon-btn-sm" onclick="showHelp()" title="도움말">?</button>
+    </div>
+
+    <!-- Mode Tabs -->
+    <div class="mode-tabs">
+      <div class="mode-tab active" id="tabTopic" onclick="switchMode('topic')">
+        <span class="mode-icon">&#x1F4A1;</span>토픽 모드
+        <div class="mode-desc">주제만 입력 → 자동 생성</div>
+      </div>
+      <div class="mode-tab" id="tabScript" onclick="switchMode('script')">
+        <span class="mode-icon">&#x1F4DD;</span>스크립트 모드
+        <div class="mode-desc">원고 입력 → 변환 & 검증</div>
+      </div>
+    </div>
+
+    <!-- API Key -->
+    <div class="field" style="margin-bottom:4px">
+      <label>Gemini API Key <span style="color:var(--text-faint);font-weight:400">(선택 — 없어도 동작)</span></label>
+    </div>
+    <div class="api-key-bar">
+      <input type="password" id="apiKeyInput" placeholder="없어도 OK! 있으면 AI 품질 향상" oninput="saveApiKey(this.value)">
+      <div class="status-dot idle" id="apiDot"></div>
+    </div>
+
+    <!-- ═══ Topic Mode ═══ -->
+    <div id="topicMode">
+      <div class="input-area">
+        <div class="field">
+          <label>토픽 / 주제</label>
+          <input type="text" id="topicInput" placeholder="예: AI 마케팅 자동화 트렌드 2026" style="margin-bottom:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();generateFromTopic();}">
+        </div>
+        <div class="field">
+          <label>톤</label>
+          <div class="tone-grid" id="toneGrid">
+            <button class="tone-btn active" onclick="setTone('professional',this)">전문적</button>
+            <button class="tone-btn" onclick="setTone('casual',this)">캐주얼</button>
+            <button class="tone-btn" onclick="setTone('friendly',this)">친근한</button>
+            <button class="tone-btn" onclick="setTone('storytelling',this)">스토리텔링</button>
+          </div>
+        </div>
+        <button class="btn-primary" id="generateTopicBtn" onclick="generateFromTopic()" style="margin-top:8px">AI로 블로그 글 생성</button>
+      </div>
+    </div>
+
+    <!-- ═══ Script Mode ═══ -->
+    <div id="scriptMode" style="display:none">
+      <div class="input-area">
+        <div class="field">
+          <label>스크립트 / 원고</label>
+          <textarea id="scriptInput" placeholder="블로그로 변환할 원고를 붙여넣으세요...&#10;&#10;캐러셀용 짧은 스크립트, 영상 대본, 메모 등&#10;어떤 형태든 OK!" style="min-height:180px"></textarea>
+        </div>
+        <div class="field" style="margin-top:6px">
+          <label>변환 옵션</label>
+          <div style="display:flex;gap:4px">
+            <button class="style-btn active" id="scriptOptDirect" onclick="setScriptOption('direct')" style="flex:1;font-size:10px;padding:8px">그대로 변환<div style="font-size:8px;color:var(--text-muted);margin-top:2px">구조만 잡아줘</div></button>
+            <button class="style-btn" id="scriptOptExpand" onclick="setScriptOption('expand')" style="flex:1;font-size:10px;padding:8px">살 붙여서 변환<div style="font-size:8px;color:var(--text-muted);margin-top:2px">구어체 블로그글로</div></button>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <button class="btn-primary" id="generateScriptBtn" onclick="generateFromScript()" style="flex:1">블로그 글로 변환</button>
+          <button class="btn-warn-outline" id="auditScriptBtn" onclick="auditScript()" style="padding:10px 14px;font-size:11px">검증</button>
+        </div>
+      </div>
+      <!-- Audit Results -->
+      <div id="auditResults" style="display:none"></div>
+    </div>
+
+    <!-- ═══ Editor ═══ -->
+    <div id="editorPanel">
+      <!-- Title with AI Suggest -->
+      <div class="section-title"><span class="collapse-arrow" onclick="toggleSection('titleSec')">&#x25BC;</span> 글 정보</div>
+      <div id="titleSec">
+        <div class="field">
+          <label>제목 <button class="btn-accent-outline" id="suggestTitleBtn" onclick="suggestTitles()" title="AI가 SEO 최적화된 제목 추천">AI 추천</button></label>
+          <input type="text" id="blogTitle" placeholder="블로그 제목 (15~30자 권장)" oninput="onFieldChange()">
+          <div class="field-hint seo-tip" id="titleHint"></div>
+          <div class="title-suggestions" id="titleSuggestions" style="display:none"></div>
+        </div>
+        <div class="field">
+          <label>부제목</label>
+          <input type="text" id="blogSubtitle" placeholder="부제목 또는 한줄 요약" oninput="onFieldChange()">
+        </div>
+      </div>
+
+      <!-- Sections -->
+      <div class="section-title"><span class="collapse-arrow" onclick="toggleSection('sectionsSec')">&#x25BC;</span> 본문 섹션</div>
+      <div id="sectionsSec">
+        <div class="section-list" id="sectionList"></div>
+        <button class="add-section-btn" onclick="addSection()">+ 섹션 추가</button>
+        <div id="sectionEditArea"></div>
+      </div>
+
+      <!-- Thumbnail -->
+      <div class="section-title"><span class="collapse-arrow" onclick="toggleSection('thumbSec')">&#x25BC;</span> 썸네일</div>
+      <div id="thumbSec">
+        <div class="thumb-editor">
+          <div class="thumb-canvas-wrap">
+            <canvas id="thumbCanvas" width="1080" height="1080" style="width:100%;border-radius:8px;cursor:pointer" onclick="document.getElementById('thumbImageInput').click()"></canvas>
+          </div>
+          <div class="field" style="margin-top:8px">
+            <label>배경 이미지</label>
+            <div style="display:flex;gap:4px">
+              <div class="media-btn" style="flex:1">📷 사진 선택<input type="file" id="thumbImageInput" accept="image/*" onchange="handleThumbImage(event)"></div>
+              <div class="media-btn" style="flex:1" onclick="document.getElementById('thumbPexelsWrap').style.display=document.getElementById('thumbPexelsWrap').style.display==='none'?'':'none'">🔍 Pexels 검색</div>
+            </div>
+            <div id="thumbPexelsWrap" style="display:none;margin-top:6px">
+              <div class="pexels-row">
+                <input type="text" id="thumbPexelsQ" placeholder="이미지 검색..." onkeydown="if(event.key==='Enter'){event.preventDefault();searchThumbPexels();}">
+                <button class="btn-accent-outline" onclick="searchThumbPexels()" style="padding:6px 10px">검색</button>
+              </div>
+              <div class="pexels-results" id="thumbPexelsResults"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label>텍스트 (줄바꿈 Enter)</label>
+            <textarea id="thumbText" style="min-height:50px" oninput="renderThumb()" placeholder="블로그 썸네일 제목"></textarea>
+          </div>
+          <div style="display:flex;gap:5px">
+            <div class="field" style="flex:1">
+              <label>글자 크기</label>
+              <input type="range" id="thumbFontSize" min="36" max="120" value="64" oninput="renderThumb()" style="width:100%;accent-color:var(--accent)">
+            </div>
+            <div class="field" style="flex:1">
+              <label>오버레이 어둡기</label>
+              <input type="range" id="thumbOverlay" min="0" max="90" value="50" oninput="renderThumb()" style="width:100%;accent-color:var(--accent)">
+            </div>
+          </div>
+          <div style="display:flex;gap:4px;margin-bottom:6px">
+            <button class="style-btn active" onclick="setThumbStyle('center')" id="tsCenter" style="flex:1">가운데</button>
+            <button class="style-btn" onclick="setThumbStyle('bottom')" id="tsBottom" style="flex:1">하단</button>
+            <button class="style-btn" onclick="setThumbStyle('left')" id="tsLeft" style="flex:1">왼쪽정렬</button>
+          </div>
+          <button class="btn-primary" onclick="autoGenerateThumb()" style="margin-bottom:5px">✨ 자동 생성 (제목 + 사진 추천)</button>
+          <div id="thumbTitleSuggestions" style="display:none;margin-bottom:6px"></div>
+          <div style="display:flex;gap:4px">
+            <button class="btn-accent-outline" onclick="autoFillThumb()" style="flex:1">제목만 가져오기</button>
+            <button class="btn-primary" onclick="downloadThumb()" style="flex:1;padding:8px">썸네일 다운로드</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hashtags -->
+      <div class="section-title"><span class="collapse-arrow" onclick="toggleSection('hashSec')">&#x25BC;</span> 해시태그</div>
+      <div id="hashSec">
+        <div class="field">
+          <textarea id="blogHashtags" placeholder="#해시태그1 #해시태그2 ..." style="min-height:45px" oninput="onFieldChange()"></textarea>
+          <div class="field-hint seo-tip" id="hashHint"></div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="section-title"><span class="collapse-arrow" onclick="toggleSection('settingSec')">&#x25BC;</span> 설정</div>
+      <div id="settingSec">
+        <div class="field">
+          <label>블로거 이름</label>
+          <input type="text" id="bloggerName" value="BDM Lab" oninput="onFieldChange()">
+        </div>
+        <div class="toggle-row"><input type="checkbox" id="showNaverHeader" checked onchange="onFieldChange()"><label for="showNaverHeader">네이버 헤더</label></div>
+        <div class="toggle-row"><input type="checkbox" id="showFooter" checked onchange="onFieldChange()"><label for="showFooter">푸터</label></div>
+      </div>
+
+      <!-- Save / Export -->
+      <div class="section-title">저장 & 내보내기</div>
+      <button class="btn-primary" onclick="manualSave()" style="margin-bottom:5px">프로젝트 저장 (Ctrl+S)</button>
+      <button class="btn-secondary" onclick="exportToFile()" style="margin-bottom:5px">📁 파일로 내보내기 (Dropbox)</button>
+      <div style="display:flex;gap:5px">
+        <button class="btn-secondary" onclick="exportHTML()" style="flex:1">HTML 다운로드</button>
+        <button class="btn-secondary" onclick="copyPlainText()" style="flex:1">텍스트 복사</button>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="section-title"><span class="collapse-arrow" onclick="toggleSection('historySec')">&#x25BC;</span> 저장된 프로젝트</div>
+    <div id="historySec">
+      <div style="display:flex;gap:4px;margin-bottom:6px">
+        <button class="btn-secondary" onclick="loadProjectFile()" style="flex:1;font-size:10px;padding:7px">📂 파일에서 불러오기</button>
+      </div>
+      <input type="file" id="loadFileInput" accept=".json" style="display:none" onchange="handleLoadFile(event)">
+      <div class="history-list" id="historyList">
+        <div style="text-align:center;padding:12px;font-size:11px;color:#444;">저장된 프로젝트가 없습니다</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Preview ═══ -->
+  <div class="preview-area">
+    <!-- SEO Score -->
+    <div class="seo-panel" id="seoPanel"></div>
+
+    <div class="preview-toolbar">
+      <span class="pt-label">미리보기</span>
+      <span class="pt-spacer"></span>
+      <button class="copy-btn" onclick="copyBlogHTML()">네이버 복사</button>
+      <button class="copy-btn" onclick="copyPlainText()">텍스트 복사</button>
+    </div>
+    <div class="blog-preview" id="blogPreview"></div>
+  </div>
+</div>
+
+<!-- Help Modal -->
+<div id="helpModal" onclick="if(event.target===this)closeHelp()" style="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+  <div style="background:#141414;border:1px solid #222;border-radius:16px;width:540px;max-width:92vw;max-height:85vh;overflow-y:auto;padding:32px 28px 24px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.6);">
+    <button onclick="closeHelp()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#555;font-size:22px;cursor:pointer;">&times;</button>
+    <div style="color:var(--accent);font-size:24px;font-weight:800;letter-spacing:2px;">BDM</div>
+    <div style="font-size:18px;font-weight:700;color:#fff;margin:4px 0 6px;">Blog Generator v2</div>
+    <div style="font-size:12px;color:#777;margin-bottom:20px;line-height:1.6;">네이버 블로그 알고리즘 최적화 + AI 글쓰기 도구</div>
+    <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:20px;">
+      <div><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#0a0a0a;font-size:11px;font-weight:800;margin-right:8px;">1</span><strong style="color:#e0e0e0;font-size:13px;">토픽 모드</strong><div style="margin-left:30px;font-size:11.5px;color:#888;line-height:1.7;">주제만 입력 → AI가 제목/부제목/본문/해시태그 자동 생성</div></div>
+      <div><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#0a0a0a;font-size:11px;font-weight:800;margin-right:8px;">2</span><strong style="color:#e0e0e0;font-size:13px;">스크립트 모드</strong><div style="margin-left:30px;font-size:11.5px;color:#888;line-height:1.7;">원고 붙여넣기 → 블로그 변환 + <strong style="color:var(--warn)">검증 버튼</strong>으로 SEO 피드백</div></div>
+      <div><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#0a0a0a;font-size:11px;font-weight:800;margin-right:8px;">3</span><strong style="color:#e0e0e0;font-size:13px;">SEO 실시간 점수</strong><div style="margin-left:30px;font-size:11.5px;color:#888;line-height:1.7;">제목 길이, 본문 분량, 해시태그, 이미지 등을 실시간 체크하여 네이버 알고리즘 최적화 점수 표시</div></div>
+      <div><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#0a0a0a;font-size:11px;font-weight:800;margin-right:8px;">4</span><strong style="color:#e0e0e0;font-size:13px;">이미지/동영상</strong><div style="margin-left:30px;font-size:11.5px;color:#888;line-height:1.7;">섹션별 미디어 업로드 + Pexels 무료 이미지 검색. 미리보기에 바로 반영</div></div>
+      <div><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#0a0a0a;font-size:11px;font-weight:800;margin-right:8px;">5</span><strong style="color:#e0e0e0;font-size:13px;">AI 제목 추천</strong><div style="margin-left:30px;font-size:11.5px;color:#888;line-height:1.7;">제목 필드의 "AI 추천" 버튼으로 SEO 최적화된 제목 3개 추천</div></div>
+    </div>
+    <div style="font-size:10px;color:#555;padding:10px;background:#0e0e0e;border-radius:8px;border:1px solid #1a1a1a;margin-bottom:16px;line-height:1.6;">
+      <strong style="color:#888">단축키:</strong> Ctrl+S 저장 | Ctrl+N 새 글 | **볼드** {{강조}} 마크업 지원
+    </div>
+    <button onclick="closeHelp()" style="width:100%;padding:13px;background:var(--accent);color:#0a0a0a;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">시작하기</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// State
+// ═══════════════════════════════════════
+let apiKey = localStorage.getItem('bdm_blog_gemini_key') || '';
+let currentMode = 'topic';
+let currentTone = 'professional';
+let currentSectionIdx = 0;
+let scriptOption = 'direct'; // 'direct' = 그대로, 'expand' = 살 붙여서
+
+const DEFAULT_STATE = {
+  title: '', subtitle: '',
+  sections: [],
+  hashtags: '',
+  bloggerName: 'BDM Lab',
+  showNaverHeader: true, showFooter: true,
+};
+
+let blogState = loadAutoSave() || JSON.parse(JSON.stringify(DEFAULT_STATE));
+let saveHistory = loadHistory();
+
+// ═══════════════════════════════════════
+// Init
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  if (apiKey) {
+    document.getElementById('apiKeyInput').value = apiKey;
+    document.getElementById('apiDot').className = 'status-dot ok';
+  }
+  restoreState();
+  renderAll();
+  renderHistory();
+  updateSEO();
+  if (!localStorage.getItem('bdm_blog_v2_help')) {
+    showHelp();
+    localStorage.setItem('bdm_blog_v2_help', '1');
+  }
+});
+
+// ═══════════════════════════════════════
+// Mode / Tone
+// ═══════════════════════════════════════
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById('tabTopic').className = 'mode-tab' + (mode === 'topic' ? ' active' : '');
+  document.getElementById('tabScript').className = 'mode-tab' + (mode === 'script' ? ' active' : '');
+  document.getElementById('topicMode').style.display = mode === 'topic' ? '' : 'none';
+  document.getElementById('scriptMode').style.display = mode === 'script' ? '' : 'none';
+}
+
+function setScriptOption(opt) {
+  scriptOption = opt;
+  document.getElementById('scriptOptDirect').classList.toggle('active', opt === 'direct');
+  document.getElementById('scriptOptExpand').classList.toggle('active', opt === 'expand');
+}
+
+function setTone(tone, btn) {
+  currentTone = tone;
+  document.querySelectorAll('#toneGrid .tone-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// API (Gemini - 선택 사항)
+// ═══════════════════════════════════════
+function saveApiKey(v) {
+  apiKey = v.trim();
+  localStorage.setItem('bdm_blog_gemini_key', apiKey);
+  document.getElementById('apiDot').className = 'status-dot ' + (apiKey ? 'ok' : 'idle');
+}
+
+async function callAI(prompt) {
+  if (!apiKey) return null;
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 4096 } })
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  } catch { return null; }
+}
+
+// ═══════════════════════════════════════
+// 내장 블로그 생성 엔진 (API 없이 동작)
+// ═══════════════════════════════════════
+// 불용어 (해시태그에 절대 들어가면 안 되는 단어)
+const STOPWORDS = new Set([
+  // 동사/서술어 어미
+  '됩니다','합니다','입니다','있습니다','없습니다','됩니다','했습니다','됐습니다',
+  '하는','되는','있는','없는','하고','되고','있어','없어','해서','돼서',
+  '이다','이란','라고','라는','에서','으로','부터','까지','대한','위한',
+  '때문','통해','따라','관련','대해','위해','아닌','같은','통한','인한',
+  '하면','되면','이런','저런','그런','어떤','모든','각각','여러','다양한',
+  '수도','것이','것을','것은','것도','정도','이상','이하','미만','가량',
+  '매우','가장','정말','너무','아주','굉장히','엄청','상당히','꽤나',
+  '그리고','하지만','그래서','그러나','또한','따라서','때문에','그러므로',
+  '첫번째','두번째','세번째','네번째','다섯번째','첫째','둘째','셋째',
+  '먼저','다음','마지막','결론','결론적으로','요즘','최근','현재','앞으로',
+  '이것','저것','그것','이것은','어떻게','왜','무엇','어디','누가',
+  '주는','받는','오는','가는','나는','보는','알려','줄게','줄게요',
+  '활용','활용하면','적용','적용하면','시작','시작해','시작하면',
+  '필요','필요합니다','중요','중요합니다','가능','가능합니다',
+  '만들','만들어','만들고','만드는','바꾸','바뀌고','바뀌는',
+  '빠르게','빠른','좋은','좋습니다','나쁜','높은','낮은','많은','적은',
+  '해보세요','해보자','해봤는데','해봤더니','알아보자','알아봅시다',
+  '글','이','그','저','을','를','에','와','과','의','도','만','은','는',
+]);
+
+// 영어 전문용어/브랜드 (해시태그에 좋은 단어)
+const GOOD_ENGLISH = new Set([
+  'AI','ChatGPT','Claude','GPT','SEO','SNS','ROI','CTA','KPI','B2B','B2C',
+  'SaaS','CRM','UX','UI','MVP','API','GA4','LLM','NLP','MZ','MBTI',
+  'YouTube','Instagram','TikTok','Naver','Google','Meta','Apple',
+  'React','Python','JavaScript','Java','AWS','Azure',
+  'NFT','DeFi','Web3','IoT','VR','AR','XR',
+]);
+
+function extractKeywords(text) {
+  const clean = text
+    .replace(/\*\*|\/\/|__|~~|\{\{|\}\}/g, '')  // 마크업 제거
+    .replace(/[^가-힣a-zA-Z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+
+  const words = clean.split(' ').filter(w => w.length >= 2);
+  const freq = {};
+
+  words.forEach(w => {
+    const lower = w.toLowerCase();
+    // 불용어 필터
+    if (STOPWORDS.has(w) || STOPWORDS.has(lower)) return;
+    // 한글 1글자 제외
+    if (/^[가-힣]$/.test(w)) return;
+    // 숫자만인 것 제외
+    if (/^\d+$/.test(w)) return;
+    // 한글 단어: 조사/어미 제거 후 저장
+    let cleaned = w;
+    if (/^[가-힣]+$/.test(w) && w.length >= 3) {
+      // 끝에 붙은 조사/어미 제거
+      // 긴 조사부터 매칭 (서의→의로 잘리는 것 방지)
+      cleaned = w.replace(/(입니다|합니다|됩니다|있습니다|없습니다|였습니다|서의|에서|으로|부터|까지|에게|한테|이란|이라|처럼|만큼|해서|하는|되는|라고|라는|이고|이며|이나|이든|에는|에도|와는|과는|로는|는|은|을|를|이|가|에|도|만|의|와|과|로)$/g, '');
+      if (cleaned.length < 2) return; // 제거 후 너무 짧으면 스킵
+    }
+    // 동사/형용사/서술 어미로 끝나는 것 제외
+    if (/[다요니며면서게적인든지]$/.test(cleaned)) return;
+    // "~하게", "~되게" 등 부사형
+    if (/[하되]게$/.test(cleaned)) return;
+    // 2글자 한글인데 조사인 것 제외
+    if (cleaned.length === 2 && /[은는이가을를에서도와과의]/.test(cleaned[1])) return;
+    // 2글자인데 의미 약한 단어 제외
+    if (/^(걱정|정말|매우|아주|굉장|정도|가장|현재|최근|우리|자신|사실|경우|상황|방법|결과|이후|이전|부분|대부분|이유|덕분|물론|혹시|아직|벌써|그냥|여부|적용|부담|달라|시간당|지하|있으|없으|해야|해도)$/.test(cleaned)) return;
+
+    freq[cleaned] = (freq[cleaned] || 0) + 1;
+  });
+
+  // 영어 전문용어 우선 + 빈도순
+  return Object.entries(freq)
+    .sort((a, b) => {
+      const aGood = GOOD_ENGLISH.has(a[0]) ? 100 : 0;
+      const bGood = GOOD_ENGLISH.has(b[0]) ? 100 : 0;
+      return (bGood + b[1]) - (aGood + a[1]);
+    })
+    .map(e => e[0]);
+}
+
+function generateTitleFromTopic(topic, tone) {
+  const patterns = [
+    `${topic}, 이것만 알면 끝! 완벽 가이드`,
+    `${topic} 총정리: 초보자도 쉽게 이해하는 방법`,
+    `${topic} 꼭 알아야 할 핵심 포인트 5가지`,
+    `2026 ${topic} 트렌드 분석과 실전 활용법`,
+    `${topic} 성공하는 사람들의 비밀 전략`,
+    `${topic} A to Z: 실무자가 알려주는 핵심 노하우`,
+  ];
+  const tonePatterns = {
+    casual: [`${topic}? 생각보다 쉬운 방법 알려줄게`, `${topic} 정리해봤는데 대박이다`],
+    friendly: [`${topic} 함께 알아볼까요? 쉽게 정리했어요`, `${topic} 걱정 마세요! 차근차근 알려드릴게요`],
+    storytelling: [`${topic}을 만나고 달라진 이야기`, `처음엔 몰랐던 ${topic}의 진짜 가치`],
+  };
+  const pool = [...patterns, ...(tonePatterns[tone] || [])];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function generateSectionsFromTopic(topic, tone) {
+  const isProf = tone === 'professional' || tone === 'storytelling';
+  return [
+    { heading: `${topic}이란 무엇인가?`, body: `**${topic}**은 최근 많은 관심을 받고 있는 주제입니다. 기본 개념부터 차근차근 살펴보겠습니다.\n\n이 분야를 이해하기 위해서는 먼저 __핵심 정의와 배경__을 알아야 합니다. ${isProf ? '전문가들은 이를 체계적으로 분석하여 //실무에 적용//하고 있습니다.' : '쉽게 말하면, 우리 일상에도 밀접하게 연결되어 있는 개념이에요.'}`, media: [] },
+    { heading: `${topic}이 중요한 이유`, body: `왜 지금 **${topic}**에 주목해야 할까요?\n\n첫째, {{빠르게 변화하는 트렌드}} 속에서 경쟁력을 갖추려면 이 분야의 이해가 필수적입니다.\n둘째, __실제 성과를 만들어내는 핵심 요소__로 자리잡고 있습니다.\n셋째, 앞으로의 //성장 가능성//이 매우 높습니다.`, media: [] },
+    { heading: `${topic} 핵심 포인트 정리`, body: `${topic}을 효과적으로 활용하기 위한 **핵심 포인트**를 정리했습니다.\n\n**1. 기본기를 탄탄히** — __기초 개념__을 정확히 이해하는 것이 가장 중요합니다.\n**2. 실전 적용** — 이론만으로는 부족합니다. {{직접 실행하고 피드백을 받는 과정}}이 필요합니다.\n**3. 꾸준한 업데이트** — 이 분야는 빠르게 변하므로 //지속적인 학습//이 필수입니다.`, media: [] },
+    { heading: `실전에서 바로 쓰는 ${topic} 활용법`, body: `그렇다면 실제로 어떻게 적용할 수 있을까요?\n\n가장 먼저 **목표를 명확히 설정**하세요. __무엇을 달성하고 싶은지__ 구체적으로 정해야 합니다.\n\n다음으로 {{단계별 실행 계획}}을 세우세요. 한 번에 모든 것을 하려 하지 말고, //작은 것부터 시작//하는 것이 성공의 비결입니다.\n\n마지막으로 결과를 **측정하고 개선**하는 습관을 들이세요.`, media: [] },
+    { heading: `${topic} 시작하기: 마무리 정리`, body: `지금까지 **${topic}**의 핵심 내용을 살펴봤습니다.\n\n정리하자면, 이 분야에서 성공하기 위해서는 {{기본기 + 실전 경험 + 지속적 학습}}이 가장 중요합니다.\n\n이 글이 도움이 되셨다면 **이웃추가**와 **공감** 부탁드립니다! 궁금한 점은 댓글로 남겨주세요.`, media: [] },
+  ];
+}
+
+function generateHashtagsFromTopic(topic) {
+  return smartHashtags(topic, topic);
+}
+
+// ═══════════════════════════════════════
+// 자동 포맷팅 엔진
+// ═══════════════════════════════════════
+function autoFormat(text, allText) {
+  // 이미 마크업이 있으면 건드리지 않음
+  if (/\*\*|\/\/|__|\{\{|~~/.test(text)) return text;
+
+  const keywords = extractKeywords(allText || text).slice(0, 8);
+  const topKeywords = keywords.slice(0, 3);   // 최상위 → **볼드**
+  const midKeywords = keywords.slice(3, 6);   // 중간 → __밑줄__
+
+  let result = text;
+
+  // 1. 핵심 키워드 → **볼드** (문장 내에서 첫 등장만)
+  const boldUsed = new Set();
+  topKeywords.forEach(kw => {
+    if (kw.length < 2) return;
+    const regex = new RegExp(`(?<![*_/~{])${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?![*_/~}])`, 'g');
+    let count = 0;
+    result = result.replace(regex, (match) => {
+      count++;
+      if (count <= 2 && !boldUsed.has(kw)) { // 키워드당 최대 2회 볼드
+        if (count === 2) boldUsed.add(kw);
+        return `**${match}**`;
+      }
+      return match;
+    });
+  });
+
+  // 2. 중요 패턴 → {{강조}} (핵심, 중요, 필수, 가장, 반드시 등과 함께 오는 구절)
+  result = result.replace(/(?<!\{)((?:가장|핵심|중요한|필수|반드시|꼭|절대)\s?[가-힣a-zA-Z]{2,12})(?!\})/g, (match) => {
+    return `{{${match}}}`;
+  });
+
+  // 3. 숫자+단위 패턴 → **볼드** (58.5%, 100만원, 3가지 등)
+  result = result.replace(/(?<!\*)(\d+[\d,.]*\s?(?:%|퍼센트|만원|억|조|가지|단계|배|개|명|회|번|위))(?!\*)/g, '**$1**');
+
+  // 4. 영어 전문용어 / 브랜드 → //이탤릭//
+  result = result.replace(/(?<!\/)((?:ChatGPT|Claude|AI|SEO|SNS|ROI|CTA|KPI|B2B|B2C|SaaS|CRM|UX|UI|MVP|API|GA4|GPT|LLM|NLP))(?!\/)/g, '//$1//');
+
+  // 5. "~이란", "~은/는 ~이다/입니다" 정의 문장 → __밑줄__
+  result = result.replace(/(?<!_)([가-힣A-Za-z]{2,10}(?:이란|이, |은 |는 )[^.!?\n]{5,25}(?:입니다|이다|에요|예요|거예요))(?!_)/g, (match) => {
+    if (/__/.test(match) || /\*\*/.test(match)) return match;
+    return `__${match}__`;
+  });
+
+  // 6. 중간 키워드 → __밑줄__ (아직 마크업 안 된 것만, 키워드당 1회)
+  midKeywords.forEach(kw => {
+    if (kw.length < 2) return;
+    const regex = new RegExp(`(?<![*_/~{])${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?![*_/~}])`);
+    result = result.replace(regex, `__${kw}__`);
+  });
+
+  // 중복 마크업 정리 (예: ****text**** → **text**)
+  result = result.replace(/\*{4,}([^*]+)\*{4,}/g, '**$1**');
+  result = result.replace(/_{4,}([^_]+)_{4,}/g, '__$1__');
+  result = result.replace(/\/{4,}([^/]+)\/{4,}/g, '//$1//');
+  // 중첩 마크업 정리
+  result = result.replace(/\*\*\*\*([^*]+)\*\*\*\*/g, '**$1**');
+
+  return result;
+}
+
+// 섹션 배열 전체에 자동 포맷 적용
+function autoFormatSections(sections) {
+  const allText = sections.map(s => (s.heading || '') + ' ' + (s.body || '')).join(' ');
+  return sections.map(s => ({
+    ...s,
+    body: autoFormat(s.body || '', allText)
+  }));
+}
+
+// 스크립트를 섹션으로 분리하는 로컬 파서
+function parseScriptToSections(script) {
+  const lines = script.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  const sections = [];
+  let currentHeading = '';
+  let currentBody = [];
+
+  for (const line of lines) {
+    // 제목/소제목 패턴 감지
+    const isHeading = (
+      line.length <= 40 && (
+        /^[#■●▶▷◆◇★☆\[\(【〔]/.test(line) ||
+        /^[0-9]+[\.\)]\s/.test(line) ||
+        (line.length <= 20 && !line.includes('.') && lines.indexOf(line) > 0)
+      )
+    );
+
+    if (isHeading) {
+      if (currentBody.length > 0) {
+        sections.push({ heading: currentHeading || '서론', body: currentBody.join('\n\n'), media: [] });
+        currentBody = [];
+      }
+      currentHeading = line.replace(/^[#■●▶▷◆◇★☆\[\(【〔\d\.\)\]】〕]+\s*/, '').trim();
+    } else {
+      currentBody.push(line);
+    }
+  }
+  if (currentBody.length > 0) {
+    sections.push({ heading: currentHeading || (sections.length === 0 ? '본문' : '마무리'), body: currentBody.join('\n\n'), media: [] });
+  }
+
+  // 섹션이 1개뿐이면 문단 기준으로 나누기
+  if (sections.length <= 1 && script.length > 300) {
+    const fullText = script.trim();
+    const paragraphs = fullText.split(/\n\s*\n+/).filter(p => p.trim().length > 20);
+    if (paragraphs.length >= 3) {
+      const newSections = [];
+      const headings = ['도입', '핵심 내용', '상세 설명', '추가 정보', '마무리'];
+      paragraphs.forEach((p, i) => {
+        newSections.push({ heading: headings[i] || `섹션 ${i + 1}`, body: p.trim(), media: [] });
+      });
+      return newSections;
+    }
+  }
+
+  return sections.length > 0 ? sections : [{ heading: '본문', body: script, media: [] }];
+}
+
+function generateTitleFromScript(script) {
+  const firstLine = script.split('\n').find(l => l.trim().length > 5) || '';
+  const clean = firstLine.replace(/^[#■●▶\d\.\)\-]+\s*/, '').trim();
+  if (clean.length >= 10 && clean.length <= 35) return clean;
+  const keywords = extractKeywords(script).slice(0, 3);
+  if (keywords.length >= 2) return `${keywords[0]}과 ${keywords[1]}: 핵심 정리 가이드`;
+  return keywords[0] ? `${keywords[0]} 완벽 가이드` : '블로그 포스트';
+}
+
+function generateHashtagsFromScript(script) {
+  const title = generateTitleFromScript(script);
+  return smartHashtags(title, script);
+}
+
+// ═══════════════════════════════════════
+// 스마트 해시태그 엔진
+// ═══════════════════════════════════════
+function smartHashtags(topic, fullText) {
+  const tags = [];
+  const allText = (topic + ' ' + fullText).toLowerCase();
+  const used = new Set();
+
+  function addTag(t) {
+    t = t.trim();
+    if (!t.startsWith('#')) t = '#' + t;
+    // 필터: 3~15자, 어미/조사로 끝나지 않음, 의미 없는 단어 제외
+    if (t.length < 3 || t.length > 15) return;
+    if (/[다요니며면서고는은를을에서의와과게적]$/.test(t)) return;
+    if (/^#(당신|사람|것|수|때|곳|중|명|번|건|벌|개|점|분|년|월|일|뜻|말|걸|거|등|뿐|만|더|안|못|줄|듯|CTA|HOOK|WHY)$/i.test(t)) return;
+    const key = t.toLowerCase();
+    if (used.has(key)) return;
+    if (tags.length >= 15) return;
+    used.add(key);
+    tags.push(t);
+  }
+
+  // ──── 1단계: 본문에서 고유명사/브랜드 먼저 ────
+  const brandRegex = /(?:인스타그램|틱톡|유튜브|네이버|카카오|페이스북|트위터|구글|아마존|ChatGPT|Claude|HBR|ROI|SNS|SEO|MZ세대|BDM|Instagram|TikTok|YouTube|Google)/g;
+  const brands = fullText.match(brandRegex) || [];
+  [...new Set(brands)].forEach(b => addTag(b));
+
+  // ──── 2단계: 확실한 복합명사만 (공백 없이 붙어있는 것) ────
+  const nounSuffixes = '마케팅|자동화|전략|분석|최적화|브랜딩|트렌드|서비스|플랫폼|콘텐츠|광고|캠페인|디자인|교육|투자|부동산|건강|다이어트|여행|맛집|인테리어|패션|뷰티|브랜드|커머스|알고리즘|데이터';
+  const compoundRegex = new RegExp('([가-힣]{2,4})(' + nounSuffixes + ')', 'g');
+  let match;
+  while ((match = compoundRegex.exec(fullText)) !== null) {
+    const prefix = match[1];
+    if (/[는은을를이가에서]$/.test(prefix)) continue;
+    if (STOPWORDS.has(prefix)) continue;
+    const compound = prefix + match[2];
+    if (compound.length >= 4 && compound.length <= 10) addTag(compound);
+  }
+
+  // ──── 3단계: 본문에서 확실한 명사만 직접 매칭 ────
+  // 한국어 형태소 분석 없이 extractKeywords는 쓰레기가 많으므로,
+  // 본문에서 직접 정규식으로 확실한 명사/명사구만 뽑는다
+  const nounPatterns = fullText.match(/(?:인플루언서|팔로워|마케팅|브랜딩|알고리즘|콘텐츠|플랫폼|캠페인|커머스|이커머스|데이터|인사이트|트렌드|전략|자동화|최적화|솔루션|스타트업|크리에이터|유튜버|블로거|인스타그램|틱톡|유튜브|네이버|카카오|페이스북|구글|아마존|건강보험|실비보험|주차장|주차요금|입원비|병원비|의료비|진료비|수술비|건강검진|부동산|아파트|전세|월세|매매|재테크|주식|투자|펀드|적금|보험|다이어트|운동|헬스|필라테스|요가|맛집|카페|레시피|여행|호텔|숙소|항공|패션|뷰티|화장품|스킨케어|육아|교육|입시|수능|취업|이직|면접|연봉|프리랜서|디자인|개발|코딩|프로그래밍|서버|클라우드|보안|블록체인|비트코인|NFT)/g) || [];
+  [...new Set(nounPatterns)].forEach(n => addTag(n));
+
+
+  // ──── 4단계: 분야별 맥락 태그 ────
+  const allTextLower = allText;
+  const contextTags = {
+    마케팅: ['#마케팅전략', '#디지털마케팅', '#마케팅트렌드', '#온라인마케팅', '#마케팅꿀팁'],
+    브랜딩: ['#퍼스널브랜딩', '#브랜드전략', '#셀프브랜딩', '#브랜딩팁', '#브랜드마케팅'],
+    AI: ['#AI활용법', '#인공지능', '#AI트렌드', '#AI마케팅', '#생성형AI'],
+    블로그: ['#블로그운영', '#블로그수익', '#블로그마케팅', '#네이버블로그', '#블로그팁'],
+    부동산: ['#부동산투자', '#부동산정보', '#아파트', '#부동산트렌드', '#부동산분석'],
+    건강: ['#건강관리', '#건강정보', '#건강팁', '#웰빙', '#라이프스타일'],
+    다이어트: ['#다이어트식단', '#다이어트방법', '#체중관리', '#식단관리', '#헬스'],
+    여행: ['#여행추천', '#국내여행', '#해외여행', '#여행팁', '#여행코스'],
+    맛집: ['#맛집추천', '#맛집탐방', '#맛집리뷰', '#먹스타그램', '#푸드'],
+    육아: ['#육아정보', '#육아팁', '#엄마표', '#아이와함께', '#초등교육'],
+    투자: ['#투자전략', '#재테크', '#주식투자', '#금융정보', '#자산관리'],
+    병원: ['#병원정보', '#의료정보', '#건강검진', '#진료과목', '#병원추천'],
+    입원: ['#입원비', '#입원준비', '#의료비', '#건강보험', '#실비보험'],
+    주차: ['#주차정보', '#주차요금', '#주차팁', '#주차장'],
+    개발: ['#개발자', '#프로그래밍', '#코딩', '#개발공부', '#IT'],
+    디자인: ['#디자인트렌드', '#웹디자인', '#그래픽디자인', '#UI디자인', '#디자인팁'],
+    교육: ['#교육정보', '#자기계발', '#온라인강의', '#배움', '#성장'],
+    SNS: ['#SNS마케팅', '#인스타그램', '#소셜미디어', '#콘텐츠마케팅'],
+    패션: ['#패션트렌드', '#오오티디', '#데일리룩', '#스타일링', '#패션추천'],
+    뷰티: ['#뷰티추천', '#화장품추천', '#스킨케어', '#메이크업', '#뷰티팁'],
+    인테리어: ['#인테리어', '#홈스타일링', '#집꾸미기', '#인테리어팁', '#홈데코'],
+  };
+
+  for (const [keyword, relatedTags] of Object.entries(contextTags)) {
+    if (allTextLower.includes(keyword.toLowerCase()) || allTextLower.includes(keyword)) {
+      relatedTags.forEach(t => addTag(t));
+    }
+  }
+
+  // ──── 5단계: 인플루언서/팔로워 관련 추가 맥락 ────
+  const extraContext = {
+    팔로워: ['#팔로워', '#인플루언서마케팅', '#SNS마케팅', '#인플루언서', '#소셜미디어'],
+    커머스: ['#소셜커머스', '#이커머스', '#온라인쇼핑', '#쇼핑몰'],
+    검색: ['#검색엔진', '#검색마케팅', '#SEO최적화', '#네이버검색'],
+    데이터: ['#데이터분석', '#빅데이터', '#데이터마케팅', '#마케팅데이터'],
+    콘텐츠: ['#콘텐츠마케팅', '#콘텐츠전략', '#콘텐츠제작'],
+    알고리즘: ['#알고리즘', '#추천알고리즘', '#SNS알고리즘'],
+    쇼핑: ['#온라인쇼핑', '#쇼핑몰', '#쇼핑트렌드'],
+  };
+  for (const [kw, rTags] of Object.entries(extraContext)) {
+    if (allTextLower.includes(kw)) rTags.forEach(t => addTag(t));
+  }
+
+  // ──── 6단계: 네이버 블로그 태그 전략 ────
+  // 네이버 블로그에서 태그는 상위노출에 직접 영향 없음 (색인 + 모바일 유입 역할)
+  // 핵심 키워드 태그만 소수 정확히 넣는 게 최적 (5~10개)
+  // 범용 태그(#소통해요 #이웃추가 등)는 네이버에서 의미 없으므로 넣지 않음
+
+  return tags.slice(0, 10).join(' ');
+}
+
+// ═══════════════════════════════════════
+// 생성 함수 (API 있으면 AI, 없으면 내장)
+// ═══════════════════════════════════════
+async function generateFromTopic() {
+  const topic = document.getElementById('topicInput').value.trim();
+  if (!topic) { alert('토픽을 입력하세요.'); return; }
+  const btn = document.getElementById('generateTopicBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>생성 중...';
+
+  // API 키 있으면 AI 먼저 시도
+  if (apiKey) {
+    const toneMap = { professional:'전문적이고 신뢰감 있는', casual:'캐주얼하고 편한', friendly:'친근하고 따뜻한', storytelling:'스토리텔링 형식의 흥미로운' };
+    const prompt = `네이버 블로그 글을 작성해주세요. 네이버 검색 알고리즘(C-Rank, DIA)에 최적화.
+토픽: ${topic} / 톤: ${toneMap[currentTone]}
+JSON만 응답(코드블록 없이): {"title":"제목 15~30자","subtitle":"부제목","sections":[{"heading":"소제목","body":"본문 **볼드** {{강조}}"}],"hashtags":"#태그1 #태그2"}
+섹션 3~5개, 본문 1500자 이상, 해시태그 8~12개`;
+    const result = await callAI(prompt);
+    if (result) {
+      btn.disabled = false; btn.innerHTML = '블로그 글 생성';
+      try {
+        const data = JSON.parse(result.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim());
+        applyResult(data); return;
+      } catch {}
+    }
+  }
+
+  // 내장 엔진으로 생성
+  const title = generateTitleFromTopic(topic, currentTone);
+  const subtitle = `${topic}에 대해 알아야 할 모든 것을 정리했습니다.`;
+  const sections = generateSectionsFromTopic(topic, currentTone);
+  const hashtags = generateHashtagsFromTopic(topic);
+  applyResult({ title, subtitle, sections, hashtags });
+  btn.disabled = false; btn.innerHTML = '블로그 글 생성';
+}
+
+async function generateFromScript() {
+  const script = document.getElementById('scriptInput').value.trim();
+  if (!script) { alert('스크립트를 입력하세요.'); return; }
+  const btn = document.getElementById('generateScriptBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>변환 중...';
+  const isExpand = scriptOption === 'expand';
+
+  // API 키 있으면 AI 먼저 시도
+  if (apiKey) {
+    const expandInstruction = isExpand
+      ? `원본 스크립트의 핵심 메시지를 유지하면서, 구어체 블로그 글로 확장하세요.
+- 각 섹션의 본문을 3~5문장으로 늘려서 설명을 풍부하게
+- "~인데요", "~거든요", "~잖아요", "~하더라고요" 등 자연스러운 구어체 사용
+- 독자에게 말을 거는 듯한 친근한 톤
+- 개인 경험이나 공감 표현 추가 ("사실 저도 처음엔...", "이거 진짜 중요한 게...")
+- 원본의 데이터/팩트는 정확히 유지`
+      : `원문 핵심 유지, 블로그에 적합하게 재구성`;
+
+    const prompt = `아래 스크립트를 네이버 블로그 글로 재구성. 네이버 SEO 최적화.
+${expandInstruction}
+--- 원고 ---
+${script.slice(0, 3000)}
+--- 끝 ---
+JSON만 응답(코드블록 없이): {"title":"제목 15~30자","subtitle":"부제목","sections":[{"heading":"소제목","body":"본문"}],"hashtags":"#태그1 #태그2"}
+섹션 3~6개, **볼드** {{강조}}, 해시태그 8~12개`;
+    const result = await callAI(prompt);
+    if (result) {
+      btn.disabled = false; btn.innerHTML = '블로그 글로 변환';
+      try {
+        const data = JSON.parse(result.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim());
+        applyResult(data); return;
+      } catch {}
+    }
+  }
+
+  // 내장 파서로 변환
+  const title = generateTitleFromScript(script);
+  const subtitle = '';
+  let sections = parseScriptToSections(script);
+
+  // "살 붙여서 변환" 옵션이면 구어체로 확장
+  if (isExpand) {
+    sections = expandToBlogStyle(sections);
+  }
+
+  sections = autoFormatSections(sections);
+  const hashtags = generateHashtagsFromScript(script);
+  applyResult({ title, subtitle, sections, hashtags });
+  btn.disabled = false; btn.innerHTML = '블로그 글로 변환';
+}
+
+// 짧은 스크립트를 구어체 블로그 글로 확장
+function expandToBlogStyle(sections) {
+  return sections.map((sec, idx) => {
+    const body = sec.body || '';
+    // 이미 길면 건드리지 않음
+    if (body.length > 300) return sec;
+
+    const sentences = body.split(/(?<=[.!?])\s*/).filter(s => s.trim().length > 3);
+    let expanded = '';
+
+    sentences.forEach((sentence, si) => {
+      const clean = sentence.replace(/\*\*|\/\/|__|~~|\{\{|\}\}/g, '').trim();
+
+      // 각 문장을 확장
+      if (si === 0 && idx === 0) {
+        // 첫 섹션 첫 문장: 도입부 추가
+        expanded += sentence.trim() + '\n\n';
+        expanded += pickOne([
+          '사실 이 이야기를 처음 들었을 때 저도 좀 놀랐는데요.',
+          '이 부분이 정말 중요한 포인트거든요.',
+          '요즘 이 주제에 대해 관심 있는 분들이 정말 많더라고요.',
+          '이게 왜 중요한지, 하나씩 살펴볼게요.',
+        ]) + '\n\n';
+      } else if (clean.match(/^\d+/) || clean.match(/^첫|둘|셋|넷/)) {
+        // 번호 매긴 포인트: 부연 설명 추가
+        expanded += sentence.trim() + '\n\n';
+        expanded += pickOne([
+          '이 부분은 좀 더 자세히 설명드릴게요.',
+          '이게 생각보다 영향이 큰데요.',
+          '많은 분들이 여기서 놓치는 포인트가 있어요.',
+          '실제로 이걸 적용해보면 확실히 차이가 나더라고요.',
+        ]) + ' ';
+      } else if (clean.includes('?')) {
+        // 질문형: 공감 추가
+        expanded += sentence.trim() + '\n\n';
+        expanded += pickOne([
+          '한번 진지하게 생각해볼 만한 질문이죠.',
+          '솔직히 저도 이 부분에서 많이 고민했거든요.',
+          '이 질문에 대한 답을 찾아가는 과정이 중요합니다.',
+        ]) + '\n\n';
+      } else if (/결론|결국|요약|정리/.test(clean)) {
+        // 결론부: 마무리 추가
+        expanded += sentence.trim() + '\n\n';
+        expanded += pickOne([
+          '오늘 내용이 도움이 되셨다면 공감과 댓글 부탁드려요!',
+          '궁금한 점이 있으시면 댓글로 남겨주세요. 하나하나 답변드릴게요.',
+          '다음에도 유용한 정보로 찾아올게요. 이웃추가 해두시면 놓치지 않으실 거예요!',
+        ]);
+      } else {
+        expanded += sentence.trim() + ' ';
+      }
+    });
+
+    // 확장된 내용이 원본보다 짧으면 원본 유지
+    if (expanded.trim().length < body.length) {
+      return sec;
+    }
+
+    return { ...sec, body: expanded.trim() };
+  });
+}
+
+function pickOne(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function applyResult(data) {
+  blogState.title = data.title || '';
+  blogState.subtitle = data.subtitle || '';
+  blogState.sections = (data.sections || []).map(s => ({ heading: s.heading || '', body: s.body || '', media: s.media || [] }));
+  blogState.hashtags = data.hashtags || '';
+  currentSectionIdx = 0;
+  restoreState(); renderAll(); updateSEO(); scheduleAutoSave();
+}
+
+// ═══════════════════════════════════════
+// 스크립트 검증 (내장 + AI 보조)
+// ═══════════════════════════════════════
+async function auditScript() {
+  const script = document.getElementById('scriptInput').value.trim();
+  if (!script) { alert('검증할 스크립트를 입력하세요.'); return; }
+  const btn = document.getElementById('auditScriptBtn');
+  btn.disabled = true; btn.textContent = '검증 중...';
+
+  // AI 시도
+  if (apiKey) {
+    const prompt = `네이버 블로그 SEO 전문가로서 원고 분석. JSON만 응답(코드블록 없이):
+{"score":75,"items":[{"label":"항목","status":"good|warn|bad","detail":"설명"}],"titleSuggestions":["추천제목1","추천제목2"],"summary":"피드백 2문장"}
+--- 원고 ---
+${script.slice(0, 2000)}
+--- 끝 ---
+분석: 제목, 분량(1500자↑), 구조, 키워드밀도, 가독성, 해시태그, 이미지, CTA`;
+    const result = await callAI(prompt);
+    if (result) {
+      btn.disabled = false; btn.textContent = '검증';
+      try {
+        const data = JSON.parse(result.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim());
+        renderAuditResults(data); return;
+      } catch {}
+    }
+  }
+
+  // 내장 검증
+  const items = [];
+  let score = 0;
+  const len = script.length;
+
+  if (len >= 1500) { items.push({ label: '본문 분량', status: 'good', detail: `${len}자 — 충분합니다` }); score += 20; }
+  else if (len >= 800) { items.push({ label: '본문 분량', status: 'warn', detail: `${len}자 — 1500자 이상 권장` }); score += 10; }
+  else { items.push({ label: '본문 분량', status: 'bad', detail: `${len}자 — 너무 짧습니다 (1500자 이상 권장)` }); }
+
+  const paragraphs = script.split(/\n\s*\n+/).filter(p => p.trim().length > 10);
+  if (paragraphs.length >= 3) { items.push({ label: '문단 구성', status: 'good', detail: `${paragraphs.length}개 문단 — 구조가 좋습니다` }); score += 15; }
+  else { items.push({ label: '문단 구성', status: 'warn', detail: `${paragraphs.length}개 문단 — 3개 이상으로 나누세요` }); score += 5; }
+
+  const sentences = script.split(/[.!?。]\s*/).filter(s => s.length > 5);
+  const avgLen = sentences.length > 0 ? Math.round(sentences.reduce((a, s) => a + s.length, 0) / sentences.length) : 0;
+  if (avgLen <= 60) { items.push({ label: '문장 길이', status: 'good', detail: `평균 ${avgLen}자 — 읽기 쉽습니다` }); score += 15; }
+  else { items.push({ label: '문장 길이', status: 'warn', detail: `평균 ${avgLen}자 — 50자 이하로 줄이면 가독성 향상` }); score += 8; }
+
+  const hasQuestion = /\?|인가요|일까요|할까요|건가요/.test(script);
+  if (hasQuestion) { items.push({ label: '독자 참여 유도', status: 'good', detail: '질문형 문장이 포함되어 있습니다' }); score += 10; }
+  else { items.push({ label: '독자 참여 유도', status: 'warn', detail: '질문형 문장을 추가하면 체류시간이 늘어납니다' }); score += 3; }
+
+  const hasCTA = /댓글|공감|이웃|팔로우|구독|좋아요|공유/.test(script);
+  if (hasCTA) { items.push({ label: 'CTA (행동 유도)', status: 'good', detail: '독자 행동 유도 문구가 있습니다' }); score += 10; }
+  else { items.push({ label: 'CTA (행동 유도)', status: 'warn', detail: '"댓글로 알려주세요", "공감 부탁드려요" 등을 추가하세요' }); score += 2; }
+
+  const keywords = extractKeywords(script);
+  if (keywords.length >= 3) { items.push({ label: '키워드', status: 'good', detail: `주요 키워드: ${keywords.slice(0, 5).join(', ')}` }); score += 15; }
+  else { items.push({ label: '키워드', status: 'warn', detail: '핵심 키워드를 반복적으로 사용하세요' }); score += 5; }
+
+  const hasBold = /\*\*/.test(script);
+  if (hasBold) { items.push({ label: '강조 표현', status: 'good', detail: '볼드 마크업이 사용되고 있습니다' }); score += 5; }
+  else { items.push({ label: '강조 표현', status: 'warn', detail: '**핵심키워드** 형식으로 강조하세요' }); }
+
+  score = Math.min(100, score);
+  const summary = score >= 70
+    ? `전체적으로 좋은 구성입니다. 세부 항목을 개선하면 네이버 검색 노출이 더 좋아질 수 있습니다.`
+    : score >= 40
+    ? `기본 구성은 되어있지만, 분량/구조/키워드 최적화가 더 필요합니다. 위 항목들을 참고하여 개선하세요.`
+    : `글의 구조와 분량이 부족합니다. 1500자 이상, 3개 이상 섹션, 핵심 키워드 반복 사용을 권장합니다.`;
+
+  const titleSuggestions = keywords.length >= 2
+    ? [`${keywords[0]} ${keywords[1]}: 핵심 정리 가이드`, `${keywords[0]} 완벽 분석 — 꼭 알아야 할 포인트`, `2026 ${keywords[0]} 트렌드와 실전 활용법`]
+    : [];
+
+  renderAuditResults({ score, items, titleSuggestions, keywordSuggestions: keywords.slice(0, 6), summary });
+  btn.disabled = false; btn.textContent = '검증';
+}
+
+function renderAuditResults(data) {
+  const el = document.getElementById('auditResults');
+  el.style.display = '';
+  let html = `<div class="audit-panel">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('collapsed')">
+      <div class="seo-score-circle ${data.score >= 70 ? 'good' : data.score >= 40 ? 'ok' : 'bad'}" style="width:36px;height:36px;font-size:14px;">${data.score}</div>
+      <span class="audit-title">검증 결과</span>
+      <span class="audit-toggle">접기/펼치기</span>
+    </div>
+    <div>`;
+  if (data.summary) html += `<div class="audit-item good" style="margin-bottom:8px;border-left-color:var(--info)"><div class="audit-label">종합 피드백</div>${esc(data.summary)}</div>`;
+  (data.items || []).forEach(item => { html += `<div class="audit-item ${item.status}"><div class="audit-label">${esc(item.label)}</div>${esc(item.detail)}</div>`; });
+  if (data.titleSuggestions?.length) {
+    html += `<div style="margin-top:8px;font-size:10px;color:var(--text-muted);font-weight:600;margin-bottom:4px">추천 제목</div>`;
+    data.titleSuggestions.forEach(t => { html += `<div class="title-suggestion" onclick="document.getElementById('blogTitle').value='${esc(t)}';onFieldChange();">${esc(t)}</div>`; });
+  }
+  if (data.keywordSuggestions?.length) {
+    html += `<div style="margin-top:8px;font-size:10px;color:var(--text-muted);font-weight:600;margin-bottom:4px">추천 키워드</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px">${data.keywordSuggestions.map(k => `<span style="padding:3px 8px;background:rgba(0,255,136,.08);border-radius:4px;font-size:10px;color:var(--accent)">${esc(k)}</span>`).join('')}</div>`;
+  }
+  html += `</div></div>`;
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// 제목 추천 (내장 + AI 보조)
+// ═══════════════════════════════════════
+async function suggestTitles() {
+  const btn = document.getElementById('suggestTitleBtn');
+  btn.disabled = true; btn.textContent = '생성중...';
+  const bodyText = blogState.sections.map(s => s.heading + ' ' + s.body).join(' ');
+  const keywords = extractKeywords(bodyText).slice(0, 5);
+  const topic = keywords.slice(0, 2).join(' ') || blogState.title || '블로그';
+
+  // AI 시도
+  if (apiKey) {
+    const prompt = `네이버 블로그 SEO 제목 3개 추천. 본문 키워드: ${keywords.join(', ')}. JSON만: {"titles":["제목1","제목2","제목3"]} 15~30자, 핵심키워드 앞배치`;
+    const result = await callAI(prompt);
+    if (result) {
+      try {
+        const data = JSON.parse(result.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim());
+        if (data.titles?.length) { showTitleSuggestions(data.titles); btn.disabled = false; btn.textContent = 'AI 추천'; return; }
+      } catch {}
+    }
+  }
+
+  // 내장 추천
+  const titles = [
+    `${topic} 완벽 가이드: 핵심만 쏙쏙 정리`,
+    `${topic} 이것만 알면 끝! 실전 노하우`,
+    `2026 ${topic} 트렌드 분석과 활용법`,
+  ];
+  showTitleSuggestions(titles);
+  btn.disabled = false; btn.textContent = 'AI 추천';
+}
+
+function showTitleSuggestions(titles) {
+  const el = document.getElementById('titleSuggestions');
+  el.style.display = '';
+  el.innerHTML = titles.map(t =>
+    `<div class="title-suggestion" onclick="document.getElementById('blogTitle').value='${esc(t)}';onFieldChange();document.getElementById('titleSuggestions').style.display='none';">${esc(t)}</div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════
+// SEO Score (실시간)
+// ═══════════════════════════════════════
+function updateSEO() {
+  collectState();
+  const s = blogState;
+  const checks = [];
+  let totalScore = 0;
+
+  // 1. Title length
+  const tLen = (s.title || '').length;
+  if (tLen >= 15 && tLen <= 30) { checks.push({ icon: 'pass', label: '제목 길이', value: `${tLen}자 (최적)` }); totalScore += 20; }
+  else if (tLen > 0 && tLen < 15) { checks.push({ icon: 'warn', label: '제목 길이', value: `${tLen}자 (15자 이상 권장)` }); totalScore += 10; }
+  else if (tLen > 30) { checks.push({ icon: 'warn', label: '제목 길이', value: `${tLen}자 (30자 이하 권장)` }); totalScore += 10; }
+  else { checks.push({ icon: 'fail', label: '제목 길이', value: '제목 없음' }); }
+
+  // 2. Body length
+  const bodyText = s.sections.map(sec => sec.body || '').join('');
+  const bLen = bodyText.length;
+  if (bLen >= 1500) { checks.push({ icon: 'pass', label: '본문 분량', value: `${bLen}자 (충분)` }); totalScore += 20; }
+  else if (bLen >= 800) { checks.push({ icon: 'warn', label: '본문 분량', value: `${bLen}자 (1500자 이상 권장)` }); totalScore += 12; }
+  else if (bLen > 0) { checks.push({ icon: 'warn', label: '본문 분량', value: `${bLen}자 (부족)` }); totalScore += 5; }
+  else { checks.push({ icon: 'fail', label: '본문 분량', value: '본문 없음' }); }
+
+  // 3. Section count
+  const secCount = s.sections.length;
+  if (secCount >= 3) { checks.push({ icon: 'pass', label: '섹션 구조', value: `${secCount}개 섹션` }); totalScore += 15; }
+  else if (secCount >= 1) { checks.push({ icon: 'warn', label: '섹션 구조', value: `${secCount}개 (3개 이상 권장)` }); totalScore += 8; }
+  else { checks.push({ icon: 'fail', label: '섹션 구조', value: '섹션 없음' }); }
+
+  // 4. Hashtags
+  const tags = (s.hashtags || '').split(/\s+/).filter(h => h.startsWith('#') && h.length > 1);
+  if (tags.length >= 5 && tags.length <= 10) { checks.push({ icon: 'pass', label: '태그', value: `${tags.length}개 (적절)` }); totalScore += 15; }
+  else if (tags.length >= 1) { checks.push({ icon: 'warn', label: '태그', value: `${tags.length}개 (핵심 5~10개 권장)` }); totalScore += 7; }
+  else { checks.push({ icon: 'fail', label: '해시태그', value: '없음' }); }
+
+  // 5. Media
+  const mediaCount = s.sections.reduce((a, sec) => a + (sec.media?.length || 0), 0);
+  if (mediaCount >= 2) { checks.push({ icon: 'pass', label: '이미지/동영상', value: `${mediaCount}개` }); totalScore += 15; }
+  else if (mediaCount >= 1) { checks.push({ icon: 'warn', label: '이미지/동영상', value: `${mediaCount}개 (2개 이상 권장)` }); totalScore += 8; }
+  else { checks.push({ icon: 'fail', label: '이미지/동영상', value: '없음 (추가 권장)' }); }
+
+  // 6. Subtitle
+  if (s.subtitle && s.subtitle.length > 5) { checks.push({ icon: 'pass', label: '부제목', value: '있음' }); totalScore += 5; }
+  else { checks.push({ icon: 'warn', label: '부제목', value: '없음 (추가 권장)' }); totalScore += 2; }
+
+  // 7. Keyword in title check
+  const headings = s.sections.map(sec => sec.heading).join(' ');
+  if (s.title && headings && s.title.length > 3) {
+    const titleWords = s.title.replace(/[^가-힣a-zA-Z0-9\s]/g, '').split(/\s+/).filter(w => w.length >= 2);
+    const bodyAll = headings + ' ' + bodyText;
+    const matched = titleWords.filter(w => bodyAll.includes(w));
+    if (matched.length >= 2) { checks.push({ icon: 'pass', label: '키워드 일관성', value: '제목↔본문 일치' }); totalScore += 10; }
+    else { checks.push({ icon: 'warn', label: '키워드 일관성', value: '제목 키워드를 본문에도 사용하세요' }); totalScore += 3; }
+  } else {
+    checks.push({ icon: 'fail', label: '키워드 일관성', value: '분석 불가' });
+  }
+
+  totalScore = Math.min(100, totalScore);
+
+  // Render
+  const panel = document.getElementById('seoPanel');
+  const grade = totalScore >= 70 ? 'good' : totalScore >= 40 ? 'ok' : 'bad';
+  const gradeText = totalScore >= 70 ? '네이버 알고리즘 최적화 양호' : totalScore >= 40 ? '개선하면 더 좋은 노출' : '최적화가 필요합니다';
+
+  panel.innerHTML = `
+    <div class="seo-header">
+      <div class="seo-score-circle ${grade}">${totalScore}</div>
+      <div>
+        <div class="seo-title">SEO 점수</div>
+        <div class="seo-subtitle">${gradeText}</div>
+      </div>
+    </div>
+    <div class="seo-checks">
+      ${checks.map(c => `<div class="seo-check"><div class="seo-icon ${c.icon}">${c.icon === 'pass' ? '&#10003;' : c.icon === 'warn' ? '!' : '&#10005;'}</div><span class="seo-label">${c.label}</span><span class="seo-value">${c.value}</span></div>`).join('')}
+    </div>
+  `;
+
+  // Update inline hints
+  const titleHint = document.getElementById('titleHint');
+  if (titleHint) {
+    if (tLen === 0) titleHint.textContent = '';
+    else if (tLen < 15) titleHint.textContent = `${tLen}자 — 15자 이상이 네이버 검색 노출에 유리합니다`;
+    else if (tLen <= 30) titleHint.textContent = `${tLen}자 — 최적 길이입니다`;
+    else titleHint.textContent = `${tLen}자 — 30자 이하가 검색 결과에서 잘리지 않습니다`;
+  }
+
+  const hashHint = document.getElementById('hashHint');
+  if (hashHint) {
+    if (tags.length === 0) hashHint.textContent = '';
+    else hashHint.textContent = `${tags.length}개 — ${tags.length < 5 ? '5개 이상 권장' : tags.length > 15 ? '15개 이하 권장' : '적절합니다'}`;
+  }
+}
+
+// ═══════════════════════════════════════
+// State Sync
+// ═══════════════════════════════════════
+function collectState() {
+  blogState.title = document.getElementById('blogTitle')?.value || '';
+  blogState.subtitle = document.getElementById('blogSubtitle')?.value || '';
+  blogState.hashtags = document.getElementById('blogHashtags')?.value || '';
+  blogState.bloggerName = document.getElementById('bloggerName')?.value || 'BDM Lab';
+  blogState.showNaverHeader = document.getElementById('showNaverHeader')?.checked !== false;
+  blogState.showFooter = document.getElementById('showFooter')?.checked !== false;
+}
+
+function restoreState() {
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  const chk = (id, val) => { const el = document.getElementById(id); if (el) el.checked = val !== false; };
+  set('blogTitle', blogState.title);
+  set('blogSubtitle', blogState.subtitle);
+  set('blogHashtags', blogState.hashtags);
+  set('bloggerName', blogState.bloggerName || 'BDM Lab');
+  chk('showNaverHeader', blogState.showNaverHeader);
+  chk('showFooter', blogState.showFooter);
+}
+
+function onFieldChange() {
+  collectState();
+  renderPreview();
+  renderSectionList();
+  updateSEO();
+  scheduleAutoSave();
+}
+
+// ═══════════════════════════════════════
+// Section Management
+// ═══════════════════════════════════════
+function addSection() {
+  blogState.sections.push({ heading: '새 섹션', body: '', media: [] });
+  currentSectionIdx = blogState.sections.length - 1;
+  renderAll(); updateSEO(); scheduleAutoSave();
+}
+
+function deleteSection(i) {
+  // Revoke media URLs
+  (blogState.sections[i]?.media || []).forEach(m => { if (m.objectUrl) URL.revokeObjectURL(m.objectUrl); });
+  blogState.sections.splice(i, 1);
+  if (currentSectionIdx >= blogState.sections.length) currentSectionIdx = Math.max(0, blogState.sections.length - 1);
+  renderAll(); updateSEO(); scheduleAutoSave();
+}
+
+function selectSection(i) { currentSectionIdx = i; renderSectionList(); renderSectionEdit(); }
+
+function moveSection(from, to) {
+  if (to < 0 || to >= blogState.sections.length) return;
+  const item = blogState.sections.splice(from, 1)[0];
+  blogState.sections.splice(to, 0, item);
+  currentSectionIdx = to;
+  renderAll(); scheduleAutoSave();
+}
+
+function renderSectionList() {
+  const el = document.getElementById('sectionList');
+  if (!blogState.sections.length) {
+    el.innerHTML = '<div style="text-align:center;padding:8px;font-size:10px;color:#444;">섹션이 없습니다</div>';
+    return;
+  }
+  el.innerHTML = blogState.sections.map((s, i) => {
+    const hasMedia = s.media?.length > 0;
+    return `<div class="section-item ${currentSectionIdx === i ? 'active' : ''}" onclick="selectSection(${i})">
+      <span class="move-btn" onclick="event.stopPropagation();moveSection(${i},${i - 1})" title="위로">&#x25B2;</span>
+      <span class="move-btn" onclick="event.stopPropagation();moveSection(${i},${i + 1})" title="아래로">&#x25BC;</span>
+      <span class="num">${i + 1}</span>
+      <span class="label">${esc(s.heading || '(제목 없음)')}</span>
+      ${hasMedia ? '<span class="sec-badge has-media">IMG</span>' : ''}
+      <button class="delete-btn" onclick="event.stopPropagation();deleteSection(${i})">&times;</button>
+    </div>`;
+  }).join('');
+}
+
+function renderSectionEdit() {
+  const area = document.getElementById('sectionEditArea');
+  if (!blogState.sections.length || currentSectionIdx >= blogState.sections.length) { area.innerHTML = ''; return; }
+  const s = blogState.sections[currentSectionIdx];
+  const mediaHTML = (s.media || []).map((m, mi) => `
+    <div class="media-thumb">
+      ${m.type === 'video' ? `<video src="${m.objectUrl || m.url}" muted></video>` : `<img src="${m.objectUrl || m.url}" alt="">`}
+      <button class="media-remove" onclick="removeMedia(${currentSectionIdx},${mi})">&times;</button>
+    </div>
+  `).join('');
+
+  area.innerHTML = `
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid #1e1e1e">
+      <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:6px">섹션 ${currentSectionIdx + 1} 편집</div>
+      <div class="field">
+        <label>소제목</label>
+        <input type="text" value="${esc(s.heading)}" oninput="updateSection('heading',this.value)">
+      </div>
+      <div class="field">
+        <label>본문</label>
+        <div style="display:flex;gap:3px;margin-bottom:4px;flex-wrap:wrap">
+          <button class="fmt-btn" onclick="wrapSelection('**','**')" title="볼드"><b>B</b></button>
+          <button class="fmt-btn" onclick="wrapSelection('//','/'+'/')" title="이탤릭"><i>I</i></button>
+          <button class="fmt-btn" onclick="wrapSelection('__','__')" title="밑줄"><u>U</u></button>
+          <button class="fmt-btn" onclick="wrapSelection('{{','}}')" title="초록 강조" style="color:#03C75A">A</button>
+          <button class="fmt-btn" onclick="wrapSelection('~~','~~')" title="취소선"><s>S</s></button>
+        </div>
+        <textarea id="sectionBodyTA" style="min-height:110px" oninput="updateSection('body',this.value)">${esc(s.body)}</textarea>
+        <div class="field-hint">**볼드** //이탤릭// __밑줄__ {{강조}} ~~취소선~~ | 또는 위 버튼으로</div>
+      </div>
+
+      <!-- Media -->
+      <div class="media-area">
+        <div style="font-size:10px;font-weight:600;color:var(--text-muted);margin-bottom:6px">이미지 / 동영상</div>
+        <div class="media-btns">
+          <div class="media-btn">&#x1F4F7; 이미지 추가<input type="file" accept="image/*" multiple onchange="handleMediaUpload(event,'image')"></div>
+          <div class="media-btn">&#x1F3AC; 동영상 추가<input type="file" accept="video/*" onchange="handleMediaUpload(event,'video')"></div>
+        </div>
+        <!-- Pexels Search -->
+        <div class="pexels-row">
+          <input type="text" id="pexelsSearch" placeholder="Pexels 무료 이미지 검색..." onkeydown="if(event.key==='Enter'){event.preventDefault();searchPexels();}">
+          <button class="btn-accent-outline" onclick="searchPexels()" style="padding:6px 10px">검색</button>
+        </div>
+        <div class="pexels-results" id="pexelsResults"></div>
+        ${mediaHTML ? `<div style="margin-top:8px;font-size:9px;color:var(--text-muted);margin-bottom:4px">첨부된 미디어</div><div class="media-preview">${mediaHTML}</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function updateSection(field, value) {
+  if (currentSectionIdx < blogState.sections.length) {
+    blogState.sections[currentSectionIdx][field] = value;
+    renderSectionList(); renderPreview(); updateSEO(); scheduleAutoSave();
+  }
+}
+
+// ═══════════════════════════════════════
+// Media Upload
+// ═══════════════════════════════════════
+function handleMediaUpload(event, type) {
+  const files = event.target.files;
+  if (!files.length) return;
+  const sec = blogState.sections[currentSectionIdx];
+  if (!sec) return;
+  if (!sec.media) sec.media = [];
+
+  Array.from(files).forEach(file => {
+    const objectUrl = URL.createObjectURL(file);
+    sec.media.push({ type, objectUrl, name: file.name });
+  });
+
+  renderSectionEdit(); renderSectionList(); renderPreview(); updateSEO(); scheduleAutoSave();
+  event.target.value = '';
+}
+
+function removeMedia(secIdx, mediaIdx) {
+  const sec = blogState.sections[secIdx];
+  if (!sec?.media?.[mediaIdx]) return;
+  const m = sec.media[mediaIdx];
+  if (m.objectUrl && !m.pexelsUrl) URL.revokeObjectURL(m.objectUrl);
+  sec.media.splice(mediaIdx, 1);
+  renderSectionEdit(); renderSectionList(); renderPreview(); updateSEO(); scheduleAutoSave();
+}
+
+// ═══════════════════════════════════════
+// Pexels Image Search
+// ═══════════════════════════════════════
+const pexelsCache = {};
+async function searchPexels() {
+  const query = document.getElementById('pexelsSearch')?.value?.trim();
+  if (!query) return;
+  // Pexels API는 별도 키 필요
+
+  // Use Pexels via a simple fetch — requires Pexels API key stored as pexels key
+  let pexelsKey = localStorage.getItem('pexels_api_key') || '';
+  if (!pexelsKey) {
+    pexelsKey = prompt('Pexels API Key를 입력하세요.\n(pexels.com/api 에서 무료 발급)');
+    if (!pexelsKey) return;
+    localStorage.setItem('pexels_api_key', pexelsKey);
+  }
+
+  const cacheKey = query.toLowerCase();
+  if (pexelsCache[cacheKey]) { showPexelsResults(pexelsCache[cacheKey]); return; }
+
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=12&size=small`, {
+      headers: { 'Authorization': pexelsKey }
+    });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    const results = (data.photos || []).map(p => ({ id: p.id, thumb: p.src.tiny, medium: p.src.medium, alt: p.alt }));
+    pexelsCache[cacheKey] = results;
+    showPexelsResults(results);
+  } catch (e) {
+    document.getElementById('pexelsResults').innerHTML = '<div style="font-size:10px;color:var(--danger);padding:4px">이미지 검색 실패. Pexels API Key를 확인하세요.</div>';
+  }
+}
+
+function showPexelsResults(results) {
+  document.getElementById('pexelsResults').innerHTML = results.map((r, i) =>
+    `<div class="pexels-thumb" onclick="addPexelsImage(${i})" title="${esc(r.alt)}"><img src="${r.thumb}" alt="${esc(r.alt)}"></div>`
+  ).join('');
+  window._pexelsResults = results;
+}
+
+function addPexelsImage(idx) {
+  const r = window._pexelsResults?.[idx];
+  if (!r) return;
+  const sec = blogState.sections[currentSectionIdx];
+  if (!sec) return;
+  if (!sec.media) sec.media = [];
+  sec.media.push({ type: 'image', objectUrl: r.medium, pexelsUrl: r.medium, name: r.alt || 'pexels' });
+  renderSectionEdit(); renderSectionList(); renderPreview(); updateSEO(); scheduleAutoSave();
+}
+
+// ═══════════════════════════════════════
+// Render All
+// ═══════════════════════════════════════
+function renderAll() { renderSectionList(); renderSectionEdit(); renderPreview(); }
+
+// ═══════════════════════════════════════
+// Preview
+// ═══════════════════════════════════════
+function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+function fmtBlogText(text) {
+  let h = esc(text);
+  h = h.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');           // **볼드**
+  h = h.replace(/\/\/(.+?)\/\//g, '<i>$1</i>');                     // //이탤릭//
+  h = h.replace(/__(.+?)__/g, '<u>$1</u>');                         // __밑줄__
+  h = h.replace(/\{\{(.+?)\}\}/g, '<em>$1</em>');                   // {{강조}}
+  h = h.replace(/~~(.+?)~~/g, '<del>$1</del>');                     // ~~취소선~~
+  return h.split(/\n\n+/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
+}
+
+function renderPreview() {
+  collectState();
+  const s = blogState;
+  const today = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+  const hashtags = (s.hashtags || '').split(/\s+/).filter(h => h.startsWith('#') && h.length > 1);
+
+  let html = '';
+  if (s.showNaverHeader !== false) {
+    html += `<div class="blog-header"><span class="naver-logo">NAVER</span><span class="blog-label">Blog</span></div>`;
+  }
+
+  html += `<div class="blog-content">`;
+  html += `<div class="blog-title">${esc(s.title) || '<span style="color:#ccc">제목을 입력하세요</span>'}</div>`;
+  if (s.subtitle) html += `<div class="blog-subtitle">${esc(s.subtitle)}</div>`;
+
+  if (!s.sections.length) {
+    html += `<div style="text-align:center;padding:50px 0;color:#bbb;font-size:13px;">토픽을 입력하고 생성하거나 직접 섹션을 추가하세요</div>`;
+  }
+
+  s.sections.forEach((sec, i) => {
+    if (i > 0) html += '<div class="blog-separator"></div>';
+    html += `<div class="blog-section">`;
+
+    // Media above text
+    if (sec.media?.length) {
+      sec.media.forEach(m => {
+        html += `<div class="blog-section-media">`;
+        if (m.type === 'video') html += `<video src="${m.objectUrl || m.url}" controls muted style="max-height:400px"></video>`;
+        else html += `<img src="${m.objectUrl || m.pexelsUrl || m.url}" alt="${esc(m.name || '')}">`;
+        if (m.name && !m.name.startsWith('pexels')) html += `<div class="media-caption">${esc(m.name)}</div>`;
+        html += `</div>`;
+      });
+    }
+
+    if (sec.heading) html += `<div class="blog-section-heading">${esc(sec.heading)}</div>`;
+    if (sec.body) html += `<div class="blog-section-body">${fmtBlogText(sec.body)}</div>`;
+    html += `</div>`;
+  });
+
+  if (hashtags.length) {
+    html += `<div class="blog-hashtags">${hashtags.map(h => `<span class="blog-hashtag">${esc(h)}</span>`).join('')}</div>`;
+  }
+  html += `</div>`;
+
+  if (s.showFooter !== false) {
+    html += `<div class="blog-footer"><span class="bf-name">${esc(s.bloggerName || 'BDM Lab')}</span><span class="bf-date">${today}</span></div>`;
+  }
+
+  document.getElementById('blogPreview').innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// Auto Save
+// ═══════════════════════════════════════
+let _autoSaveTimer = null;
+function scheduleAutoSave() {
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(() => {
+    collectState();
+    try {
+      const saveData = JSON.parse(JSON.stringify(blogState));
+      // Strip objectUrls from media (can't persist)
+      (saveData.sections || []).forEach(sec => {
+        (sec.media || []).forEach(m => {
+          if (m.pexelsUrl) { m.url = m.pexelsUrl; }
+          delete m.objectUrl; delete m.pexelsUrl;
+        });
+        sec.media = (sec.media || []).filter(m => m.url); // only keep pexels images
+      });
+      localStorage.setItem('bdm_blog_autosave', JSON.stringify(saveData));
+      const el = document.getElementById('autoSaveStatus');
+      el.textContent = 'auto-saved'; el.style.color = '#00FF88';
+      setTimeout(() => { el.style.color = '#333'; }, 1500);
+    } catch (e) { console.warn('Auto-save failed', e); }
+  }, 500);
+}
+
+function loadAutoSave() {
+  try {
+    const raw = localStorage.getItem('bdm_blog_autosave');
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    // Restore pexels URLs as objectUrl for display
+    (data.sections || []).forEach(sec => {
+      (sec.media || []).forEach(m => { if (m.url) { m.objectUrl = m.url; m.pexelsUrl = m.url; } });
+    });
+    return data;
+  } catch { return null; }
+}
+
+// ═══════════════════════════════════════
+// Manual Save & History
+// ═══════════════════════════════════════
+function getDateStr() {
+  const d = new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function getTimeStr() {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function cleanFileName(s) {
+  return (s || 'untitled').replace(/[^\w가-힣\s-]/g, '').replace(/\s+/g, '_').slice(0, 40);
+}
+
+function prepareSaveData() {
+  collectState();
+  const saveData = JSON.parse(JSON.stringify(blogState));
+  delete saveData._loadedId;
+  (saveData.sections || []).forEach(sec => {
+    (sec.media || []).forEach(m => { if (m.pexelsUrl) m.url = m.pexelsUrl; delete m.objectUrl; delete m.pexelsUrl; });
+    sec.media = (sec.media || []).filter(m => m.url);
+  });
+  return saveData;
+}
+
+function manualSave() {
+  collectState();
+  const id = 'blog_' + Date.now();
+  const saveData = prepareSaveData();
+
+  const entry = {
+    id,
+    title: blogState.title || '(제목 없음)',
+    savedAt: new Date().toISOString(),
+    dateFolder: getDateStr(),
+    data: saveData
+  };
+
+  const existingIdx = saveHistory.findIndex(h => h.id === blogState._loadedId);
+  if (existingIdx >= 0) {
+    saveHistory[existingIdx].title = entry.title;
+    saveHistory[existingIdx].savedAt = entry.savedAt;
+    saveHistory[existingIdx].data = entry.data;
+  } else {
+    saveHistory.unshift(entry);
+    blogState._loadedId = id;
+  }
+  persistHistory(); renderHistory();
+  const el = document.getElementById('autoSaveStatus');
+  el.textContent = 'saved!'; el.style.color = '#00FF88';
+  setTimeout(() => { el.style.color = '#333'; }, 2000);
+}
+
+// 📁 파일로 내보내기 (naver-blog-output/YYYYMMDD/제목_HHMM.json)
+function exportToFile() {
+  collectState();
+  const saveData = prepareSaveData();
+  const dateStr = getDateStr();
+  const timeStr = getTimeStr();
+  const title = cleanFileName(blogState.title);
+  const fileName = `${title}_${timeStr}.json`;
+
+  const projectFile = {
+    _type: 'bdm-blog-project',
+    _version: 2,
+    title: blogState.title || '(제목 없음)',
+    savedAt: new Date().toISOString(),
+    dateFolder: dateStr,
+    data: saveData
+  };
+
+  const blob = new Blob([JSON.stringify(projectFile, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  // 폴더 경로는 브라우저가 지정 불가 → 다운로드 후 수동으로 이동하거나 showSaveFilePicker 사용
+  a.download = fileName;
+
+  // File System Access API 시도 (폴더 선택 가능한 브라우저)
+  if (window.showSaveFilePicker) {
+    (async () => {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: fileName,
+          startIn: 'downloads',
+          types: [{ description: 'Blog Project', accept: { 'application/json': ['.json'] } }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        showSaveMsg(`저장 완료: ${fileName}`);
+      } catch (e) {
+        if (e.name !== 'AbortError') { a.click(); showSaveMsg(`다운로드: ${fileName}`); }
+      }
+    })();
+  } else {
+    a.click();
+    showSaveMsg(`다운로드: ${fileName}\n\n📂 naver-blog-output/${dateStr}/ 폴더에 넣어주세요`);
+  }
+  URL.revokeObjectURL(a.href);
+
+  // localStorage에도 저장
+  manualSave();
+}
+
+function showSaveMsg(msg) {
+  const el = document.getElementById('autoSaveStatus');
+  el.textContent = 'exported!'; el.style.color = '#00FF88';
+  setTimeout(() => { el.style.color = '#333'; }, 2000);
+}
+
+// 📂 파일에서 불러오기
+function loadProjectFile() {
+  document.getElementById('loadFileInput').click();
+}
+
+function handleLoadFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const project = JSON.parse(e.target.result);
+      // bdm-blog-project 형식 확인
+      if (project._type === 'bdm-blog-project' && project.data) {
+        blogState = JSON.parse(JSON.stringify(project.data));
+        blogState._loadedId = null;
+      } else if (project.title !== undefined && project.sections !== undefined) {
+        // 직접 데이터 형식
+        blogState = JSON.parse(JSON.stringify(project));
+        blogState._loadedId = null;
+      } else {
+        alert('올바른 프로젝트 파일이 아닙니다.');
+        return;
+      }
+
+      (blogState.sections || []).forEach(sec => {
+        (sec.media || []).forEach(m => { if (m.url) { m.objectUrl = m.url; m.pexelsUrl = m.url; } });
+      });
+      currentSectionIdx = 0;
+      restoreState(); renderAll(); updateSEO(); scheduleAutoSave();
+
+      // 히스토리에도 추가
+      const id = 'blog_' + Date.now();
+      blogState._loadedId = id;
+      saveHistory.unshift({
+        id,
+        title: blogState.title || file.name.replace('.json', ''),
+        savedAt: new Date().toISOString(),
+        dateFolder: getDateStr(),
+        data: prepareSaveData()
+      });
+      persistHistory(); renderHistory();
+
+      const el = document.getElementById('autoSaveStatus');
+      el.textContent = 'loaded!'; el.style.color = '#00FF88';
+      setTimeout(() => { el.style.color = '#333'; }, 2000);
+    } catch (err) {
+      alert('파일을 불러올 수 없습니다: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function loadFromHistory(id) {
+  const entry = saveHistory.find(h => h.id === id);
+  if (!entry) return;
+  blogState = JSON.parse(JSON.stringify(entry.data));
+  blogState._loadedId = id;
+  (blogState.sections || []).forEach(sec => {
+    (sec.media || []).forEach(m => { if (m.url) { m.objectUrl = m.url; m.pexelsUrl = m.url; } });
+  });
+  currentSectionIdx = 0;
+  restoreState(); renderAll(); renderHistory(); updateSEO(); scheduleAutoSave();
+}
+
+function deleteFromHistory(id) {
+  if (!confirm('삭제하시겠습니까?')) return;
+  saveHistory = saveHistory.filter(h => h.id !== id);
+  persistHistory(); renderHistory();
+}
+
+function persistHistory() {
+  try { localStorage.setItem('bdm_blog_history', JSON.stringify(saveHistory)); } catch (e) {}
+}
+
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem('bdm_blog_history') || '[]'); } catch { return []; }
+}
+
+function renderHistory() {
+  const el = document.getElementById('historyList');
+  if (!saveHistory.length) { el.innerHTML = '<div style="text-align:center;padding:10px;font-size:10px;color:#444;">저장된 프로젝트가 없습니다</div>'; return; }
+
+  // 날짜별로 그룹핑
+  const groups = {};
+  saveHistory.forEach(h => {
+    const d = new Date(h.savedAt);
+    const dateKey = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    const dateLabel = `${d.getMonth()+1}월 ${d.getDate()}일`;
+    if (!groups[dateKey]) groups[dateKey] = { label: dateLabel, items: [] };
+    groups[dateKey].items.push(h);
+  });
+
+  let html = '';
+  Object.keys(groups).sort((a,b) => b.localeCompare(a)).forEach(dateKey => {
+    const g = groups[dateKey];
+    html += `<div style="font-size:9px;color:var(--text-muted);font-weight:600;padding:6px 2px 3px;margin-top:4px;border-bottom:1px solid #1a1a1a;">📁 ${g.label} (${dateKey})</div>`;
+    g.items.forEach(h => {
+      const d = new Date(h.savedAt);
+      const ts = `${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+      const isActive = blogState._loadedId === h.id;
+      html += `<div class="history-item ${isActive ? 'active' : ''}" onclick="loadFromHistory('${h.id}')">
+        <span class="h-title">${esc(h.title)}</span><span class="h-date">${ts}</span>
+        <button class="h-delete" onclick="event.stopPropagation();deleteFromHistory('${h.id}')">&times;</button>
+      </div>`;
+    });
+  });
+
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// Export / Copy
+// ═══════════════════════════════════════
+// 네이버 블로그에 붙여넣기용 — 인라인 스타일 포함 HTML 생성
+function buildNaverHTML() {
+  collectState();
+  const s = blogState;
+  let html = '';
+
+  // 제목
+  if (s.title) {
+    html += `<h2 style="font-family:'Noto Sans KR',sans-serif;font-size:24px;font-weight:700;color:#222;line-height:1.5;margin:0 0 8px 0;">${esc(s.title)}</h2>`;
+  }
+  // 부제목
+  if (s.subtitle) {
+    html += `<p style="font-family:'Noto Sans KR',sans-serif;font-size:15px;color:#888;margin:0 0 20px 0;padding-bottom:16px;border-bottom:1px solid #eee;line-height:1.6;">${esc(s.subtitle)}</p>`;
+  }
+
+  s.sections.forEach((sec, i) => {
+    // 구분선
+    if (i > 0) {
+      html += `<div style="width:60px;height:1px;background:#ddd;margin:28px auto;"></div>`;
+    }
+
+    // 이미지
+    if (sec.media?.length) {
+      sec.media.forEach(m => {
+        if (m.type !== 'video' && (m.objectUrl || m.pexelsUrl || m.url)) {
+          html += `<p style="text-align:center;margin:16px 0;"><img src="${m.objectUrl || m.pexelsUrl || m.url}" style="max-width:100%;border-radius:8px;" alt=""></p>`;
+        }
+      });
+    }
+
+    // 소제목 (초록색 왼쪽 바)
+    if (sec.heading) {
+      html += `<h3 style="font-family:'Noto Sans KR',sans-serif;font-size:18px;font-weight:700;color:#333;margin:20px 0 12px 0;padding-left:14px;border-left:4px solid #03C75A;line-height:1.5;">${esc(sec.heading)}</h3>`;
+    }
+
+    // 본문
+    if (sec.body) {
+      const paragraphs = sec.body.split(/\n\n+/);
+      paragraphs.forEach(p => {
+        let h = esc(p);
+        h = h.replace(/\*\*(.+?)\*\*/g, '<b style="color:#222;font-weight:700;">$1</b>');
+        h = h.replace(/\/\/(.+?)\/\//g, '<i style="font-style:italic;">$1</i>');
+        h = h.replace(/__(.+?)__/g, '<u style="text-decoration:underline;">$1</u>');
+        h = h.replace(/\{\{(.+?)\}\}/g, '<span style="color:#03C75A;font-weight:600;">$1</span>');
+        h = h.replace(/~~(.+?)~~/g, '<del style="text-decoration:line-through;color:#999;">$1</del>');
+        h = h.replace(/\n/g, '<br>');
+        html += `<p style="font-family:'Noto Sans KR',sans-serif;font-size:15px;color:#444;line-height:2;margin:0 0 12px 0;">${h}</p>`;
+      });
+    }
+  });
+
+  // 해시태그
+  const tags = (s.hashtags || '').split(/\s+/).filter(h => h.startsWith('#') && h.length > 1);
+  if (tags.length) {
+    html += `<p style="margin-top:24px;padding-top:16px;border-top:1px solid #eee;">`;
+    tags.forEach(tag => {
+      html += `<span style="display:inline-block;padding:5px 12px;margin:2px 3px;background:#f5f5f5;border-radius:20px;font-size:13px;color:#03C75A;font-weight:500;font-family:'Noto Sans KR',sans-serif;">${esc(tag)}</span>`;
+    });
+    html += `</p>`;
+  }
+
+  return html;
+}
+
+function copyBlogHTML() {
+  const html = buildNaverHTML();
+  const blob = new Blob([html], { type: 'text/html' });
+  const plainText = blogStateToPlainText();
+  navigator.clipboard.write([
+    new ClipboardItem({
+      'text/html': blob,
+      'text/plain': new Blob([plainText], { type: 'text/plain' })
+    })
+  ]).then(() => flashCopyBtn(0, '네이버 복사')).catch(() => {
+    // Fallback
+    const el = document.getElementById('blogPreview');
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(range);
+    document.execCommand('copy'); sel.removeAllRanges();
+    flashCopyBtn(0, '네이버 복사');
+  });
+}
+
+function blogStateToPlainText() {
+  collectState();
+  const s = blogState;
+  let text = s.title + '\n\n';
+  if (s.subtitle) text += s.subtitle + '\n\n';
+  s.sections.forEach(sec => {
+    if (sec.heading) text += '\u25A0 ' + sec.heading + '\n\n';
+    if (sec.body) text += sec.body.replace(/\*\*/g, '').replace(/\{\{|\}\}/g, '') + '\n\n';
+  });
+  if (s.hashtags) text += '\n' + s.hashtags;
+  return text.trim();
+}
+
+function copyPlainText() {
+  const text = blogStateToPlainText();
+  navigator.clipboard.writeText(text).then(() => flashCopyBtn(1, '텍스트 복사'));
+}
+
+function flashCopyBtn(idx, orig) {
+  const btns = document.querySelectorAll('.copy-btn');
+  const btn = btns[idx];
+  if (!btn) return;
+  btn.textContent = 'Copied!'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1500);
+}
+
+function exportHTML() {
+  collectState();
+  const s = blogState;
+  const today = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+  const tags = (s.hashtags || '').split(/\s+/).filter(h => h.startsWith('#') && h.length > 1);
+
+  let html = `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${esc(s.title)}</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');body{font-family:'Noto Sans KR',sans-serif;max-width:720px;margin:0 auto;padding:40px 20px;background:#fff;color:#333}h1{font-size:26px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px}.sub{font-size:15px;color:#888;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #eee}.sec{margin-bottom:28px}.sec h2{font-size:18px;font-weight:700;color:#333;margin-bottom:12px;padding-left:12px;border-left:3px solid #03C75A}.sec p{font-size:15px;color:#444;line-height:2;margin-bottom:12px}.sec strong{color:#222}.sec em{color:#03C75A;font-style:normal;font-weight:600}.sec img{width:100%;border-radius:8px;margin:12px 0}.sep{width:60px;height:1px;background:#ddd;margin:28px auto}.tags{padding:20px 0;border-top:1px solid #eee;margin-top:20px;display:flex;flex-wrap:wrap;gap:6px}.tag{padding:5px 12px;background:#f5f5f5;border-radius:20px;font-size:12px;color:#03C75A}.ft{padding:16px 0;border-top:1px solid #eee;margin-top:20px;font-size:12px;color:#999;display:flex;justify-content:space-between}</style></head><body>
+<h1>${esc(s.title)}</h1>${s.subtitle ? `<div class="sub">${esc(s.subtitle)}</div>` : ''}`;
+
+  s.sections.forEach((sec, i) => {
+    if (i > 0) html += '<div class="sep"></div>';
+    html += '<div class="sec">';
+    if (sec.media?.length) sec.media.forEach(m => {
+      if (m.pexelsUrl || m.url) html += `<img src="${m.pexelsUrl || m.url}" alt="">`;
+    });
+    if (sec.heading) html += `<h2>${esc(sec.heading)}</h2>`;
+    if (sec.body) html += fmtBlogText(sec.body);
+    html += '</div>';
+  });
+
+  if (tags.length) html += `<div class="tags">${tags.map(h => `<span class="tag">${esc(h)}</span>`).join('')}</div>`;
+  html += `<div class="ft"><span>${esc(s.bloggerName)}</span><span>${today}</span></div></body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (s.title || 'blog').replace(/[^\w가-힣]/g, '_') + '.html';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ═══════════════════════════════════════
+// Utilities
+// ═══════════════════════════════════════
+function newProject() {
+  if (blogState.title || blogState.sections.length) {
+    if (!confirm('새 글을 시작하시겠습니까?')) return;
+  }
+  blogState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  delete blogState._loadedId;
+  currentSectionIdx = 0;
+  restoreState(); renderAll(); renderHistory(); updateSEO(); scheduleAutoSave();
+}
+
+function showHelp() { document.getElementById('helpModal').style.display = 'flex'; }
+function closeHelp() { document.getElementById('helpModal').style.display = 'none'; }
+
+// 텍스트 선택 영역에 마크업 감싸기
+function wrapSelection(before, after) {
+  const ta = document.getElementById('sectionBodyTA');
+  if (!ta) return;
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  const text = ta.value;
+  const selected = text.substring(start, end);
+
+  if (selected.length > 0) {
+    // 선택 영역을 감싸기
+    const newText = text.substring(0, start) + before + selected + after + text.substring(end);
+    ta.value = newText;
+    ta.selectionStart = start + before.length;
+    ta.selectionEnd = end + before.length;
+  } else {
+    // 선택 없으면 커서 위치에 삽입
+    const placeholder = '텍스트';
+    const newText = text.substring(0, start) + before + placeholder + after + text.substring(end);
+    ta.value = newText;
+    ta.selectionStart = start + before.length;
+    ta.selectionEnd = start + before.length + placeholder.length;
+  }
+
+  ta.focus();
+  ta.dispatchEvent(new Event('input'));
+}
+
+// ═══════════════════════════════════════
+// Thumbnail Generator
+// ═══════════════════════════════════════
+let thumbImage = null;
+let thumbStyle = 'center';
+
+function renderThumb() {
+  const canvas = document.getElementById('thumbCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1080;
+  ctx.clearRect(0, 0, W, H);
+
+  // 배경
+  if (thumbImage) {
+    const img = thumbImage;
+    const sc = Math.max(W / img.width, H / img.height);
+    const sw = img.width * sc, sh = img.height * sc;
+    ctx.drawImage(img, (W - sw) / 2, (H - sh) / 2, sw, sh);
+  } else {
+    // 기본 그라데이션
+    const g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, '#1a1a2e');
+    g.addColorStop(0.5, '#16213e');
+    g.addColorStop(1, '#0f3460');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // 오버레이
+  const overlayVal = parseInt(document.getElementById('thumbOverlay')?.value || 50);
+  ctx.fillStyle = `rgba(0,0,0,${overlayVal / 100})`;
+  ctx.fillRect(0, 0, W, H);
+
+  // 텍스트
+  const text = document.getElementById('thumbText')?.value || '';
+  if (!text) {
+    // 힌트
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '600 36px Pretendard, Noto Sans KR, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('위 텍스트에 썸네일 제목을 입력하세요', W / 2, H / 2);
+    return;
+  }
+
+  const fontSize = parseInt(document.getElementById('thumbFontSize')?.value || 42);
+  const lines = text.split('\n').filter(l => l.length > 0);
+  const lineHeight = fontSize * 1.4;
+  const totalH = lines.length * lineHeight;
+
+  ctx.font = `800 ${fontSize}px Pretendard, Noto Sans KR, sans-serif`;
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetX = 2;
+  ctx.shadowOffsetY = 2;
+
+  let startY, textAlign, startX;
+
+  if (thumbStyle === 'center') {
+    textAlign = 'center';
+    startX = W / 2;
+    startY = (H - totalH) / 2 + fontSize;
+  } else if (thumbStyle === 'bottom') {
+    textAlign = 'center';
+    startX = W / 2;
+    startY = H - totalH - 30 + fontSize;
+  } else { // left
+    textAlign = 'left';
+    startX = 40;
+    startY = (H - totalH) / 2 + fontSize;
+  }
+
+  ctx.textAlign = textAlign;
+  lines.forEach((line, i) => {
+    ctx.fillText(line, startX, startY + i * lineHeight);
+  });
+
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+
+  // 작은 + 아이콘 (참고 이미지처럼)
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.font = '400 20px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.font = '400 28px sans-serif';
+  ctx.fillText('+', W - 30, H - 24);
+}
+
+function handleThumbImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = () => { thumbImage = img; renderThumb(); };
+  img.src = URL.createObjectURL(file);
+}
+
+function setThumbStyle(style) {
+  thumbStyle = style;
+  ['center', 'bottom', 'left'].forEach(s => {
+    const el = document.getElementById('ts' + s.charAt(0).toUpperCase() + s.slice(1));
+    if (el) el.classList.toggle('active', s === style);
+  });
+  renderThumb();
+}
+
+// 썸네일용 짧은 제목 생성 (2줄 이내, 임팩트 있게)
+function generateThumbTitles(blogTitle) {
+  const clean = (blogTitle || '').replace(/[:\-—|·]/g, ' ').replace(/\s+/g, ' ').trim();
+  const keywords = extractKeywords(clean).slice(0, 4);
+  const mainKw = keywords[0] || clean.split(' ')[0] || '블로그';
+  const subKw = keywords[1] || '';
+
+  const titles = [];
+
+  // 1. 원제목 축약 (콜론/대시 앞부분만)
+  const colonIdx = blogTitle.indexOf(':');
+  const dashIdx = blogTitle.indexOf(' - ');
+  if (colonIdx > 3 && colonIdx < blogTitle.length - 3) {
+    titles.push(splitThumbText(blogTitle.substring(0, colonIdx).trim()));
+  }
+  if (dashIdx > 3) {
+    titles.push(splitThumbText(blogTitle.substring(0, dashIdx).trim()));
+  }
+
+  // 2. 키워드 기반 임팩트 제목들
+  titles.push(splitThumbText(`${mainKw} 총정리`));
+  if (subKw) titles.push(splitThumbText(`${mainKw}\n${subKw} 완벽 가이드`));
+  titles.push(splitThumbText(`${mainKw}\n이것만 알면 끝`));
+  titles.push(splitThumbText(`${mainKw}\n핵심 정리`));
+  if (subKw) titles.push(splitThumbText(`${mainKw} ${subKw}\n꼭 알아야 할 것들`));
+  titles.push(splitThumbText(`${mainKw}\nA to Z`));
+
+  // 3. 원제목 2줄 분리 버전
+  titles.push(splitThumbText(clean));
+
+  // 중복 제거, 최대 5개
+  const unique = [...new Set(titles)].filter(t => t.length >= 3).slice(0, 5);
+  return unique;
+}
+
+function splitThumbText(text) {
+  if (text.includes('\n')) return text;
+  if (text.length <= 14) return text;
+  // 공백 기준으로 가운데서 줄바꿈
+  const mid = Math.ceil(text.length / 2);
+  const spaceIdx = text.lastIndexOf(' ', mid + 3);
+  if (spaceIdx > 3) return text.substring(0, spaceIdx) + '\n' + text.substring(spaceIdx + 1);
+  return text.substring(0, mid) + '\n' + text.substring(mid);
+}
+
+// 자동 추천: Pexels에서 관련 사진도 자동 검색
+async function autoGenerateThumb() {
+  const title = document.getElementById('blogTitle')?.value || '';
+  if (!title) { alert('먼저 토픽을 입력하고 블로그 글을 생성하세요.'); return; }
+
+  // 1. 썸네일 제목 추천 목록 표시
+  const suggestions = generateThumbTitles(title);
+  const sugEl = document.getElementById('thumbTitleSuggestions');
+  sugEl.style.display = '';
+  sugEl.innerHTML = `<div style="font-size:10px;color:var(--text-muted);font-weight:600;margin-bottom:4px">썸네일 제목 추천 (클릭하여 선택)</div>` +
+    suggestions.map((t, i) => `<div class="title-suggestion" style="white-space:pre-line;line-height:1.4;padding:8px 10px;${i===0?'border-color:var(--accent);color:var(--accent);':''}" onclick="selectThumbTitle(this.innerText)">${esc(t)}</div>`).join('');
+
+  // 첫번째 추천으로 자동 적용
+  const ta = document.getElementById('thumbText');
+  ta.value = suggestions[0] || splitThumbText(title);
+  renderThumb();
+
+  // 2. Pexels에서 관련 이미지 자동 검색
+  const keywords = extractKeywords(title).slice(0, 2);
+  const searchQuery = keywords.join(' ') || title.split(' ').slice(0, 2).join(' ');
+
+  let pexelsKey = localStorage.getItem('pexels_api_key') || '';
+  if (pexelsKey) {
+    try {
+      const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(searchQuery)}&per_page=6&orientation=landscape`, {
+        headers: { 'Authorization': pexelsKey }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const photos = (data.photos || []).map(p => ({ thumb: p.src.tiny, medium: p.src.large, alt: p.alt }));
+        if (photos.length > 0) {
+          // 첫번째 사진 자동 적용
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => { thumbImage = img; renderThumb(); };
+          img.src = photos[0].medium;
+
+          // 나머지도 선택지로 표시
+          document.getElementById('thumbPexelsWrap').style.display = '';
+          document.getElementById('thumbPexelsResults').innerHTML = photos.map((r, i) =>
+            `<div class="pexels-thumb ${i===0?'style="border-color:var(--accent)"':''}" onclick="selectThumbPexels(${i})" title="${esc(r.alt)}"><img src="${r.thumb}" alt=""></div>`
+          ).join('');
+          window._thumbPexelsResults = photos;
+        }
+      }
+    } catch (e) { /* Pexels 실패해도 제목은 적용됨 */ }
+  } else {
+    // Pexels 키 없으면 기본 배경 유지
+    document.getElementById('thumbPexelsWrap').style.display = 'none';
+  }
+}
+
+function selectThumbTitle(text) {
+  document.getElementById('thumbText').value = text;
+  renderThumb();
+  // 선택된 항목 하이라이트
+  document.querySelectorAll('#thumbTitleSuggestions .title-suggestion').forEach(el => {
+    el.style.borderColor = el.innerText === text ? 'var(--accent)' : '';
+    el.style.color = el.innerText === text ? 'var(--accent)' : '';
+  });
+}
+
+function autoFillThumb() {
+  const title = document.getElementById('blogTitle')?.value || '';
+  if (!title) { alert('먼저 블로그 제목을 입력하세요.'); return; }
+  const ta = document.getElementById('thumbText');
+  ta.value = splitThumbText(title);
+  renderThumb();
+}
+
+function downloadThumb() {
+  const canvas = document.getElementById('thumbCanvas');
+  canvas.toBlob(blob => {
+    const a = document.createElement('a');
+    const title = cleanFileName(document.getElementById('thumbText')?.value || 'thumbnail');
+    a.download = `thumb_${title}_${getDateStr()}.png`;
+    a.href = URL.createObjectURL(blob);
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }, 'image/png');
+}
+
+async function searchThumbPexels() {
+  const query = document.getElementById('thumbPexelsQ')?.value?.trim();
+  if (!query) return;
+  let pexelsKey = localStorage.getItem('pexels_api_key') || '';
+  if (!pexelsKey) {
+    pexelsKey = prompt('Pexels API Key를 입력하세요.\n(pexels.com/api 에서 무료 발급)');
+    if (!pexelsKey) return;
+    localStorage.setItem('pexels_api_key', pexelsKey);
+  }
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=8&orientation=landscape`, {
+      headers: { 'Authorization': pexelsKey }
+    });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    const results = (data.photos || []).map(p => ({ thumb: p.src.tiny, medium: p.src.large, alt: p.alt }));
+    document.getElementById('thumbPexelsResults').innerHTML = results.map((r, i) =>
+      `<div class="pexels-thumb" onclick="selectThumbPexels(${i})" title="${esc(r.alt)}"><img src="${r.thumb}" alt=""></div>`
+    ).join('');
+    window._thumbPexelsResults = results;
+  } catch (e) {
+    document.getElementById('thumbPexelsResults').innerHTML = '<div style="font-size:10px;color:var(--danger);padding:4px">검색 실패</div>';
+  }
+}
+
+function selectThumbPexels(idx) {
+  const r = window._thumbPexelsResults?.[idx];
+  if (!r) return;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => { thumbImage = img; renderThumb(); };
+  img.src = r.medium;
+}
+
+// 초기 렌더
+setTimeout(renderThumb, 300);
+
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const arrow = el.previousElementSibling?.querySelector('.collapse-arrow');
+  el.classList.toggle('collapsed');
+  if (arrow) arrow.classList.toggle('collapsed');
+  // Set max-height for animation
+  if (!el.classList.contains('collapsed')) { el.style.maxHeight = el.scrollHeight + 500 + 'px'; }
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); manualSave(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'n') { e.preventDefault(); newProject(); }
+});
+</script>
+</body>
+</html>

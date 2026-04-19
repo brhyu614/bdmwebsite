@@ -1,0 +1,11 @@
+image_01.jpg — 배달/치킨 관련
+https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1200&h=800&fit=crop
+
+image_02.jpg — 스마트폰 앱 사용
+https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&fit=crop
+
+image_03.jpg — 도시 거리/상권
+https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&h=800&fit=crop
+
+image_04.jpg — 프랜차이즈 매장
+https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&h=800&fit=crop

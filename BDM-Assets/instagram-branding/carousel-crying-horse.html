@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Lab Carousel — 우는 말 인형</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #e5e5e5;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 60px;
+  }
+
+  h2.section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1C1917;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  p.section-desc {
+    font-size: 14px;
+    color: #78716C;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .slides-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .slide {
+    width: 360px;
+    height: 450px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .slide-number {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    z-index: 10;
+  }
+
+  /* ============================================
+     OPTION A — Light, Editorial
+     ============================================ */
+  .opt-a {
+    background: #FAFAF9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .opt-a .top-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #059669;
+    margin-bottom: 24px;
+  }
+  .opt-a .main-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.45;
+    color: #1C1917;
+    word-break: keep-all;
+  }
+  .opt-a .main-text em {
+    font-style: normal;
+    color: #059669;
+  }
+  .opt-a .sub-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #78716C;
+    margin-top: 20px;
+    word-break: keep-all;
+  }
+  .opt-a .accent-line {
+    width: 40px;
+    height: 3px;
+    background: #059669;
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+  .opt-a .bottom-brand {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #A8A29E;
+    text-transform: uppercase;
+  }
+
+  .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+  .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+  .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+
+  .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+  .opt-a .compare-label { font-size: 12px; color: #78716C; }
+  .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+
+  .opt-a .num-list { text-align: left; width: 100%; }
+  .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+  .opt-a .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-a .num-text { font-size: 13px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+  .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+
+  /* ============================================
+     OPTION B — Dark, Bold
+     ============================================ */
+  .opt-b {
+    background: #0F0F0F;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+  .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+  .opt-b .main-text em { font-style: normal; color: #34d399; }
+  .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+  .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+  .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+
+  .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+  .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+  .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+
+  .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+  .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+  .opt-b .compare-label { font-size: 12px; color: #78716C; }
+  .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+
+  .opt-b .num-list { text-align: left; width: 100%; }
+  .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+  .opt-b .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .opt-b .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+  .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+
+  .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+
+</style>
+</head>
+<body>
+
+<!-- =============================================
+     OPTION A — Light Editorial
+     ============================================= -->
+<h2 class="section-title">Option A — Light Editorial</h2>
+<p class="section-desc">우는 말 인형 — 불량품이 20,000개 팔린 구조</p>
+
+<div class="slides-row">
+
+  <!-- SLIDE 1: Hook -->
+  <div class="slide">
+    <div class="slide-number">1/9</div>
+    <div class="opt-a">
+      <div class="top-label">알고리즘 디코드</div>
+      <div class="main-text" style="font-size: 28px;">
+        중국의 한 공장에서<br>
+        말 인형의 입을<br>
+        <em>거꾸로</em> 꿰맸다.
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text">
+        다음 날 주문량:
+      </div>
+      <div class="main-text" style="font-size: 22px; margin-top: 8px;">
+        400개 → <em>20,000개.</em>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: 무슨 일이 있었나 -->
+  <div class="slide">
+    <div class="slide-number">2/9</div>
+    <div class="opt-a">
+      <div class="top-label">현상</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        무슨 일이 있었나
+      </div>
+      <div class="sub-text" style="margin-top: 0; text-align: left; font-size: 14px;">
+        말의 해를 맞아<br>
+        빨간 말 인형을 만들고 있었다.<br><br>
+        웃는 입을 달아야 하는데<br>
+        한 작업자가 입꼬리를 반대로 꿰맸다.<br><br>
+        <strong style="color: #1C1917;">말이 울고 있었다.</strong>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: 고객의 선택 -->
+  <div class="slide">
+    <div class="slide-number">3/9</div>
+    <div class="opt-a">
+      <div class="top-label">전환점</div>
+      <div class="main-text" style="font-size: 22px;">
+        고객의 선택
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text" style="text-align: left; font-size: 14px;">
+        항저우의 한 고객이<br>
+        이 불량품을 받았다.<br><br>
+        환불? <strong style="color: #dc2626;">거절.</strong><br>
+        대신 사진을 찍어 올렸다.<br><br>
+        <em style="color: #059669;">48시간 뒤,</em> 공장은 생산 라인을<br>
+        <strong style="color: #1C1917;">2개 → 10개 이상</strong>으로 확대했다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 왜 결함이 더 잘 팔리는가 (ACCENT GREEN) -->
+  <div class="slide">
+    <div class="slide-number">4/9</div>
+    <div class="opt-a" style="background: #059669;">
+      <div class="top-label" style="color: rgba(255,255,255,0.6);">연구</div>
+      <div class="main-text" style="color: white; font-size: 32px;">
+        왜 결함이<br>더 잘 팔리는가
+      </div>
+      <div class="accent-line" style="background: rgba(255,255,255,0.4);"></div>
+      <div class="sub-text" style="color: rgba(255,255,255,0.8); font-size: 13px; text-align: left;">
+        예일대 연구 (Journal of Consumer Research, 2018):<br><br>
+        → 실수로 만들어진 제품을 더 선호한다.<br><br>
+        이유: 실수는 희소하다 → 더 특별하게 느낀다.<br><br>
+        단, 조건: 실수가 유일하고 비의도적이어야.
+      </div>
+      <div class="bottom-brand" style="color: rgba(255,255,255,0.3);">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: 감정 연결 -->
+  <div class="slide">
+    <div class="slide-number">5/9</div>
+    <div class="opt-a">
+      <div class="top-label">심리</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        <em>감정</em> 연결
+      </div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">牛马(뉴마)</div>
+          <div class="compare-value" style="color: #1C1917;">소와 말 = 과로의 은어</div>
+        </div>
+      </div>
+      <div class="sub-text" style="text-align: left; margin-top: 16px;">
+        "이게 출근할 때 내 표정이고,<br>
+        웃는 말은 퇴근할 때 내 표정"<br><br>
+        → 우는 말은 제품이 아니라<br>
+        <strong style="color: #1C1917;">감정 표현의 매체</strong>가 됐다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 알고리즘 루프 (NUM LIST) -->
+  <div class="slide">
+    <div class="slide-number">6/9</div>
+    <div class="opt-a">
+      <div class="top-label">메커니즘</div>
+      <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+        알고리즘 루프
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text"><strong>멈춤:</strong> 설 인형이 울고 있다? → 인지적 불일치</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text"><strong>감정:</strong> "이게 나야" → 공감 + 유머</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text"><strong>공유:</strong> 놀라움 + 유대감 → 소셜 화폐</div>
+        </div>
+      </div>
+      <div class="sub-text" style="font-size: 12px;">
+        → 세 단계가 동시에 작동하면 <strong style="color: #1C1917;">폭발.</strong>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: 아무도 검색하지 않았다 -->
+  <div class="slide">
+    <div class="slide-number">7/9</div>
+    <div class="opt-a">
+      <div class="top-label">시사점</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        아무도<br><em>검색하지 않았다</em>
+      </div>
+      <div class="sub-text" style="margin-top: 0; text-align: left; font-size: 14px;">
+        이 인형을 검색해서 산 사람은<br>
+        거의 없다.<br><br>
+        더우인(중국 TikTok) 피드에서<br>
+        우연히 발견했다.<br><br>
+        → <strong style="color: #1C1917;">발견형 커머스:</strong><br>
+        필요를 인식하기 전에<br>
+        필요를 만들어주는 구조.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 기업이 배울 것 (NUM LIST) -->
+  <div class="slide">
+    <div class="slide-number">8/9</div>
+    <div class="opt-a">
+      <div class="top-label">전략</div>
+      <div class="main-text" style="font-size: 18px; margin-bottom: 16px;">
+        기업이 배울 것
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text"><strong>결함 = 위기가 아니라 신호</strong>로 읽어라</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text">기능적 우수성은 알고리즘 연료가 안 된다. <strong>감정적 공명("이게 나야")</strong>이 알고리즘 연료다.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text"><strong>48시간 안에</strong> 생산 라인 전환한 속도가 핵심.</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: CTA -->
+  <div class="slide">
+    <div class="slide-number">9/9</div>
+    <div class="opt-a" style="justify-content: center;">
+      <div style="margin-bottom: 24px;">
+        <svg width="64" height="64" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="248" fill="#0a0a0a"/>
+          <circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/>
+          <rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/>
+          <rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/>
+          <rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/>
+          <rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/>
+          <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+        </svg>
+      </div>
+      <div class="main-text" style="font-size: 14px; font-weight: 600; color: #57534E;">알고리즘은 완벽함을 보상하지 않는다.<br>감정을 보상한다.</div>
+      <div class="accent-line" style="margin: 20px auto;"></div>
+      <div class="sub-text" style="font-size: 14px; color: #44403C; margin-top: 0;">전체 분석 읽기</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #059669; margin-top: 8px; font-weight: 600;">bigdatamarketinglab.com</div>
+      <div style="font-size: 11px; color: #A8A29E; margin-top: 20px;">@bdm.lab</div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- =============================================
+     OPTION B — Dark Bold
+     ============================================= -->
+<h2 class="section-title" style="margin-top: 40px;">Option B — Dark Bold</h2>
+<p class="section-desc">우는 말 인형 — 불량품이 20,000개 팔린 구조</p>
+
+<div class="slides-row">
+
+  <!-- SLIDE 1: Hook -->
+  <div class="slide">
+    <div class="slide-number">1/9</div>
+    <div class="opt-b">
+      <div class="top-label">알고리즘 디코드</div>
+      <div class="main-text" style="font-size: 28px;">
+        중국의 한 공장에서<br>
+        말 인형의 입을<br>
+        <em>거꾸로</em> 꿰맸다.
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text">
+        다음 날 주문량:
+      </div>
+      <div class="main-text" style="font-size: 22px; margin-top: 8px;">
+        400개 → <em>20,000개.</em>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: 무슨 일이 있었나 -->
+  <div class="slide">
+    <div class="slide-number">2/9</div>
+    <div class="opt-b">
+      <div class="top-label">현상</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        무슨 일이 있었나
+      </div>
+      <div class="sub-text" style="margin-top: 0; text-align: left; font-size: 14px;">
+        말의 해를 맞아<br>
+        빨간 말 인형을 만들고 있었다.<br><br>
+        웃는 입을 달아야 하는데<br>
+        한 작업자가 입꼬리를 반대로 꿰맸다.<br><br>
+        <strong style="color: #FAFAF9;">말이 울고 있었다.</strong>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: 고객의 선택 -->
+  <div class="slide">
+    <div class="slide-number">3/9</div>
+    <div class="opt-b">
+      <div class="top-label">전환점</div>
+      <div class="main-text" style="font-size: 22px;">
+        고객의 선택
+      </div>
+      <div class="accent-line"></div>
+      <div class="sub-text" style="text-align: left; font-size: 14px;">
+        항저우의 한 고객이<br>
+        이 불량품을 받았다.<br><br>
+        환불? <strong style="color: #ef4444;">거절.</strong><br>
+        대신 사진을 찍어 올렸다.<br><br>
+        <em style="color: #34d399;">48시간 뒤,</em> 공장은 생산 라인을<br>
+        <strong style="color: #FAFAF9;">2개 → 10개 이상</strong>으로 확대했다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 왜 결함이 더 잘 팔리는가 (ACCENT GREEN) -->
+  <div class="slide">
+    <div class="slide-number">4/9</div>
+    <div class="opt-b" style="background: linear-gradient(160deg, #059669 0%, #047857 100%);">
+      <div class="top-label" style="color: rgba(255,255,255,0.5);">연구</div>
+      <div class="main-text" style="color: white; font-size: 32px;">
+        왜 결함이<br>더 잘 팔리는가
+      </div>
+      <div class="accent-line" style="background: rgba(255,255,255,0.3);"></div>
+      <div class="sub-text" style="color: rgba(255,255,255,0.8); font-size: 13px; text-align: left;">
+        예일대 연구 (Journal of Consumer Research, 2018):<br><br>
+        → 실수로 만들어진 제품을 더 선호한다.<br><br>
+        이유: 실수는 희소하다 → 더 특별하게 느낀다.<br><br>
+        단, 조건: 실수가 유일하고 비의도적이어야.
+      </div>
+      <div class="bottom-brand" style="color: rgba(255,255,255,0.25);">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: 감정 연결 -->
+  <div class="slide">
+    <div class="slide-number">5/9</div>
+    <div class="opt-b">
+      <div class="top-label">심리</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        <em>감정</em> 연결
+      </div>
+      <div class="compare-box">
+        <div class="compare-row">
+          <div class="compare-label">牛马(뉴마)</div>
+          <div class="compare-value" style="color: #FAFAF9;">소와 말 = 과로의 은어</div>
+        </div>
+      </div>
+      <div class="sub-text" style="text-align: left; margin-top: 16px;">
+        "이게 출근할 때 내 표정이고,<br>
+        웃는 말은 퇴근할 때 내 표정"<br><br>
+        → 우는 말은 제품이 아니라<br>
+        <strong style="color: #FAFAF9;">감정 표현의 매체</strong>가 됐다.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 알고리즘 루프 (NUM LIST) -->
+  <div class="slide">
+    <div class="slide-number">6/9</div>
+    <div class="opt-b">
+      <div class="top-label">메커니즘</div>
+      <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+        알고리즘 루프
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text"><strong>멈춤:</strong> 설 인형이 울고 있다? → 인지적 불일치</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text"><strong>감정:</strong> "이게 나야" → 공감 + 유머</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text"><strong>공유:</strong> 놀라움 + 유대감 → 소셜 화폐</div>
+        </div>
+      </div>
+      <div class="sub-text" style="font-size: 12px;">
+        → 세 단계가 동시에 작동하면 <strong style="color: #FAFAF9;">폭발.</strong>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: 아무도 검색하지 않았다 -->
+  <div class="slide">
+    <div class="slide-number">7/9</div>
+    <div class="opt-b">
+      <div class="top-label">시사점</div>
+      <div class="main-text" style="font-size: 22px; margin-bottom: 16px;">
+        아무도<br><em>검색하지 않았다</em>
+      </div>
+      <div class="sub-text" style="margin-top: 0; text-align: left; font-size: 14px;">
+        이 인형을 검색해서 산 사람은<br>
+        거의 없다.<br><br>
+        더우인(중국 TikTok) 피드에서<br>
+        우연히 발견했다.<br><br>
+        → <strong style="color: #FAFAF9;">발견형 커머스:</strong><br>
+        필요를 인식하기 전에<br>
+        필요를 만들어주는 구조.
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 기업이 배울 것 (NUM LIST) -->
+  <div class="slide">
+    <div class="slide-number">8/9</div>
+    <div class="opt-b">
+      <div class="top-label">전략</div>
+      <div class="main-text" style="font-size: 18px; margin-bottom: 16px;">
+        기업이 배울 것
+      </div>
+      <div class="num-list">
+        <div class="num-item">
+          <div class="num-circle">1</div>
+          <div class="num-text"><strong>결함 = 위기가 아니라 신호</strong>로 읽어라</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">2</div>
+          <div class="num-text">기능적 우수성은 알고리즘 연료가 안 된다. <strong>감정적 공명("이게 나야")</strong>이 알고리즘 연료다.</div>
+        </div>
+        <div class="num-item">
+          <div class="num-circle">3</div>
+          <div class="num-text"><strong>48시간 안에</strong> 생산 라인 전환한 속도가 핵심.</div>
+        </div>
+      </div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: CTA -->
+  <div class="slide">
+    <div class="slide-number">9/9</div>
+    <div class="opt-b" style="justify-content: center;">
+      <div style="margin-bottom: 24px;">
+        <svg width="64" height="64" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="248" fill="#1A1A1A"/>
+          <circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/>
+          <rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/>
+          <rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/>
+          <rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/>
+          <rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/>
+          <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+        </svg>
+      </div>
+      <div class="main-text" style="font-size: 14px; font-weight: 600; color: #A8A29E;">알고리즘은 완벽함을 보상하지 않는다.<br>감정을 보상한다.</div>
+      <div class="accent-line" style="margin: 20px auto;"></div>
+      <div class="sub-text" style="font-size: 14px; color: #D6D3D1; margin-top: 0;">전체 분석 읽기</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #34d399; margin-top: 8px; font-weight: 600;">bigdatamarketinglab.com</div>
+      <div style="font-size: 11px; color: #57534E; margin-top: 20px;">@bdm.lab</div>
+      <div class="bottom-brand">BDM Lab &middot; Big Data Marketing Lab</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin: 40px 0; padding: 24px; background: white; border-radius: 12px; max-width: 600px; text-align: center;">
+  <p style="font-size: 13px; color: #78716C; line-height: 1.8;">
+    <strong style="color: #1C1917;">사용법:</strong> 각 슬라이드를 1080&times;1350px 비율로 스크린샷하거나,<br>
+    브라우저에서 개별 슬라이드를 우클릭 &gt; 검사 &gt; 캡처하세요.<br>
+    또는 Figma/Canva에 이 디자인을 옮겨서 사용할 수 있습니다.
+  </p>
+</div>
+
+</body>
+</html>

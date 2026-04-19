@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-Regular.ttf'); font-weight: 400; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-Medium.ttf'); font-weight: 500; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-SemiBold.ttf'); font-weight: 600; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-Bold.ttf'); font-weight: 700; }
+  @font-face { font-family: 'Pretendard'; src: url('file://{{ home }}/Library/Fonts/Pretendard-ExtraBold.ttf'); font-weight: 800; }
+
+  :root { --accent: {{ accent }}; }
+  * { margin: 0; padding: 0; box-sizing: border-box; word-break: keep-all; overflow-wrap: break-word; }
+  body { font-family: 'Pretendard', -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; }
+
+  .slide {
+    width: 1080px; height: 1350px;
+    position: relative; overflow: hidden;
+    background: #0A0A0A;
+  }
+
+  .top-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px; background: var(--accent); z-index: 5;
+  }
+
+  .content {
+    height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 80px;
+  }
+
+  .source { font-size: 24px; font-weight: 600; color: var(--accent); letter-spacing: 1px; margin-bottom: 48px; }
+  .brand-name { font-size: 96px; font-weight: 800; color: var(--accent); letter-spacing: 6px; margin-bottom: 8px; }
+  .brand-sub { font-size: 28px; font-weight: 500; color: rgba(255,255,255,0.4); margin-bottom: 56px; }
+  .divider { width: 48px; height: 3px; background: rgba(255,255,255,0.12); margin: 0 auto 48px; }
+  .closing { font-size: 36px; font-weight: 400; line-height: 1.8; color: rgba(255,255,255,0.35); margin-bottom: 44px; }
+  .cta { font-size: 48px; font-weight: 700; line-height: 1.5; color: #fff; margin-bottom: 52px; }
+  .cta .acc { color: var(--accent); }
+  .links { font-size: 24px; color: var(--accent); font-weight: 500; line-height: 2; }
+  .handle { font-size: 22px; color: rgba(255,255,255,0.2); margin-top: 8px; }
+
+  .footer {
+    position: absolute; bottom: 36px; left: 0; right: 0;
+    text-align: center; font-size: 18px; font-weight: 500;
+    font-style: italic; letter-spacing: 1px;
+    color: rgba(255,255,255,0.2); z-index: 5;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-bar"></div>
+  <div class="content">
+    <div class="source">{{ source }}</div>
+    <div class="brand-name">BDM</div>
+    <div class="brand-sub">{{ brand_sub }}</div>
+    <div class="divider"></div>
+    <div class="closing">{{ closing }}</div>
+    <div class="cta">{{ cta }}</div>
+    <div class="links">{{ links_html }}</div>
+    <div class="handle">@bdm.lab</div>
+  </div>
+  <div class="footer">{{ footer }}</div>
+</div>
+</body>
+</html>

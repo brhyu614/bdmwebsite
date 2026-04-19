@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face { font-family: 'Pretendard'; src: url('file:///Users/jeongseongyeong/Library/Fonts/Pretendard-Regular.ttf'); font-weight: 400; }
+  @font-face { font-family: 'Pretendard'; src: url('file:///Users/jeongseongyeong/Library/Fonts/Pretendard-Medium.ttf'); font-weight: 500; }
+  @font-face { font-family: 'Pretendard'; src: url('file:///Users/jeongseongyeong/Library/Fonts/Pretendard-SemiBold.ttf'); font-weight: 600; }
+  @font-face { font-family: 'Pretendard'; src: url('file:///Users/jeongseongyeong/Library/Fonts/Pretendard-Bold.ttf'); font-weight: 700; }
+  @font-face { font-family: 'Pretendard'; src: url('file:///Users/jeongseongyeong/Library/Fonts/Pretendard-ExtraBold.ttf'); font-weight: 800; }
+
+  :root { --accent: #39FF14; }
+  * { margin: 0; padding: 0; box-sizing: border-box; word-break: keep-all; overflow-wrap: break-word; }
+  body { font-family: 'Pretendard', -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; }
+
+  .slide {
+    width: 1080px; height: 1350px;
+    position: relative; overflow: hidden;
+  }
+
+  /* Background video */
+  .bg-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
+  }
+
+  .bg-grad {
+    position: absolute; inset: 0; z-index: 1;
+  }
+
+  /* Variant gradients */
+  .dark .bg-grad {
+    background: linear-gradient(180deg,
+      rgba(17,17,17,0.1) 0%, rgba(17,17,17,0.2) 30%,
+      rgba(17,17,17,0.7) 50%, #111 65%);
+  }
+  .light .bg-grad {
+    background: linear-gradient(180deg,
+      rgba(250,250,250,0.0) 0%, rgba(250,250,250,0.2) 30%,
+      rgba(250,250,250,0.75) 50%, #FAFAFA 65%);
+  }
+  .green .bg-grad {
+    background: linear-gradient(180deg,
+      #39FF1400 0%, #39FF144D 35%,
+      #39FF14D9 55%, #39FF14 68%);
+  }
+
+  .cat-tag {
+    position: absolute; top: 52px; left: 72px;
+    padding-left: 14px;
+    font-size: 20px; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    z-index: 5;
+  }
+
+  .mute {
+    position: absolute; top: 52px; right: 36px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(0,0,0,0.45); z-index: 5;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mute svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.7); }
+
+  .text-area {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 0 80px 90px; z-index: 3;
+  }
+  .text-area h2 {
+    font-size: 52px; font-weight: 800;
+    line-height: 1.35; margin-bottom: 28px;
+  }
+  .text-area .body {
+    font-size: 28px; font-weight: 400; line-height: 1.85;
+  }
+  .text-area .body strong { font-weight: 700; }
+
+  .footer {
+    position: absolute; bottom: 36px; left: 0; right: 0;
+    text-align: center; font-size: 18px; font-weight: 500;
+    font-style: italic; letter-spacing: 1px; z-index: 5;
+  }
+
+  /* ── Dark variant ── */
+  .dark { background: #111; }
+  .dark .cat-tag { color: rgba(255,255,255,0.5); border-left: 3px solid var(--accent); }
+  .dark .text-area h2 { color: #fff; }
+  .dark .text-area h2 .acc { color: var(--accent); }
+  .dark .text-area .body { color: rgba(255,255,255,0.55); }
+  .dark .text-area .body strong { color: #fff; }
+  .dark .text-area .body .hl { color: var(--accent); font-weight: 700; }
+  .dark .footer { color: rgba(255,255,255,0.2); }
+
+  /* ── Light variant ── */
+  .light { background: #FAFAFA; }
+  .light .cat-tag { color: rgba(30,30,30,0.4); border-left: 3px solid var(--accent); }
+  .light .text-area h2 { color: #1A1A1A; }
+  .light .text-area h2 .acc { color: var(--accent); }
+  .light .text-area .body { color: rgba(30,30,30,0.5); }
+  .light .text-area .body strong { color: #1A1A1A; }
+  .light .text-area .body .hl { color: var(--accent); font-weight: 700; }
+  .light .footer { color: rgba(30,30,30,0.2); }
+
+  /* ── Green variant ── */
+  .green { background: var(--accent); }
+  .green .cat-tag { color: rgba(255,255,255,0.6); border-left: 3px solid #fff; }
+  .green .text-area h2 { color: #fff; }
+  .green .text-area .body { color: rgba(255,255,255,0.8); }
+  .green .text-area .body strong { color: #fff; }
+  .green .footer { color: rgba(255,255,255,0.35); }
+
+  /* Slide number badge */
+  .slide-num {
+    position: absolute; top: 52px; left: 50%;
+    transform: translateX(-50%);
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; z-index: 5;
+  }
+  .dark .slide-num { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
+  .light .slide-num { background: rgba(0,0,0,0.06); color: rgba(0,0,0,0.3); }
+  .green .slide-num { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+<div class="slide dark">
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="/Users/jeongseongyeong/Dropbox/BDM-Assets/carousel-output/c2/bg_videos/video_7.mp4" type="video/mp4">
+  </video>
+  <div class="bg-grad"></div>
+  <div class="cat-tag">ACTION</div>
+  <div class="slide-num">7</div>
+  <div class="mute"><svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg></div>
+  <div class="text-area">
+    <h2>기다리고 있습니까,<br>먼저 침투하고 있습니까?</h2>
+    <div class="body"><div class="body">고객이 굳이 우리를 검색하게 기다리고 있습니까?</div><div style="height:8px;"></div><div class="body">아니면 고객의 알고리즘 피드에 <span class="hl">먼저 침투</span>하고 있습니까?</div></div>
+  </div>
+  <div class="footer">BDM Lab · @bdm.lab</div>
+</div>
+</body>
+</html>

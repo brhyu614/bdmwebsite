@@ -1,0 +1,8 @@
+image_01.jpg — AI 쇼핑/스마트폰
+https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&fit=crop
+
+image_02.jpg — 이커머스/택배
+https://images.unsplash.com/photo-1556742111-a301076d9d18?w=1200&h=800&fit=crop
+
+image_03.jpg — 검색/컴퓨터
+https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=1200&h=800&fit=crop

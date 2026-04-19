@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM Carousel — 발견형 쇼핑 (DBR 기고) v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1a1a1a; display:flex; flex-wrap:wrap; gap:24px; padding:32px; justify-content:center; font-family:'Noto Sans KR',sans-serif; }
+  h2.sec { width:100%; text-align:center; font-family:'Outfit',sans-serif; font-size:20px; font-weight:700; color:#F5F5F4; margin:16px 0 8px; }
+  .s { width:360px; height:450px; border-radius:6px; overflow:hidden; position:relative; display:flex; flex-direction:column; padding:40px 36px; }
+  /* Light */
+  .L { background:#FAFAF9; color:#1C1917; }
+  .L .lbl { color:#059669; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .L .h1 { font-size:26px; font-weight:900; line-height:1.32; letter-spacing:-0.8px; }
+  .L .p { font-size:13px; line-height:1.75; color:#57534E; }
+  .L .acc { color:#059669; }
+  .L .bar { width:40px; height:3px; background:#059669; border-radius:2px; }
+  .L .card { background:#F5F5F4; border-radius:8px; padding:14px; }
+  .L .card-b { border:1px solid #E7E5E4; }
+  .L .card-g { background:#ECFDF5; border:1px solid #A7F3D0; }
+  .L .div { width:100%; height:1px; background:#E7E5E4; }
+  .L .mut { color:#A8A29E; }
+  .L .sub { color:#78716C; }
+  .L .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:#A8A29E; }
+  .L .num { font-family:'Outfit',sans-serif; font-size:52px; font-weight:900; color:#059669; line-height:1; }
+  .L .nc { width:24px; height:24px; border-radius:50%; background:#059669; color:white; display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; flex-shrink:0; }
+  .L .badge { background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:4px; font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; display:inline-block; }
+  .L .cta-t { font-family:'Outfit',sans-serif; font-weight:900; font-size:28px; color:#059669; letter-spacing:-1px; }
+  .L .cta-l { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#059669; }
+  /* Dark */
+  .D { background:#0F0F0F; color:#F5F5F4; }
+  .D .lbl { color:#34d399; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .D .h1 { font-size:26px; font-weight:900; line-height:1.32; letter-spacing:-0.8px; }
+  .D .p { font-size:13px; line-height:1.75; color:#A8A29E; }
+  .D .acc { color:#34d399; }
+  .D .bar { width:40px; height:3px; background:#34d399; border-radius:2px; }
+  .D .card { background:#1A1A1A; border-radius:8px; padding:14px; }
+  .D .card-b { border:1px solid #2A2A2A; }
+  .D .card-g { background:#0d2e23; border:1px solid #065F46; }
+  .D .div { width:100%; height:1px; background:#2A2A2A; }
+  .D .mut { color:#6b7280; }
+  .D .sub { color:#9CA3AF; }
+  .D .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:#6b7280; }
+  .D .num { font-family:'Outfit',sans-serif; font-size:52px; font-weight:900; color:#34d399; line-height:1; }
+  .D .nc { width:24px; height:24px; border-radius:50%; background:#34d399; color:#0F0F0F; display:flex; align-items:center; justify-content:center; font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; flex-shrink:0; }
+  .D .badge { background:#78350F; color:#FDE68A; padding:4px 10px; border-radius:4px; font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; display:inline-block; }
+  .D .cta-t { font-family:'Outfit',sans-serif; font-weight:900; font-size:28px; color:#34d399; letter-spacing:-1px; }
+  .D .cta-l { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#34d399; }
+  /* Accent slide */
+  .A { background:#059669; color:white; }
+  .A .lbl { color:rgba(255,255,255,.7); font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .A .h1 { font-size:24px; font-weight:900; line-height:1.35; color:white; }
+  .A .p { font-size:14px; line-height:1.8; color:rgba(255,255,255,.9); }
+  .A .bar { width:40px; height:3px; background:rgba(255,255,255,.5); border-radius:2px; }
+  .A .ft { position:absolute; bottom:16px; left:36px; right:36px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:8px; color:rgba(255,255,255,.5); }
+  /* utils */
+  .fc { display:flex; flex-direction:column; }
+  .fr { display:flex; flex-direction:row; }
+  .f1 { flex:1; } .g4{gap:4px} .g6{gap:6px} .g8{gap:8px} .g10{gap:10px} .g12{gap:12px} .g16{gap:16px} .g20{gap:20px}
+  .ac { align-items:center; } .jc { justify-content:center; } .jb { justify-content:space-between; }
+  .tc { text-align:center; } .w100 { width:100%; }
+  .ni { display:flex; gap:12px; align-items:flex-start; }
+  .swipe { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.5px; opacity:0.6; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LIGHT ═══════════ -->
+<h2 class="sec">Option A — Light</h2>
+
+<!-- S1: Hook -->
+<div class="s L">
+  <div class="fc g16 f1">
+    <div class="fr g8 ac"><span class="lbl">DBR 432호 기고</span><span class="badge">동아비즈니스리뷰</span></div>
+    <div class="bar"></div>
+    <div class="h1">마지막으로<br>'검색'해서<br>뭔가 산 게 <span class="acc">언제야?</span></div>
+    <div class="p">아마 기억이 안 날 거다.<br><br>요즘은 인스타 피드를 넘기다가<br>"어, 이거 괜찮은데?" 하고<br>그냥 사버리니까.<br><br><strong>이게 우연이 아니라는 걸 알면 무섭다.</strong></div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>1 / 9 →</span></div>
+</div>
+
+<!-- S2: Data -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">DATA</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px">숫자로 보면 더 확실하다</div>
+    <div class="fr g16 ac" style="margin-top:8px">
+      <div class="fc ac g4" style="flex:1">
+        <div class="num">58.5</div>
+        <div style="font-family:'Outfit'; font-size:18px; font-weight:700; color:#059669;">%</div>
+        <div style="font-size:11px; color:#78716C; text-align:center; margin-top:4px">구글 검색 중<br><strong>클릭조차 안 함</strong></div>
+        <div style="font-size:8px; color:#A8A29E; font-family:'JetBrains Mono'">SparkToro 2024</div>
+      </div>
+      <div style="width:1px; height:90px; background:#E7E5E4"></div>
+      <div class="fc ac g6" style="flex:1">
+        <div style="font-size:13px; font-weight:700; color:#059669">월간 앱 사용시간</div>
+        <div class="fc g4 w100" style="padding:0 4px">
+          <div class="fr ac g6">
+            <span style="font-size:11px; font-weight:700; width:55px">인스타</span>
+            <div style="flex:1; height:18px; background:#ECFDF5; border-radius:4px"><div style="width:88%; height:100%; background:#059669; border-radius:4px"></div></div>
+          </div>
+          <div class="fr ac g6">
+            <span style="font-size:11px; font-weight:500; width:55px; color:#A8A29E">네이버</span>
+            <div style="flex:1; height:18px; background:#F5F5F4; border-radius:4px"><div style="width:68%; height:100%; background:#D6D3D1; border-radius:4px"></div></div>
+          </div>
+        </div>
+        <div style="font-size:8px; color:#A8A29E; font-family:'JetBrains Mono'">국내 모바일 통계</div>
+      </div>
+    </div>
+    <div class="div" style="margin-top:12px"></div>
+    <div class="p" style="margin-top:8px"><strong>사람들은 검색을 안 한다.</strong><br>그럼 대체 어디서 뭘 사는 걸까?</div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>2 / 9 →</span></div>
+</div>
+
+<!-- S3: Story -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">이런 경험 있지 않아?</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px">검색 안 했는데<br>사고 싶어진 적</div>
+    <div class="fc g6" style="margin-top:8px">
+      <div class="card card-b fr ac g10" style="padding:12px">
+        <span style="font-size:22px">☕</span>
+        <div><div style="font-size:11px; font-weight:700">출퇴근길에 커피 영상을 자주 본다</div><div style="font-size:10px" class="sub">그냥 멍하니 보는 거</div></div>
+      </div>
+      <div class="tc acc" style="font-size:14px">↓</div>
+      <div class="card card-b fr ac g10" style="padding:12px">
+        <span style="font-size:22px">📱</span>
+        <div><div style="font-size:11px; font-weight:700">어느 날 피드에 "휴대용 커피머신" 영상이 뜸</div><div style="font-size:10px" class="sub">검색한 적 없는 제품</div></div>
+      </div>
+      <div class="tc acc" style="font-size:14px">↓</div>
+      <div class="card card-g tc" style="padding:12px">
+        <div style="font-size:12px; font-weight:700; color:#059669">"이건 나한테 딱인데?" → 구매</div>
+      </div>
+    </div>
+    <div class="p" style="margin-top:8px; font-size:12px"><strong>이건 우연이 아니다.</strong><br>알고리즘이 설계한 거다.</div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>3 / 9 →</span></div>
+</div>
+
+<!-- S4: Reveal (Accent) -->
+<div class="s A">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">이름이 있다</span>
+    <div class="bar"></div>
+    <div class="h1">발견형 쇼핑<br><span style="font-family:'Outfit'; font-size:17px; opacity:.8">Discovery Commerce</span></div>
+    <div class="p">알고리즘이 당신의 클릭, 시청 시간,<br>재생 속도까지 학습해서<br><br><strong>"지금 이 사람에게 가장<br>와닿을 제안"</strong>을<br>실시간으로 던진다.<br><br>광고가 아니다.<br>당신의 <strong>일상 맥락 속에서<br>필요를 일깨우는 과정</strong>이다.</div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>4 / 9 →</span></div>
+</div>
+
+<!-- S5: Funnel comparison -->
+<div class="s L">
+  <div class="fc g10 f1">
+    <span class="lbl">구매 과정이 완전히 바뀌었다</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:18px">과거 vs 지금</div>
+    <div class="fr g12" style="margin-top:8px">
+      <!-- Past -->
+      <div class="fc g4 ac" style="flex:1">
+        <div style="font-size:10px; font-weight:700; color:#A8A29E">과거</div>
+        <div class="card card-b tc" style="padding:8px; font-size:11px; width:100%">검색</div>
+        <div class="mut" style="font-size:12px">↓</div>
+        <div class="card card-b tc" style="padding:8px; font-size:11px; width:90%">비교</div>
+        <div class="mut" style="font-size:12px">↓</div>
+        <div class="card card-b tc" style="padding:8px; font-size:11px; width:80%">또 비교</div>
+        <div class="mut" style="font-size:12px">↓</div>
+        <div class="card card-b tc" style="padding:8px; font-size:11px; width:70%; color:#A8A29E">겨우 구매</div>
+        <div style="font-size:9px; color:#A8A29E; margin-top:2px">여러 탭 왔다갔다</div>
+      </div>
+      <!-- Now -->
+      <div class="fc g4 ac" style="flex:1">
+        <div style="font-size:10px; font-weight:700; color:#059669">지금</div>
+        <div class="card-g tc" style="padding:8px; font-size:11px; width:100%; border-radius:8px; font-weight:700; color:#059669">피드에서 발견</div>
+        <div style="font-size:12px; color:#059669">↓</div>
+        <div class="card-g tc" style="padding:8px; font-size:11px; width:100%; border-radius:8px; font-weight:700; color:#059669">댓글·후기로 바로 검증</div>
+        <div style="font-size:12px; color:#059669">↓</div>
+        <div class="tc" style="padding:10px; font-size:12px; width:100%; border-radius:8px; background:#059669; color:white; font-weight:900">바로 구매 ✓</div>
+        <div style="font-size:9px; color:#059669; font-weight:600; margin-top:2px">한 앱 안에서 끝</div>
+      </div>
+    </div>
+    <div class="p" style="margin-top:8px; font-size:11px"><strong>검색이 빠졌다.</strong> 알아차렸는가?<br>이걸 누가 가장 잘 하고 있을까?</div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>5 / 9 →</span></div>
+</div>
+
+<!-- S6: Meta -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">대표 사례</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:19px">메타가 만든<br>완벽한 쇼핑 루프</div>
+    <div class="p" style="font-size:12px">인스타그램 <strong>Advantage+ 쇼핑</strong></div>
+    <div class="fc g4" style="margin-top:8px">
+      <div class="fr g6 ac">
+        <div style="width:26px; height:26px; background:#ECFDF5; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#059669">1</div>
+        <div class="card card-b f1" style="padding:10px"><div style="font-size:11px; font-weight:700">AI가 당신의 구매 확률을 예측</div><div style="font-size:9px" class="sub">클릭·시청·머무른 시간 전부 학습</div></div>
+      </div>
+      <div class="fr g6 ac">
+        <div style="width:26px; height:26px; background:#ECFDF5; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#059669">2</div>
+        <div class="card card-b f1" style="padding:10px"><div style="font-size:11px; font-weight:700">피드에서 자연스럽게 상품 노출</div><div style="font-size:9px" class="sub">검색 안 해도 "맞춤 제안"이 뜸</div></div>
+      </div>
+      <div class="fr g6 ac">
+        <div style="width:26px; height:26px; background:#059669; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white">3</div>
+        <div class="card-g f1" style="padding:10px; border-radius:8px"><div style="font-size:11px; font-weight:700; color:#059669">같은 화면에서 바로 결제</div><div style="font-size:9px; color:#059669">구매 데이터 → 알고리즘 더 정확해짐</div></div>
+      </div>
+    </div>
+    <div class="p" style="margin-top:8px; font-size:12px"><strong>검색창을 열 이유가 사라졌다.</strong><br>이게 마케팅에 어떤 의미일까?</div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>6 / 9 →</span></div>
+</div>
+
+<!-- S7: So What -->
+<div class="s L">
+  <div class="fc g16 f1 jc">
+    <span class="lbl">한 문장으로</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:23px">소비자는 이제<br><span class="acc">검색을 시작하기도 전에</span><br>구매를 끝낸다</div>
+    <div class="div"></div>
+    <div class="p"><strong>'검색을 통한 선택'</strong>의 시대에서<br><strong style="color:#059669">'발견에 의한 결정'</strong>의 시대로.<br><br>마케터가 SEO에만 매달리면<br>고객을 만나기도 전에 게임이 끝난다.<br><br><strong>그래서 지금 뭘 바꿔야 할까?</strong></div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>7 / 9 →</span></div>
+</div>
+
+<!-- S8: Takeaway -->
+<div class="s L">
+  <div class="fc g12 f1">
+    <span class="lbl">지금 당장</span>
+    <div class="bar"></div>
+    <div class="h1" style="font-size:20px">바꿔야 할 4가지</div>
+    <div class="fc g10" style="margin-top:8px">
+      <div class="ni"><div class="nc">1</div><div><div style="font-size:12px; font-weight:700">검색 트래픽에 목매지 마라</div><div style="font-size:11px; line-height:1.5" class="sub">검색 결과의 절반은 클릭도 안 된다</div></div></div>
+      <div class="ni"><div class="nc">2</div><div><div style="font-size:12px; font-weight:700">'발견되는' 콘텐츠를 만들어라</div><div style="font-size:11px; line-height:1.5" class="sub">알고리즘이 추천하고 싶은 구조로 설계</div></div></div>
+      <div class="ni"><div class="nc">3</div><div><div style="font-size:12px; font-weight:700">피드 안에서 구매까지 끝내라</div><div style="font-size:11px; line-height:1.5" class="sub">발견→검증→결제를 한 흐름에서</div></div></div>
+      <div class="ni"><div class="nc">4</div><div><div style="font-size:12px; font-weight:700">KPI를 바꿔라</div><div style="font-size:11px; line-height:1.5" class="sub">클릭률 말고 '피드→전환율'을 봐라</div></div></div>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>8 / 9 →</span></div>
+</div>
+
+<!-- S9: CTA -->
+<div class="s L" style="justify-content:center; align-items:center; text-align:center">
+  <div class="fc g14 ac">
+    <div class="badge" style="font-size:11px; padding:6px 14px">DBR 432호 기고</div>
+    <div class="cta-t">BDM</div>
+    <div style="font-size:13px; font-weight:700">빅데이터 마케팅 랩</div>
+    <div class="div" style="width:60px"></div>
+    <div class="fc g6">
+      <div style="font-size:11px" class="sub">이 글의 전문은 <strong style="color:#1C1917">DBR 432호</strong>에서</div>
+      <div class="cta-l">📖 dbr.donga.com/article/view/1904/article_no/11961</div>
+    </div>
+    <div class="div" style="width:60px"></div>
+    <div class="fc g6">
+      <div style="font-size:11px" class="sub">더 깊은 분석은 웹사이트에서</div>
+      <div class="cta-l">🔗 bigdatamarketinglab.com</div>
+      <div style="font-size:10px" class="mut">@bdm.lab</div>
+    </div>
+  </div>
+  <div class="ft"><span>BDM Lab</span><span>9 / 9</span></div>
+</div>
+
+<!-- ═══════════ DARK ═══════════ -->
+<h2 class="sec" style="margin-top:40px">Option B — Dark</h2>
+
+<div class="s D"><div class="fc g16 f1"><div class="fr g8 ac"><span class="lbl">DBR 432호 기고</span><span class="badge">동아비즈니스리뷰</span></div><div class="bar"></div><div class="h1">마지막으로<br>'검색'해서<br>뭔가 산 게 <span class="acc">언제야?</span></div><div class="p">아마 기억이 안 날 거다.<br><br>요즘은 인스타 피드를 넘기다가<br>"어, 이거 괜찮은데?" 하고<br>그냥 사버리니까.<br><br><strong style="color:#F5F5F4">이게 우연이 아니라는 걸 알면 무섭다.</strong></div></div><div class="ft"><span>BDM Lab</span><span>1 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g12 f1"><span class="lbl">DATA</span><div class="bar"></div><div class="h1" style="font-size:20px">숫자로 보면 더 확실하다</div><div class="fr g16 ac" style="margin-top:8px"><div class="fc ac g4" style="flex:1"><div class="num">58.5</div><div style="font-family:'Outfit'; font-size:18px; font-weight:700; color:#34d399">%</div><div style="font-size:11px; text-align:center; margin-top:4px" class="sub">구글 검색 중<br><strong style="color:#F5F5F4">클릭조차 안 함</strong></div><div style="font-size:8px; font-family:'JetBrains Mono'" class="mut">SparkToro 2024</div></div><div style="width:1px; height:90px; background:#2A2A2A"></div><div class="fc ac g6" style="flex:1"><div style="font-size:13px; font-weight:700; color:#34d399">월간 앱 사용시간</div><div class="fc g4 w100" style="padding:0 4px"><div class="fr ac g6"><span style="font-size:11px; font-weight:700; width:55px">인스타</span><div style="flex:1; height:18px; background:#0d2e23; border-radius:4px"><div style="width:88%; height:100%; background:#34d399; border-radius:4px"></div></div></div><div class="fr ac g6"><span style="font-size:11px; font-weight:500; width:55px; color:#6b7280">네이버</span><div style="flex:1; height:18px; background:#1A1A1A; border-radius:4px"><div style="width:68%; height:100%; background:#4B5563; border-radius:4px"></div></div></div></div><div style="font-size:8px; font-family:'JetBrains Mono'" class="mut">국내 모바일 통계</div></div></div><div class="div" style="margin-top:12px"></div><div class="p" style="margin-top:8px"><strong style="color:#F5F5F4">사람들은 검색을 안 한다.</strong><br>그럼 대체 어디서 뭘 사는 걸까?</div></div><div class="ft"><span>BDM Lab</span><span>2 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g12 f1"><span class="lbl">이런 경험 있지 않아?</span><div class="bar"></div><div class="h1" style="font-size:20px">검색 안 했는데<br>사고 싶어진 적</div><div class="fc g6" style="margin-top:8px"><div class="card card-b fr ac g10" style="padding:12px"><span style="font-size:22px">☕</span><div><div style="font-size:11px; font-weight:700">출퇴근길에 커피 영상을 자주 본다</div><div style="font-size:10px" class="mut">그냥 멍하니 보는 거</div></div></div><div class="tc acc" style="font-size:14px">↓</div><div class="card card-b fr ac g10" style="padding:12px"><span style="font-size:22px">📱</span><div><div style="font-size:11px; font-weight:700">어느 날 피드에 "휴대용 커피머신" 영상이 뜸</div><div style="font-size:10px" class="mut">검색한 적 없는 제품</div></div></div><div class="tc acc" style="font-size:14px">↓</div><div class="card-g tc" style="padding:12px; border-radius:8px"><div style="font-size:12px; font-weight:700; color:#34d399">"이건 나한테 딱인데?" → 구매</div></div></div><div class="p" style="margin-top:8px; font-size:12px"><strong style="color:#F5F5F4">이건 우연이 아니다.</strong><br>알고리즘이 설계한 거다.</div></div><div class="ft"><span>BDM Lab</span><span>3 / 9 →</span></div></div>
+
+<div class="s A"><div class="fc g16 f1 jc"><span class="lbl">이름이 있다</span><div class="bar"></div><div class="h1">발견형 쇼핑<br><span style="font-family:'Outfit'; font-size:17px; opacity:.8">Discovery Commerce</span></div><div class="p">알고리즘이 당신의 클릭, 시청 시간,<br>재생 속도까지 학습해서<br><br><strong>"지금 이 사람에게 가장<br>와닿을 제안"</strong>을<br>실시간으로 던진다.<br><br>광고가 아니다.<br>당신의 <strong>일상 맥락 속에서<br>필요를 일깨우는 과정</strong>이다.</div></div><div class="ft"><span>BDM Lab</span><span>4 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g10 f1"><span class="lbl">구매 과정이 완전히 바뀌었다</span><div class="bar"></div><div class="h1" style="font-size:18px">과거 vs 지금</div><div class="fr g12" style="margin-top:8px"><div class="fc g4 ac" style="flex:1"><div style="font-size:10px; font-weight:700" class="mut">과거</div><div class="card card-b tc" style="padding:8px; font-size:11px; width:100%">검색</div><div class="mut" style="font-size:12px">↓</div><div class="card card-b tc" style="padding:8px; font-size:11px; width:90%">비교</div><div class="mut" style="font-size:12px">↓</div><div class="card card-b tc" style="padding:8px; font-size:11px; width:80%">또 비교</div><div class="mut" style="font-size:12px">↓</div><div class="card card-b tc" style="padding:8px; font-size:11px; width:70%; color:#6b7280">겨우 구매</div><div style="font-size:9px; margin-top:2px" class="mut">여러 탭 왔다갔다</div></div><div class="fc g4 ac" style="flex:1"><div style="font-size:10px; font-weight:700; color:#34d399">지금</div><div class="card-g tc" style="padding:8px; font-size:11px; width:100%; border-radius:8px; font-weight:700; color:#34d399">피드에서 발견</div><div style="font-size:12px; color:#34d399">↓</div><div class="card-g tc" style="padding:8px; font-size:11px; width:100%; border-radius:8px; font-weight:700; color:#34d399">댓글·후기로 바로 검증</div><div style="font-size:12px; color:#34d399">↓</div><div class="tc" style="padding:10px; font-size:12px; width:100%; border-radius:8px; background:#34d399; color:#0F0F0F; font-weight:900">바로 구매 ✓</div><div style="font-size:9px; color:#34d399; font-weight:600; margin-top:2px">한 앱 안에서 끝</div></div></div><div class="p" style="margin-top:8px; font-size:11px"><strong style="color:#F5F5F4">검색이 빠졌다.</strong> 알아차렸는가?<br>이걸 누가 가장 잘 하고 있을까?</div></div><div class="ft"><span>BDM Lab</span><span>5 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g12 f1"><span class="lbl">대표 사례</span><div class="bar"></div><div class="h1" style="font-size:19px">메타가 만든<br>완벽한 쇼핑 루프</div><div class="p" style="font-size:12px">인스타그램 <strong style="color:#F5F5F4">Advantage+ 쇼핑</strong></div><div class="fc g4" style="margin-top:8px"><div class="fr g6 ac"><div style="width:26px; height:26px; background:#0d2e23; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#34d399">1</div><div class="card card-b f1" style="padding:10px"><div style="font-size:11px; font-weight:700">AI가 당신의 구매 확률을 예측</div><div style="font-size:9px" class="mut">클릭·시청·머무른 시간 전부 학습</div></div></div><div class="fr g6 ac"><div style="width:26px; height:26px; background:#0d2e23; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#34d399">2</div><div class="card card-b f1" style="padding:10px"><div style="font-size:11px; font-weight:700">피드에서 자연스럽게 상품 노출</div><div style="font-size:9px" class="mut">검색 안 해도 "맞춤 제안"이 뜸</div></div></div><div class="fr g6 ac"><div style="width:26px; height:26px; background:#34d399; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#0F0F0F">3</div><div class="card-g f1" style="padding:10px; border-radius:8px"><div style="font-size:11px; font-weight:700; color:#34d399">같은 화면에서 바로 결제</div><div style="font-size:9px; color:#34d399">구매 데이터 → 알고리즘 더 정확해짐</div></div></div></div><div class="p" style="margin-top:8px; font-size:12px"><strong style="color:#F5F5F4">검색창을 열 이유가 사라졌다.</strong><br>이게 마케팅에 어떤 의미일까?</div></div><div class="ft"><span>BDM Lab</span><span>6 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g16 f1 jc"><span class="lbl">한 문장으로</span><div class="bar"></div><div class="h1" style="font-size:23px">소비자는 이제<br><span class="acc">검색을 시작하기도 전에</span><br>구매를 끝낸다</div><div class="div"></div><div class="p"><strong style="color:#F5F5F4">'검색을 통한 선택'</strong>의 시대에서<br><strong style="color:#34d399">'발견에 의한 결정'</strong>의 시대로.<br><br>마케터가 SEO에만 매달리면<br>고객을 만나기도 전에 게임이 끝난다.<br><br><strong style="color:#F5F5F4">그래서 지금 뭘 바꿔야 할까?</strong></div></div><div class="ft"><span>BDM Lab</span><span>7 / 9 →</span></div></div>
+
+<div class="s D"><div class="fc g12 f1"><span class="lbl">지금 당장</span><div class="bar"></div><div class="h1" style="font-size:20px">바꿔야 할 4가지</div><div class="fc g10" style="margin-top:8px"><div class="ni"><div class="nc">1</div><div><div style="font-size:12px; font-weight:700">검색 트래픽에 목매지 마라</div><div style="font-size:11px; line-height:1.5" class="sub">검색 결과의 절반은 클릭도 안 된다</div></div></div><div class="ni"><div class="nc">2</div><div><div style="font-size:12px; font-weight:700">'발견되는' 콘텐츠를 만들어라</div><div style="font-size:11px; line-height:1.5" class="sub">알고리즘이 추천하고 싶은 구조로 설계</div></div></div><div class="ni"><div class="nc">3</div><div><div style="font-size:12px; font-weight:700">피드 안에서 구매까지 끝내라</div><div style="font-size:11px; line-height:1.5" class="sub">발견→검증→결제를 한 흐름에서</div></div></div><div class="ni"><div class="nc">4</div><div><div style="font-size:12px; font-weight:700">KPI를 바꿔라</div><div style="font-size:11px; line-height:1.5" class="sub">클릭률 말고 '피드→전환율'을 봐라</div></div></div></div></div><div class="ft"><span>BDM Lab</span><span>8 / 9 →</span></div></div>
+
+<div class="s D" style="justify-content:center; align-items:center; text-align:center"><div class="fc g14 ac"><div class="badge" style="font-size:11px; padding:6px 14px">DBR 432호 기고</div><div class="cta-t">BDM</div><div style="font-size:13px; font-weight:700">빅데이터 마케팅 랩</div><div class="div" style="width:60px"></div><div class="fc g6"><div style="font-size:11px" class="sub">이 글의 전문은 <strong style="color:#F5F5F4">DBR 432호</strong>에서</div><div class="cta-l">📖 dbr.donga.com/article/view/1904/article_no/11961</div></div><div class="div" style="width:60px"></div><div class="fc g6"><div style="font-size:11px" class="sub">더 깊은 분석은 웹사이트에서</div><div class="cta-l">🔗 bigdatamarketinglab.com</div><div style="font-size:10px" class="mut">@bdm.lab</div></div></div><div class="ft"><span>BDM Lab</span><span>9 / 9</span></div></div>
+
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDM Lab Carousel — AEO</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #e5e5e5; font-family: 'Noto Sans KR', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 60px; }
+    h2.section-title { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: #1C1917; margin-bottom: 10px; text-align: center; }
+    p.section-desc { font-size: 14px; color: #78716C; text-align: center; margin-bottom: 30px; }
+    .slides-row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 100%; }
+    .slide { width: 360px; height: 450px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); position: relative; flex-shrink: 0; }
+    .slide-number { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.5); color: white; font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; z-index: 10; }
+
+    /* OPTION A - LIGHT */
+    .opt-a { background: #FAFAF9; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+    .opt-a .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #059669; margin-bottom: 24px; }
+    .opt-a .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #1C1917; word-break: keep-all; }
+    .opt-a .main-text em { font-style: normal; color: #059669; }
+    .opt-a .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #78716C; margin-top: 20px; word-break: keep-all; }
+    .opt-a .accent-line { width: 40px; height: 3px; background: #059669; margin: 20px auto; border-radius: 2px; }
+    .opt-a .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #A8A29E; text-transform: uppercase; }
+    .opt-a .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #059669; line-height: 1; }
+    .opt-a .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #059669; }
+    .opt-a .stat-label { font-size: 13px; color: #78716C; margin-top: 6px; }
+    .opt-a .compare-box { background: #F5F5F4; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+    .opt-a .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .opt-a .compare-row + .compare-row { border-top: 1px solid #E7E5E4; }
+    .opt-a .compare-label { font-size: 12px; color: #78716C; }
+    .opt-a .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+    .opt-a .num-list { text-align: left; width: 100%; }
+    .opt-a .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+    .opt-a .num-item + .num-item { border-top: 1px solid #E7E5E4; }
+    .opt-a .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .opt-a .num-text { font-size: 13px; line-height: 1.6; color: #44403C; word-break: keep-all; }
+    .opt-a .num-text strong { color: #1C1917; font-weight: 700; }
+    .opt-a .bar-chart { display: flex; align-items: flex-end; gap: 20px; margin: 16px 0; height: 130px; }
+    .opt-a .bar-group { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .opt-a .bar { width: 52px; border-radius: 4px 4px 0 0; }
+    .opt-a .bar-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #78716C; }
+    .opt-a .bar-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; color: #1C1917; }
+
+    /* OPTION B - DARK */
+    .opt-b { background: #0F0F0F; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 36px; text-align: center; }
+    .opt-b .top-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; }
+    .opt-b .main-text { font-family: 'Noto Sans KR', sans-serif; font-weight: 800; font-size: 26px; line-height: 1.45; color: #FAFAF9; word-break: keep-all; }
+    .opt-b .main-text em { font-style: normal; color: #34d399; }
+    .opt-b .sub-text { font-size: 13px; font-weight: 400; line-height: 1.7; color: #A8A29E; margin-top: 20px; word-break: keep-all; }
+    .opt-b .accent-line { width: 40px; height: 3px; background: #34d399; margin: 20px auto; border-radius: 2px; }
+    .opt-b .bottom-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #57534E; text-transform: uppercase; }
+    .opt-b .stat-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 56px; color: #34d399; line-height: 1; }
+    .opt-b .stat-unit { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; color: #34d399; }
+    .opt-b .stat-label { font-size: 13px; color: #A8A29E; margin-top: 6px; }
+    .opt-b .compare-box { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 12px; padding: 20px 24px; margin: 12px 0; width: 100%; }
+    .opt-b .compare-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .opt-b .compare-row + .compare-row { border-top: 1px solid #2A2A2A; }
+    .opt-b .compare-label { font-size: 12px; color: #78716C; }
+    .opt-b .compare-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; }
+    .opt-b .num-list { text-align: left; width: 100%; }
+    .opt-b .num-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+    .opt-b .num-item + .num-item { border-top: 1px solid #2A2A2A; }
+    .opt-b .num-circle { width: 24px; height: 24px; border-radius: 50%; background: #059669; color: white; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .opt-b .num-text { font-size: 13px; line-height: 1.6; color: #D6D3D1; word-break: keep-all; }
+    .opt-b .num-text strong { color: #FAFAF9; font-weight: 700; }
+    .opt-b .bar-chart { display: flex; align-items: flex-end; gap: 20px; margin: 16px 0; height: 130px; }
+    .opt-b .bar-group { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .opt-b .bar { width: 52px; border-radius: 4px 4px 0 0; }
+    .opt-b .bar-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #78716C; }
+    .opt-b .bar-value { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; color: #FAFAF9; }
+    .strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 2px; opacity: 0.5; }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== OPTION A — LIGHT ==================== -->
+  <section>
+    <h2 class="section-title">Option A — Light Editorial</h2>
+    <p class="section-desc">AEO — 구글 검색이 사라지고 있다 (알고리즘 디코드)</p>
+    <div class="slides-row">
+
+      <!-- Slide 1: Hook -->
+      <div class="slide opt-a">
+        <div class="slide-number">1 / 9</div>
+        <div class="top-label">알고리즘 디코드</div>
+        <div class="main-text" style="font-size: 24px;">
+          2026년까지<br>
+          구글 검색 트래픽 <em>25% 감소</em> 전망.
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          검색 결과 대신 AI가 직접 답변하는 시대.<br>
+          당신의 콘텐츠, AI가 인용하는가?
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 2: What Changed -->
+      <div class="slide opt-a">
+        <div class="slide-number">2 / 9</div>
+        <div class="top-label">현상</div>
+        <div class="main-text" style="font-size: 20px;">
+          무슨 <em>변화</em>인가
+        </div>
+        <div class="accent-line"></div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">과거</span>
+            <span class="compare-value" style="color: #78716C; font-size: 13px;">검색 → 결과 목록 → 클릭 → 방문</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">지금</span>
+            <span class="compare-value" style="color: #059669; font-size: 13px;">질문 → AI가 바로 답변</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 13px;">
+          사이트 방문이 사라진다.<br>
+          AI 답변에 '출처'로 선택되는 게 핵심.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 3: Scale of Change (Stats) -->
+      <div class="slide opt-a">
+        <div class="slide-number">3 / 9</div>
+        <div class="top-label">데이터</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          이 변화의 <em>크기</em>
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">ChatGPT 월간 방문</span>
+            <span class="compare-value" style="color: #059669;">18억 회</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Perplexity (1년 만에)</span>
+            <span class="compare-value" style="color: #059669;">1천만 → 5천만</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">AI Overview 시 클릭률</span>
+            <span class="compare-value" style="color: #ef4444;">30-40% 하락</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 12px;">정보 탐색의 시작점이 바뀌고 있다.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 4: Accent Green — Strategy 1 -->
+      <div class="slide opt-a" style="background: #059669;">
+        <div class="slide-number">4 / 9</div>
+        <div class="top-label" style="color: rgba(255,255,255,0.7);">전략 1</div>
+        <div class="main-text" style="color: #fff; font-size: 32px;">
+          질문-답변 구조
+        </div>
+        <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+        <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.8;">
+          AI는 "질문 → 직접적 답변" 형태를<br>
+          가장 쉽게 인용한다.<br><br>
+          키워드 나열이 아니라<br>
+          "왜 그런가? → 왜냐하면 ~이기 때문" 구조.
+        </div>
+        <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+      </div>
+
+      <!-- Slide 5: Strategy 2 -->
+      <div class="slide opt-a">
+        <div class="slide-number">5 / 9</div>
+        <div class="top-label">전략 2</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>고유한 데이터</em>를<br>만들어라
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          모든 사이트가 같은 말을 하면<br>
+          AI가 인용할 이유가 없다.<br><br>
+          독자적 연구, 자체 데이터, 사례 분석<br>
+          <strong style="color: #059669;">"여기서만 얻을 수 있는 정보"</strong>가 인용된다.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 6: Strategy 3 -->
+      <div class="slide opt-a">
+        <div class="slide-number">6 / 9</div>
+        <div class="top-label">전략 3</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>엔티티</em>를 구축하라
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          AI는 "엔티티"로 세상을 이해한다.<br>
+          삼성전자, 네이버, 김연아 = 엔티티<br><br>
+          당신의 브랜드가 특정 주제의<br>
+          <strong style="color: #059669;">전문 엔티티로 인식</strong>되어야 한다.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 7: Execution Checklist -->
+      <div class="slide opt-a">
+        <div class="slide-number">7 / 9</div>
+        <div class="top-label">실무 액션</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          <em>실행 체크리스트</em>
+        </div>
+        <div class="num-list">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>FAQ를 깊이 있는 답변</strong>으로 재구성</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>Schema.org 구조화 데이터</strong> 적용</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text"><strong>일관된 브랜드명 사용</strong> (혼재 금지)</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">4</div>
+            <div class="num-text"><strong>고유한 데이터/분석</strong> 정기 발행</div>
+          </div>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 8: Limitations -->
+      <div class="slide opt-a">
+        <div class="slide-number">8 / 9</div>
+        <div class="top-label">한계</div>
+        <div class="main-text" style="font-size: 22px;">
+          AEO는 아직 <em>초기 단계</em>다
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          6개월 후에도 같은 전략이 유효한지 불확실.<br>
+          성과 측정 도구도 미성숙.<br><br>
+          하지만 방향은 분명하다:<br>
+          <strong style="color: #059669;">인용될 만한 콘텐츠를 만드는<br>기업이 유리하다.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 9: CTA -->
+      <div class="slide opt-a">
+        <div class="slide-number">9 / 9</div>
+        <div style="margin-bottom: 24px;">
+          <svg width="64" height="64" viewBox="0 0 500 500">
+            <circle cx="250" cy="250" r="248" fill="#0a0a0a"/>
+            <circle cx="250" cy="250" r="240" fill="none" stroke="#059669" stroke-width="4"/>
+            <rect x="210" y="210" width="14" height="24" rx="2" fill="#059669"/>
+            <rect x="228" y="195" width="14" height="39" rx="2" fill="#059669"/>
+            <rect x="246" y="172" width="14" height="62" rx="2" fill="#059669"/>
+            <rect x="264" y="148" width="14" height="86" rx="2" fill="#059669"/>
+            <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+          </svg>
+        </div>
+        <div class="main-text" style="font-size: 20px; line-height: 1.6;">
+          SEO는 키워드로 순위를 올렸다.<br>
+          AEO는 <em>'본질적 가치'</em>로만 올릴 수 있다.<br>
+          검색에서 답변으로. 게임이 바뀌었다.
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          bigdatamarketinglab.com<br>
+          @bdm.lab
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== OPTION B — DARK ==================== -->
+  <section>
+    <h2 class="section-title">Option B — Dark Bold</h2>
+    <p class="section-desc">AEO — 구글 검색이 사라지고 있다 (알고리즘 디코드)</p>
+    <div class="slides-row">
+
+      <!-- Slide 1: Hook -->
+      <div class="slide opt-b">
+        <div class="slide-number">1 / 9</div>
+        <div class="top-label">알고리즘 디코드</div>
+        <div class="main-text" style="font-size: 24px;">
+          2026년까지<br>
+          구글 검색 트래픽 <em>25% 감소</em> 전망.
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          검색 결과 대신 AI가 직접 답변하는 시대.<br>
+          당신의 콘텐츠, AI가 인용하는가?
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 2: What Changed -->
+      <div class="slide opt-b">
+        <div class="slide-number">2 / 9</div>
+        <div class="top-label">현상</div>
+        <div class="main-text" style="font-size: 20px;">
+          무슨 <em>변화</em>인가
+        </div>
+        <div class="accent-line"></div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">과거</span>
+            <span class="compare-value" style="color: #78716C; font-size: 13px;">검색 → 결과 목록 → 클릭 → 방문</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">지금</span>
+            <span class="compare-value" style="color: #34d399; font-size: 13px;">질문 → AI가 바로 답변</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 13px;">
+          사이트 방문이 사라진다.<br>
+          AI 답변에 '출처'로 선택되는 게 핵심.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 3: Scale of Change (Stats) -->
+      <div class="slide opt-b">
+        <div class="slide-number">3 / 9</div>
+        <div class="top-label">데이터</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 12px;">
+          이 변화의 <em>크기</em>
+        </div>
+        <div class="compare-box">
+          <div class="compare-row">
+            <span class="compare-label">ChatGPT 월간 방문</span>
+            <span class="compare-value" style="color: #34d399;">18억 회</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Perplexity (1년 만에)</span>
+            <span class="compare-value" style="color: #34d399;">1천만 → 5천만</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">AI Overview 시 클릭률</span>
+            <span class="compare-value" style="color: #ef4444;">30-40% 하락</span>
+          </div>
+        </div>
+        <div class="sub-text" style="font-size: 12px;">정보 탐색의 시작점이 바뀌고 있다.</div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 4: Accent Green — Strategy 1 -->
+      <div class="slide opt-b" style="background: linear-gradient(160deg, #059669 0%, #047857 100%);">
+        <div class="slide-number">4 / 9</div>
+        <div class="top-label" style="color: rgba(255,255,255,0.7);">전략 1</div>
+        <div class="main-text" style="color: #fff; font-size: 32px;">
+          질문-답변 구조
+        </div>
+        <div class="accent-line" style="background: rgba(255,255,255,0.5);"></div>
+        <div class="sub-text" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.8;">
+          AI는 "질문 → 직접적 답변" 형태를<br>
+          가장 쉽게 인용한다.<br><br>
+          키워드 나열이 아니라<br>
+          "왜 그런가? → 왜냐하면 ~이기 때문" 구조.
+        </div>
+        <div class="bottom-brand" style="color: rgba(255,255,255,0.4);">BDM Lab</div>
+      </div>
+
+      <!-- Slide 5: Strategy 2 -->
+      <div class="slide opt-b">
+        <div class="slide-number">5 / 9</div>
+        <div class="top-label">전략 2</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>고유한 데이터</em>를<br>만들어라
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          모든 사이트가 같은 말을 하면<br>
+          AI가 인용할 이유가 없다.<br><br>
+          독자적 연구, 자체 데이터, 사례 분석<br>
+          <strong style="color: #34d399;">"여기서만 얻을 수 있는 정보"</strong>가 인용된다.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 6: Strategy 3 -->
+      <div class="slide opt-b">
+        <div class="slide-number">6 / 9</div>
+        <div class="top-label">전략 3</div>
+        <div class="main-text" style="font-size: 22px;">
+          <em>엔티티</em>를 구축하라
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          AI는 "엔티티"로 세상을 이해한다.<br>
+          삼성전자, 네이버, 김연아 = 엔티티<br><br>
+          당신의 브랜드가 특정 주제의<br>
+          <strong style="color: #34d399;">전문 엔티티로 인식</strong>되어야 한다.
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 7: Execution Checklist -->
+      <div class="slide opt-b">
+        <div class="slide-number">7 / 9</div>
+        <div class="top-label">실무 액션</div>
+        <div class="main-text" style="font-size: 20px; margin-bottom: 16px;">
+          <em>실행 체크리스트</em>
+        </div>
+        <div class="num-list">
+          <div class="num-item">
+            <div class="num-circle">1</div>
+            <div class="num-text"><strong>FAQ를 깊이 있는 답변</strong>으로 재구성</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">2</div>
+            <div class="num-text"><strong>Schema.org 구조화 데이터</strong> 적용</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">3</div>
+            <div class="num-text"><strong>일관된 브랜드명 사용</strong> (혼재 금지)</div>
+          </div>
+          <div class="num-item">
+            <div class="num-circle">4</div>
+            <div class="num-text"><strong>고유한 데이터/분석</strong> 정기 발행</div>
+          </div>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 8: Limitations -->
+      <div class="slide opt-b">
+        <div class="slide-number">8 / 9</div>
+        <div class="top-label">한계</div>
+        <div class="main-text" style="font-size: 22px;">
+          AEO는 아직 <em>초기 단계</em>다
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text" style="font-size: 14px; line-height: 1.8;">
+          6개월 후에도 같은 전략이 유효한지 불확실.<br>
+          성과 측정 도구도 미성숙.<br><br>
+          하지만 방향은 분명하다:<br>
+          <strong style="color: #34d399;">인용될 만한 콘텐츠를 만드는<br>기업이 유리하다.</strong>
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+      <!-- Slide 9: CTA -->
+      <div class="slide opt-b">
+        <div class="slide-number">9 / 9</div>
+        <div style="margin-bottom: 24px;">
+          <svg width="64" height="64" viewBox="0 0 500 500">
+            <circle cx="250" cy="250" r="248" fill="#1A1A1A"/>
+            <circle cx="250" cy="250" r="240" fill="none" stroke="#34d399" stroke-width="4"/>
+            <rect x="210" y="210" width="14" height="24" rx="2" fill="#34d399"/>
+            <rect x="228" y="195" width="14" height="39" rx="2" fill="#34d399"/>
+            <rect x="246" y="172" width="14" height="62" rx="2" fill="#34d399"/>
+            <rect x="264" y="148" width="14" height="86" rx="2" fill="#34d399"/>
+            <text x="250" y="330" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="900" font-size="110" fill="white" letter-spacing="-5">BDM</text>
+          </svg>
+        </div>
+        <div class="main-text" style="font-size: 20px; line-height: 1.6;">
+          SEO는 키워드로 순위를 올렸다.<br>
+          AEO는 <em>'본질적 가치'</em>로만 올릴 수 있다.<br>
+          검색에서 답변으로. 게임이 바뀌었다.
+        </div>
+        <div class="accent-line"></div>
+        <div class="sub-text">
+          bigdatamarketinglab.com<br>
+          @bdm.lab
+        </div>
+        <div class="bottom-brand">BDM Lab</div>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

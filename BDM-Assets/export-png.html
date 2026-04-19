@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>BDM Lab Logo — PNG Export</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a1a; font-family: -apple-system, sans-serif; color: white; padding: 40px; }
+h1 { font-size: 24px; margin-bottom: 6px; }
+.sub { color: #78716c; font-size: 13px; margin-bottom: 40px; }
+.section { margin-bottom: 48px; }
+.section-title { font-size: 11px; color: #059669; letter-spacing: 2px; margin-bottom: 20px; font-weight: 600; }
+.grid { display: flex; flex-wrap: wrap; gap: 24px; }
+.card { background: #0d0d0d; border-radius: 16px; padding: 24px; text-align: center; border: 1px solid #262626; }
+.card canvas { display: block; margin: 0 auto 16px; border-radius: 50%; }
+.card .label { font-size: 12px; color: #a8a29e; margin-bottom: 12px; }
+.card .btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-block; padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  cursor: pointer; border: 1px solid #333; background: #1a1a1a; color: #d6d3d1; transition: 0.15s;
+}
+.btn:hover { background: #059669; color: white; border-color: #059669; }
+.note { color: #57534e; font-size: 12px; margin-top: 24px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<h1>BDM Lab Logo — PNG Export</h1>
+<p class="sub">클릭하면 PNG 파일이 다운로드됩니다. 인스타 프로필, 캐러셀 등에 사용하세요.</p>
+
+<div id="app"></div>
+
+<p class="note">
+  * 모든 PNG는 투명 배경 없이 검정(#0a0a0a) 배경으로 생성됩니다.<br>
+  * 1024px 이상은 고해상도 인쇄용, 512px은 일반 디지털용, 110px은 인스타 프로필 실제 크기입니다.<br>
+  * SVG 파일은 같은 폴더에 있습니다 (벡터 파일, 무한 확대 가능).
+</p>
+
+<script>
+// Wait for font to load
+document.fonts.ready.then(() => {
+
+const VARIATIONS = [
+  {
+    id: 'peak-fade',
+    name: 'Peak + Fade (기본)',
+    bars: [
+      { h: 0.27, color: '#059669' },
+      { h: 0.46, color: '#059669' },
+      { h: 0.73, color: '#059669' },
+      { h: 1.0,  color: '#059669' },
+      { h: 0.65, color: '#1a3a2e' },
+      { h: 0.35, color: '#1a3a2e' },
+    ]
+  },
+  {
+    id: 'ascending',
+    name: 'Ascending Only',
+    bars: [
+      { h: 0.27, color: '#059669' },
+      { h: 0.46, color: '#059669' },
+      { h: 0.73, color: '#059669' },
+      { h: 1.0,  color: '#059669' },
+    ]
+  },
+  {
+    id: 'bell-curve',
+    name: 'Bell Curve',
+    bars: [
+      { h: 0.33, color: '#059669' },
+      { h: 0.53, color: '#059669' },
+      { h: 0.80, color: '#059669' },
+      { h: 1.0,  color: '#059669' },
+      { h: 0.80, color: '#059669' },
+      { h: 0.53, color: '#059669' },
+    ]
+  },
+  {
+    id: 'ring-only',
+    name: 'Ring Only (미니멀)',
+    bars: []
+  }
+];
+
+const SIZES = [1024, 512, 256, 110];
+
+function drawLogo(canvas, size, variation) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = size;
+  canvas.height = size;
+  const c = size / 2;
+  const r = size / 2 - 2;
+
+  // Background circle
+  ctx.beginPath();
+  ctx.arc(c, c, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fill();
+
+  // Gradient ring
+  const ringWidth = Math.max(2, size * 0.012);
+  const ringR = r - ringWidth / 2 - (size * 0.008);
+  const grad = ctx.createLinearGradient(0, 0, size, size);
+  grad.addColorStop(0, '#059669');
+  grad.addColorStop(0.5, '#34d399');
+  grad.addColorStop(1, '#059669');
+  ctx.beginPath();
+  ctx.arc(c, c, ringR, 0, Math.PI * 2);
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = ringWidth;
+  ctx.stroke();
+
+  // Bars
+  const bars = variation.bars;
+  if (bars.length > 0) {
+    const maxBarH = size * 0.18;
+    const barW = Math.max(2, size * 0.028);
+    const barGap = Math.max(1, size * 0.014);
+    const totalW = bars.length * barW + (bars.length - 1) * barGap;
+    let startX = c - totalW / 2;
+    const barBaseY = c - size * 0.02;
+
+    bars.forEach((bar, i) => {
+      const bh = maxBarH * bar.h;
+      const x = startX + i * (barW + barGap);
+      const y = barBaseY - bh;
+      ctx.beginPath();
+      ctx.roundRect(x, y, barW, bh, Math.max(1, barW * 0.2));
+      ctx.fillStyle = bar.color;
+      ctx.fill();
+    });
+  }
+
+  // BDM text
+  const fontSize = variation.bars.length > 0 ? size * 0.22 : size * 0.28;
+  const textY = variation.bars.length > 0 ? c + size * 0.18 : c + fontSize * 0.35;
+  ctx.font = `900 ${fontSize}px Outfit`;
+  ctx.fillStyle = 'white';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = `${-size * 0.01}px`;
+  ctx.fillText('BDM', c, textY);
+}
+
+function downloadCanvas(canvas, filename) {
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// Build UI
+const app = document.getElementById('app');
+
+VARIATIONS.forEach(variation => {
+  const section = document.createElement('div');
+  section.className = 'section';
+  section.innerHTML = `<div class="section-title">${variation.name.toUpperCase()}</div><div class="grid"></div>`;
+  const grid = section.querySelector('.grid');
+
+  SIZES.forEach(size => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const displaySize = Math.min(size, 200);
+    const canvas = document.createElement('canvas');
+    canvas.style.width = displaySize + 'px';
+    canvas.style.height = displaySize + 'px';
+    drawLogo(canvas, size, variation);
+
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = `${size} × ${size}px`;
+
+    const btns = document.createElement('div');
+    btns.className = 'btns';
+
+    const dlBtn = document.createElement('div');
+    dlBtn.className = 'btn';
+    dlBtn.textContent = 'PNG 다운로드';
+    dlBtn.onclick = () => downloadCanvas(canvas, `bdm-logo-${variation.id}-${size}px.png`);
+
+    btns.appendChild(dlBtn);
+    card.appendChild(label);
+    card.appendChild(canvas);
+    card.appendChild(btns);
+    grid.appendChild(card);
+  });
+
+  app.appendChild(section);
+});
+
+});
+</script>
+</body>
+</html>

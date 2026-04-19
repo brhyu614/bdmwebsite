@@ -14,7 +14,7 @@ export default function BBQPage() {
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">Project — 프랜차이즈 분석</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          배달은 리뷰가, 매장식사는 입지가 매출을 결정한다
+          상권 인구 구조가 모든 채널의 매출을 결정한다
         </h1>
         <p className="mt-3 text-base text-subtext">
           치킨 프랜차이즈 349개 매장 · 3년 주간 거래 데이터 · 배달/매장식사/포장 채널 분리
@@ -58,11 +58,11 @@ export default function BBQPage() {
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border-2 border-[#F97316]/40 bg-[#F97316]/5 p-5">
             <p className="text-lg font-bold text-[#F97316]">배달 매출</p>
-            <p className="mt-2 text-sm text-subtext"><strong className="text-text">리뷰가 39%를 결정한다.</strong> 그중에서도 &ldquo;음식이 맛있다&rdquo;는 구체적 언급이 별점보다 2배 이상 강력하다. 1인 가구 비율이 높은 지역에서 배달 매출이 높다.</p>
+            <p className="mt-2 text-sm text-subtext"><strong className="text-text">인구통계가 가장 강력한 예측 변수다 (R² +0.67).</strong> 리뷰는 배달에서만 추가적 기여(R² +0.25). 그중에서도 &ldquo;음식이 맛있다&rdquo;는 구체적 언급이 별점보다 2배 이상 강력하다.</p>
           </div>
           <div className="rounded-xl border-2 border-accent/40 bg-accent/5 p-5">
             <p className="text-lg font-bold text-accent">매장식사 매출</p>
-            <p className="mt-2 text-sm text-subtext"><strong className="text-text">리뷰는 거의 영향 없다 (0.3%).</strong> 입지와 경쟁이 전부다. 고령화 지수가 높은 지역에서 매장식사 매출이 높다. 직접 방문하는 고객은 자기 경험으로 판단한다.</p>
+            <p className="mt-2 text-sm text-subtext"><strong className="text-text">인구통계가 역시 가장 중요 (R² +0.49).</strong> 리뷰의 추가 기여는 미미(R² +0.05). 입지와 경쟁 환경이 결정적이며, 고령화 지수가 높은 지역에서 매장식사 매출이 높다.</p>
           </div>
         </div>
       </section>
@@ -162,7 +162,7 @@ export default function BBQPage() {
 
         <div className="mt-6 font-serif text-base leading-[1.9] text-subtext space-y-4">
           <p>
-            <strong className="text-text">매장식사 매출에서 리뷰의 영향은 거의 0이었다 (0.3%).</strong> 직접 방문하는 고객은 리뷰 대신 자기 경험을 기준으로 판단하기 때문이다.
+            <strong className="text-text">매장식사에서 리뷰의 추가 기여는 미미했다 (R² +0.05).</strong> 직접 방문하는 고객은 리뷰 대신 자기 경험을 기준으로 판단하기 때문이다.
           </p>
           <p>
             배달 매출을 올리려면 &ldquo;별점 4.5 이상 유지&rdquo;가 아니라, <strong className="text-text">&ldquo;맛있다&rdquo;는 구체적 언급을 늘리는 것</strong>이 핵심이다. &ldquo;치킨의 바삭함은 어떠셨나요?&rdquo; 같은 유도 질문이 리뷰 이벤트보다 효과적이다.

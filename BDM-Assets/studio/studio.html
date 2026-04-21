@@ -226,6 +226,18 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .tov-foot{display:flex;align-items:center;gap:6px;margin-top:4px;padding-top:10px;border-top:1px dashed var(--color-border)}
 .tov-foot .spacer{flex:1}
 
+/* ==== 로그인 게이트 (비로그인 상태 전용 풀 화면) ==== */
+.login-hero{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.login-card{max-width:520px;width:100%;background:var(--color-surface);border:1px solid var(--color-border);border-radius:18px;padding:42px 40px;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.login-brand{font-family:var(--font-sans);font-size:13px;font-weight:600;color:var(--color-subtext);display:flex;align-items:center;gap:8px;letter-spacing:0.5px;margin-bottom:22px}
+.login-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(96,165,250,0.6)}
+.login-title{font-family:var(--font-sans);font-size:32px;font-weight:800;letter-spacing:-0.025em;line-height:1.15;margin-bottom:18px;color:var(--color-text)}
+.login-lead{font-size:15px;line-height:1.75;color:var(--color-subtext);margin-bottom:30px}
+.login-lead b{color:var(--color-text)}
+.login-btn{width:100%;justify-content:center;padding:14px 22px;font-size:15px;gap:10px}
+.login-btn .g-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#fff;color:#1a1a1a;font-weight:900;font-size:13px}
+.login-note{font-size:12px;color:var(--color-muted);margin-top:18px;line-height:1.6;text-align:center}
+
 /* ==== 처음 안내 모달 ==== */
 .intro-modal{max-width:720px}
 .intro-lead{font-size:14px;line-height:1.75;color:var(--color-text);margin:0 0 18px}
@@ -382,6 +394,54 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
 </header>
 
 <div class="page">
+
+<!-- ============ 로그인 게이트 (비로그인 상태 전용) ============ -->
+<section id="login-gate" style="display:none">
+  <div class="login-hero">
+    <div class="login-card">
+      <div class="login-brand"><span class="dot"></span> BDM Lab Studio</div>
+      <h1 class="login-title">인스타 캐러셀 자동화</h1>
+      <p class="login-lead">
+        스타일 레퍼런스 한두 개 등록해두면, 그 톤을 닮은 캐러셀 초안을
+        자동으로 뽑아줍니다. 사용자 피드백이 모여 엔진이 주기적으로
+        개선되는 <b>집단지성 구조</b>입니다.
+      </p>
+      <button class="btn btn-primary btn-lg login-btn" onclick="signIn()">
+        <span class="g-icon">G</span> Google로 로그인
+      </button>
+      <div class="login-note">
+        등록된 베타 테스터만 사용 가능합니다. 접근 권한이 필요하면
+        <a href="mailto:boram8235@gmail.com" style="color:var(--color-accent)">boram8235@gmail.com</a>
+        으로 문의하세요.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 스타일 없음 상태 (로그인 후, 스타일 0개) ============ -->
+<section id="empty-style-gate" style="display:none">
+  <div class="card card-lg">
+    <div class="section-title">
+      <h1>먼저 스타일을 하나 만들어주세요</h1>
+      <span class="section-sub">Step 00 · Setup</span>
+    </div>
+    <p class="lead">
+      Studio는 <b>스타일 레퍼런스</b>를 기반으로 캐러셀을 만듭니다.
+      따라하고 싶은 인스타 캐러셀의 <b>게시물 URL</b>을 넣거나 <b>직접 스크린샷</b>을 올리면,
+      Claude Vision이 톤·구조·색감을 분석해서 생성 엔진에 자동으로 주입합니다.
+    </p>
+    <p class="muted" style="font-size:13px;margin-bottom:24px">
+      지금은 토큰 제한이 있어서 한두 개 스타일만 등록·분석해두고 쓰시길 권장합니다.
+    </p>
+    <div class="step-footer">
+      <div class="spacer"></div>
+      <a href="styles.html" class="btn btn-primary btn-lg">🎨 스타일 추가하기 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 메인 스텝 영역 (로그인 + 스타일 있음) ============ -->
+<div id="main-flow">
 
 <!-- ============ 스텝 네비 ============ -->
 <nav class="steps-nav" id="steps-nav">
@@ -607,7 +667,9 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
   </details>
 </section>
 
-</div>
+</div><!-- /#main-flow -->
+
+</div><!-- /.page -->
 
 <!-- ============ Pexels 모달 ============ -->
 <div id="pexels-modal" class="modal-backdrop" style="display:none">
@@ -1752,6 +1814,18 @@ async function signIn(){
 }
 async function signOut(){ await supabase.auth.signOut(); location.reload(); }
 
+/* 로그인/스타일 상태에 따라 3개 섹션 전환:
+   - #login-gate (비로그인)
+   - #empty-style-gate (로그인 + 스타일 0개)
+   - #main-flow (로그인 + 스타일 ≥1개) */
+function showGate(kind){
+  const login = $('login-gate'), empty = $('empty-style-gate'), main = $('main-flow');
+  if(!login || !empty || !main) return;
+  login.style.display = kind === 'login' ? 'block' : 'none';
+  empty.style.display = kind === 'empty-style' ? 'block' : 'none';
+  main.style.display  = kind === 'main' ? 'block' : 'none';
+}
+
 async function init(){
   if(typeof window.supabase === 'undefined'){ log('SDK 로드 실패', 'err'); return; }
   supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -1761,17 +1835,28 @@ async function init(){
   const bar = $('auth-bar');
   if(!session){
     bar.innerHTML = '<button class="btn btn-primary btn-sm" onclick="signIn()">Google 로그인</button>';
+    showGate('login');
     return;
   }
   bar.innerHTML = `<span class="user-chip auth">✓ ${esc(session.user.email)}</span><button class="btn btn-ghost btn-sm" onclick="signOut()">로그아웃</button>`;
   log('인증 OK', 'ok');
 
   await loadStyles();
+  // 스타일 하나도 없으면 설정 게이트 (첫 경험)
+  const hasStyles = Object.keys(stylesMap).length > 0;
+  showGate(hasStyles ? 'main' : 'empty-style');
+
   await loadFeedbackThemes();
   renderFbScoreRows();
-  maybeAutoShowIntro();
-  document.addEventListener('visibilitychange', () => {
-    if(document.visibilityState === 'visible' && session) loadStyles();
+  if(hasStyles) maybeAutoShowIntro();
+  document.addEventListener('visibilitychange', async () => {
+    if(document.visibilityState === 'visible' && session){
+      await loadStyles();
+      // 다른 탭에서 스타일 만들고 돌아온 경우 — 자동으로 메인으로
+      if(Object.keys(stylesMap).length > 0 && $('empty-style-gate').style.display === 'block'){
+        showGate('main');
+      }
+    }
   });
 }
 

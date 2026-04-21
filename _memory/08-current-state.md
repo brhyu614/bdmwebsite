@@ -27,9 +27,24 @@
 ### 📌 배포 액션 하나만 남음
 ```bash
 cd /Users/boramlim/Dropbox/Website-BigDMKTG/BDM-Assets/studio
-npx supabase@latest functions deploy submit-bug-report --no-verify-jwt
+# 010 migration (allowlist)
+pbcopy < supabase/010_email_allowlist.sql   # → SQL Editor에서 Run
+# submit-bug-report는 2026-04-21 저녁 이미 배포됨 (v1)
 ```
-(키·다른 함수·다른 migration은 전부 완료. **다시 물어보거나 재설정 요구 금지.**)
+(키·다른 함수는 전부 완료. **다시 물어보거나 재설정 요구 금지.**)
+
+### 🔐 이메일 Allowlist (2026-04-21 저녁 추가)
+- 새 migration: `supabase/010_email_allowlist.sql`
+  - `allowed_emails` 테이블 (관리자 only RLS)
+  - `handle_new_user()` 트리거 교체: allowlist에 없으면 RAISE EXCEPTION → OAuth 가입 차단
+  - `admin_add_allowed_emails(p_emails TEXT[], p_note TEXT)` RPC
+  - `allowed_emails_status` 뷰 (초대 + 가입 여부 추적)
+  - 시드: `boram8235@gmail.com`, `brlim@hanyang.ac.kr` (관리자 2개)
+- **관리 UI**: `styles.html` 하단에 관리자 전용 "🔑 베타 초대 관리" 카드
+  - `public.users.is_admin = true`인 유저한테만 노출
+  - 이메일 여러 개 한 번에 추가 가능 (줄바꿈/쉼표/공백 구분)
+  - 초대된 이메일 + 가입 여부를 테이블로 표시
+- **@hanyang.ac.kr 도메인 가드 제거**: `styles.html`에서 하드코딩된 도메인 체크 삭제. 이제 DB trigger가 유일한 게이트.
 
 ## 🎯 한 줄 요약
 

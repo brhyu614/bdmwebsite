@@ -4,82 +4,143 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>스타일 라이브러리 · BDM Lab Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Noto+Sans+KR:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root{
+  --color-bg:#0B0F14;
+  --color-surface:#121922;
+  --color-surface-alt:#1C2533;
+  --color-text:#F1F5F9;
+  --color-subtext:#A3B0C2;
+  --color-muted:#5A6778;
+  --color-accent:#60A5FA;
+  --color-accent-dim:#3B82F6;
+  --color-accent-bg:rgba(96,165,250,0.09);
+  --color-border:#1F2937;
+  --color-success:#22C55E;
+  --color-warning:#F59E0B;
+  --color-danger:#EF4444;
+  --font-sans:'Outfit','Noto Sans KR',system-ui,sans-serif;
+  --font-serif:'Newsreader','Noto Sans KR',Georgia,serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;background:#FAFAF9;color:#1C1917;min-height:100vh;padding:24px;line-height:1.5}
-.wrap{max-width:1100px;margin:0 auto}
-.card{background:#fff;border:1px solid #E7E5E4;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 4px 16px rgba(28,25,23,.04)}
-h1{font-size:24px;font-weight:800;margin-bottom:4px;letter-spacing:-0.02em}
-h2{font-size:14px;font-weight:700;color:#57534E;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
-h3{font-size:18px;font-weight:800;margin:0;letter-spacing:-0.01em}
-.sub{font-size:14px;color:#57534E;margin-bottom:16px}
+body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--color-bg)}
+::-webkit-scrollbar-thumb{background:var(--color-surface-alt);border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--color-muted)}
+::selection{background:var(--color-accent);color:#0B0F14}
+
+/* ==== TOPBAR (studio.html과 동일) ==== */
+.topbar{border-bottom:1px solid var(--color-border);background:var(--color-bg);position:sticky;top:0;z-index:50}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
+.brand{font-family:var(--font-sans);font-weight:800;letter-spacing:-0.02em;font-size:18px;color:var(--color-text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(96,165,250,0.55)}
+.brand .sub{color:var(--color-subtext);font-weight:500}
+.topbar-spacer{flex:1}
+.topbar a.nav-link,.topbar button.nav-link{color:var(--color-subtext);text-decoration:none;font-size:13px;font-weight:500;padding:6px 10px;border-radius:6px;background:none;border:none;cursor:pointer;font-family:inherit}
+.topbar a.nav-link:hover,.topbar button.nav-link:hover{background:var(--color-surface);color:var(--color-text)}
+.topbar a.nav-link.active{background:var(--color-surface);color:var(--color-text)}
+.topbar .nav-link.bug-link{color:#F59E0B;border:1px dashed rgba(245,158,11,0.4);padding:4px 10px;border-radius:6px}
+.topbar .nav-link.bug-link:hover{background:rgba(245,158,11,0.1);color:#FBBF24}
+.user-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--color-border);border-radius:999px;font-size:12px;color:var(--color-subtext);background:var(--color-surface)}
+.user-chip.auth{color:var(--color-accent);border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
+
+/* ==== 페이지 컨테이너 ==== */
+.page{max-width:1200px;margin:0 auto;padding:22px 24px 120px}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:14px;padding:24px;margin-bottom:16px}
+h1{font-family:var(--font-sans);font-size:24px;font-weight:800;letter-spacing:-0.02em;margin-bottom:4px}
+h2{font-size:13px;font-weight:700;color:var(--color-subtext);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px}
+h3{font-size:16px;font-weight:700;margin:0;letter-spacing:-0.01em;color:var(--color-text)}
+.sub{font-size:14px;color:var(--color-subtext);margin-bottom:16px;line-height:1.7}
 .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .row-between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#ECFDF5;color:#047857;border:1px solid #059669;border-radius:6px;font-size:11px;font-weight:700}
-.chip.muted{background:#F5F5F4;color:#57534E;border-color:#E7E5E4}
-.chip.warn{background:#FEF3C7;color:#92400E;border-color:#F59E0B}
-.chip.danger{background:#FEF2F2;color:#991B1B;border-color:#DC2626}
-label{display:block;font-size:12px;font-weight:700;color:#57534E;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
-input,select,textarea{width:100%;padding:10px 12px;border:1px solid #E7E5E4;border-radius:8px;font-family:inherit;font-size:14px;background:#fff;color:#1C1917}
-textarea{min-height:80px;resize:vertical;font-family:"Noto Sans KR",system-ui}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px #ECFDF5}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:#1C1917;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;white-space:nowrap}
-.btn:hover{opacity:.88}
-.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ==== 칩 ==== */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--color-accent-bg);color:var(--color-accent);border:1px solid var(--color-accent-dim);border-radius:6px;font-size:11px;font-weight:700}
+.chip.muted{background:var(--color-surface-alt);color:var(--color-subtext);border-color:var(--color-border)}
+.chip.warn{background:rgba(245,158,11,0.12);color:#FBBF24;border-color:rgba(245,158,11,0.4)}
+.chip.danger{background:rgba(239,68,68,0.12);color:#FCA5A5;border-color:rgba(239,68,68,0.4)}
+
+/* ==== 폼 요소 ==== */
+label{display:block;font-size:11px;font-weight:700;color:var(--color-subtext);margin-bottom:6px;text-transform:uppercase;letter-spacing:1.2px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--color-border);border-radius:8px;font-family:inherit;font-size:14px;background:var(--color-bg);color:var(--color-text);transition:border-color .12s,box-shadow .12s}
+textarea{min-height:80px;resize:vertical;line-height:1.55}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--color-accent);box-shadow:0 0 0 3px var(--color-accent-bg)}
+input::placeholder,textarea::placeholder{color:var(--color-muted)}
+
+/* ==== 버튼 ==== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--color-accent);color:#0B0F14;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:filter .15s;white-space:nowrap}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
 .btn-sm{padding:6px 12px;font-size:12px}
-.btn-red{background:#DC2626}
-.btn-green{background:#059669}
-.btn-ghost{background:#F5F5F4;color:#1C1917;border:1px solid #E7E5E4}
-.btn-ghost:hover{background:#E7E5E4}
-nav{display:flex;gap:8px;margin-bottom:16px;font-size:13px}
-nav a{color:#57534E;text-decoration:none;padding:4px 10px;border-radius:6px}
-nav a.active{background:#1C1917;color:#fff}
-nav a:hover:not(.active){background:#F5F5F4}
+.btn-red{background:var(--color-danger);color:#fff}
+.btn-green{background:var(--color-success);color:#0B0F14}
+.btn-ghost{background:var(--color-surface-alt);color:var(--color-text);border:1px solid var(--color-border)}
+.btn-ghost:hover{background:var(--color-surface);filter:none}
+
+/* ==== 스타일 그리드 ==== */
 .style-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
-.style-card{background:#fff;border:1px solid #E7E5E4;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px}
-.style-card.is-default{border-color:#059669;border-width:2px}
+.style-card{background:var(--color-bg);border:1px solid var(--color-border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;transition:border-color .12s}
+.style-card:hover{border-color:var(--color-accent-dim)}
+.style-card.is-default{border-color:var(--color-accent);border-width:2px}
 .item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:6px;margin-top:8px}
-.item-thumb{aspect-ratio:9/16;background:#F5F5F4;border:1px solid #E7E5E4;border-radius:6px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:10px;color:#78716C;cursor:pointer}
+.item-thumb{aspect-ratio:9/16;background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:6px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--color-subtext);cursor:pointer}
 .item-thumb img{width:100%;height:100%;object-fit:cover}
-.item-thumb .delete-x{position:absolute;top:2px;right:2px;background:rgba(28,25,23,.8);color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:10px;cursor:pointer;display:none;align-items:center;justify-content:center}
+.item-thumb .delete-x{position:absolute;top:2px;right:2px;background:rgba(11,15,20,0.85);color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:10px;cursor:pointer;display:none;align-items:center;justify-content:center}
 .item-thumb:hover .delete-x{display:flex}
-.item-thumb.url{background:#EFF6FF;color:#1D4ED8}
-.item-thumb.generation{background:#FEF7ED;color:#C2410C}
-.drop-zone{border:2px dashed #D6D3D1;border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:all .15s;font-size:13px;color:#78716C}
-.drop-zone:hover,.drop-zone.drag{border-color:#059669;background:#ECFDF5;color:#047857}
+.item-thumb.url{background:rgba(96,165,250,0.1);color:var(--color-accent)}
+.item-thumb.generation{background:rgba(245,158,11,0.1);color:#FBBF24}
+
+/* ==== 드롭존 ==== */
+.drop-zone{border:2px dashed var(--color-border);border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:all .15s;font-size:13px;color:var(--color-subtext);background:var(--color-bg)}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--color-accent);background:var(--color-accent-bg);color:var(--color-accent)}
 .drop-zone input{display:none}
-pre{background:#F5F5F4;border:1px solid #E7E5E4;border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.6;font-family:ui-monospace,monospace;color:#1C1917;overflow-x:auto;margin:4px 0;white-space:pre-wrap;word-break:break-all;max-height:260px;overflow-y:auto}
-.log{margin-top:10px;padding:8px 10px;background:#FAFAF9;border:1px solid #E7E5E4;border-radius:6px;font-size:11px;font-family:ui-monospace,monospace;color:#78716C;max-height:160px;overflow-y:auto}
-.log-line{margin:1px 0}
-.log-err{color:#DC2626}
-.log-ok{color:#059669}
-.profile{background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;padding:12px 14px;margin-top:8px;font-size:13px;line-height:1.65}
-.profile h4{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#166534;margin:10px 0 4px 0;font-weight:700}
+
+/* ==== 코드/로그 ==== */
+pre{background:var(--color-bg);border:1px solid var(--color-border);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.6;font-family:var(--font-mono);color:var(--color-text);overflow-x:auto;margin:4px 0;white-space:pre-wrap;word-break:break-all;max-height:260px;overflow-y:auto}
+.log{margin-top:10px;padding:8px 10px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:6px;font-size:11px;font-family:var(--font-mono);color:var(--color-subtext);max-height:160px;overflow-y:auto}
+.log-line{margin:1px 0;line-height:1.55}
+.log-err{color:#FCA5A5}
+.log-ok{color:var(--color-success)}
+
+/* ==== 스타일 프로필 박스 (분석 결과) ==== */
+.profile{background:var(--color-accent-bg);border:1px solid var(--color-accent-dim);border-radius:8px;padding:12px 14px;margin-top:8px;font-size:13px;line-height:1.65;color:var(--color-text)}
+.profile h4{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--color-accent);margin:10px 0 4px 0;font-weight:700}
 .profile h4:first-child{margin-top:0}
-.profile ul{padding-left:20px;margin:0}
+.profile ul{padding-left:20px;margin:0;color:#DDE3EE}
 .profile li{margin:2px 0}
-.muted-text{color:#A8A29E;font-size:12px}
-.spin{display:inline-block;width:10px;height:10px;border:2px solid #E7E5E4;border-top-color:#059669;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:4px}
+.muted-text{color:var(--color-muted);font-size:12px}
+.spin{display:inline-block;width:10px;height:10px;border:2px solid var(--color-border);border-top-color:var(--color-accent);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:4px}
 @keyframes spin{to{transform:rotate(360deg)}}
-details{margin-top:8px;font-size:12px;color:#78716C}
+details{margin-top:8px;font-size:12px;color:var(--color-subtext)}
 details summary{cursor:pointer;padding:4px 0;user-select:none;font-weight:600}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<nav>
-  <a href="test-generate.html">🚀 생성</a>
-  <a href="styles.html" class="active">🎨 스타일 라이브러리</a>
-</nav>
+<!-- ============ TOPBAR (studio.html과 동일) ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="studio.html" class="brand"><span class="dot"></span> BDM Lab <span class="sub">Studio</span></a>
+    <div class="topbar-spacer"></div>
+    <a href="studio.html" class="nav-link">🚀 생성</a>
+    <a href="styles.html" class="nav-link active">🎨 스타일 라이브러리</a>
+    <span id="auth-bar"><span class="user-chip">인증 확인 중...</span></span>
+  </div>
+</header>
+
+<div class="page">
 
 <div class="card">
   <div class="row-between">
     <div>
       <h1>🎨 스타일 라이브러리</h1>
-      <p class="sub">따라하고 싶은 캐러셀을 업로드하세요. Claude Vision이 톤·구조·색감을 분석해서 재생성에 반영합니다.</p>
+      <p class="sub">따라하고 싶은 인스타 캐러셀을 등록하세요. URL을 넣거나 직접 스크린샷을 올리면, Claude Vision이 톤·구조·색감을 분석해서 생성 엔진에 주입합니다.</p>
     </div>
-    <div id="auth-bar"><span class="chip muted">인증 확인 중...</span></div>
   </div>
 </div>
 
@@ -103,6 +164,29 @@ details summary{cursor:pointer;padding:4px 0;user-select:none;font-weight:600}
       <button class="btn btn-green" onclick="createStyle()">생성</button>
       <button class="btn btn-ghost" onclick="document.getElementById('new-style-card').style.display='none'">취소</button>
     </div>
+  </div>
+
+  <!-- 관리자 전용 · 베타 초대 관리 -->
+  <div id="admin-card" class="card" style="display:none;border-color:rgba(245,158,11,0.4)">
+    <div class="row-between" style="margin-bottom:8px">
+      <h2 style="margin:0;color:#FBBF24">🔑 베타 초대 관리 (관리자 전용)</h2>
+      <span class="chip warn">admin</span>
+    </div>
+    <p class="sub">아래 목록에 등록된 이메일만 Studio에 가입할 수 있습니다. 여러 개는 줄바꿈·쉼표·공백으로 구분해서 한 번에 추가.</p>
+
+    <div class="row" style="align-items:flex-end;gap:10px;margin-bottom:14px">
+      <div style="flex:2"><label>이메일 (여러 개 가능)</label>
+        <textarea id="invite-emails" placeholder="chohyun@hanyang.ac.kr&#10;sakie@hanyang.ac.kr, lee@hanyang.ac.kr" style="min-height:70px"></textarea>
+      </div>
+      <div style="flex:1"><label>메모 (선택)</label><input id="invite-note" placeholder="예: 조교 1차 초대"></div>
+      <button class="btn btn-green" onclick="addAllowedEmails()">＋ 초대</button>
+    </div>
+
+    <div class="row-between" style="margin-bottom:6px">
+      <h3>등록된 이메일</h3>
+      <button class="btn btn-ghost btn-sm" onclick="loadAllowlist()">↻ 새로고침</button>
+    </div>
+    <div id="allowlist-box" style="font-size:13px;color:var(--color-subtext)">—</div>
   </div>
 
   <div class="card">
@@ -172,17 +256,64 @@ async function init(){
 
   const bar = document.getElementById('auth-bar');
   if(!session){
-    bar.innerHTML = '<button class="btn" onclick="signIn()">Google로 로그인</button>';
+    bar.innerHTML = '<button class="btn btn-sm" onclick="signIn()">Google로 로그인</button>';
     return;
   }
-  if(!session.user.email.toLowerCase().endsWith(HANYANG)){
-    bar.innerHTML = `<span class="chip danger">한양대 계정 아님: ${session.user.email}</span><button class="btn btn-red btn-sm" onclick="signOut()">로그아웃</button>`;
-    return;
-  }
-  bar.innerHTML = `<span class="chip">✅ ${session.user.email}</span><button class="btn btn-red btn-sm" onclick="signOut()">로그아웃</button>`;
+  bar.innerHTML = `<span class="user-chip auth">✓ ${session.user.email}</span><button class="btn btn-red btn-sm" onclick="signOut()">로그아웃</button>`;
   document.getElementById('main').style.display = 'block';
   log('인증 OK', 'ok');
   await loadStyles();
+  await checkAdminAndLoadAllowlist();
+}
+
+/* ==================== 관리자 전용 · 이메일 Allowlist ==================== */
+async function checkAdminAndLoadAllowlist(){
+  const { data, error } = await supabase
+    .from('users')
+    .select('is_admin')
+    .eq('id', session.user.id)
+    .maybeSingle();
+  if(error || !data?.is_admin) return;
+  document.getElementById('admin-card').style.display = 'block';
+  loadAllowlist();
+}
+
+async function loadAllowlist(){
+  const box = document.getElementById('allowlist-box');
+  box.textContent = '불러오는 중...';
+  const { data, error } = await supabase
+    .from('allowed_emails_status')
+    .select('email, note, invited_at, has_signed_up, signed_up_at');
+  if(error){ box.innerHTML = '<span style="color:#FCA5A5">실패: ' + esc(error.message) + '</span>'; return; }
+  if(!data || data.length === 0){ box.innerHTML = '<span class="muted-text">등록된 이메일이 없습니다.</span>'; return; }
+  const fmt = d => d ? new Date(d).toISOString().slice(0,10) : '—';
+  box.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:8px 16px;font-family:var(--font-mono);font-size:12px">
+      <b style="color:var(--color-muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">이메일</b>
+      <b style="color:var(--color-muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">메모</b>
+      <b style="color:var(--color-muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">초대일</b>
+      <b style="color:var(--color-muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">가입</b>
+      ${data.map(r => `
+        <span>${esc(r.email)}</span>
+        <span class="muted-text">${esc(r.note || '—')}</span>
+        <span class="muted-text">${fmt(r.invited_at)}</span>
+        <span>${r.has_signed_up ? `<span class="chip" style="padding:1px 6px;font-size:10px">✓ ${fmt(r.signed_up_at)}</span>` : '<span class="muted-text">—</span>'}</span>
+      `).join('')}
+    </div>
+  `;
+}
+
+async function addAllowedEmails(){
+  const raw = document.getElementById('invite-emails').value;
+  const note = document.getElementById('invite-note').value.trim() || null;
+  const emails = raw.split(/[\s,;\n]+/).map(e => e.trim().toLowerCase()).filter(e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e));
+  if(emails.length === 0){ alert('유효한 이메일이 없습니다.'); return; }
+  const { data, error } = await supabase.rpc('admin_add_allowed_emails', { p_emails: emails, p_note: note });
+  if(error){ alert('추가 실패: ' + error.message); log('allowlist 추가 실패: ' + error.message, 'err'); return; }
+  log(`allowlist · ${data}명 추가 (중복 제외)`, 'ok');
+  document.getElementById('invite-emails').value = '';
+  document.getElementById('invite-note').value = '';
+  loadAllowlist();
 }
 
 async function loadStyles(){

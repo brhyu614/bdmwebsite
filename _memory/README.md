@@ -4,16 +4,19 @@
 
 새 Claude 세션이 이 저장소에 접근했을 때 가장 먼저 이 폴더 전체를 읽어야 한다.
 
-## 우선순위
+## 우선순위 (신규 세션에서 순서대로 읽기)
 
-1. **`01-user.md`** — 사용자(교수님) 프로필 + 커뮤니케이션 스타일 (필수 — 매 세션 시작 시 읽을 것)
+1. **`01-user.md`** — 사용자(교수님) 프로필 + 커뮤니케이션 스타일 (필수 — 매 세션 시작 시)
 2. **`02-writing-rules.md`** — 모든 채널 글쓰기 규칙 (링크드인/인스타/웹사이트/네이버/Threads)
 3. **`03-content-strategy.md`** — 웹사이트의 목적, 3대 타겟, 논문 출판 상태
-4. **`04-content-factory.md`** — 소셜미디어 자동화 3개 프로그램 구조
+4. **`04-content-factory.md`** — 소셜미디어 자동화 3개 프로그램 구조 (1세대 툴)
 5. **`05-studio-mvp.md`** — BDM Lab Studio (캐러셀 MVP) 전체 맥락
-6. **`06-studio-architecture.md`** — "집단지성 버전 팩토리" 4조각 아키텍처 (최신 설계)
+6. **`06-studio-architecture.md`** — "집단지성 버전 팩토리" 4조각 아키텍처
 7. **`07-linkedin-plan.md`** — 링크드인 9개 포스트 플랜 + 1번 확정본 전문
-8. **`99-decisions-log.md`** — 날짜별 주요 결정사항 로그 (append-only)
+8. **`08-current-state.md`** ⭐ — **지금 어디까지 왔는지 스냅샷** (파일 트리, DB, 배포 상태)
+9. **`09-apis-and-secrets.md`** — 모든 외부 API + 비밀 키 + 비용 구조
+10. **`10-deployment-runbook.md`** ⭐ — **새 환경에서 복귀 단계별 가이드**
+11. **`99-decisions-log.md`** — 날짜별 주요 결정사항 로그 (append-only, 최상단이 최신)
 
 ## 업데이트 규칙
 
@@ -25,6 +28,12 @@
 ## 프로젝트 구조 포인터
 
 - 웹사이트 코드: `/` (Next.js 15.5 + Tailwind v4 + MDX)
-- 자동화 툴들: `BDM-Assets/program-carousel/`, `program-naver/`, `program-threads/`
-- **최신 개발 초점:** `BDM-Assets/studio/` (캐러셀 MVP — Supabase + Claude API + Gemini 평가)
+- 자동화 툴들: `BDM-Assets/program-carousel/`, `program-naver/`, `program-threads/` (1세대)
+- **최신 개발 초점:** `BDM-Assets/studio/` (캐러셀 MVP — Supabase + Claude API + Gemini 평가 + Replicate + Apify)
 - 스튜디오별 상세: `BDM-Assets/studio/CLAUDE.md`
+
+## 새 세션 오픈 트리거 문구
+
+> "_memory/ 폴더 전체를 순서대로 읽어줘 (README → 01~10 → 99). 읽고 나서 지금 상태 요약해줘."
+
+이 문구 하나로 다른 컴퓨터/계정에서도 컨텍스트 즉시 복원.

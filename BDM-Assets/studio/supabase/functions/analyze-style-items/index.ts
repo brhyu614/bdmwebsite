@@ -10,6 +10,7 @@
 // ============================================================
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
+import { encodeBase64 } from 'https://deno.land/std@0.224.0/encoding/base64.ts';
 import { corsHeaders, jsonResponse, errorResponse } from '../_shared/cors.ts';
 
 const VISION_MODEL = 'claude-sonnet-4-20250514';
@@ -195,7 +196,7 @@ Deno.serve(async (req: Request) => {
       const imgResp = await fetch(signed.signedUrl);
       if (!imgResp.ok) continue;
       const buf = new Uint8Array(await imgResp.arrayBuffer());
-      const base64 = btoa(String.fromCharCode(...buf));
+      const base64 = encodeBase64(buf);
       const mediaType = item.screenshot_path!.toLowerCase().endsWith('.jpg') ||
                          item.screenshot_path!.toLowerCase().endsWith('.jpeg')
         ? 'image/jpeg'

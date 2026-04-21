@@ -62,28 +62,49 @@ ratings, publications, engine_versions, api_calls, styles
 4. **스타일 자동 반영 금지** — 피드백은 유저가 큐레이팅. 자동 적용 안 함.
 5. **`program-carousel` (1653줄) 보존** — 작동 중인 1세대 툴, 건드리지 말고 포팅만.
 
-## 빌드 순서 (합의 2026-04-21)
+## 빌드 현황 (2026-04-21)
 
-1. 스타일 라이브러리 UI (레퍼런스 추가/편집/선택) ← **다음 작업**
-2. 피드백 큐레이션 + 재생성 (체크박스 + 자유 입력 → regenerate)
-3. 버전 히스토리 뷰 + "최종 컨펌"
-4. 이미지 렌더링 레이어 (Pexels + 슬라이드 템플릿 + 1080x1350 미리보기)
+### ✅ 배포 + 테스트됨
+1. 스타일 라이브러리 UI (styles.html): CRUD, 스크린샷 업로드, Apify로 인스타 URL 자동 다운로드
+2. Claude Vision 분석 (analyze-style-items)
+3. 피드백 큐레이션 + 재생성 (체크박스 + 자유 입력)
+4. 버전 히스토리 스트립
+5. 최종 컨펌 + 🎨 스타일에 반영하기 (reflect_generation_to_style RPC)
+
+### ⏳ 구현 완료, 배포 대기
+6. Migration 007: slide_media JSONB + slide-images 버킷
+7. Replicate Flux Schnell 이미지 생성 (generate-slide-image) — 스타일 프로필 주입
+8. Pexels 프록시 (search-pexels) — 스타일-aware 키워드 augment
+9. 비주얼 슬라이드 렌더러 (test-generate.html) — 9개 카드 1080×1350 + 컨트롤 (🎨 AI / 🖼 Pexels / 📤 업로드)
+
+### 🗺 미착수
+10. Export to PNG (html2canvas + ZIP)
+11. UI/UX 디자인 리팩터 (베타 배포 전)
+12. Naver Blog / Threads 스크래퍼 확장 (같은 Apify 인프라)
 
 ## 배포 명령어 (메모)
 
 ```bash
-# 비밀 설정
+# 비밀 설정 (전체)
 npx supabase@latest secrets set ANTHROPIC_API_KEY=<key>
 npx supabase@latest secrets set GEMINI_API_KEY=<key>
+npx supabase@latest secrets set APIFY_TOKEN=<key>
+npx supabase@latest secrets set REPLICATE_API_TOKEN=<key>
+npx supabase@latest secrets set PEXELS_API_KEY=<key>
 
-# 함수 배포 (JWT 게이트웨이 검증 끔)
-npx supabase@latest functions deploy generate-carousel --no-verify-jwt
-npx supabase@latest functions deploy review-carousel --no-verify-jwt
+# Edge Functions 6개 배포 (모두 --no-verify-jwt 필수: JWT ES256 이슈)
+for fn in generate-carousel review-carousel analyze-style-items \
+          fetch-instagram-carousel generate-slide-image search-pexels; do
+  npx supabase@latest functions deploy $fn --no-verify-jwt
+done
 
 # 로컬 정적 서버 (테스트 페이지)
 cd BDM-Assets/studio && python3 -m http.server 8000
 # → http://localhost:8000/test-generate.html
+# → http://localhost:8000/styles.html
 ```
+
+**상세 API/비용/복귀 가이드**: `/_memory/09-apis-and-secrets.md`, `/_memory/10-deployment-runbook.md`
 
 ## Supabase Dashboard 바로가기
 

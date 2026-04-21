@@ -5,6 +5,40 @@
 
 ---
 
+### 2026-04-21 · 이미지 레이어 1차 구현 완료 (배포 대기)
+
+Replicate + Pexels + 업로드 3-tier 이미지 소스 구조 구현.
+
+**신규 추가:**
+- `007_slide_media.sql` — `generations.slide_media` JSONB + `slide-images` Storage 버킷
+- `supabase/functions/generate-slide-image/index.ts` — Replicate Flux Schnell 프록시 (스타일 프로필 프롬프트 주입)
+- `supabase/functions/search-pexels/index.ts` — Pexels 프록시 (style-aware 키워드 augment)
+- `test-generate.html` 비주얼 그리드 — 9개 슬라이드 1080x1350 카드 + per-slide 컨트롤 (🎨 AI / 🖼 Pexels / 📤 업로드)
+
+**영구 문서화 (이번 세션):**
+- `_memory/08-current-state.md` — 현재 상태 스냅샷
+- `_memory/09-apis-and-secrets.md` — 모든 외부 API + 키 + 비용
+- `_memory/10-deployment-runbook.md` — 새 환경 복귀 가이드
+
+**사용자 액션 필요:**
+1. Replicate 가입 + 토큰 → `npx supabase@latest secrets set REPLICATE_API_TOKEN=<키>`
+2. Pexels 키 → `npx supabase@latest secrets set PEXELS_API_KEY=<키>` (기존 키 재사용 가능)
+3. Migration 007 Supabase SQL Editor 실행
+4. 2개 함수 배포: `generate-slide-image`, `search-pexels` (둘 다 `--no-verify-jwt`)
+
+### 2026-04-21 · 이미지 생성은 AI (Replicate Flux Schnell) 우선, Pexels 보조
+
+교수님 피드백: "pexels 해주는거 별로... 입력해둔 스타일에 맞게 제시되면 좋겠다"
+
+**결정: 3-tier 이미지 소스**
+1. **AI 생성 (기본)**: Replicate Flux Schnell. 스타일 프로필(visual_guidelines/color_signature) 프롬프트 주입. ~$0.003/장 → $0.027/생성 (9장)
+2. **Pexels (보조)**: 스톡 원할 때. 스타일 키워드 augment
+3. **직접 업로드 (항상)**: 완전한 통제
+
+**Why:** Pexels 스톡 이미지는 일반적·생성된 캐러셀 스타일과 안 맞음. AI는 스타일 프로필의 색·톤·가이드라인을 정확히 반영 가능.
+
+**필요 시크릿**: `REPLICATE_API_TOKEN`, `PEXELS_API_KEY` (기존)
+
 ### 2026-04-21 · 외부 콘텐츠 가져오기는 Apify로 (멀티플랫폼 인프라)
 
 교수님 결정: "허접하게 하고 싶지 않음, 돈 내더라도 확실한 것"

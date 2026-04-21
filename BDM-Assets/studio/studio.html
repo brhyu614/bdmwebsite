@@ -11,14 +11,14 @@
 /* ==== 디자인 토큰 — bigdatamarketinglab.com 과 동일 ==== */
 :root{
   --color-bg:#0B0F14;
-  --color-surface:#111820;
-  --color-surface-alt:#1A2230;
-  --color-text:#EAEDF2;
-  --color-subtext:#8B95A5;
-  --color-muted:#505C6E;
-  --color-accent:#4C9EEB;
-  --color-accent-dim:#3A7FCC;
-  --color-accent-bg:rgba(76,158,235,0.08);
+  --color-surface:#121922;
+  --color-surface-alt:#1C2533;
+  --color-text:#F1F5F9;
+  --color-subtext:#A3B0C2;
+  --color-muted:#5A6778;
+  --color-accent:#60A5FA;
+  --color-accent-dim:#3B82F6;
+  --color-accent-bg:rgba(96,165,250,0.09);
   --color-border:#1E2A3A;
   --color-success:#22C55E;
   --color-warning:#F59E0B;
@@ -29,7 +29,7 @@
   --font-mono:'JetBrains Mono',ui-monospace,monospace;
 
   /* 스타일 프로필 주입용 (B단계) */
-  --style-accent:#4C9EEB;
+  --style-accent:#60A5FA;
   --style-accent-rgb:76,158,235;
   --style-font-heading:var(--font-sans);
   --style-font-body:var(--font-sans);
@@ -51,7 +51,7 @@ body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-s
 .topbar{border-bottom:1px solid var(--color-border);background:var(--color-bg);position:sticky;top:0;z-index:50}
 .topbar-inner{max-width:1240px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:20px}
 .brand{font-family:var(--font-sans);font-weight:800;letter-spacing:-0.02em;font-size:18px;color:var(--color-text);text-decoration:none;display:flex;align-items:center;gap:8px}
-.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(76,158,235,0.5)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(96,165,250,0.55)}
 .brand .sub{color:var(--color-subtext);font-weight:500}
 .topbar-spacer{flex:1}
 .topbar a.nav-link{color:var(--color-subtext);text-decoration:none;font-size:13px;font-weight:500;padding:6px 10px;border-radius:6px}
@@ -145,8 +145,17 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .slide-tag{display:inline-block;padding:2px 9px;background:var(--color-surface-alt);color:var(--color-text);border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;border:1px solid var(--color-border)}
 .slide-tag.variant{background:var(--color-accent-bg);color:var(--color-accent);border-color:var(--color-accent-dim)}
 .slide-heading{font-family:var(--style-font-heading);font-size:17px;font-weight:var(--style-heading-weight);color:var(--color-text);margin-bottom:8px;line-height:1.35;letter-spacing:-0.01em}
-.slide-body{font-family:var(--style-font-body);font-size:13.5px;line-height:1.75;color:#C8CDD6;white-space:pre-wrap;word-break:keep-all}
+.slide-body{font-family:var(--style-font-body);font-size:13.5px;line-height:1.75;color:#DDE3EE;white-space:pre-wrap;word-break:keep-all}
 .slide-meta{margin-top:8px;font-size:11px;color:var(--color-muted);font-family:var(--font-mono)}
+
+/* 인라인 편집 가능 필드 */
+.editable-field{outline:none;border-radius:6px;padding:4px 8px;margin:-4px -8px 4px;transition:background .12s,box-shadow .12s;cursor:text}
+.editable-field:hover{background:rgba(var(--style-accent-rgb),0.06)}
+.editable-field:focus,.editable-field.editing{background:var(--color-surface-alt);box-shadow:inset 0 0 0 2px var(--color-accent);font-family:var(--font-mono);font-size:13px;line-height:1.55;color:var(--color-text);white-space:pre-wrap}
+.editable-field.editing strong,.editable-field.editing em,.editable-field.editing mark.hl{all:unset}
+.outro-field{display:inline-block;min-width:180px}
+.edit-hint{margin-left:auto;font-size:10px;font-family:var(--font-mono);opacity:.5}
+.slide-text:hover .edit-hint{opacity:.9;color:var(--color-accent)}
 
 /* 마크다운 파서용 */
 .slide-heading strong,.slide-body strong,.v-heading strong,.v-body strong{font-weight:900;color:var(--color-text)}
@@ -165,6 +174,78 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .visual-canvas .v-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,0.78) 100%)}
 .visual-canvas.variant-light .v-overlay{background:linear-gradient(to bottom, rgba(255,255,255,0.05) 30%, rgba(234,237,242,0.9) 90%)}
 .visual-canvas.variant-green .v-overlay{background:linear-gradient(to bottom, rgba(var(--style-accent-rgb),0) 30%, rgba(var(--style-accent-rgb),0.82) 100%)}
+/* 스타일 통합 variant — 9장을 한 브랜드로 묶는 공통 오버레이 (스타일 토큰 기반) */
+.visual-canvas.variant-style .v-overlay{background:linear-gradient(to bottom, rgba(11,15,20,0) 40%, rgba(11,15,20,0.82) 100%)}
+.visual-canvas.variant-style .v-text{color:#fff}
+
+/* ==== 텍스트 위치 (data-pos) ==== */
+.visual-canvas[data-pos="top"] .v-text{top:14px;bottom:auto}
+.visual-canvas[data-pos="center"] .v-text{top:50%;bottom:auto;transform:translateY(-50%)}
+.visual-canvas[data-pos="bottom"] .v-text{bottom:12px;top:auto}
+/* center 위치면 오버레이도 중앙 집중 */
+.visual-canvas[data-pos="center"] .v-overlay{background:radial-gradient(ellipse at center, rgba(11,15,20,0.72) 20%, rgba(11,15,20,0.15) 80%)}
+.visual-canvas[data-pos="top"] .v-overlay{background:linear-gradient(to top, rgba(11,15,20,0) 45%, rgba(11,15,20,0.82) 100%)}
+
+/* ==== 텍스트 정렬 (data-align) ==== */
+.visual-canvas[data-align="left"] .v-text{text-align:left}
+.visual-canvas[data-align="center"] .v-text{text-align:center}
+.visual-canvas[data-align="right"] .v-text{text-align:right}
+
+/* ==== 제목 크기 (data-heading-size) — 1080×1350 기준, 미리보기는 /3.2배로 축소 렌더 */
+.visual-canvas[data-heading-size="sm"] .v-heading{font-size:11px}
+.visual-canvas[data-heading-size="md"] .v-heading{font-size:15px}
+.visual-canvas[data-heading-size="lg"] .v-heading{font-size:20px}
+.visual-canvas[data-heading-size="xl"] .v-heading{font-size:26px;line-height:1.15}
+
+/* ==== 본문 크기 (data-body-size) ==== */
+.visual-canvas[data-body-size="sm"] .v-body{font-size:9px;-webkit-line-clamp:3}
+.visual-canvas[data-body-size="md"] .v-body{font-size:10.5px;-webkit-line-clamp:4}
+.visual-canvas[data-body-size="lg"] .v-body{font-size:12.5px;-webkit-line-clamp:5}
+
+/* ==== 색상 (data-color) ==== */
+.visual-canvas[data-color="light"] .v-text{color:#FAFAF9;text-shadow:0 2px 10px rgba(0,0,0,0.55)}
+.visual-canvas[data-color="dark"] .v-text{color:#0B0F14;text-shadow:none}
+.visual-canvas[data-color="dark"] .v-overlay{background:linear-gradient(to bottom, rgba(255,255,255,0.05) 30%, rgba(234,237,242,0.92) 90%)}
+.visual-canvas[data-color="accent"] .v-heading{color:var(--color-accent)}
+.visual-canvas[data-color="accent"] .v-body{color:#fff}
+
+/* ==== 표시/숨김 (data-heading-visible / data-body-visible) ==== */
+.visual-canvas[data-heading-visible="false"] .v-heading{display:none}
+.visual-canvas[data-body-visible="false"] .v-body{display:none}
+
+/* ==== ⚙️ 텍스트 조정 인라인 패널 ==== */
+.tov-panel{margin-top:8px;padding:12px;background:var(--color-bg);border:1px solid var(--color-accent-dim);border-radius:8px;font-size:12px}
+.tov-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tov-row b{width:44px;flex-shrink:0;font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--color-muted)}
+.tov-row span{font-size:10px;color:var(--color-muted);margin-left:4px}
+.tov-toggle{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--color-subtext);cursor:pointer;user-select:none}
+.tov-toggle input{accent-color:var(--color-accent);cursor:pointer}
+.tov-btn{padding:4px 9px;border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-subtext);border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:600}
+.tov-btn:hover{border-color:var(--color-accent-dim);color:var(--color-text)}
+.tov-btn.selected{background:var(--color-accent);color:#0B0F14;border-color:var(--color-accent)}
+.tov-foot{display:flex;align-items:center;gap:6px;margin-top:4px;padding-top:10px;border-top:1px dashed var(--color-border)}
+.tov-foot .spacer{flex:1}
+
+/* ==== 처음 안내 모달 ==== */
+.intro-modal{max-width:720px}
+.intro-lead{font-size:14px;line-height:1.75;color:var(--color-text);margin:0 0 18px}
+.intro-h3{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-accent);margin:20px 0 10px}
+.intro-steps{margin:0 0 8px;padding-left:20px;font-size:13px;line-height:1.8;color:var(--color-subtext)}
+.intro-steps li{margin:8px 0}
+.intro-steps b{color:var(--color-text)}
+.intro-tips{margin:0;padding-left:20px;font-size:13px;line-height:1.8;color:var(--color-subtext)}
+.intro-tips li{margin:6px 0}
+.intro-tips b{color:var(--color-text)}
+.intro-foot{display:flex;align-items:center;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--color-border)}
+.intro-foot .spacer{flex:1}
+
+/* ==== 상단 🐛 문제 제보 링크 강조 ==== */
+.topbar .nav-link.bug-link{color:#F59E0B;border:1px dashed rgba(245,158,11,0.4);padding:4px 10px;border-radius:6px}
+.topbar .nav-link.bug-link:hover{background:rgba(245,158,11,0.1);color:#FBBF24}
+
+/* textarea 공통 */
+#bug-desc,#bug-repro{width:100%;min-height:80px;padding:10px 12px;border:1px solid var(--color-border);background:var(--color-bg);color:var(--color-text);border-radius:6px;font-family:inherit;font-size:13px;line-height:1.6;resize:vertical;margin-top:6px}
+#bug-desc:focus,#bug-repro:focus{outline:none;border-color:var(--color-accent)}
 .visual-canvas .v-tag{position:absolute;top:10px;left:10px;padding:3px 9px;background:rgba(17,24,32,0.88);color:var(--color-text);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;border-radius:4px;backdrop-filter:blur(4px)}
 .visual-canvas .v-num{position:absolute;top:10px;right:10px;padding:3px 8px;background:rgba(11,15,20,0.75);color:var(--color-subtext);font-size:10px;font-weight:700;border-radius:10px;font-family:var(--font-mono)}
 .visual-canvas .v-text{position:absolute;left:12px;right:12px;bottom:12px;color:#fff;z-index:2}
@@ -193,6 +274,33 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .pex-thumb:hover{border-color:var(--color-accent)}
 .pex-thumb .credit{position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:rgba(0,0,0,0.7);color:#fff;font-size:9px;text-align:center}
 
+/* ==== 스타일 투명성 배너 (Step 3 상단) ==== */
+.style-transparency{display:none;background:linear-gradient(135deg,rgba(var(--style-accent-rgb),0.08),rgba(var(--style-accent-rgb),0.02));border:1px solid var(--color-border);border-left:3px solid var(--color-accent);border-radius:12px;padding:14px 18px;margin:10px 0 18px;font-size:13px}
+.style-transparency .st-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.style-transparency .st-badge{display:inline-block;padding:3px 10px;color:#0B0F14;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase}
+.style-transparency .st-body{display:flex;flex-direction:column;gap:6px;padding:10px 0 6px;border-top:1px dashed var(--color-border)}
+.style-transparency .st-row{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--color-subtext)}
+.style-transparency .st-row b{flex-shrink:0;width:72px;font-size:10px;color:var(--color-muted);text-transform:uppercase;letter-spacing:1px;padding-top:2px}
+.style-transparency .st-row ul{margin:0;padding-left:16px;flex:1}
+.style-transparency .st-row ul li{margin:2px 0;line-height:1.55}
+.style-transparency .st-swatches{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.style-transparency .st-sw{display:inline-block;width:16px;height:16px;border-radius:4px;border:1px solid var(--color-border)}
+.style-transparency .st-swatches code{font-size:11px;font-family:var(--font-mono);color:var(--color-muted);margin-right:6px}
+.style-transparency .st-foot{margin-top:10px;padding-top:10px;border-top:1px dashed var(--color-border);font-size:11.5px}
+.style-transparency .st-empty{padding:6px 0}
+
+/* ==== 프롬프트 보기 모달 ==== */
+.pv-prompt{background:var(--color-bg);border:1px solid var(--color-border);border-radius:8px;padding:14px;font-family:var(--font-mono);font-size:12.5px;line-height:1.7;color:var(--color-text);white-space:pre-wrap;word-break:break-word;margin:0}
+.pv-injected-list{margin:0;padding-left:20px;font-size:13px;line-height:1.75;color:var(--color-subtext)}
+.pv-injected-list li{margin:3px 0}
+
+/* ==== 이미지 피드백 인라인 패널 (💬) ==== */
+.img-fb-panel{margin-top:8px;padding:10px;background:var(--color-bg);border:1px solid var(--color-accent-dim);border-radius:8px}
+.img-fb-panel label{font-size:11px;color:var(--color-muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px}
+.img-fb-text{width:100%;min-height:60px;padding:8px 10px;border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:6px;font-family:inherit;font-size:13px;resize:vertical}
+.img-fb-text:focus{outline:none;border-color:var(--color-accent)}
+.btn-sm{padding:6px 12px;font-size:12px}
+
 /* ==== 버전 히스토리 ==== */
 .versions-strip{display:flex;gap:6px;flex-wrap:wrap}
 .version-chip{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:var(--color-surface-alt);color:var(--color-subtext);border:1px solid var(--color-border);border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-mono);transition:all .1s}
@@ -208,13 +316,13 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .rev-score .value.hi{color:var(--color-success)}
 .rev-score .value.mid{color:var(--color-warning)}
 .rev-score .value.lo{color:var(--color-danger)}
-.rev-feedback{font-family:var(--font-serif);font-size:14px;line-height:1.8;color:#C8CDD6}
+.rev-feedback{font-family:var(--font-serif);font-size:14px;line-height:1.8;color:#DDE3EE}
 
 /* ==== 피드백 큐레이션 (재생성용) ==== */
 .check-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;margin:6px 0;cursor:pointer;transition:all .12s}
 .check-row:hover{border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
 .check-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:var(--color-accent)}
-.check-row label{font-size:13px;color:#C8CDD6;cursor:pointer;margin:0;text-transform:none;letter-spacing:0;font-weight:500;line-height:1.55}
+.check-row label{font-size:13px;color:#DDE3EE;cursor:pointer;margin:0;text-transform:none;letter-spacing:0;font-weight:500;line-height:1.55}
 
 /* ==== 피드백 수집 (Step 4) ==== */
 .fb-section{margin:16px 0 8px;font-size:11px;font-weight:700;color:var(--color-subtext);text-transform:uppercase;letter-spacing:1.5px}
@@ -267,7 +375,8 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
     <a href="studio.html" class="brand"><span class="dot"></span> BDM Lab <span class="sub">Studio</span></a>
     <div class="topbar-spacer"></div>
     <a href="styles.html" class="nav-link">🎨 스타일 라이브러리</a>
-    <a href="test-generate.html" class="nav-link">🧪 개발자</a>
+    <button type="button" class="nav-link" onclick="openIntro()" title="프로그램 안내 다시 보기">❓ 안내</button>
+    <button type="button" class="nav-link bug-link" onclick="openBugReport()" title="버그/문제 제보">🐛 문제 제보</button>
     <span id="auth-bar"><span class="user-chip">인증 확인 중...</span></span>
   </div>
 </header>
@@ -399,10 +508,13 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
       <h1>슬라이드 이미지</h1>
       <span class="section-sub">Step 03 · Visual</span>
     </div>
-    <p>1080×1350 미리보기. 각 슬라이드마다 <b>🎨 AI 생성</b> (Replicate Flux, 스타일 자동 반영) / <b>🖼 Pexels</b> (스톡) / <b>📤 업로드</b>. <br>또는 아래 <b>⚡ 한 방 생성</b>으로 9장 전부 AI 일괄 생성 (rate limit 자동 우회).</p>
+    <p>1080×1350 미리보기. 슬라이드마다 <b>🎨 AI</b>(스타일 자동 반영) / <b>🖼 Pexels</b>(스톡) / <b>📤 업로드</b>. 마음에 안 들면 <b>💬 피드백</b>으로 수정 방향 적어서 다시 생성할 수 있습니다. <b>🔍</b> 눌러서 실제 AI에 보낸 프롬프트도 확인하세요.</p>
 
-    <div class="alert alert-info" id="rate-alert" style="display:none">
-      <b>ℹ️ Replicate 크레딧 확인</b>: 잔액 $5 미만이면 throttle 걸려 일괄 생성이 느려집니다. <a href="https://replicate.com/account/billing" target="_blank" style="color:var(--color-accent)">크레딧 충전</a> 권장.
+    <!-- 스타일 투명성 배너 — 이번 생성에 주입될 스타일 요약 -->
+    <div class="style-transparency" id="style-transparency"></div>
+
+    <div class="alert alert-warn" id="rate-alert" style="display:none">
+      <b>⚠️ 이미지 서버 잔액이 적을 때</b>: 잔액이 얼마 안 남으면 서버가 일부러 천천히 받아요. 계속 느리게 나오면 <a href="https://replicate.com/account/billing" target="_blank" style="color:var(--color-accent)">여기에서 충전</a>하시면 즉시 빨라집니다 ($10만 충전해도 약 3700장).
     </div>
 
     <div id="visual-grid" class="visual-grid"></div>
@@ -410,12 +522,25 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
     <div class="step-footer">
       <button class="btn btn-ghost" onclick="goStep(2)">← 텍스트로</button>
       <div class="spacer"></div>
-      <button class="btn" id="autoGenBtn" onclick="autoGenerateAllImages()" disabled>⚡ 한 방 생성 (빈 슬라이드 AI 일괄)</button>
+      <button class="btn" id="autoGenBtn" onclick="autoGenerateAllImages()" disabled>🎨 스타일대로 AI 이미지 일괄 생성</button>
       <span id="autogen-status" class="chip"></span>
       <button class="btn btn-primary" onclick="goStep(4)">완료 단계 →</button>
     </div>
   </div>
 </section>
+
+<!-- 이미지 피드백 인라인 패널 (슬라이드 카드 아래 열림) -->
+<template id="tpl-img-feedback">
+  <div class="img-fb-panel">
+    <label>이 이미지 어떻게 수정할까요?</label>
+    <textarea class="img-fb-text" placeholder="예: 더 어두운 톤으로 / 사람 없게 / 클로즈업 / 데이터 그래프 느낌 / 색을 더 진하게..."></textarea>
+    <div class="row" style="margin-top:8px;gap:8px">
+      <button class="btn btn-sm img-fb-cancel">취소</button>
+      <div class="spacer"></div>
+      <button class="btn btn-primary btn-sm img-fb-submit">피드백 반영해서 다시 생성 →</button>
+    </div>
+  </div>
+</template>
 
 <!-- ============ STEP 4: 완료 · 피드백 ============ -->
 <section class="step-panel" id="panel-4">
@@ -506,6 +631,112 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
   </div>
 </div>
 
+<!-- ============ 처음 안내 (1분 읽기) ============ -->
+<div id="intro-modal" class="modal-backdrop" style="display:none">
+  <div class="modal intro-modal">
+    <div class="modal-head">
+      <div style="flex:1">
+        <h2>BDM Lab Studio</h2>
+        <div class="muted" style="font-size:12px;margin-top:2px">인스타 캐러셀 자동화 프로그램입니다. 1분이면 사용법을 알 수 있습니다.</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeIntro()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="intro-lead">
+        스타일 레퍼런스 한두 개 등록해두면, 그 톤을 닮은 캐러셀 초안을 자동으로 뽑아줍니다.
+      </p>
+      <p class="intro-lead">
+        사용자들의 피드백이 모여서 엔진 프롬프트가 주기적으로 개선되는 <b>집단지성 구조</b>입니다.
+        많이 쓸수록 모두에게 좋아집니다. 지금은 연구용 베타입니다.
+      </p>
+
+      <h3 class="intro-h3">4단계 흐름</h3>
+      <ol class="intro-steps">
+        <li><b>Step 1 · 입력</b> — 주제를 쓰고 스타일을 고릅니다. 스타일은 <a href="styles.html" style="color:var(--color-accent)">🎨 스타일 라이브러리</a>에서 인스타 계정·게시물 URL을 넣어 만들어두면 여러 번 재활용됩니다.</li>
+        <li><b>Step 2 · 텍스트</b> — Claude가 쓴 슬라이드 초안. 마음에 안 드는 문장은 <b>클릭해서 직접 고치거나</b>, Gemini 평가 후 피드백으로 재생성하세요.</li>
+        <li><b>Step 3 · 이미지</b> — 각 슬라이드에 🎨 AI / 🖼 Pexels / 📤 업로드 중 선택. <b>⚙️ 버튼</b>으로 텍스트 크기·위치·표시 여부를 조정하고, <b>"전체에 적용"</b>으로 한 번에 통일할 수 있습니다.</li>
+        <li><b>Step 4 · 완료</b> — 최종 컨펌 + 별점 + 테마 태그 + 자유 피드백. 이게 엔진 개선 재료가 됩니다.</li>
+      </ol>
+
+      <h3 class="intro-h3">꼭 기억할 3가지</h3>
+      <ul class="intro-tips">
+        <li><b>스타일 품질이 곧 결과 품질이다.</b> 개수보다 분석(🤖 분석하기)이 끝나 있는지가 더 중요합니다. 지금은 토큰 제한이 있어서 한두 개만 등록·분석해두고 쓰시길 권장합니다.</li>
+        <li><b>피드백은 집단지성 자산이다.</b> "텍스트가 흐리다", "제목이 약하다" 같은 한 줄도 전체 사용자 데이터에 합쳐져서 다음 버전 시스템 프롬프트 개선 재료가 됩니다.</li>
+        <li><b>막히면 상단 🐛 문제 제보.</b> 쓰다가 어색하거나 에러 나면 그 자리에서 바로 보내주세요.</li>
+      </ul>
+
+      <div class="intro-foot">
+        <label class="tov-toggle"><input type="checkbox" id="intro-dontshow" checked> 다음부터 자동으로 열지 않기</label>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="closeIntro()">시작하기 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 버그/문제 제보 모달 (🐛) ============ -->
+<div id="bug-modal" class="modal-backdrop" style="display:none">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-head">
+      <div style="flex:1">
+        <h2>🐛 문제 제보</h2>
+        <div class="muted" style="font-size:12px;margin-top:2px">에러, 어색한 동작, UI 문제 아무거나. 교수님이 직접 봅니다.</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeBugReport()">✕ 닫기</button>
+    </div>
+    <div class="modal-body">
+      <label>어느 단계에서?</label>
+      <div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:14px">
+        <button type="button" class="tov-btn bug-step" data-val="step1">Step 1 · 입력</button>
+        <button type="button" class="tov-btn bug-step" data-val="step2">Step 2 · 텍스트</button>
+        <button type="button" class="tov-btn bug-step" data-val="step3">Step 3 · 이미지</button>
+        <button type="button" class="tov-btn bug-step" data-val="step4">Step 4 · 완료</button>
+        <button type="button" class="tov-btn bug-step" data-val="styles">스타일 라이브러리</button>
+        <button type="button" class="tov-btn bug-step" data-val="login">로그인/인증</button>
+        <button type="button" class="tov-btn bug-step selected" data-val="other">전체/기타</button>
+      </div>
+
+      <label>뭐가 문제인가요?</label>
+      <textarea id="bug-desc" placeholder="예: Step 3에서 AI 이미지 눌렀는데 3번 슬라이드만 계속 실패함. 에러 메시지는 'Replicate 호출 실패 402' 비슷한 거."></textarea>
+
+      <label style="margin-top:10px">재현 방법 (선택)</label>
+      <textarea id="bug-repro" placeholder="예: 1) 생성 시작 → 2) Step 3 → 3) 3번 슬라이드 🎨 AI 클릭 → 4) 실패" style="min-height:60px"></textarea>
+
+      <div class="row" style="margin-top:14px;align-items:center">
+        <div class="muted" style="font-size:11px;flex:1">브라우저/URL/현재 단계는 자동으로 함께 전송됩니다.</div>
+        <button class="btn btn-primary" onclick="submitBugReport()" id="bug-submit">제보 보내기</button>
+        <span id="bug-status" class="chip"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 프롬프트 보기 모달 (🔍) ============ -->
+<div id="prompt-view-modal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="modal-head">
+      <div style="flex:1">
+        <h2>🔍 실제 AI에 보낸 프롬프트</h2>
+        <div class="muted" style="font-size:12px;margin-top:2px">
+          슬라이드 <b id="pv-label">—</b> · 스타일 <b id="pv-style-name">—</b> · 모델 <code id="pv-model">—</code>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closePromptView()">✕ 닫기</button>
+    </div>
+    <div class="modal-body">
+      <h3>주입된 스타일 요소</h3>
+      <p class="muted" style="font-size:12px;margin:0 0 8px">이 항목들이 스타일 라이브러리에서 가져와서 프롬프트에 자동 합쳐졌습니다.</p>
+      <ul class="pv-injected-list" id="pv-injected"></ul>
+
+      <h3 style="margin-top:18px">최종 프롬프트 (Replicate Flux Schnell에 전달)</h3>
+      <pre id="pv-prompt" class="pv-prompt"></pre>
+      <p class="muted" style="font-size:12px;margin-top:10px">
+        프롬프트가 마음에 들지 않으면 <b>💬 버튼</b>으로 "더 어둡게", "사람 없게" 같은 피드백을 주면 이 프롬프트 뒤에 추가되어 다시 생성됩니다.
+      </p>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="hidden-upload" accept="image/png,image/jpeg,image/webp" style="display:none">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -522,6 +753,12 @@ let supabase, session;
 let lastResult = null;           // { generation_id, carousel_id, version, output, ... }
 let lastReview = null;
 let slideMediaMap = {};          // slide_index → media entry
+const DEFAULT_TEXT_OVERRIDE = {
+  heading_visible: 'true', body_visible: 'true',
+  heading_size: 'md', body_size: 'md',
+  position: 'bottom', align: 'left', color_mode: 'auto',
+};
+let slideTextOverrides = {};     // slide_index → override obj (localStorage persisted)
 let versionHistory = [];
 let currentCarouselId = null;
 const stylesMap = {};            // id → { name, analyzed, ... }
@@ -571,6 +808,7 @@ function goStep(n){
   $('panel-' + n).classList.add('active');
   if(tab) tab.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  if(n === 3) renderTransparencyBanner();
 }
 function unlockStep(n){
   const tab = document.querySelector(`.step-tab[data-step="${n}"]`);
@@ -596,7 +834,7 @@ function extractAccentFromProfile(profile){
   }
   const NAME_MAP = {
     'black':'#1C1917','white':'#FAFAF9','green':'#22C55E','emerald':'#059669',
-    'blue':'#4C9EEB','red':'#EF4444','yellow':'#EAB308','pink':'#EC4899',
+    'blue':'#60A5FA','red':'#EF4444','yellow':'#EAB308','pink':'#EC4899',
     'purple':'#A855F7','orange':'#F97316','gray':'#6B7280','grey':'#6B7280',
     'beige':'#D6C7A7','brown':'#78350F','navy':'#1E3A8A','teal':'#0D9488',
   };
@@ -618,7 +856,7 @@ function extractFontFromProfile(profile){
 }
 function applyStyleToCSS(styleId){
   const root = document.documentElement;
-  root.style.setProperty('--style-accent', '#4C9EEB');
+  root.style.setProperty('--style-accent', '#60A5FA');
   root.style.setProperty('--style-accent-rgb', '76, 158, 235');
   root.style.setProperty('--style-font-heading', "'Outfit','Noto Sans KR',sans-serif");
   root.style.setProperty('--style-font-body', "'Outfit','Noto Sans KR',sans-serif");
@@ -716,6 +954,7 @@ async function doGenerate(){
     currentCarouselId = data.carousel_id;
     versionHistory = [{ version: data.version, generation_id: data.generation_id, output: data.output, review: null, slide_media: [] }];
     slideMediaMap = {};
+    loadTextOverrides();   // 이전 세션 텍스트 조정 복원
     $('output').textContent = JSON.stringify(data.output, null, 2);
     renderCarousel(data.output);
     renderVisualGrid(data.output);
@@ -752,12 +991,13 @@ function renderCarousel(out){
 function renderSlideText(slide, num, cls){
   const tag = slide.tag ? `<span class="slide-tag">${esc(slide.tag)}</span>` : '';
   const variant = slide.variant ? `<span class="slide-tag variant">${esc(slide.variant)}</span>` : '';
-  const heading = slide.heading ? `<div class="slide-heading">${mdInline(slide.heading)}</div>` : '';
-  const body = slide.body ? `<div class="slide-body">${mdInline(slide.body)}</div>` : '';
+  const path = num === 0 ? 'cover' : `slides.${num - 1}`;
+  const heading = slide.heading !== undefined ? editableField(slide.heading || '', `${path}.heading`, 'slide-heading', '제목을 입력하세요') : '';
+  const body = slide.body !== undefined ? editableField(slide.body || '', `${path}.body`, 'slide-body', '본문을 입력하세요') : '';
   const kw = slide.video_keyword ? `<div class="slide-meta">🎬 ${esc(slide.video_keyword)}</div>` : '';
-  const label = num === 0 ? 'COVER' : num === -1 ? 'OUTRO' : '#' + String(num).padStart(2,'0');
-  return `<div class="slide-text ${cls}">
-    <div class="slide-text-head"><span class="slide-label">${label}</span>${tag}${variant}</div>
+  const label = num === 0 ? 'COVER' : '#' + String(num).padStart(2,'0');
+  return `<div class="slide-text ${cls}" data-slide-num="${num}">
+    <div class="slide-text-head"><span class="slide-label">${label}</span>${tag}${variant}<span class="edit-hint muted">클릭해서 수정</span></div>
     ${heading}${body}${kw}
   </div>`;
 }
@@ -767,9 +1007,61 @@ function renderOutro(o){
     ['brand_sub', o.brand_sub],
     ['closing', o.closing],
     ['cta', o.cta],
-    ['links', Array.isArray(o.links) ? o.links.join(', ') : o.links],
-  ].filter(([,v]) => v).map(([k,v]) => `<div class="slide-meta"><b style="color:var(--color-muted)">${k}</b> &nbsp; ${mdInline(v)}</div>`).join('');
-  return `<div class="slide-text outro"><div class="slide-text-head"><span class="slide-label">OUTRO</span></div>${rows}</div>`;
+  ].map(([k,v]) => `<div class="slide-meta"><b style="color:var(--color-muted)">${k}</b> &nbsp; ${editableField(v || '', `outro.${k}`, 'outro-field', k + ' 입력')}</div>`).join('');
+  const links = o.links ? `<div class="slide-meta"><b style="color:var(--color-muted)">links</b> &nbsp; ${esc(Array.isArray(o.links) ? o.links.join(', ') : o.links)}</div>` : '';
+  return `<div class="slide-text outro"><div class="slide-text-head"><span class="slide-label">OUTRO</span><span class="edit-hint muted">클릭해서 수정</span></div>${rows}${links}</div>`;
+}
+/* 인라인 편집 가능 필드 — focus 시 raw markdown 표시, blur 시 저장+재렌더 */
+function editableField(rawValue, path, cls, placeholder){
+  const rendered = rawValue ? mdInline(rawValue) : `<span class="muted" style="opacity:.5">${esc(placeholder)}</span>`;
+  return `<div class="${cls} editable-field" contenteditable="true" spellcheck="false"
+    data-path="${esc(path)}" data-raw="${esc(rawValue)}" data-placeholder="${esc(placeholder)}"
+    onfocus="startEditField(this)" onblur="saveEditField(this)">${rendered}</div>`;
+}
+function startEditField(el){
+  el.classList.add('editing');
+  el.innerText = el.dataset.raw || '';
+  requestAnimationFrame(() => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+}
+function saveEditField(el){
+  el.classList.remove('editing');
+  const newText = (el.innerText || '').replace(/\u00A0/g, ' ').trim();
+  const prev = el.dataset.raw || '';
+  if(newText === prev){
+    el.innerHTML = newText ? mdInline(newText) : `<span class="muted" style="opacity:.5">${esc(el.dataset.placeholder || '')}</span>`;
+    return;
+  }
+  el.dataset.raw = newText;
+  // lastResult.output에 반영 (path: "cover.heading" | "slides.2.body" | "outro.cta")
+  if(lastResult?.output){
+    const parts = el.dataset.path.split('.');
+    let obj = lastResult.output;
+    for(let i = 0; i < parts.length - 1; i++){
+      const p = parts[i];
+      const key = /^\d+$/.test(p) ? parseInt(p, 10) : p;
+      if(obj[key] === undefined) obj[key] = /^\d+$/.test(parts[i+1]) ? [] : {};
+      obj = obj[key];
+    }
+    obj[parts[parts.length - 1]] = newText;
+    // 원본 JSON 패널도 동기화
+    const outputEl = $('output');
+    if(outputEl) outputEl.textContent = JSON.stringify(lastResult.output, null, 2);
+    // 버전 히스토리 현재 버전도 동기화
+    const v = versionHistory.find(x => x.generation_id === lastResult.generation_id);
+    if(v) v.output = lastResult.output;
+    // Step 3 이미지 그리드가 이미 그려져 있다면 텍스트만 다시 반영
+    if($('visual-grid').children.length) renderVisualGrid(lastResult.output);
+  }
+  el.innerHTML = newText ? mdInline(newText) : `<span class="muted" style="opacity:.5">${esc(el.dataset.placeholder || '')}</span>`;
+  setChip($('gen-status'), '✓ 수정 저장됨', 'ok');
+  setTimeout(() => setChip($('gen-status'), '', ''), 1500);
 }
 
 /* ==================== 버전 히스토리 ==================== */
@@ -885,6 +1177,7 @@ async function doRegenerate(){
     lastResult = data;
     versionHistory.push({ version: data.version, generation_id: data.generation_id, output: data.output, review: null, slide_media: [] });
     slideMediaMap = {};
+    loadTextOverrides();   // 새 버전에도 같은 텍스트 조정 유지
     $('output').textContent = JSON.stringify(data.output, null, 2);
     renderCarousel(data.output);
     renderVisualGrid(data.output);
@@ -909,10 +1202,46 @@ function renderVisualGrid(out){
   const grid = $('visual-grid'); grid.innerHTML = '';
   collectSlides(out).forEach(s => grid.appendChild(renderVisualSlide(s)));
   $('autoGenBtn').disabled = false;
+  renderTransparencyBanner();
+}
+
+/* ==================== 스타일 투명성 배너 ====================
+   "지금 이 스타일이 AI 프롬프트에 정말로 주입되고 있습니다" — 눈으로 확인 */
+function renderTransparencyBanner(){
+  const banner = $('style-transparency');
+  if(!banner) return;
+  const styleId = $('styleSelect')?.value;
+  const style = styleId ? stylesMap[styleId] : null;
+  if(!style){
+    banner.innerHTML = '<div class="st-empty muted">스타일이 선택되지 않았습니다. Step 1에서 스타일을 고르면 여기에 주입 내역이 표시됩니다.</div>';
+    return;
+  }
+  const profile = style.analyzed || {};
+  const accent = extractAccentFromProfile(profile) || '#60A5FA';
+  const tone = profile.overall_tone || '(스타일 분석 전)';
+  const colors = Array.isArray(profile.color_signature) ? profile.color_signature.slice(0, 5) : [];
+  const guides = Array.isArray(profile.visual_guidelines) ? profile.visual_guidelines.slice(0, 3) : [];
+  banner.innerHTML = `
+    <div class="st-head">
+      <span class="st-badge" style="background:${esc(accent)}">지금 사용 중인 스타일</span>
+      <b>${esc(style.name)}</b>
+      <span class="muted">— 아래 정보가 모든 AI 이미지 프롬프트에 자동으로 주입됩니다.</span>
+    </div>
+    <div class="st-body">
+      <div class="st-row"><b>톤</b><span>${esc(tone)}</span></div>
+      ${colors.length ? `<div class="st-row"><b>컬러</b><span class="st-swatches">${colors.map(c => `<span class="st-sw" style="background:${esc(c)}" title="${esc(c)}"></span><code>${esc(c)}</code>`).join('')}</span></div>` : ''}
+      ${guides.length ? `<div class="st-row"><b>비주얼 규칙</b><ul>${guides.map(g => `<li>${esc(g)}</li>`).join('')}</ul></div>` : ''}
+      ${profile.typography ? `<div class="st-row"><b>타이포</b><span>${esc(profile.typography)}</span></div>` : ''}
+    </div>
+    <div class="st-foot muted">각 슬라이드의 <b>🔍</b> 버튼을 누르면 Replicate에 실제로 보낸 프롬프트를 그대로 볼 수 있습니다.</div>
+  `;
+  banner.style.display = 'block';
 }
 function renderVisualSlide(s){
   const idx = s._index;
-  const variant = (s.variant || 'dark').toLowerCase();
+  // 스타일 선택 시 variant 오버라이드 역전 — 9장 전부 스타일 토큰으로 통일
+  const styleSelected = !!$('styleSelect')?.value;
+  const variant = styleSelected ? 'style' : (s.variant || 'dark').toLowerCase();
   const card = document.createElement('div');
   card.className = 'visual-slide';
   card.id = 'vs-' + idx;
@@ -926,8 +1255,12 @@ function renderVisualSlide(s){
   const body = s.body || '';
   const tag = s.tag || label;
 
+  // 텍스트 오버라이드 (슬라이드별) — 기본값 병합
+  const ov = { ...DEFAULT_TEXT_OVERRIDE, ...(slideTextOverrides[idx] || {}) };
+  const dataAttrs = `data-variant="${variant}" data-pos="${ov.position}" data-align="${ov.align}" data-heading-size="${ov.heading_size}" data-body-size="${ov.body_size}" data-color="${ov.color_mode}" data-heading-visible="${ov.heading_visible}" data-body-visible="${ov.body_visible}"`;
+
   card.innerHTML = `
-    <div class="visual-canvas variant-${esc(variant)}">
+    <div class="visual-canvas variant-${esc(variant)}" ${dataAttrs}>
       ${imgUrl ? `<img src="${esc(imgUrl)}" alt="">` : `<div class="v-empty"><div class="big">📭</div>이미지 없음<br>아래 버튼 선택</div>`}
       ${imgUrl ? `<div class="v-overlay"></div>` : ''}
       <div class="v-tag">${esc(tag)}</div>
@@ -945,19 +1278,225 @@ function renderVisualSlide(s){
       <button onclick="generateAIImageForSlide(${idx})" title="Replicate Flux (스타일 자동 반영)">🎨 AI</button>
       <button onclick="openPexelsModal(${idx})" title="Pexels 검색">🖼 Pexels</button>
       <button onclick="triggerUpload(${idx})" title="로컬 업로드">📤</button>
-    </div>`;
+      <button onclick="openTextOverride(${idx})" title="텍스트 표시/크기/위치 조정">⚙️ 텍스트</button>
+      ${media?.source === 'ai' ? `<button onclick="openSlideFeedback(${idx})" title="이 이미지를 피드백으로 수정">💬</button>
+      <button onclick="openPromptView(${idx})" title="실제 AI에 보낸 프롬프트 보기">🔍</button>` : ''}
+    </div>
+    <div class="img-feedback-host" id="ifh-${idx}"></div>
+    <div class="text-override-host" id="toh-${idx}"></div>`;
   return card;
 }
 
-/* ==================== AI 이미지 생성 (단건) ==================== */
-async function generateAIImageForSlide(slide_index, retryAttempt = 0){
+/* ==================== 슬라이드별 💬 피드백 재생성 ==================== */
+function openSlideFeedback(idx){
+  const host = $('ifh-' + idx);
+  if(!host) return;
+  if(host.firstElementChild){ host.innerHTML = ''; return; }
+  const tpl = $('tpl-img-feedback');
+  const node = tpl.content.firstElementChild.cloneNode(true);
+  const textarea = node.querySelector('.img-fb-text');
+  const cancel = node.querySelector('.img-fb-cancel');
+  const submit = node.querySelector('.img-fb-submit');
+  cancel.onclick = () => { host.innerHTML = ''; };
+  submit.onclick = async () => {
+    const hint = textarea.value.trim();
+    if(!hint){ textarea.focus(); return; }
+    submit.disabled = true; submit.textContent = '생성 중...';
+    host.innerHTML = '';
+    await generateAIImageForSlide(idx, { customHint: hint });
+  };
+  host.appendChild(node);
+  textarea.focus();
+}
+
+/* ==================== 👋 처음 안내 ==================== */
+const INTRO_SEEN_KEY = 'bdm.studio.intro_seen_v1';
+function openIntro(){ const m = $('intro-modal'); if(m) m.style.display = 'flex'; }
+function closeIntro(){
+  const m = $('intro-modal'); if(!m) return;
+  const dontShow = $('intro-dontshow')?.checked;
+  if(dontShow){ try { localStorage.setItem(INTRO_SEEN_KEY, '1'); } catch(_){} }
+  m.style.display = 'none';
+}
+function maybeAutoShowIntro(){
+  try { if(!localStorage.getItem(INTRO_SEEN_KEY)) openIntro(); } catch(_){ openIntro(); }
+}
+
+/* ==================== 🐛 버그/문제 제보 ==================== */
+let bugStep = 'other';
+function openBugReport(){
+  const m = $('bug-modal'); if(!m) return;
+  // 현재 보이는 step을 기본값으로
+  const activePanel = document.querySelector('.step-panel.active');
+  const activeStep = activePanel?.id?.replace('panel-', '');
+  if(activeStep && ['1','2','3','4'].includes(activeStep)) bugStep = 'step' + activeStep;
+  m.querySelectorAll('.bug-step').forEach(b => b.classList.toggle('selected', b.dataset.val === bugStep));
+  m.querySelectorAll('.bug-step').forEach(b => { b.onclick = () => {
+    bugStep = b.dataset.val;
+    m.querySelectorAll('.bug-step').forEach(x => x.classList.remove('selected'));
+    b.classList.add('selected');
+  };});
+  $('bug-desc').value = '';
+  $('bug-repro').value = '';
+  setChip($('bug-status'), '', '');
+  m.style.display = 'flex';
+  setTimeout(() => $('bug-desc')?.focus(), 50);
+}
+function closeBugReport(){ const m = $('bug-modal'); if(m) m.style.display = 'none'; }
+async function submitBugReport(){
+  const desc = $('bug-desc').value.trim();
+  if(!desc){ $('bug-desc').focus(); setChip($('bug-status'), '내용 입력 필요', 'warn'); return; }
+  const repro = $('bug-repro').value.trim();
+  const btn = $('bug-submit'); btn.disabled = true;
+  setChip($('bug-status'), '전송 중...', 'warn');
+  if(!(await ensureFreshSession())){ setChip($('bug-status'), '세션 만료', 'err'); btn.disabled = false; return; }
+  try {
+    const payload = {
+      step: bugStep,
+      description: desc,
+      reproduction: repro || null,
+      url: window.location.href,
+      user_agent: navigator.userAgent,
+      generation_id: lastResult?.generation_id || null,
+      carousel_id: currentCarouselId || null,
+      style_id: $('styleSelect')?.value || null,
+    };
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/submit-bug-report`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if(!resp.ok){ setChip($('bug-status'), '실패: ' + (data.error || resp.status), 'err'); return; }
+    setChip($('bug-status'), '✓ 제보 전송됨 · 감사합니다', 'ok');
+    setTimeout(closeBugReport, 1500);
+  } catch(e){ setChip($('bug-status'), '네트워크: ' + e.message, 'err'); }
+  finally { btn.disabled = false; }
+}
+
+/* ==================== ⚙️ 슬라이드별 텍스트 조정 ==================== */
+function textOverrideKey(){ return `bdm.studio.text_ov.${lastResult?.generation_id || 'none'}`; }
+function saveTextOverrides(){
+  try { localStorage.setItem(textOverrideKey(), JSON.stringify(slideTextOverrides)); } catch(_){}
+}
+function loadTextOverrides(){
+  try {
+    const raw = localStorage.getItem(textOverrideKey());
+    slideTextOverrides = raw ? JSON.parse(raw) : {};
+  } catch(_){ slideTextOverrides = {}; }
+}
+function openTextOverride(idx){
+  const host = $('toh-' + idx);
+  if(!host) return;
+  if(host.firstElementChild){ host.innerHTML = ''; return; }
+  const ov = { ...DEFAULT_TEXT_OVERRIDE, ...(slideTextOverrides[idx] || {}) };
+  const btnGroup = (name, options, current) =>
+    options.map(([val, label]) =>
+      `<button type="button" class="tov-btn${current === val ? ' selected' : ''}" data-field="${name}" data-val="${val}">${label}</button>`
+    ).join('');
+  host.innerHTML = `
+    <div class="tov-panel">
+      <div class="tov-row"><b>제목</b>
+        <label class="tov-toggle"><input type="checkbox" data-field="heading_visible" ${ov.heading_visible === 'true' ? 'checked' : ''}> 표시</label>
+        <span>크기</span>${btnGroup('heading_size', [['sm','S'],['md','M'],['lg','L'],['xl','XL']], ov.heading_size)}</div>
+      <div class="tov-row"><b>본문</b>
+        <label class="tov-toggle"><input type="checkbox" data-field="body_visible" ${ov.body_visible === 'true' ? 'checked' : ''}> 표시</label>
+        <span>크기</span>${btnGroup('body_size', [['sm','S'],['md','M'],['lg','L']], ov.body_size)}</div>
+      <div class="tov-row"><b>위치</b>${btnGroup('position', [['top','상단'],['center','중앙'],['bottom','하단']], ov.position)}</div>
+      <div class="tov-row"><b>정렬</b>${btnGroup('align', [['left','왼쪽'],['center','가운데'],['right','오른쪽']], ov.align)}</div>
+      <div class="tov-row"><b>색상</b>${btnGroup('color_mode', [['auto','자동'],['light','밝게'],['dark','어둡게'],['accent','액센트']], ov.color_mode)}</div>
+      <div class="tov-foot">
+        <button class="btn btn-sm tov-apply-all">이 설정을 9장 전체에 적용</button>
+        <button class="btn btn-sm btn-ghost tov-reset">초기화</button>
+        <div class="spacer"></div>
+        <button class="btn btn-sm btn-ghost tov-close">닫기</button>
+      </div>
+    </div>`;
+  // 버튼 그룹 이벤트
+  host.querySelectorAll('.tov-btn').forEach(b => {
+    b.onclick = () => {
+      const field = b.dataset.field, val = b.dataset.val;
+      slideTextOverrides[idx] = { ...(slideTextOverrides[idx] || {}), [field]: val };
+      saveTextOverrides();
+      b.parentElement.querySelectorAll(`.tov-btn[data-field="${field}"]`).forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      applyOverrideToCard(idx);
+    };
+  });
+  // 체크박스 이벤트
+  host.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.onchange = () => {
+      slideTextOverrides[idx] = { ...(slideTextOverrides[idx] || {}), [cb.dataset.field]: cb.checked ? 'true' : 'false' };
+      saveTextOverrides();
+      applyOverrideToCard(idx);
+    };
+  });
+  host.querySelector('.tov-apply-all').onclick = () => {
+    const src = { ...DEFAULT_TEXT_OVERRIDE, ...(slideTextOverrides[idx] || {}) };
+    collectSlides(lastResult.output).forEach(s => { slideTextOverrides[s._index] = { ...src }; });
+    saveTextOverrides();
+    renderVisualGrid(lastResult.output);
+    setChip($('autogen-status'), '✓ 전체 슬라이드에 텍스트 설정 복제됨', 'ok');
+    setTimeout(() => setChip($('autogen-status'), '', ''), 2000);
+  };
+  host.querySelector('.tov-reset').onclick = () => {
+    delete slideTextOverrides[idx];
+    saveTextOverrides();
+    applyOverrideToCard(idx);
+    host.innerHTML = '';
+  };
+  host.querySelector('.tov-close').onclick = () => { host.innerHTML = ''; };
+}
+function applyOverrideToCard(idx){
+  const canvas = document.querySelector(`#vs-${idx} .visual-canvas`);
+  if(!canvas) return;
+  const ov = { ...DEFAULT_TEXT_OVERRIDE, ...(slideTextOverrides[idx] || {}) };
+  canvas.dataset.pos = ov.position;
+  canvas.dataset.align = ov.align;
+  canvas.dataset.headingSize = ov.heading_size;
+  canvas.dataset.bodySize = ov.body_size;
+  canvas.dataset.color = ov.color_mode;
+  canvas.dataset.headingVisible = ov.heading_visible;
+  canvas.dataset.bodyVisible = ov.body_visible;
+}
+
+/* ==================== 🔍 프롬프트 보기 ==================== */
+function openPromptView(idx){
+  const media = slideMediaMap[idx];
+  const modal = $('prompt-view-modal');
+  if(!modal) return;
+  const styleId = $('styleSelect')?.value;
+  const style = styleId ? stylesMap[styleId] : null;
+  const label = idx === 0 ? 'COVER' : idx === -1 ? 'OUTRO' : '#' + idx;
+  $('pv-label').textContent = label;
+  $('pv-style-name').textContent = style?.name || '(스타일 없음)';
+  $('pv-model').textContent = media?.model || 'flux-schnell';
+  $('pv-prompt').textContent = media?.prompt || '(프롬프트 정보가 없습니다. 이 이미지는 이전 버전에서 생성되었거나 Pexels/업로드 이미지입니다.)';
+  const profile = style?.analyzed || {};
+  const injected = [];
+  if(profile.overall_tone) injected.push(`tone: ${profile.overall_tone}`);
+  if(Array.isArray(profile.color_signature) && profile.color_signature.length) injected.push(`colors: ${profile.color_signature.slice(0,4).join(', ')}`);
+  if(Array.isArray(profile.visual_guidelines) && profile.visual_guidelines.length) injected.push(...profile.visual_guidelines.slice(0,3));
+  $('pv-injected').innerHTML = injected.length
+    ? injected.map(x => `<li>${esc(x)}</li>`).join('')
+    : '<li class="muted">스타일이 아직 분석되지 않았습니다. 스타일 라이브러리에서 🤖 분석하기를 눌러주세요.</li>';
+  modal.style.display = 'flex';
+}
+function closePromptView(){ const m = $('prompt-view-modal'); if(m) m.style.display = 'none'; }
+
+/* ==================== AI 이미지 생성 (단건) ====================
+   opts.customHint — 피드백 텍스트 (💬 재생성 시 프롬프트에 추가)
+   opts.retryAttempt — 내부 재시도 카운터 */
+async function generateAIImageForSlide(slide_index, opts){
+  opts = opts || {};
+  const { customHint = null, retryAttempt = 0 } = opts;
   if(!lastResult) return;
   const out = lastResult.output;
   const slide = collectSlides(out).find(s => s._index === slide_index);
   if(!slide){ alert('슬라이드 없음'); return; }
 
   const btn = document.querySelector(`#vs-${slide_index} .visual-controls button:nth-child(1)`);
-  if(btn){ btn.classList.add('loading'); btn.textContent = '생성중'; btn.disabled = true; }
+  if(btn){ btn.classList.add('loading'); btn.textContent = customHint ? '수정중' : '생성중'; btn.disabled = true; }
 
   if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
   try {
@@ -968,17 +1507,18 @@ async function generateAIImageForSlide(slide_index, retryAttempt = 0){
         generation_id: lastResult.generation_id,
         slide_index,
         slide: { role: slide._role, tag: slide.tag, heading: slide.heading, body: slide.body, video_keyword: slide.video_keyword, variant: slide.variant, media_type: slide.media_type },
+        custom_prompt_hint: customHint,
       }),
     });
     const data = await resp.json();
     if(!resp.ok){
-      // 429 rate limit → retry_after 후 자동 재시도 (최대 2회)
+      // 이미지 서버가 잠깐 느려질 때(HTTP 429) → 안내된 시간만큼 대기 후 자동 재시도 (최대 2회)
       const retryAfter = data?.retry_after || (data?.detail && /retry_after":(\d+)/.exec(data.detail)?.[1]);
       if(resp.status === 502 && /429/.test(JSON.stringify(data)) && retryAttempt < 2 && retryAfter){
-        log(`Replicate throttle — ${retryAfter}s 대기 후 재시도 (#${slide_index})`, 'err');
-        if(btn){ btn.textContent = `대기 ${retryAfter}s`; }
+        log(`이미지 서버 잠깐 느림 — ${retryAfter}초 기다렸다 재시도 (슬라이드 #${slide_index})`, 'err');
+        if(btn){ btn.textContent = `대기 ${retryAfter}초`; }
         await sleep((parseInt(retryAfter) + 1) * 1000);
-        return generateAIImageForSlide(slide_index, retryAttempt + 1);
+        return generateAIImageForSlide(slide_index, { customHint, retryAttempt: retryAttempt + 1 });
       }
       alert('AI 생성 실패 (' + resp.status + '): ' + (data.error || JSON.stringify(data)));
       $('rate-alert').style.display = /credit|throttle|429/.test(JSON.stringify(data)) ? 'block' : 'none';
@@ -993,10 +1533,10 @@ async function generateAIImageForSlide(slide_index, retryAttempt = 0){
   finally { if(btn){ btn.classList.remove('loading'); btn.disabled = false; btn.textContent = '🎨 AI'; } }
 }
 
-/* ==================== 한 방 생성 ==================== */
+/* ==================== 스타일대로 AI 일괄 생성 ==================== */
 async function autoGenerateAllImages(){
   if(!lastResult) return;
-  if(!confirm(`빈 슬라이드에 AI 이미지 일괄 생성?\n(slide당 ~$0.003, rate limit 자동 우회 — 429 만나면 대기 후 재시도)`)) return;
+  if(!confirm(`빈 슬라이드에 스타일대로 이미지를 한꺼번에 만들까요?\n(슬라이드당 약 $0.003 · 서버가 잠깐 느려지면 자동으로 잠시 기다렸다가 이어서 생성합니다)`)) return;
   const slides = collectSlides(lastResult.output);
   const targets = slides.filter(s => !slideMediaMap[s._index]);
   if(targets.length === 0){ alert('이미 모든 슬라이드에 이미지가 있음'); return; }
@@ -1229,6 +1769,7 @@ async function init(){
   await loadStyles();
   await loadFeedbackThemes();
   renderFbScoreRows();
+  maybeAutoShowIntro();
   document.addEventListener('visibilitychange', () => {
     if(document.visibilityState === 'visible' && session) loadStyles();
   });

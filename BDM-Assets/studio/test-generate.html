@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생성 E2E 테스트 · BDM Lab Studio</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;background:#FAFAF9;color:#1C1917;min-height:100vh;padding:24px}
+.wrap{max-width:900px;margin:0 auto}
+.card{background:#fff;border:1px solid #E7E5E4;border-radius:12px;padding:28px;margin-bottom:16px;box-shadow:0 4px 16px rgba(28,25,23,.04)}
+h1{font-size:22px;font-weight:800;margin-bottom:4px;letter-spacing:-0.02em}
+h2{font-size:14px;font-weight:700;color:#57534E;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
+.sub{font-size:14px;color:#57534E;margin-bottom:18px;line-height:1.5}
+.row{display:flex;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:#ECFDF5;color:#047857;border:1px solid #059669;border-radius:6px;font-size:12px;font-weight:700}
+.chip.muted{background:#F5F5F4;color:#57534E;border-color:#E7E5E4}
+label{display:block;font-size:12px;font-weight:700;color:#57534E;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid #E7E5E4;border-radius:8px;font-family:inherit;font-size:14px;background:#fff;color:#1C1917}
+textarea{min-height:120px;resize:vertical;font-family:"Noto Sans KR",system-ui}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px #ECFDF5}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:#1C1917;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn:hover{opacity:.88}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-red{background:#DC2626}
+.btn-green{background:#059669}
+pre{background:#F5F5F4;border:1px solid #E7E5E4;border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.6;font-family:ui-monospace,monospace;color:#1C1917;overflow-x:auto;margin:8px 0;white-space:pre-wrap;word-break:break-all;max-height:500px;overflow-y:auto}
+details{margin:8px 0;font-size:12px;color:#78716C}
+details summary{cursor:pointer;padding:6px 0;user-select:none}
+.slide{background:#FAFAF9;border:1px solid #E7E5E4;border-radius:10px;padding:14px 16px;margin:10px 0}
+.slide.cover{background:#ECFDF5;border-color:#059669}
+.slide.outro{background:#FEF7ED;border-color:#F59E0B}
+.slide-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.slide-num{font-size:11px;font-weight:800;color:#A8A29E;min-width:24px}
+.slide-tag{display:inline-block;padding:2px 8px;background:#1C1917;color:#fff;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
+.slide-tag.light{background:#F5F5F4;color:#1C1917;border:1px solid #E7E5E4}
+.slide-tag.variant{background:#ECFDF5;color:#047857;border:1px solid #059669}
+.slide-tag.media{background:#EFF6FF;color:#1D4ED8;border:1px solid #3B82F6}
+.slide-heading{font-size:17px;font-weight:800;color:#1C1917;margin-bottom:8px;line-height:1.35;letter-spacing:-0.01em}
+.slide-body{font-size:13px;line-height:1.7;color:#292524;white-space:pre-wrap;word-break:keep-all}
+.slide-meta{margin-top:8px;font-size:11px;color:#A8A29E;font-family:ui-monospace,monospace}
+.outro-field{display:flex;gap:8px;align-items:baseline;margin:4px 0;font-size:13px}
+.outro-key{font-size:10px;font-weight:700;color:#A8A29E;text-transform:uppercase;letter-spacing:1px;min-width:70px}
+.outro-val{color:#1C1917;line-height:1.5}
+.err{background:#FEF2F2;border-color:#DC2626;color:#991B1B}
+.ok{background:#ECFDF5;border-color:#059669;color:#047857}
+.label-mini{font-size:11px;color:#A8A29E;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{padding:10px 12px;background:#FAFAF9;border:1px solid #E7E5E4;border-radius:8px}
+.stat-label{font-size:10px;color:#A8A29E;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.stat-value{font-size:18px;font-weight:800;margin-top:2px}
+.log{margin-top:12px;padding:10px;background:#FAFAF9;border:1px solid #E7E5E4;border-radius:6px;font-size:11px;font-family:ui-monospace,monospace;color:#78716C;max-height:180px;overflow-y:auto}
+.log-line{margin:2px 0}
+.log-err{color:#DC2626}
+.log-ok{color:#059669}
+nav{display:flex;gap:8px;margin-bottom:16px;font-size:13px}
+nav a{color:#57534E;text-decoration:none;padding:6px 12px;border-radius:6px;font-weight:600}
+nav a.active{background:#1C1917;color:#fff}
+nav a:hover:not(.active){background:#F5F5F4}
+.check-row{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:#FAFAF9;border:1px solid #E7E5E4;border-radius:6px;margin:4px 0;cursor:pointer;transition:all .12s}
+.check-row:hover{border-color:#059669;background:#F0FDF4}
+.check-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.check-row label{font-size:13px;color:#292524;cursor:pointer;margin:0;text-transform:none;letter-spacing:0;font-weight:500;line-height:1.5}
+.version-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:#1C1917;color:#fff;border-radius:14px;font-size:11px;font-weight:700;margin-left:6px}
+.version-chip.prev{background:#F5F5F4;color:#57534E;cursor:pointer}
+.version-chip.prev:hover{background:#E7E5E4}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <a href="test-generate.html" class="active">🚀 생성</a>
+  <a href="styles.html">🎨 스타일 라이브러리</a>
+</nav>
+
+<div class="card">
+  <h1>🧪 생성 E2E 테스트</h1>
+  <p class="sub">Edge Function → Claude → DB → 응답까지 전체 흐름 검증</p>
+  <div id="auth-bar" class="row"><span class="chip muted">인증 확인 중...</span></div>
+</div>
+
+<div id="form-card" class="card" style="display:none">
+  <h2>입력</h2>
+
+  <label>스타일 선택</label>
+  <select id="styleSelect"><option value="">(기본 스타일)</option></select>
+
+  <div class="label-mini" style="margin-top:16px"></div>
+  <label>주제 / 제목 *</label>
+  <input id="topic" placeholder="예: 인스타 알고리즘이 당신의 팔로워를 숨기는 이유">
+
+  <div class="label-mini" style="margin-top:16px"></div>
+  <label>본문 (선택)</label>
+  <textarea id="body_text" placeholder="본문이 있으면 여기에. 없으면 비워두세요. 비우면 제목만으로 생성됩니다."></textarea>
+
+  <div class="row" style="margin-top:16px">
+    <div style="flex:1"><label>카테고리</label><input id="category" placeholder="마케팅 / 연구 / 플랫폼..."></div>
+    <div style="flex:1"><label>톤</label><input id="tone" placeholder="학술적 / 가벼운 / 도발적..."></div>
+    <div style="flex:1"><label>분량</label>
+      <select id="length">
+        <option value="5-7">5-7 슬라이드</option>
+        <option value="7-10" selected>7-10 슬라이드</option>
+        <option value="10-12">10-12 슬라이드</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:20px">
+    <button id="generateBtn" class="btn btn-green" onclick="doGenerate()">🚀 Claude로 생성</button>
+    <button id="reviewBtn" class="btn" onclick="doReview()" disabled>📋 Gemini로 평가</button>
+    <span id="statusChip" class="chip muted">대기</span>
+  </div>
+</div>
+
+<div id="result-card" class="card" style="display:none">
+  <h2>결과</h2>
+  <div class="grid">
+    <div class="stat"><div class="stat-label">엔진 버전</div><div class="stat-value" id="stat-engine">—</div></div>
+    <div class="stat"><div class="stat-label">이번 달 사용량</div><div class="stat-value" id="stat-quota">—</div></div>
+    <div class="stat"><div class="stat-label">비용 (USD)</div><div class="stat-value" id="stat-cost">—</div></div>
+  </div>
+
+  <div class="label-mini">캐러셀 미리보기</div>
+  <div id="preview"></div>
+  <details><summary>원본 JSON 보기</summary><pre id="output"></pre></details>
+
+  <div class="label-mini" id="reviewLabel" style="display:none">Gemini 평가</div>
+  <div id="reviewBox" style="display:none"></div>
+  <details id="reviewRawWrap" style="display:none"><summary>평가 원본 JSON</summary><pre id="reviewOutput"></pre></details>
+
+  <div id="versions-wrap" style="display:none;margin-top:14px">
+    <div class="label-mini">버전 히스토리 (클릭해서 전환)</div>
+    <div id="versions-list" class="row" style="gap:6px;margin:0"></div>
+  </div>
+</div>
+
+<div id="feedback-card" class="card" style="display:none">
+  <h2>🔄 피드백 반영 → 재생성</h2>
+  <p class="sub" style="margin-bottom:12px">Gemini 제안 중 반영할 항목을 체크하고, 추가 지시도 자유롭게 쓰세요. 선택된 것만 다음 버전에 반영됩니다.</p>
+
+  <div class="label-mini">개선 제안 (체크해서 선택)</div>
+  <div id="suggest-list"></div>
+
+  <div class="label-mini" style="margin-top:14px">추가 지시사항 (선택)</div>
+  <textarea id="custom-instruction" placeholder="예: 2번 슬라이드 숫자를 더 강조해주세요. 결말을 도발적인 질문으로 바꿔주세요."></textarea>
+
+  <div class="row" style="margin-top:14px">
+    <button id="regenBtn" class="btn btn-green" onclick="doRegenerate()">🔄 피드백 반영 재생성</button>
+    <span id="regen-status" class="chip muted">대기</span>
+  </div>
+</div>
+
+<div id="final-card" class="card" style="display:none">
+  <h2>✓ 최종 승인</h2>
+  <p class="sub" style="margin-bottom:12px">만족스러운 버전이라면 최종 컨펌하고, 스타일 학습에도 반영할 수 있습니다.</p>
+  <div class="row">
+    <button id="confirmBtn" class="btn" onclick="doConfirmFinal()">✓ 현재 버전을 최종 컨펌</button>
+    <button id="reflectBtn" class="btn btn-green" onclick="doReflectToStyle()">🎨 스타일에 반영하기</button>
+    <span id="final-status" class="chip muted"></span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>디버그 로그</h2>
+  <div id="logBox" class="log"><div class="log-line">[log] 시작...</div></div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = 'https://mnynajxjgjidnojxsafr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_I9Jf-KnpKOnLDDNoMq0E8A_oZ1E7lLt';
+const FN_GENERATE = `${SUPABASE_URL}/functions/v1/generate-carousel`;
+const FN_REVIEW = `${SUPABASE_URL}/functions/v1/review-carousel`;
+const HANYANG = '@hanyang.ac.kr';
+
+let supabase;
+let session = null;
+let lastResult = null;      // 현재 활성 버전 (generate or regenerate 응답)
+let lastReview = null;      // 마지막 Gemini 평가
+let versionHistory = [];    // [{version, generation_id, output, review}]
+let currentCarouselId = null;
+
+function esc(s){ return String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+function renderSlideCard(slide, num, cls){
+  const tag = slide.tag ? `<span class="slide-tag">${esc(slide.tag)}</span>` : '';
+  const variant = slide.variant ? `<span class="slide-tag variant">${esc(slide.variant)}</span>` : '';
+  const media = slide.media_type ? `<span class="slide-tag media">${esc(slide.media_type)}</span>` : '';
+  const heading = slide.heading ? `<div class="slide-heading">${esc(slide.heading)}</div>` : '';
+  const body = slide.body ? `<div class="slide-body">${esc(slide.body)}</div>` : '';
+  const kw = slide.video_keyword ? `<div class="slide-meta">🎬 ${esc(slide.video_keyword)}</div>` : '';
+  const label = num === 0 ? 'COVER' : num === -1 ? 'OUTRO' : `#${num}`;
+  return `<div class="slide ${cls}">
+    <div class="slide-head"><span class="slide-num">${label}</span>${tag}${variant}${media}</div>
+    ${heading}${body}${kw}
+  </div>`;
+}
+
+function renderOutro(o){
+  if(!o) return '';
+  const fields = [
+    ['brand_sub', o.brand_sub],
+    ['closing', o.closing],
+    ['cta', o.cta],
+    ['links', Array.isArray(o.links) ? o.links.join(', ') : o.links],
+  ].filter(([,v]) => v);
+  const rows = fields.map(([k,v]) => `<div class="outro-field"><span class="outro-key">${k}</span><span class="outro-val">${esc(v)}</span></div>`).join('');
+  return `<div class="slide outro"><div class="slide-head"><span class="slide-num">OUTRO</span></div>${rows}</div>`;
+}
+
+function renderCarousel(out){
+  const preview = document.getElementById('preview');
+  if(!out){ preview.innerHTML = '<p style="color:#A8A29E">출력 없음</p>'; return; }
+  let html = '';
+  if(out.cover) html += renderSlideCard(out.cover, 0, 'cover');
+  if(Array.isArray(out.slides)){
+    out.slides.forEach((s,i) => { html += renderSlideCard(s, i+1, ''); });
+  }
+  if(out.outro) html += renderOutro(out.outro);
+  preview.innerHTML = html;
+}
+
+function renderReview(r){
+  const box = document.getElementById('reviewBox');
+  if(!r){ box.innerHTML = ''; return; }
+  const scores = [['hook','훅'],['data','데이터'],['flow','흐름'],['cta','CTA']]
+    .map(([k,label]) => `<div class="stat"><div class="stat-label">${label}</div><div class="stat-value">${esc(r[k] ?? '—')}<span style="font-size:12px;color:#A8A29E">/5</span></div></div>`)
+    .join('');
+  const total = r.total != null ? `<div class="stat"><div class="stat-label">총점</div><div class="stat-value" style="color:#059669">${esc(r.total)}<span style="font-size:12px;color:#A8A29E">/20</span></div></div>` : '';
+  const feedback = r.feedback ? `<div class="label-mini">피드백</div><p style="font-size:14px;line-height:1.6;color:#292524">${esc(r.feedback)}</p>` : '';
+  box.innerHTML = `<div class="grid" style="margin-bottom:14px">${scores}${total}</div>${feedback}`;
+
+  // suggestion 리스트는 체크박스로 feedback-card 안에 렌더
+  const suggestList = document.getElementById('suggest-list');
+  if(Array.isArray(r.suggestions) && r.suggestions.length > 0){
+    suggestList.innerHTML = r.suggestions.map((s, i) => `
+      <div class="check-row">
+        <input type="checkbox" id="sg-${i}" data-text="${esc(s).replace(/"/g,'&quot;')}">
+        <label for="sg-${i}">${esc(s)}</label>
+      </div>
+    `).join('');
+  } else {
+    suggestList.innerHTML = '<div class="muted-text" style="color:#A8A29E;font-size:13px">Gemini 제안 없음. 아래 자유 입력으로 지시하세요.</div>';
+  }
+  document.getElementById('feedback-card').style.display = 'block';
+  document.getElementById('final-card').style.display = 'block';
+}
+
+function renderVersionsStrip(){
+  const wrap = document.getElementById('versions-wrap');
+  const list = document.getElementById('versions-list');
+  if(versionHistory.length === 0){ wrap.style.display='none'; return; }
+  wrap.style.display = 'block';
+  list.innerHTML = versionHistory.map(v => {
+    const active = (lastResult?.generation_id === v.generation_id);
+    return `<span class="version-chip ${active ? '' : 'prev'}" data-gen="${v.generation_id}" ${active ? '' : `onclick="switchToVersion('${v.generation_id}')"`}>v${v.version}${active ? ' · 현재' : ''}</span>`;
+  }).join('');
+}
+
+function switchToVersion(genId){
+  const v = versionHistory.find(x => x.generation_id === genId);
+  if(!v) return;
+  lastResult = { output: v.output, generation_id: v.generation_id, carousel_id: currentCarouselId, version: v.version };
+  renderCarousel(v.output);
+  document.getElementById('output').textContent = JSON.stringify(v.output, null, 2);
+  document.getElementById('statusChip').textContent = '✅ 버전 ' + v.version + ' 활성';
+  if(v.review){ lastReview = v.review; renderReview(v.review); }
+  renderVersionsStrip();
+  log('버전 전환 → v' + v.version);
+}
+
+async function ensureFreshSession(){
+  const { data, error } = await supabase.auth.getSession();
+  if(error || !data.session){ log('세션 없음', 'err'); return false; }
+  const exp = data.session.expires_at ?? 0;
+  const now = Math.floor(Date.now()/1000);
+  if(exp - now < 120){
+    log('토큰 곧 만료 → refresh 시도');
+    const { data: r, error: re } = await supabase.auth.refreshSession();
+    if(re || !r.session){ log('refresh 실패: ' + (re?.message ?? '세션 없음'), 'err'); return false; }
+    session = r.session;
+    log('토큰 갱신 OK', 'ok');
+  } else {
+    session = data.session;
+  }
+  return true;
+}
+
+function log(msg, type){
+  const box = document.getElementById('logBox');
+  const line = document.createElement('div');
+  line.className = 'log-line' + (type === 'err' ? ' log-err' : type === 'ok' ? ' log-ok' : '');
+  line.textContent = '[' + new Date().toISOString().slice(11,19) + '] ' + msg;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+  console.log(msg);
+}
+
+async function signIn(){
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.href.split('#')[0].split('?')[0],
+      queryParams: { hd: 'hanyang.ac.kr' }
+    }
+  });
+  if(error) log('로그인 에러: ' + error.message, 'err');
+}
+
+async function signOut(){
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+async function loadStyles(){
+  const { data, error } = await supabase
+    .from('styles')
+    .select('id, name, is_default, item_count')
+    .order('is_default', { ascending: false })
+    .order('created_at', { ascending: true });
+  if(error){ log('스타일 조회 실패: ' + error.message, 'err'); return; }
+  const sel = document.getElementById('styleSelect');
+  sel.innerHTML = '';
+  for(const s of data){
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = `${s.name}${s.is_default ? ' (기본)' : ''} — ${s.item_count}개 레퍼런스`;
+    sel.appendChild(opt);
+  }
+  log(`스타일 ${data.length}개 로드`, 'ok');
+}
+
+async function doGenerate(){
+  const topic = document.getElementById('topic').value.trim();
+  if(!topic){ alert('주제 입력 필요'); return; }
+
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  document.getElementById('statusChip').textContent = '생성 중... (30–60초)';
+
+  if(!(await ensureFreshSession())){ alert('세션 만료. 다시 로그인하세요.'); btn.disabled = false; return; }
+
+  const payload = {
+    topic,
+    body_text: document.getElementById('body_text').value,
+    category: document.getElementById('category').value,
+    tone: document.getElementById('tone').value,
+    length: document.getElementById('length').value,
+    style_id: document.getElementById('styleSelect').value || null,
+    mode: 'generate',
+  };
+
+  log('POST /generate-carousel ...');
+  log('payload: ' + JSON.stringify(payload));
+
+  try {
+    const resp = await fetch(FN_GENERATE, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await resp.json();
+    log(`응답 ${resp.status}: ${resp.ok ? 'OK' : JSON.stringify(data).slice(0,200)}`, resp.ok ? 'ok' : 'err');
+
+    if(!resp.ok){
+      alert(`에러 (${resp.status}): ${data.error}`);
+      document.getElementById('statusChip').textContent = '실패';
+      document.getElementById('statusChip').className = 'chip muted';
+      return;
+    }
+
+    lastResult = data;
+    currentCarouselId = data.carousel_id;
+    versionHistory = [{ version: data.version, generation_id: data.generation_id, output: data.output, review: null }];
+    document.getElementById('result-card').style.display = 'block';
+    document.getElementById('stat-engine').textContent = data.engine_version ?? '—';
+    document.getElementById('stat-quota').textContent = `${data.quota.used} / ${data.quota.limit}`;
+    document.getElementById('stat-cost').textContent = '$' + (data.usage?.cost_usd ?? 0).toFixed(4);
+    document.getElementById('output').textContent = JSON.stringify(data.output, null, 2);
+    renderCarousel(data.output);
+    document.getElementById('reviewBtn').disabled = false;
+    document.getElementById('statusChip').textContent = '✅ 완료 · 버전 ' + data.version;
+    document.getElementById('statusChip').className = 'chip';
+    // reset feedback/final cards for new carousel
+    document.getElementById('feedback-card').style.display = 'none';
+    document.getElementById('final-card').style.display = 'none';
+    document.getElementById('final-status').textContent = '';
+    renderVersionsStrip();
+    log('생성 완료 · carousel_id=' + data.carousel_id, 'ok');
+  } catch(e){
+    log('예외: ' + e.message, 'err');
+    alert('네트워크 에러: ' + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function doReview(){
+  if(!lastResult?.output){ alert('먼저 생성하세요'); return; }
+  const btn = document.getElementById('reviewBtn');
+  btn.disabled = true;
+
+  if(!(await ensureFreshSession())){ alert('세션 만료. 다시 로그인하세요.'); btn.disabled = false; return; }
+
+  log('POST /review-carousel ...');
+
+  try {
+    const resp = await fetch(FN_REVIEW, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        carousel: lastResult.output,
+        carousel_id: lastResult.carousel_id,
+        generation_id: lastResult.generation_id,
+      }),
+    });
+    const rawText = await resp.text();
+    log(`review 응답 ${resp.status}`, resp.ok ? 'ok' : 'err');
+    let data;
+    try { data = JSON.parse(rawText); }
+    catch(e){
+      log('JSON 파싱 실패. 원시 응답: ' + rawText.slice(0,500), 'err');
+      alert('응답 파싱 실패:\n' + rawText.slice(0, 500));
+      return;
+    }
+
+    if(!resp.ok){
+      const errMsg = data.error ?? data.message ?? data.msg ?? '(error/message 없음)';
+      const detail = data.detail ? (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail)) : '';
+      const raw = data.raw ? '\n\nraw: ' + (typeof data.raw === 'string' ? data.raw.slice(0,500) : JSON.stringify(data.raw).slice(0,500)) : '';
+      log('review 실패: ' + JSON.stringify(data).slice(0,500), 'err');
+      alert(`평가 실패 (${resp.status}): ${errMsg}${detail ? '\n\n상세:\n'+detail : ''}${raw}\n\n전체:\n${JSON.stringify(data).slice(0,500)}`);
+      return;
+    }
+
+    document.getElementById('reviewLabel').style.display = 'block';
+    document.getElementById('reviewBox').style.display = 'block';
+    document.getElementById('reviewRawWrap').style.display = 'block';
+    lastReview = data.review;
+    // 현재 버전에 리뷰 결과 붙이기
+    const cur = versionHistory.find(v => v.generation_id === lastResult.generation_id);
+    if(cur) cur.review = data.review;
+    renderReview(data.review);
+    document.getElementById('reviewOutput').textContent = JSON.stringify(data.review, null, 2);
+  } catch(e){
+    log('예외: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function doRegenerate(){
+  if(!lastResult?.output){ alert('먼저 생성하세요'); return; }
+  const selected = Array.from(document.querySelectorAll('#suggest-list input[type=checkbox]:checked'))
+    .map(cb => cb.dataset.text);
+  const custom = document.getElementById('custom-instruction').value.trim();
+  if(selected.length === 0 && !custom){
+    if(!confirm('선택된 제안도 없고 자유 입력도 비어있어요. 그냥 재생성할까요?')) return;
+  }
+
+  const feedbackText = [
+    ...(selected.length ? ['[반영할 개선 제안]', ...selected.map((s,i) => `${i+1}. ${s}`)] : []),
+    ...(custom ? ['', '[추가 지시]', custom] : []),
+  ].join('\n');
+
+  const btn = document.getElementById('regenBtn');
+  btn.disabled = true;
+  document.getElementById('regen-status').textContent = '재생성 중... (30-60초)';
+
+  if(!(await ensureFreshSession())){ alert('세션 만료'); btn.disabled = false; return; }
+
+  const payload = {
+    topic: document.getElementById('topic').value.trim(),
+    body_text: document.getElementById('body_text').value,
+    category: document.getElementById('category').value,
+    tone: document.getElementById('tone').value,
+    length: document.getElementById('length').value,
+    style_id: document.getElementById('styleSelect').value || null,
+    mode: 'regenerate',
+    carousel_id: currentCarouselId,
+    previous_output: lastResult.output,
+    feedback: feedbackText,
+  };
+
+  log('POST /generate-carousel (regenerate) ...');
+  log('feedback text:\n' + feedbackText);
+
+  try {
+    const resp = await fetch(FN_GENERATE, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json();
+    log(`재생성 응답 ${resp.status}`, resp.ok ? 'ok' : 'err');
+    if(!resp.ok){
+      alert(`재생성 실패 (${resp.status}): ${data.error}\n\n상세:\n${JSON.stringify(data.detail ?? {}).slice(0,300)}`);
+      document.getElementById('regen-status').textContent = '실패';
+      return;
+    }
+
+    // improvements 테이블에 기록 (클라이언트에서 직접 insert)
+    try {
+      await supabase.from('improvements').insert({
+        from_generation_id: lastResult.generation_id,
+        to_generation_id: data.generation_id,
+        feedback_text: feedbackText,
+        selected_suggestions: selected,
+        custom_instruction: custom || null,
+      });
+    } catch(e){ log('improvements 기록 실패 (무시 가능): ' + e.message, 'err'); }
+
+    // 새 버전 추가
+    lastResult = data;
+    versionHistory.push({ version: data.version, generation_id: data.generation_id, output: data.output, review: null });
+    document.getElementById('stat-quota').textContent = `${data.quota.used} / ${data.quota.limit}`;
+    document.getElementById('stat-cost').textContent = '$' + (data.usage?.cost_usd ?? 0).toFixed(4);
+    document.getElementById('output').textContent = JSON.stringify(data.output, null, 2);
+    renderCarousel(data.output);
+    document.getElementById('statusChip').textContent = '✅ 버전 ' + data.version + ' 활성';
+    document.getElementById('regen-status').textContent = '✓ v' + data.version + ' 생성됨';
+    // 체크박스 초기화
+    document.querySelectorAll('#suggest-list input[type=checkbox]').forEach(cb => cb.checked = false);
+    document.getElementById('custom-instruction').value = '';
+    // 새 버전은 아직 Gemini 평가 안 됨
+    document.getElementById('reviewBox').innerHTML = '<div class="muted-text" style="color:#A8A29E;font-size:13px">새 버전 — 다시 평가하려면 위의 "Gemini로 평가" 클릭</div>';
+    document.getElementById('suggest-list').innerHTML = '<div class="muted-text" style="color:#A8A29E;font-size:13px">Gemini 재평가 후 새 제안이 나옵니다</div>';
+    document.getElementById('final-status').textContent = '';
+    renderVersionsStrip();
+    log('재생성 완료 · v' + data.version, 'ok');
+  } catch(e){
+    log('예외: ' + e.message, 'err');
+    alert('네트워크 에러: ' + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function doConfirmFinal(){
+  if(!lastResult?.generation_id || !currentCarouselId){ alert('먼저 생성하세요'); return; }
+  if(!confirm(`현재 버전(v${lastResult.version})을 최종 컨펌하시겠어요?`)) return;
+  const { error } = await supabase.from('carousels').update({
+    status: 'finalized',
+    finalized_generation_id: lastResult.generation_id,
+    final_approved_at: new Date().toISOString(),
+  }).eq('id', currentCarouselId);
+  if(error){ alert('컨펌 실패: ' + error.message); return; }
+  document.getElementById('final-status').textContent = '✓ 최종 컨펌 · v' + lastResult.version;
+  document.getElementById('final-status').className = 'chip';
+  log('최종 컨펌 완료 · v' + lastResult.version, 'ok');
+}
+
+async function doReflectToStyle(){
+  if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
+  const styleId = document.getElementById('styleSelect').value;
+  if(!styleId){ alert('먼저 스타일을 선택하세요 (현재는 기본 스타일). 특정 스타일에 반영하려면 드롭다운에서 고르세요.'); return; }
+  const label = prompt('이 버전을 어떤 라벨로 스타일에 추가할까요? (선택)', document.getElementById('topic').value.slice(0, 40));
+  if(label === null) return; // 취소
+
+  const { data, error } = await supabase.rpc('reflect_generation_to_style', {
+    p_generation_id: lastResult.generation_id,
+    p_style_id: styleId,
+    p_label: label || null,
+  });
+  if(error){ alert('반영 실패: ' + error.message); return; }
+  document.getElementById('final-status').textContent = '🎨 스타일에 반영됨 (다시 분석 필요)';
+  document.getElementById('final-status').className = 'chip';
+  log('reflect_generation_to_style OK · style_item_id=' + data, 'ok');
+  alert(`✓ 스타일에 반영됨.\n스타일 라이브러리에서 "분석하기"를 눌러 업데이트된 스타일을 반영하세요.`);
+}
+
+async function init(){
+  if(typeof window.supabase === 'undefined'){ log('SDK 로드 실패', 'err'); return; }
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const { data: { session: s }} = await supabase.auth.getSession();
+  session = s;
+
+  const bar = document.getElementById('auth-bar');
+  if(!session){
+    bar.innerHTML = '<span class="chip muted">로그인 필요</span><button class="btn" onclick="signIn()">Google로 로그인</button>';
+    return;
+  }
+  if(!session.user.email.toLowerCase().endsWith(HANYANG)){
+    bar.innerHTML = `<span class="chip" style="background:#FEF2F2;color:#991B1B;border-color:#DC2626">한양대 계정 아님: ${session.user.email}</span><button class="btn btn-red" onclick="signOut()">로그아웃</button>`;
+    return;
+  }
+  bar.innerHTML = `<span class="chip">✅ ${session.user.email}</span><button class="btn btn-red" onclick="signOut()">로그아웃</button>`;
+  document.getElementById('form-card').style.display = 'block';
+  log('인증 OK', 'ok');
+  await loadStyles();
+  // 탭으로 돌아왔을 때 스타일 목록 새로고침 (스타일 라이브러리에서 변경됐을 수 있음)
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'visible' && session) loadStyles();
+  });
+}
+
+window.addEventListener('load', init);
+</script>
+
+</body>
+</html>

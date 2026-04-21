@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스타일 라이브러리 · BDM Lab Studio</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;background:#FAFAF9;color:#1C1917;min-height:100vh;padding:24px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto}
+.card{background:#fff;border:1px solid #E7E5E4;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 4px 16px rgba(28,25,23,.04)}
+h1{font-size:24px;font-weight:800;margin-bottom:4px;letter-spacing:-0.02em}
+h2{font-size:14px;font-weight:700;color:#57534E;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
+h3{font-size:18px;font-weight:800;margin:0;letter-spacing:-0.01em}
+.sub{font-size:14px;color:#57534E;margin-bottom:16px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.row-between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#ECFDF5;color:#047857;border:1px solid #059669;border-radius:6px;font-size:11px;font-weight:700}
+.chip.muted{background:#F5F5F4;color:#57534E;border-color:#E7E5E4}
+.chip.warn{background:#FEF3C7;color:#92400E;border-color:#F59E0B}
+.chip.danger{background:#FEF2F2;color:#991B1B;border-color:#DC2626}
+label{display:block;font-size:12px;font-weight:700;color:#57534E;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid #E7E5E4;border-radius:8px;font-family:inherit;font-size:14px;background:#fff;color:#1C1917}
+textarea{min-height:80px;resize:vertical;font-family:"Noto Sans KR",system-ui}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px #ECFDF5}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:#1C1917;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+.btn:hover{opacity:.88}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-red{background:#DC2626}
+.btn-green{background:#059669}
+.btn-ghost{background:#F5F5F4;color:#1C1917;border:1px solid #E7E5E4}
+.btn-ghost:hover{background:#E7E5E4}
+nav{display:flex;gap:8px;margin-bottom:16px;font-size:13px}
+nav a{color:#57534E;text-decoration:none;padding:4px 10px;border-radius:6px}
+nav a.active{background:#1C1917;color:#fff}
+nav a:hover:not(.active){background:#F5F5F4}
+.style-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.style-card{background:#fff;border:1px solid #E7E5E4;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.style-card.is-default{border-color:#059669;border-width:2px}
+.item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:6px;margin-top:8px}
+.item-thumb{aspect-ratio:9/16;background:#F5F5F4;border:1px solid #E7E5E4;border-radius:6px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:10px;color:#78716C;cursor:pointer}
+.item-thumb img{width:100%;height:100%;object-fit:cover}
+.item-thumb .delete-x{position:absolute;top:2px;right:2px;background:rgba(28,25,23,.8);color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:10px;cursor:pointer;display:none;align-items:center;justify-content:center}
+.item-thumb:hover .delete-x{display:flex}
+.item-thumb.url{background:#EFF6FF;color:#1D4ED8}
+.item-thumb.generation{background:#FEF7ED;color:#C2410C}
+.drop-zone{border:2px dashed #D6D3D1;border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:all .15s;font-size:13px;color:#78716C}
+.drop-zone:hover,.drop-zone.drag{border-color:#059669;background:#ECFDF5;color:#047857}
+.drop-zone input{display:none}
+pre{background:#F5F5F4;border:1px solid #E7E5E4;border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.6;font-family:ui-monospace,monospace;color:#1C1917;overflow-x:auto;margin:4px 0;white-space:pre-wrap;word-break:break-all;max-height:260px;overflow-y:auto}
+.log{margin-top:10px;padding:8px 10px;background:#FAFAF9;border:1px solid #E7E5E4;border-radius:6px;font-size:11px;font-family:ui-monospace,monospace;color:#78716C;max-height:160px;overflow-y:auto}
+.log-line{margin:1px 0}
+.log-err{color:#DC2626}
+.log-ok{color:#059669}
+.profile{background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;padding:12px 14px;margin-top:8px;font-size:13px;line-height:1.65}
+.profile h4{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#166534;margin:10px 0 4px 0;font-weight:700}
+.profile h4:first-child{margin-top:0}
+.profile ul{padding-left:20px;margin:0}
+.profile li{margin:2px 0}
+.muted-text{color:#A8A29E;font-size:12px}
+.spin{display:inline-block;width:10px;height:10px;border:2px solid #E7E5E4;border-top-color:#059669;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+details{margin-top:8px;font-size:12px;color:#78716C}
+details summary{cursor:pointer;padding:4px 0;user-select:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <a href="test-generate.html">🚀 생성</a>
+  <a href="styles.html" class="active">🎨 스타일 라이브러리</a>
+</nav>
+
+<div class="card">
+  <div class="row-between">
+    <div>
+      <h1>🎨 스타일 라이브러리</h1>
+      <p class="sub">따라하고 싶은 캐러셀을 업로드하세요. Claude Vision이 톤·구조·색감을 분석해서 재생성에 반영합니다.</p>
+    </div>
+    <div id="auth-bar"><span class="chip muted">인증 확인 중...</span></div>
+  </div>
+</div>
+
+<div id="main" style="display:none">
+
+  <div class="card">
+    <div class="row-between" style="margin-bottom:12px">
+      <h2 style="margin:0">내 스타일</h2>
+      <button class="btn btn-green" onclick="openNewStyle()">＋ 새 스타일 만들기</button>
+    </div>
+    <div id="style-list" class="style-grid"></div>
+  </div>
+
+  <div id="new-style-card" class="card" style="display:none">
+    <h2>새 스타일 만들기</h2>
+    <div class="row" style="margin-bottom:10px">
+      <div style="flex:2"><label>이름 *</label><input id="new-name" placeholder="예: 틱톡 관심그래프 스타일"></div>
+      <div style="flex:3"><label>설명 (선택)</label><input id="new-desc" placeholder="어떤 느낌의 스타일인지 한 줄로"></div>
+    </div>
+    <div class="row">
+      <button class="btn btn-green" onclick="createStyle()">생성</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('new-style-card').style.display='none'">취소</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>디버그 로그</h2>
+    <div id="logBox" class="log"><div class="log-line">[log] 시작...</div></div>
+  </div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = 'https://mnynajxjgjidnojxsafr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_I9Jf-KnpKOnLDDNoMq0E8A_oZ1E7lLt';
+const FN_ANALYZE = `${SUPABASE_URL}/functions/v1/analyze-style-items`;
+const FN_FETCH_IG = `${SUPABASE_URL}/functions/v1/fetch-instagram-carousel`;
+const BUCKET = 'style-screenshots';
+const HANYANG = '@hanyang.ac.kr';
+
+let supabase, session = null;
+
+function log(msg, type){
+  const box = document.getElementById('logBox');
+  const line = document.createElement('div');
+  line.className = 'log-line' + (type === 'err' ? ' log-err' : type === 'ok' ? ' log-ok' : '');
+  line.textContent = '[' + new Date().toISOString().slice(11,19) + '] ' + msg;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+  console.log(msg);
+}
+
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function ensureFreshSession(){
+  const { data, error } = await supabase.auth.getSession();
+  if(error || !data.session) return false;
+  const exp = data.session.expires_at ?? 0;
+  const now = Math.floor(Date.now()/1000);
+  if(exp - now < 120){
+    const { data: r } = await supabase.auth.refreshSession();
+    if(r?.session){ session = r.session; return true; }
+    return false;
+  }
+  session = data.session;
+  return true;
+}
+
+async function signIn(){
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.href.split('#')[0].split('?')[0],
+      queryParams: { hd: 'hanyang.ac.kr' }
+    }
+  });
+  if(error) log('로그인 에러: ' + error.message, 'err');
+}
+
+async function signOut(){ await supabase.auth.signOut(); location.reload(); }
+
+async function init(){
+  if(typeof window.supabase === 'undefined'){ log('SDK 로드 실패', 'err'); return; }
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const { data: { session: s }} = await supabase.auth.getSession();
+  session = s;
+
+  const bar = document.getElementById('auth-bar');
+  if(!session){
+    bar.innerHTML = '<button class="btn" onclick="signIn()">Google로 로그인</button>';
+    return;
+  }
+  if(!session.user.email.toLowerCase().endsWith(HANYANG)){
+    bar.innerHTML = `<span class="chip danger">한양대 계정 아님: ${session.user.email}</span><button class="btn btn-red btn-sm" onclick="signOut()">로그아웃</button>`;
+    return;
+  }
+  bar.innerHTML = `<span class="chip">✅ ${session.user.email}</span><button class="btn btn-red btn-sm" onclick="signOut()">로그아웃</button>`;
+  document.getElementById('main').style.display = 'block';
+  log('인증 OK', 'ok');
+  await loadStyles();
+}
+
+async function loadStyles(){
+  const { data, error } = await supabase
+    .from('styles')
+    .select('id, name, description, is_default, item_count, analyzed, needs_reanalyze, last_analyzed_at, created_at')
+    .order('is_default', { ascending: false })
+    .order('created_at', { ascending: true });
+  if(error){ log('스타일 로드 실패: ' + error.message, 'err'); return; }
+  const list = document.getElementById('style-list');
+  list.innerHTML = '';
+  if(!data || data.length === 0){
+    list.innerHTML = '<p class="muted-text">아직 스타일이 없습니다. 위에서 새 스타일을 만들어 시작하세요.</p>';
+    return;
+  }
+  for(const s of data){
+    list.appendChild(renderStyleCard(s));
+  }
+  log(`스타일 ${data.length}개 로드`, 'ok');
+}
+
+function renderStyleCard(s){
+  const card = document.createElement('div');
+  card.className = 'style-card' + (s.is_default ? ' is-default' : '');
+  card.id = 'style-' + s.id;
+  const statusChip = s.analyzed
+    ? `<span class="chip">✓ 분석 완료</span>`
+    : `<span class="chip muted">미분석</span>`;
+  const reanalyzeChip = s.needs_reanalyze ? '<span class="chip warn">새 레퍼런스 추가됨</span>' : '';
+  const defaultChip = s.is_default ? '<span class="chip">기본</span>' : '';
+
+  card.innerHTML = `
+    <div class="row-between">
+      <h3>${esc(s.name)}</h3>
+      <div class="row" style="gap:6px">${defaultChip}${statusChip}${reanalyzeChip}</div>
+    </div>
+    ${s.description ? `<div class="muted-text">${esc(s.description)}</div>` : ''}
+    <div class="muted-text">📎 ${s.item_count}개 레퍼런스</div>
+
+    <div id="items-${s.id}" class="item-grid"></div>
+
+    <div class="drop-zone" id="drop-${s.id}">
+      📂 스크린샷 드래그 or 클릭해서 업로드 (PNG/JPG, 최대 12장/회)
+      <input type="file" multiple accept="image/png,image/jpeg,image/webp" id="file-${s.id}">
+    </div>
+
+    <div class="row" style="gap:6px">
+      <input id="url-${s.id}" placeholder="인스타 URL (instagram.com/p/... or /reel/...)" style="flex:1">
+      <button class="btn btn-green btn-sm" onclick="fetchInstagram('${s.id}')" title="Apify로 이미지 자동 다운로드">📥 URL에서 가져오기</button>
+    </div>
+
+    <div class="row" style="gap:6px;justify-content:space-between">
+      <div class="row" style="gap:6px">
+        <button class="btn btn-green btn-sm" onclick="analyzeStyle('${s.id}')">🤖 분석하기</button>
+        ${!s.is_default ? `<button class="btn btn-ghost btn-sm" onclick="setDefault('${s.id}')">기본으로</button>` : ''}
+      </div>
+      <div class="row" style="gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="renameStyle('${s.id}', '${esc(s.name).replace(/'/g,"\\'")}')">이름 변경</button>
+        ${!s.is_default ? `<button class="btn btn-red btn-sm" onclick="deleteStyle('${s.id}', '${esc(s.name).replace(/'/g,"\\'")}')">삭제</button>` : ''}
+      </div>
+    </div>
+
+    ${s.analyzed ? renderProfile(s.analyzed) : ''}
+  `;
+
+  // file input wiring
+  setTimeout(() => {
+    const drop = card.querySelector(`#drop-${s.id}`);
+    const input = card.querySelector(`#file-${s.id}`);
+    drop.addEventListener('click', () => input.click());
+    drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+    drop.addEventListener('drop', (e) => {
+      e.preventDefault();
+      drop.classList.remove('drag');
+      uploadFiles(s.id, e.dataTransfer.files);
+    });
+    input.addEventListener('change', (e) => uploadFiles(s.id, e.target.files));
+    loadItems(s.id);
+  }, 0);
+
+  return card;
+}
+
+function renderProfile(p){
+  const section = (title, content) => content ? `<h4>${title}</h4>${content}` : '';
+  const list = (arr) => Array.isArray(arr) ? `<ul>${arr.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  const html = `
+    <details>
+      <summary>📝 분석 결과 (스타일 프로필)</summary>
+      <div class="profile">
+        ${section('Overall Tone', p.overall_tone ? `<div>${esc(p.overall_tone)}</div>` : '')}
+        ${section('Recurring Hooks', list(p.recurring_hooks))}
+        ${section('Color Signature', list(p.color_signature))}
+        ${section('Typography', p.typography ? `<div>${esc(p.typography)}</div>` : '')}
+        ${section('Structure Rules', list(p.structure_rules))}
+        ${section('Voice Guidelines', list(p.voice_guidelines))}
+        ${section('Visual Guidelines', list(p.visual_guidelines))}
+        ${section('✅ 해야 할 것', list(p.dos))}
+        ${section('⛔ 금지', list(p.donts))}
+        ${section('Summary (재생성 주입용)', p.summary_for_prompt ? `<div>${esc(p.summary_for_prompt)}</div>` : '')}
+      </div>
+    </details>
+  `;
+  return html;
+}
+
+async function loadItems(styleId){
+  const { data } = await supabase
+    .from('style_items')
+    .select('id, source_kind, screenshot_path, source_url, label, analyzed, created_at')
+    .eq('style_id', styleId)
+    .order('created_at', { ascending: true });
+  const grid = document.getElementById('items-' + styleId);
+  if(!grid) return;
+  grid.innerHTML = '';
+  if(!data || data.length === 0){ grid.innerHTML = '<div class="muted-text" style="grid-column:1/-1">레퍼런스 없음</div>'; return; }
+  for(const it of data){
+    const el = document.createElement('div');
+    el.className = 'item-thumb' + (it.source_kind === 'url' ? ' url' : it.source_kind === 'generation' ? ' generation' : '');
+    el.title = it.label || it.source_url || 'screenshot';
+    if(it.source_kind === 'screenshot' && it.screenshot_path){
+      const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(it.screenshot_path, 600);
+      if(signed?.signedUrl){
+        el.innerHTML = `<img src="${signed.signedUrl}" alt=""><button class="delete-x" onclick="deleteItem('${it.id}', '${styleId}', event)">×</button>`;
+      } else {
+        el.textContent = '이미지 로드 실패';
+      }
+    } else if(it.source_kind === 'url'){
+      el.innerHTML = `<span>🔗 URL</span><button class="delete-x" onclick="deleteItem('${it.id}', '${styleId}', event)">×</button>`;
+    } else if(it.source_kind === 'generation'){
+      el.innerHTML = `<span>✓ 컨펌본</span><button class="delete-x" onclick="deleteItem('${it.id}', '${styleId}', event)">×</button>`;
+    }
+    grid.appendChild(el);
+  }
+}
+
+function openNewStyle(){
+  document.getElementById('new-style-card').style.display = 'block';
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-desc').value = '';
+  document.getElementById('new-name').focus();
+}
+
+async function createStyle(){
+  const name = document.getElementById('new-name').value.trim();
+  if(!name){ alert('이름 필요'); return; }
+  const desc = document.getElementById('new-desc').value.trim();
+  const { error } = await supabase.from('styles').insert({
+    user_id: session.user.id,
+    name,
+    description: desc || null,
+    is_default: false,
+  });
+  if(error){ alert('생성 실패: ' + error.message); return; }
+  document.getElementById('new-style-card').style.display = 'none';
+  log('스타일 생성됨: ' + name, 'ok');
+  await loadStyles();
+}
+
+async function uploadFiles(styleId, files){
+  if(!files || files.length === 0) return;
+  if(files.length > 12){ alert('한 번에 최대 12장'); return; }
+  if(!(await ensureFreshSession())){ alert('세션 만료, 다시 로그인'); return; }
+  log(`업로드 시작: ${files.length}장 → 스타일 ${styleId}`);
+
+  for(const file of files){
+    const ext = file.name.split('.').pop().toLowerCase();
+    const path = `${session.user.id}/${styleId}/${crypto.randomUUID()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
+      cacheControl: '3600',
+      upsert: false,
+      contentType: file.type,
+    });
+    if(upErr){ log(`업로드 실패: ${file.name} - ${upErr.message}`, 'err'); continue; }
+
+    const { error: insErr } = await supabase.from('style_items').insert({
+      user_id: session.user.id,
+      style_id: styleId,
+      source_kind: 'screenshot',
+      screenshot_path: path,
+    });
+    if(insErr){ log(`DB insert 실패: ${insErr.message}`, 'err'); continue; }
+    log(`✓ 업로드: ${file.name}`, 'ok');
+  }
+  await supabase.from('styles').update({ needs_reanalyze: true }).eq('id', styleId);
+  await loadStyles();
+}
+
+async function fetchInstagram(styleId){
+  const input = document.getElementById('url-' + styleId);
+  const url = input.value.trim();
+  if(!url){ alert('URL 입력 필요'); return; }
+  if(!/^https?:\/\/(www\.)?instagram\.com\/(p|reel)\//.test(url)){
+    alert('인스타 게시물 URL만 가능합니다 (instagram.com/p/... 또는 /reel/...)');
+    return;
+  }
+  if(!(await ensureFreshSession())){ alert('세션 만료, 다시 로그인'); return; }
+
+  // 버튼 상태 변경
+  const card = document.getElementById('style-' + styleId);
+  const btn = card?.querySelector('button[onclick*=fetchInstagram]');
+  if(btn){ btn.disabled = true; btn.textContent = '📥 다운로드 중...(최대 90초)'; }
+  log('Apify 호출 → ' + url);
+
+  try {
+    const resp = await fetch(FN_FETCH_IG, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ instagram_url: url, style_id: styleId }),
+    });
+    const text = await resp.text();
+    let data; try{ data = JSON.parse(text); }catch(e){ data = { raw: text }; }
+    log(`응답 ${resp.status}: ${JSON.stringify(data).slice(0, 250)}`, resp.ok ? 'ok' : 'err');
+
+    if(!resp.ok){
+      alert(`가져오기 실패 (${resp.status}): ${data.error ?? text.slice(0, 200)}\n\n상세: ${JSON.stringify(data.detail ?? {}).slice(0, 300)}`);
+      return;
+    }
+    alert(`✓ 다운로드 완료\n- 가져온 이미지: ${data.fetched_images}장\n- 업로드 성공: ${data.inserted_items}장\n- @${data.owner ?? '알 수 없음'}\n\n이제 "분석하기" 버튼을 눌러 Vision 분석을 진행하세요.`);
+    input.value = '';
+    await loadStyles();
+  } catch(e){
+    log('예외: ' + e.message, 'err');
+    alert('네트워크 에러: ' + e.message);
+  } finally {
+    if(btn){ btn.disabled = false; btn.textContent = '📥 URL에서 가져오기'; }
+  }
+}
+
+async function deleteItem(itemId, styleId, ev){
+  if(ev){ ev.stopPropagation(); }
+  if(!confirm('이 레퍼런스를 삭제할까요?')) return;
+  // 먼저 storage에서 지우기 위해 path 조회
+  const { data: it } = await supabase.from('style_items').select('screenshot_path, source_kind').eq('id', itemId).single();
+  if(it?.source_kind === 'screenshot' && it.screenshot_path){
+    await supabase.storage.from(BUCKET).remove([it.screenshot_path]);
+  }
+  await supabase.from('style_items').delete().eq('id', itemId);
+  log('아이템 삭제', 'ok');
+  await loadStyles();
+}
+
+async function analyzeStyle(styleId){
+  if(!(await ensureFreshSession())){ alert('세션 만료, 다시 로그인'); return; }
+  log('분석 요청 → Claude Vision ...');
+  const resp = await fetch(FN_ANALYZE, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ style_id: styleId }),
+  });
+  const text = await resp.text();
+  let data; try{ data = JSON.parse(text); }catch(e){ data = { raw: text }; }
+  log(`분석 응답 ${resp.status}: ${JSON.stringify(data).slice(0, 200)}`, resp.ok ? 'ok' : 'err');
+  if(!resp.ok){
+    alert(`분석 실패 (${resp.status}): ${data.error ?? data.message ?? text.slice(0,200)}\n\n상세: ${JSON.stringify(data.detail ?? {}).slice(0,300)}`);
+    return;
+  }
+  alert(`✓ 분석 완료\n- 새로 분석: ${data.analyzed_items}장\n- 총 레퍼런스: ${data.total_items}개\n- 비용: $${(data.usage?.cost_usd ?? 0).toFixed(4)}\n- Vision 쿼터: ${data.vision_quota?.used}/${data.vision_quota?.limit}`);
+  await loadStyles();
+}
+
+async function setDefault(styleId){
+  await supabase.from('styles').update({ is_default: false }).eq('user_id', session.user.id);
+  const { error } = await supabase.from('styles').update({ is_default: true }).eq('id', styleId);
+  if(error){ alert('기본 설정 실패: ' + error.message); return; }
+  log('기본 스타일 변경', 'ok');
+  await loadStyles();
+}
+
+async function renameStyle(styleId, currentName){
+  const name = prompt('새 이름:', currentName);
+  if(!name || name.trim() === '' || name === currentName) return;
+  const { error } = await supabase.from('styles').update({ name: name.trim() }).eq('id', styleId);
+  if(error){ alert('이름 변경 실패: ' + error.message); return; }
+  await loadStyles();
+}
+
+async function deleteStyle(styleId, name){
+  if(!confirm(`"${name}" 스타일 삭제? (모든 레퍼런스도 함께 삭제됩니다)`)) return;
+  // 먼저 storage 파일들 지우기
+  const { data: items } = await supabase.from('style_items').select('screenshot_path').eq('style_id', styleId);
+  if(items && items.length > 0){
+    const paths = items.map(i => i.screenshot_path).filter(Boolean);
+    if(paths.length > 0) await supabase.storage.from(BUCKET).remove(paths);
+  }
+  const { error } = await supabase.from('styles').delete().eq('id', styleId);
+  if(error){ alert('삭제 실패: ' + error.message); return; }
+  log('스타일 삭제', 'ok');
+  await loadStyles();
+}
+
+window.addEventListener('load', init);
+</script>
+
+</body>
+</html>

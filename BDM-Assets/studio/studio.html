@@ -226,6 +226,51 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .tov-foot{display:flex;align-items:center;gap:6px;margin-top:4px;padding-top:10px;border-top:1px dashed var(--color-border)}
 .tov-foot .spacer{flex:1}
 
+/* ==== 스타일 카드 피커 (Step 1-A) ==== */
+.style-picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0 6px}
+.style-pick-card{text-align:left;background:var(--color-bg);border:1px solid var(--color-border);border-radius:14px;padding:16px 18px;cursor:pointer;font-family:inherit;color:var(--color-text);transition:all .14s;display:flex;flex-direction:column;gap:8px;position:relative}
+.style-pick-card:hover{border-color:var(--color-accent-dim);transform:translateY(-1px)}
+.style-pick-card.selected{border-color:var(--color-accent);box-shadow:0 0 0 2px var(--color-accent-bg);background:var(--color-accent-bg)}
+.style-pick-card.is-default{border-left:3px solid var(--color-accent)}
+.spc-head{display:flex;align-items:center;gap:8px}
+.spc-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;box-shadow:0 0 8px currentColor;opacity:.85}
+.spc-name{font-weight:800;font-size:15px;flex:1;letter-spacing:-0.01em}
+.spc-badge{display:inline-block;padding:1px 7px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--color-accent-bg);color:var(--color-accent);border-radius:4px;font-weight:700;vertical-align:middle;margin-left:4px}
+.spc-ok{font-size:10px;color:var(--color-success);font-weight:700;letter-spacing:0.5px;background:rgba(34,197,94,0.1);padding:2px 8px;border-radius:10px;border:1px solid rgba(34,197,94,0.35)}
+.spc-warn{font-size:10px;color:#FBBF24;font-weight:700;letter-spacing:0.5px;background:rgba(245,158,11,0.1);padding:2px 8px;border-radius:10px;border:1px solid rgba(245,158,11,0.35)}
+.spc-tone{font-size:13px;color:var(--color-subtext);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-family:var(--font-serif);font-style:italic}
+.spc-meta{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--color-muted);font-family:var(--font-mono)}
+.spc-swatches{display:inline-flex;gap:3px;margin-left:auto}
+.spc-swatches span{width:14px;height:14px;border-radius:3px;border:1px solid var(--color-border)}
+.spc-desc{font-size:12px;color:var(--color-subtext);line-height:1.5;padding-top:6px;border-top:1px dashed var(--color-border)}
+.style-empty-card{background:var(--color-bg);border:1px dashed var(--color-border);border-radius:12px;padding:30px 22px;text-align:center;color:var(--color-subtext)}
+.style-empty-card h3{font-size:16px;color:var(--color-text);margin-bottom:8px}
+.style-empty-card p{font-size:13px;line-height:1.7;max-width:520px;margin:0 auto}
+
+/* === 스타일 카드 그리드 안에 들어가는 액션 카드 (스타일 카드와 동등 크기) === */
+.style-action-card{border:1px dashed var(--color-border);background:linear-gradient(135deg,rgba(96,165,250,0.04),transparent 70%);justify-content:center;align-items:center;text-align:center;text-decoration:none;min-height:180px;gap:6px;padding:22px 20px}
+.style-action-card:hover{border-style:solid;background:linear-gradient(135deg,rgba(96,165,250,0.1),rgba(96,165,250,0.02) 70%);transform:translateY(-1px)}
+.style-action-card.style-action-add:hover{border-color:var(--color-accent)}
+.style-action-card.style-action-none{border-color:rgba(148,163,184,0.35)}
+.style-action-card.style-action-none:hover{border-color:var(--color-subtext);background:rgba(163,176,194,0.05)}
+.style-action-card.selected{border-style:solid}
+.spc-action-icon{font-size:32px;line-height:1;color:var(--color-accent);margin-bottom:6px;font-weight:300}
+.style-action-none .spc-action-icon{color:var(--color-subtext)}
+.spc-action-title{font-weight:800;font-size:15px;letter-spacing:-0.01em;color:var(--color-text)}
+.spc-action-desc{font-size:12px;color:var(--color-subtext);line-height:1.6;max-width:240px;margin:0 auto}
+
+.style-chosen-row{display:flex;align-items:center;margin-top:14px}
+.style-chosen-row .spacer{flex:1}
+
+/* ==== chip 선택기 (카테고리·톤·분량) ==== */
+.chip-select{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.ch-chip{padding:7px 14px;border:1px solid var(--color-border);border-radius:20px;background:var(--color-bg);color:var(--color-subtext);cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;transition:all .12s}
+.ch-chip:hover{border-color:var(--color-accent-dim);color:var(--color-text)}
+.ch-chip.selected{background:var(--color-accent);color:#0B0F14;border-color:var(--color-accent)}
+.ch-chip.ch-other{font-style:italic;border-style:dashed}
+.chip-custom-wrap{margin-top:8px}
+.chip-custom-wrap input{background:var(--color-bg)}
+
 /* ==== 로그인 게이트 (비로그인 상태 전용 풀 화면) ==== */
 .login-hero{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
 .login-card{max-width:520px;width:100%;background:var(--color-surface);border:1px solid var(--color-border);border-radius:18px;padding:42px 40px;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
@@ -465,15 +510,35 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
 
 <!-- ============ STEP 1: 입력 ============ -->
 <section class="step-panel active" id="panel-1">
+
+  <!-- 1-A · 스타일 고르기 (로그인 직후 제일 먼저 보이는 블록) -->
   <div class="card card-lg">
     <div class="section-title">
-      <h1>어떤 캐러셀을 만들까요?</h1>
-      <span class="section-sub">Step 01 · Input</span>
+      <h1>어떤 스타일로 만들까요?</h1>
+      <span class="section-sub">Step 01 · Style</span>
     </div>
-    <p class="lead">주제와 스타일만 고르면 됩니다. 생성 엔진은 당신의 스타일 레퍼런스를 Claude 프롬프트에 자동 주입해서 일관된 톤으로 9슬라이드를 만듭니다.</p>
+    <p class="lead">
+      스타일 레퍼런스를 고르면 그 톤/색/구성을 엔진이 그대로 따라갑니다.
+      <b>스타일이 생성 결과를 만듭니다.</b>
+      적당한 스타일이 없으면 새로 만들거나, 스타일 없이 시작할 수도 있습니다.
+    </p>
 
-    <label>스타일 레퍼런스 *</label>
-    <select id="styleSelect"></select>
+    <div id="style-picker" class="style-picker"></div>
+
+    <div class="style-chosen-row">
+      <div class="spacer"></div>
+      <span id="style-chosen-chip" class="chip" style="display:none"></span>
+    </div>
+  </div>
+
+  <!-- 1-B · 주제 입력 (스타일 선택한 뒤 나타남) -->
+  <div class="card card-lg" id="topic-card" style="display:none">
+    <div class="section-title">
+      <h1>주제와 옵션</h1>
+      <span class="section-sub">Step 01 · Topic</span>
+    </div>
+
+    <!-- 선택된 스타일 요약 (작게) -->
     <div id="style-preview" class="style-preview" style="display:none">
       <div class="style-swatch" id="sp-swatch"></div>
       <div class="style-meta">
@@ -481,6 +546,7 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
         <div class="tone" id="sp-tone">—</div>
         <div class="tokens" id="sp-tokens">—</div>
       </div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="resetStyleChoice()" style="margin-left:auto">스타일 다시 고르기</button>
     </div>
 
     <label>주제 / 제목 *</label>
@@ -489,17 +555,29 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
     <label>본문 <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(선택 — 비우면 제목만으로 생성)</span></label>
     <textarea id="body_text" placeholder="기초 자료/근거/주장을 여기에 붙여넣으세요."></textarea>
 
-    <div class="grid-3" style="margin-top:8px">
-      <div><label>카테고리</label><input id="category" placeholder="마케팅 / 연구 / 플랫폼..."></div>
-      <div><label>톤</label><input id="tone" placeholder="학술적 / 가벼운 / 도발적..."></div>
-      <div><label>분량</label>
-        <select id="length">
-          <option value="5-7">5-7 슬라이드</option>
-          <option value="7-10" selected>7-10 슬라이드</option>
-          <option value="10-12">10-12 슬라이드</option>
-        </select>
-      </div>
+    <label style="margin-top:12px">카테고리 <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(선택)</span></label>
+    <div id="category-chips" class="chip-select"></div>
+    <div id="category-custom-wrap" class="chip-custom-wrap" style="display:none">
+      <input id="category-custom" placeholder="직접 입력: 예 · 브랜딩, AEO, B2B ...">
     </div>
+
+    <label style="margin-top:14px">톤 <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(선택)</span></label>
+    <div id="tone-chips" class="chip-select"></div>
+    <div id="tone-custom-wrap" class="chip-custom-wrap" style="display:none">
+      <input id="tone-custom" placeholder="직접 입력: 예 · 냉소적, 따뜻한 권위, 공감형 ...">
+    </div>
+
+    <label style="margin-top:14px">분량</label>
+    <div id="length-chips" class="chip-select">
+      <button type="button" class="ch-chip" data-val="5-7">5-7 슬라이드</button>
+      <button type="button" class="ch-chip selected" data-val="7-10">7-10 슬라이드</button>
+      <button type="button" class="ch-chip" data-val="10-12">10-12 슬라이드</button>
+    </div>
+    <input type="hidden" id="length" value="7-10">
+
+    <!-- 카테고리/톤은 chip에서 고른 값을 hidden input에 넣어서 기존 doGenerate 호환 -->
+    <input type="hidden" id="category" value="">
+    <input type="hidden" id="tone" value="">
 
     <div class="step-footer">
       <div class="spacer"></div>
@@ -507,6 +585,9 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
       <span id="gen-status" class="chip"></span>
     </div>
   </div>
+
+  <!-- 기존 드롭다운은 숨겨두기만 — doGenerate가 styleSelect.value 참조하므로 유지 -->
+  <select id="styleSelect" style="display:none"></select>
 </section>
 
 <!-- ============ STEP 2: 텍스트 ============ -->
@@ -961,12 +1042,16 @@ function renderStylePreview(style, accent, font){
 async function loadStyles(){
   const { data, error } = await supabase
     .from('styles')
-    .select('id, name, is_default, item_count, analyzed')
+    .select('id, name, is_default, item_count, analyzed, description')
     .order('is_default', { ascending: false })
     .order('created_at', { ascending: true });
   if(error){ log('스타일 조회 실패: ' + error.message, 'err'); return; }
   const sel = $('styleSelect');
   sel.innerHTML = '';
+  // 첫 옵션은 비우기 — 카드에서 고르기 전까지는 선택 없음
+  const blank = document.createElement('option');
+  blank.value = ''; blank.textContent = '(선택 안 함)';
+  sel.appendChild(blank);
   for(const k of Object.keys(stylesMap)) delete stylesMap[k];
   for(const s of data || []){
     stylesMap[s.id] = s;
@@ -977,8 +1062,148 @@ async function loadStyles(){
     sel.appendChild(opt);
   }
   sel.onchange = () => applyStyleToCSS(sel.value);
-  applyStyleToCSS(sel.value);
+  renderStylePicker(data || []);
   log(`스타일 ${(data||[]).length}개 로드`, 'ok');
+}
+
+/* ==================== Step 1-A · 스타일 카드 피커 ==================== */
+function renderStylePicker(list){
+  const host = $('style-picker');
+  if(!host) return;
+  const styleCards = (list || []).map(s => {
+    const hasProfile = s.analyzed && Object.keys(s.analyzed).length > 0;
+    const accent = hasProfile ? extractAccentFromProfile(s.analyzed) : null;
+    const colors = Array.isArray(s.analyzed?.color_signature) ? s.analyzed.color_signature.slice(0, 4) : [];
+    const tone = s.analyzed?.overall_tone || '';
+    return `
+      <button type="button" class="style-pick-card${s.is_default ? ' is-default' : ''}"
+              data-id="${esc(s.id)}" onclick="pickStyle('${esc(s.id)}')">
+        <div class="spc-head">
+          <div class="spc-dot" style="background:${esc(accent || '#60A5FA')}"></div>
+          <div class="spc-name">${esc(s.name)}${s.is_default ? ' <span class=\"spc-badge\">기본</span>' : ''}</div>
+          ${hasProfile ? '<span class="spc-ok">✓ 분석됨</span>' : '<span class="spc-warn">분석 전</span>'}
+        </div>
+        ${tone ? `<div class="spc-tone">${esc(tone)}</div>` : ''}
+        <div class="spc-meta">
+          <span>🧷 ${s.item_count}개 레퍼런스</span>
+          ${colors.length ? `<span class="spc-swatches">${colors.map(c => `<span style="background:${esc(c)}"></span>`).join('')}</span>` : ''}
+        </div>
+        ${s.description ? `<div class="spc-desc">${esc(s.description)}</div>` : ''}
+      </button>
+    `;
+  }).join('');
+
+  const actionCards = `
+    <a href="styles.html" class="style-pick-card style-action-card style-action-add">
+      <div class="spc-action-icon">＋</div>
+      <div class="spc-action-title">새 스타일 만들기</div>
+      <div class="spc-action-desc">인스타 게시물 URL 또는 스크린샷으로 새 스타일 등록</div>
+    </a>
+    <button type="button" class="style-pick-card style-action-card style-action-none" onclick="chooseNoStyle()">
+      <div class="spc-action-icon">✨</div>
+      <div class="spc-action-title">스타일 없이 만들기</div>
+      <div class="spc-action-desc">스타일 주입 없이 주제만으로 바로 생성</div>
+    </button>
+  `;
+
+  host.innerHTML = styleCards + actionCards;
+}
+
+function pickStyle(styleId){
+  const sel = $('styleSelect');
+  sel.value = styleId;
+  applyStyleToCSS(styleId);
+  // 카드 선택 시각화
+  document.querySelectorAll('.style-pick-card').forEach(c => c.classList.toggle('selected', c.dataset.id === styleId));
+  // 선택 칩
+  const chip = $('style-chosen-chip');
+  const s = stylesMap[styleId];
+  if(s){ chip.textContent = `✓ ${s.name} 선택됨`; chip.style.display = 'inline-flex'; chip.className = 'chip'; }
+  // 주제 입력 카드 열기 + 스크롤
+  $('topic-card').style.display = 'block';
+  setTimeout(() => $('topic-card').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function chooseNoStyle(){
+  const sel = $('styleSelect'); sel.value = '';
+  applyStyleToCSS('');
+  document.querySelectorAll('.style-pick-card').forEach(c => c.classList.remove('selected'));
+  const noneCard = document.querySelector('.style-action-none');
+  if(noneCard) noneCard.classList.add('selected');
+  const chip = $('style-chosen-chip');
+  chip.textContent = '✓ 스타일 없이 진행';
+  chip.style.display = 'inline-flex';
+  chip.className = 'chip';
+  $('style-preview').style.display = 'none';
+  $('topic-card').style.display = 'block';
+  setTimeout(() => $('topic-card').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function resetStyleChoice(){
+  const sel = $('styleSelect'); sel.value = '';
+  document.querySelectorAll('.style-pick-card').forEach(c => c.classList.remove('selected'));
+  $('style-chosen-chip').style.display = 'none';
+  $('topic-card').style.display = 'none';
+  $('style-preview').style.display = 'none';
+  document.querySelector('#panel-1 .card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ==================== 카테고리 / 톤 / 분량 chip 선택 ==================== */
+const CATEGORY_PRESETS = [
+  { val: 'marketing',    label: '마케팅' },
+  { val: 'branding',     label: '브랜딩' },
+  { val: 'research',     label: '연구' },
+  { val: 'algorithm',    label: '알고리즘·플랫폼' },
+  { val: 'ai-tech',      label: 'AI·테크' },
+  { val: 'data',         label: '데이터·분석' },
+  { val: 'consumer',     label: '소비자 행동' },
+  { val: 'case',         label: '케이스 스터디' },
+  { val: 'trend',        label: '트렌드' },
+  { val: 'academic',     label: '학술·교육' },
+];
+const TONE_PRESETS = [
+  { val: '학술적',       label: '학술적' },
+  { val: '실무적',       label: '실무적' },
+  { val: '도발적',       label: '도발적' },
+  { val: '비판적',       label: '비판적' },
+  { val: '가벼운',       label: '가벼운' },
+  { val: '공감형',       label: '공감형' },
+  { val: '데이터 중심',  label: '데이터 중심' },
+  { val: '스토리텔링',   label: '스토리텔링' },
+];
+
+function renderChipSelector(hostId, hiddenId, customWrapId, presets){
+  const host = $(hostId); if(!host) return;
+  host.innerHTML = presets.map(p => `<button type="button" class="ch-chip" data-val="${esc(p.val)}">${esc(p.label)}</button>`).join('')
+    + `<button type="button" class="ch-chip ch-other" data-val="__custom__">기타 (직접 입력)</button>`;
+  host.querySelectorAll('.ch-chip').forEach(btn => {
+    btn.onclick = () => {
+      host.querySelectorAll('.ch-chip').forEach(x => x.classList.remove('selected'));
+      btn.classList.add('selected');
+      const val = btn.dataset.val;
+      const cw = $(customWrapId);
+      if(val === '__custom__'){
+        cw.style.display = 'block';
+        const input = cw.querySelector('input');
+        setTimeout(() => input.focus(), 50);
+        input.oninput = () => { $(hiddenId).value = input.value.trim(); };
+        $(hiddenId).value = (cw.querySelector('input').value || '').trim();
+      } else {
+        cw.style.display = 'none';
+        $(hiddenId).value = val;
+      }
+    };
+  });
+}
+function initLengthChips(){
+  const host = $('length-chips'); if(!host) return;
+  host.querySelectorAll('.ch-chip').forEach(btn => {
+    btn.onclick = () => {
+      host.querySelectorAll('.ch-chip').forEach(x => x.classList.remove('selected'));
+      btn.classList.add('selected');
+      $('length').value = btn.dataset.val;
+    };
+  });
 }
 
 /* ==================== 생성 ==================== */
@@ -1842,6 +2067,9 @@ async function init(){
   log('인증 OK', 'ok');
 
   await loadStyles();
+  renderChipSelector('category-chips', 'category', 'category-custom-wrap', CATEGORY_PRESETS);
+  renderChipSelector('tone-chips', 'tone', 'tone-custom-wrap', TONE_PRESETS);
+  initLengthChips();
   // 스타일 하나도 없으면 설정 게이트 (첫 경험)
   const hasStyles = Object.keys(stylesMap).length > 0;
   showGate(hasStyles ? 'main' : 'empty-style');

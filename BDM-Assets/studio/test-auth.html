@@ -2,205 +2,22 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Supabase Auth 테스트 · BDM Lab Studio</title>
+<meta http-equiv="refresh" content="0; url=studio.html">
+<title>BDM Lab Studio로 이동 중...</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;background:#FAFAF9;color:#1C1917;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.card{background:#fff;border:1px solid #E7E5E4;border-radius:12px;padding:32px;max-width:640px;width:100%;box-shadow:0 4px 16px rgba(28,25,23,.06)}
-h1{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-0.02em}
-.sub{font-size:14px;color:#57534E;margin-bottom:24px;line-height:1.5}
-.status{padding:12px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;line-height:1.6;font-family:ui-monospace,monospace;white-space:pre-wrap;word-break:break-all}
-.status-ok{background:#ECFDF5;border:1px solid #059669;color:#047857}
-.status-info{background:#F5F5F4;border:1px solid #E7E5E4;color:#57534E}
-.status-err{background:#FEF2F2;border:1px solid #DC2626;color:#991B1B}
-.btn{display:inline-flex;align-items:center;gap:10px;padding:11px 20px;background:#1C1917;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;margin-right:8px}
-.btn:hover{opacity:.88}
-.btn-logout{background:#DC2626}
-.btn-icon{width:20px;height:20px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#1C1917;font-weight:900;font-size:12px}
-pre{background:#F5F5F4;border:1px solid #E7E5E4;border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.6;font-family:ui-monospace,monospace;color:#1C1917;overflow-x:auto;margin:10px 0;white-space:pre-wrap;word-break:break-all}
-.label{font-size:11px;color:#A8A29E;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;margin-top:14px}
-.log{margin-top:18px;padding:10px;background:#FAFAF9;border:1px solid #E7E5E4;border-radius:6px;font-size:11px;font-family:ui-monospace,monospace;color:#78716C;max-height:180px;overflow-y:auto}
-.log-line{margin:2px 0}
-.log-err{color:#DC2626}
-.log-ok{color:#059669}
+body{background:#0B0F14;color:#F1F5F9;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;margin:0}
+.box{text-align:center;max-width:420px}
+.box h1{font-size:20px;font-weight:800;margin-bottom:10px}
+.box p{color:#A3B0C2;margin:0 0 18px;line-height:1.7;font-size:14px}
+.box a{display:inline-block;padding:10px 20px;background:#60A5FA;color:#0B0F14;font-weight:700;border-radius:8px;text-decoration:none}
 </style>
 </head>
 <body>
-
-<div class="card">
-  <h1>🔐 Supabase Auth 테스트</h1>
-  <p class="sub">Google OAuth + 한양대 도메인 제한 + public.users 자동 생성 검증</p>
-
-  <div id="status" class="status status-info">초기화 중...</div>
-  <div id="buttons"></div>
-
-  <div id="result" style="display:none">
-    <div class="label">✅ auth.users</div>
-    <pre id="authInfo"></pre>
-    <div class="label">✅ public.users (트리거 자동 생성)</div>
-    <pre id="publicInfo"></pre>
-    <div class="label">🔒 도메인 체크</div>
-    <pre id="domainCheck"></pre>
-  </div>
-
-  <div id="logBox" class="log">
-    <div class="log-line">[log] 시작...</div>
-  </div>
+<div class="box">
+  <h1>이 페이지는 더 이상 사용하지 않습니다</h1>
+  <p>예전 인증 테스트 화면. Studio 본 화면으로 이동합니다.</p>
+  <a href="studio.html">studio.html로 이동 →</a>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script>
-const SUPABASE_URL = 'https://mnynajxjgjidnojxsafr.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_I9Jf-KnpKOnLDDNoMq0E8A_oZ1E7lLt';
-const HANYANG_DOMAIN = '@hanyang.ac.kr';
-
-let supabase;
-
-function log(msg, type){
-  const box = document.getElementById('logBox');
-  const line = document.createElement('div');
-  line.className = 'log-line' + (type === 'err' ? ' log-err' : type === 'ok' ? ' log-ok' : '');
-  line.textContent = '[' + new Date().toISOString().slice(11,19) + '] ' + msg;
-  box.appendChild(line);
-  box.scrollTop = box.scrollHeight;
-  console.log(msg);
-}
-
-function setStatus(msg, type){
-  const el = document.getElementById('status');
-  el.className = 'status status-' + (type || 'info');
-  el.textContent = msg;
-}
-
-window.addEventListener('error', function(e){
-  log('JS 에러: ' + e.message + ' (' + (e.filename || '') + ':' + (e.lineno || '') + ')', 'err');
-  setStatus('JS 에러: ' + e.message, 'err');
-});
-
-async function signIn(){
-  log('signInWithOAuth 호출...');
-  try {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.href.split('#')[0].split('?')[0],
-        queryParams: { hd: 'hanyang.ac.kr' }
-      }
-    });
-    if(error){
-      log('로그인 에러: ' + error.message, 'err');
-      setStatus('로그인 실패: ' + error.message, 'err');
-    }
-  } catch(e){
-    log('예외: ' + e.message, 'err');
-    setStatus('예외: ' + e.message, 'err');
-  }
-}
-
-async function signOut(){
-  log('로그아웃 중...');
-  await supabase.auth.signOut();
-  location.reload();
-}
-
-function showLoginButton(){
-  document.getElementById('buttons').innerHTML =
-    '<button class="btn" onclick="signIn()"><span class="btn-icon">G</span>Google로 로그인</button>' +
-    '<div style="font-size:12px;color:#A8A29E;margin-top:10px">⚠️ @hanyang.ac.kr 계정으로 로그인하세요.</div>';
-}
-
-function showLogoutButton(){
-  document.getElementById('buttons').innerHTML =
-    '<button class="btn btn-logout" onclick="signOut()">로그아웃</button>';
-}
-
-async function init(){
-  try {
-    log('SDK 확인 중...');
-    if (typeof window.supabase === 'undefined') {
-      setStatus('❌ Supabase SDK 로드 실패.\nCDN 접속 차단일 수 있음.\n\n해결: 새로고침 or Chrome으로 시도', 'err');
-      log('window.supabase = undefined', 'err');
-      return;
-    }
-    log('SDK 로드됨', 'ok');
-
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    log('createClient 완료', 'ok');
-
-    log('getSession 호출...');
-    const sessionResult = await supabase.auth.getSession();
-    log('getSession 응답 받음');
-
-    if (sessionResult.error) {
-      log('세션 에러: ' + sessionResult.error.message, 'err');
-      setStatus('세션 조회 실패: ' + sessionResult.error.message, 'err');
-      showLoginButton();
-      return;
-    }
-
-    const session = sessionResult.data.session;
-
-    if (!session) {
-      log('세션 없음 - 로그인 필요');
-      setStatus('로그인되지 않음. Google 버튼을 눌러 시작하세요.', 'info');
-      showLoginButton();
-      return;
-    }
-
-    log('세션 발견: ' + session.user.email, 'ok');
-    const email = session.user.email || '';
-
-    if (!email.toLowerCase().endsWith(HANYANG_DOMAIN)) {
-      setStatus('❌ ' + email + ' — 한양대 계정이 아닙니다. 3초 후 자동 로그아웃.', 'err');
-      log('도메인 불일치 - 자동 로그아웃 예약', 'err');
-      setTimeout(async () => {
-        await supabase.auth.signOut();
-        location.reload();
-      }, 3000);
-      return;
-    }
-
-    setStatus('✅ 로그인 성공: ' + email, 'ok');
-    document.getElementById('result').style.display = 'block';
-    showLogoutButton();
-
-    document.getElementById('authInfo').textContent = JSON.stringify({
-      id: session.user.id,
-      email: session.user.email,
-      name: session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name),
-      created_at: session.user.created_at,
-      provider: session.user.app_metadata && session.user.app_metadata.provider
-    }, null, 2);
-
-    log('public.users 조회 중...');
-    const pubResult = await supabase
-      .from('users')
-      .select('id, email, name, monthly_quota, usage_this_month, is_admin, created_at')
-      .eq('id', session.user.id)
-      .single();
-
-    if (pubResult.error) {
-      log('public.users 에러: ' + pubResult.error.message, 'err');
-      document.getElementById('publicInfo').textContent =
-        '❌ 조회 실패:\n' + JSON.stringify(pubResult.error, null, 2) +
-        '\n\n원인 가능성:\n1. 트리거가 작동 안 함\n2. RLS 문제\n3. 첫 로그인 반영 대기';
-    } else {
-      log('public.users 조회 성공', 'ok');
-      document.getElementById('publicInfo').textContent = JSON.stringify(pubResult.data, null, 2);
-    }
-
-    document.getElementById('domainCheck').textContent =
-      '이메일: ' + email + '\n도메인: ' + email.split('@')[1] + '\n한양대 인증: ✅';
-
-  } catch(e){
-    log('init 예외: ' + e.message, 'err');
-    setStatus('초기화 실패: ' + e.message + '\n\n' + e.stack, 'err');
-  }
-}
-
-window.addEventListener('load', init);
-</script>
-
+<script>location.replace('studio.html');</script>
 </body>
 </html>

@@ -64,6 +64,50 @@ nav a:hover:not(.active){background:#F5F5F4}
 .version-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:#1C1917;color:#fff;border-radius:14px;font-size:11px;font-weight:700;margin-left:6px}
 .version-chip.prev{background:#F5F5F4;color:#57534E;cursor:pointer}
 .version-chip.prev:hover{background:#E7E5E4}
+
+/* 비주얼 슬라이드 렌더 */
+.visual-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:8px}
+.visual-slide{background:#F5F5F4;border:1px solid #E7E5E4;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.visual-canvas{position:relative;aspect-ratio:4/5;background:#1C1917;overflow:hidden}
+.visual-canvas img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.visual-canvas .v-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#78716C;font-size:12px;text-align:center;padding:12px}
+.visual-canvas .v-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,0.75) 100%)}
+.visual-canvas.variant-light .v-overlay{background:linear-gradient(to bottom, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.88) 90%)}
+.visual-canvas.variant-green .v-overlay{background:linear-gradient(to bottom, rgba(5,150,105,0) 30%, rgba(5,150,105,0.82) 100%)}
+.visual-canvas .v-tag{position:absolute;top:10px;left:10px;padding:3px 9px;background:rgba(255,255,255,0.9);color:#1C1917;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;border-radius:4px}
+.visual-canvas .v-num{position:absolute;top:10px;right:10px;padding:3px 8px;background:rgba(28,25,23,0.7);color:#fff;font-size:10px;font-weight:700;border-radius:10px}
+.visual-canvas .v-text{position:absolute;left:12px;right:12px;bottom:10px;color:#fff;z-index:2}
+.visual-canvas.variant-light .v-text{color:#1C1917;text-shadow:none}
+.visual-canvas .v-heading{font-size:15px;font-weight:800;line-height:1.25;letter-spacing:-0.01em;margin-bottom:4px;text-shadow:0 2px 10px rgba(0,0,0,0.4);word-break:keep-all}
+.visual-canvas .v-body{font-size:10.5px;line-height:1.4;opacity:0.95;text-shadow:0 1px 6px rgba(0,0,0,0.4);word-break:keep-all;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.visual-canvas.variant-light .v-heading,.visual-canvas.variant-light .v-body{text-shadow:none}
+
+/* 인라인 마크다운 / 하이라이트 토큰 */
+.slide-heading strong,.slide-body strong,.v-heading strong,.v-body strong,.outro-val strong{font-weight:900}
+.slide-heading em,.slide-body em,.v-heading em,.v-body em,.outro-val em{font-style:italic}
+mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.38) 55%);color:inherit;padding:0 2px;border-radius:2px;font-weight:inherit}
+.visual-canvas .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.62) 55%);color:#fff}
+.visual-canvas.variant-light .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.32) 55%);color:#065F46}
+.visual-source{padding:6px 8px;font-size:10px;color:#78716C;background:#FAFAF9;border-top:1px solid #E7E5E4;display:flex;justify-content:space-between;align-items:center;gap:4px}
+.visual-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1px solid #E7E5E4}
+.visual-controls button{padding:6px 4px;background:#fff;border:none;border-right:1px solid #E7E5E4;color:#1C1917;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.visual-controls button:last-child{border-right:none}
+.visual-controls button:hover{background:#F5F5F4}
+.visual-controls button:disabled{opacity:0.4;cursor:not-allowed}
+.visual-controls button.loading{background:#1C1917;color:#fff}
+.visual-controls button.active{background:#ECFDF5;color:#047857}
+
+/* Pexels 선택 모달 */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal{background:#fff;border-radius:14px;max-width:900px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column}
+.modal-head{padding:16px 20px;border-bottom:1px solid #E7E5E4;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-body{padding:16px 20px;overflow-y:auto;flex:1}
+.pexels-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px}
+.pex-thumb{aspect-ratio:4/5;background:#F5F5F4;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;position:relative}
+.pex-thumb img{width:100%;height:100%;object-fit:cover}
+.pex-thumb:hover{border-color:#059669}
+.pex-thumb .credit{position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:rgba(0,0,0,0.55);color:#fff;font-size:9px;text-align:center}
+.close-x{background:#F5F5F4;border:1px solid #E7E5E4;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
@@ -121,9 +165,17 @@ nav a:hover:not(.active){background:#F5F5F4}
     <div class="stat"><div class="stat-label">비용 (USD)</div><div class="stat-value" id="stat-cost">—</div></div>
   </div>
 
-  <div class="label-mini">캐러셀 미리보기</div>
+  <div class="label-mini">캐러셀 미리보기 (텍스트)</div>
   <div id="preview"></div>
-  <details><summary>원본 JSON 보기</summary><pre id="output"></pre></details>
+
+  <div class="label-mini" style="margin-top:14px">🖼 비주얼 슬라이드 (1080×1350 미리보기)</div>
+  <div id="visual-grid" class="visual-grid"></div>
+  <div class="row" style="gap:8px;margin-top:10px">
+    <button id="autoGenBtn" class="btn btn-ghost" onclick="autoGenerateAllImages()" disabled>🎨 모든 슬라이드 AI 일괄 생성 (~$0.03)</button>
+    <span id="autogen-status" class="chip muted" style="display:none"></span>
+  </div>
+
+  <details style="margin-top:14px"><summary>원본 JSON 보기</summary><pre id="output"></pre></details>
 
   <div class="label-mini" id="reviewLabel" style="display:none">Gemini 평가</div>
   <div id="reviewBox" style="display:none"></div>
@@ -166,6 +218,31 @@ nav a:hover:not(.active){background:#F5F5F4}
   <div id="logBox" class="log"><div class="log-line">[log] 시작...</div></div>
 </div>
 
+<!-- Pexels 모달 -->
+<div id="pexels-modal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="modal-head">
+      <div style="flex:1">
+        <h2 style="margin:0">🖼 Pexels 이미지 선택</h2>
+        <div style="font-size:12px;color:#78716C;margin-top:4px">슬라이드 <span id="pex-slide-idx"></span></div>
+      </div>
+      <button class="close-x" onclick="closePexelsModal()">✕ 닫기</button>
+    </div>
+    <div class="modal-body">
+      <div class="row" style="gap:8px">
+        <input id="pex-keyword" placeholder="검색 키워드" style="flex:1">
+        <button class="btn btn-green btn-sm" onclick="searchPexelsForSlide()">검색</button>
+      </div>
+      <div id="pex-results" class="pexels-results">
+        <div class="muted-text" style="grid-column:1/-1;color:#A8A29E;font-size:13px">검색 키워드 입력 후 검색하세요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 파일 업로드용 숨김 input -->
+<input type="file" id="hidden-upload" accept="image/png,image/jpeg,image/webp" style="display:none">
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -174,7 +251,14 @@ const SUPABASE_URL = 'https://mnynajxjgjidnojxsafr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_I9Jf-KnpKOnLDDNoMq0E8A_oZ1E7lLt';
 const FN_GENERATE = `${SUPABASE_URL}/functions/v1/generate-carousel`;
 const FN_REVIEW = `${SUPABASE_URL}/functions/v1/review-carousel`;
+const FN_GEN_IMG = `${SUPABASE_URL}/functions/v1/generate-slide-image`;
+const FN_SEARCH_PEXELS = `${SUPABASE_URL}/functions/v1/search-pexels`;
+const BUCKET_SLIDE = 'slide-images';
 const HANYANG = '@hanyang.ac.kr';
+
+let slideMediaMap = {}; // index -> { source, signed_url, storage_path, pexels_url, ... }
+let pexelsContext = { slideIndex: null, keyword: '' };
+let pexelsPhotoMap = {}; // pexels_id -> photo data (for click handler)
 
 let supabase;
 let session = null;
@@ -185,12 +269,22 @@ let currentCarouselId = null;
 
 function esc(s){ return String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
+// 인라인 마크다운 파서: **bold**, {{highlight}}, *italic*
+// 입력은 신뢰 불가(Claude 출력) → 반드시 esc() 먼저 통과 후 토큰 치환
+function mdInline(s){
+  let out = esc(s);
+  out = out.replace(/\{\{([^{}\n]+)\}\}/g, '<mark class="hl">$1</mark>');
+  out = out.replace(/\*\*([^\n*]+?)\*\*/g, '<strong>$1</strong>');
+  out = out.replace(/(^|[^*])\*([^\n*]+?)\*(?!\*)/g, '$1<em>$2</em>');
+  return out;
+}
+
 function renderSlideCard(slide, num, cls){
   const tag = slide.tag ? `<span class="slide-tag">${esc(slide.tag)}</span>` : '';
   const variant = slide.variant ? `<span class="slide-tag variant">${esc(slide.variant)}</span>` : '';
   const media = slide.media_type ? `<span class="slide-tag media">${esc(slide.media_type)}</span>` : '';
-  const heading = slide.heading ? `<div class="slide-heading">${esc(slide.heading)}</div>` : '';
-  const body = slide.body ? `<div class="slide-body">${esc(slide.body)}</div>` : '';
+  const heading = slide.heading ? `<div class="slide-heading">${mdInline(slide.heading)}</div>` : '';
+  const body = slide.body ? `<div class="slide-body">${mdInline(slide.body)}</div>` : '';
   const kw = slide.video_keyword ? `<div class="slide-meta">🎬 ${esc(slide.video_keyword)}</div>` : '';
   const label = num === 0 ? 'COVER' : num === -1 ? 'OUTRO' : `#${num}`;
   return `<div class="slide ${cls}">
@@ -207,7 +301,7 @@ function renderOutro(o){
     ['cta', o.cta],
     ['links', Array.isArray(o.links) ? o.links.join(', ') : o.links],
   ].filter(([,v]) => v);
-  const rows = fields.map(([k,v]) => `<div class="outro-field"><span class="outro-key">${k}</span><span class="outro-val">${esc(v)}</span></div>`).join('');
+  const rows = fields.map(([k,v]) => `<div class="outro-field"><span class="outro-key">${k}</span><span class="outro-val">${mdInline(v)}</span></div>`).join('');
   return `<div class="slide outro"><div class="slide-head"><span class="slide-num">OUTRO</span></div>${rows}</div>`;
 }
 
@@ -221,6 +315,270 @@ function renderCarousel(out){
   }
   if(out.outro) html += renderOutro(out.outro);
   preview.innerHTML = html;
+  renderVisualGrid(out);
+  document.getElementById('autoGenBtn').disabled = false;
+}
+
+function collectSlides(out){
+  const arr = [];
+  if(out?.cover) arr.push({ ...out.cover, _role: 'cover', _index: 0 });
+  if(Array.isArray(out?.slides)){
+    out.slides.forEach((s, i) => arr.push({ ...s, _role: 'slide', _index: i + 1 }));
+  }
+  if(out?.outro){
+    arr.push({ _role: 'outro', _index: -1, heading: out.outro.closing, body: out.outro.cta, tag: 'OUTRO', variant: 'light' });
+  }
+  return arr;
+}
+
+function renderVisualGrid(out){
+  const grid = document.getElementById('visual-grid');
+  grid.innerHTML = '';
+  const slides = collectSlides(out);
+  for(const s of slides){
+    grid.appendChild(renderVisualSlide(s));
+  }
+}
+
+function renderVisualSlide(s){
+  const idx = s._index;
+  const variant = (s.variant || 'dark').toLowerCase();
+  const card = document.createElement('div');
+  card.className = 'visual-slide';
+  card.id = 'vs-' + idx;
+
+  const media = slideMediaMap[idx];
+  const imgUrl = media?.signed_url || media?.pexels_url || '';
+  const sourceLabel = media?.source === 'ai' ? '🎨 AI' : media?.source === 'pexels' ? '🖼 Pexels' : media?.source === 'upload' ? '📤 업로드' : '없음';
+
+  const label = idx === 0 ? 'COVER' : idx === -1 ? 'OUTRO' : '#' + idx;
+  const heading = s.heading || '';
+  const body = s.body || '';
+  const tag = s.tag || label;
+
+  card.innerHTML = `
+    <div class="visual-canvas variant-${esc(variant)}">
+      ${imgUrl ? `<img src="${esc(imgUrl)}" alt="">` : `<div class="v-empty">이미지 없음<br>아래 버튼으로 선택</div>`}
+      ${imgUrl ? `<div class="v-overlay"></div>` : ''}
+      <div class="v-tag">${esc(tag)}</div>
+      <div class="v-num">${esc(label)}</div>
+      ${imgUrl ? `<div class="v-text">
+        ${heading ? `<div class="v-heading">${mdInline(heading)}</div>` : ''}
+        ${body ? `<div class="v-body">${mdInline(body)}</div>` : ''}
+      </div>` : ''}
+    </div>
+    <div class="visual-source">
+      <span>${sourceLabel}</span>
+      <span style="color:#A8A29E">${media?.photographer ? 'by ' + esc(media.photographer) : media?.model || ''}</span>
+    </div>
+    <div class="visual-controls">
+      <button onclick="generateAIImageForSlide(${idx})" title="Replicate Flux Schnell">🎨 AI</button>
+      <button onclick="openPexelsModal(${idx})" title="Pexels 검색">🖼 Pexels</button>
+      <button onclick="uploadImageForSlide(${idx})" title="이미지 업로드">📤 업로드</button>
+    </div>
+  `;
+  return card;
+}
+
+async function generateAIImageForSlide(idx){
+  if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
+  if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+  const slides = collectSlides(lastResult.output);
+  const slide = slides.find(s => s._index === idx);
+  if(!slide){ log('슬라이드 찾을 수 없음: ' + idx, 'err'); return; }
+
+  const card = document.getElementById('vs-' + idx);
+  const btn = card?.querySelector('button[onclick^="generateAIImageForSlide"]');
+  if(btn){ btn.disabled = true; btn.classList.add('loading'); btn.textContent = '⏳ 생성중'; }
+
+  log(`🎨 AI 이미지 생성 #${idx} ...`);
+  try {
+    const resp = await fetch(FN_GEN_IMG, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        generation_id: lastResult.generation_id,
+        slide_index: idx,
+        slide: {
+          role: slide._role,
+          tag: slide.tag,
+          heading: slide.heading,
+          body: slide.body,
+          video_keyword: slide.video_keyword,
+          variant: slide.variant,
+          media_type: slide.media_type,
+        },
+      }),
+    });
+    const data = await resp.json();
+    if(!resp.ok){
+      alert(`AI 생성 실패 (${resp.status}): ${data.error}\n${JSON.stringify(data.detail ?? {}).slice(0, 300)}`);
+      log('AI 생성 실패: ' + JSON.stringify(data).slice(0, 200), 'err');
+      return;
+    }
+    slideMediaMap[idx] = {
+      source: 'ai', model: data.model, signed_url: data.signed_url,
+      storage_path: data.storage_path, prompt: data.prompt,
+    };
+    log(`✓ AI 이미지 생성 #${idx}`, 'ok');
+    const grid = document.getElementById('visual-grid');
+    const old = document.getElementById('vs-' + idx);
+    const fresh = renderVisualSlide(slides.find(s => s._index === idx));
+    old.replaceWith(fresh);
+  } catch(e){
+    log('AI 생성 예외: ' + e.message, 'err');
+    alert('네트워크 에러: ' + e.message);
+  } finally {
+    if(btn){ btn.disabled = false; btn.classList.remove('loading'); btn.textContent = '🎨 AI'; }
+  }
+}
+
+async function autoGenerateAllImages(){
+  if(!lastResult?.output){ alert('먼저 생성하세요'); return; }
+  if(!confirm('모든 슬라이드의 이미지를 AI로 생성합니다. 약 $0.03 소비. 진행?')) return;
+  const btn = document.getElementById('autoGenBtn');
+  const status = document.getElementById('autogen-status');
+  btn.disabled = true;
+  status.style.display = 'inline-flex';
+  const slides = collectSlides(lastResult.output);
+  let done = 0;
+  for(const s of slides){
+    status.textContent = `${done+1}/${slides.length} 생성 중...`;
+    await generateAIImageForSlide(s._index);
+    done++;
+  }
+  status.textContent = `✓ ${done}/${slides.length} 완료`;
+  setTimeout(() => status.style.display='none', 5000);
+  btn.disabled = false;
+}
+
+function openPexelsModal(idx){
+  if(!lastResult?.output){ alert('먼저 생성하세요'); return; }
+  const slides = collectSlides(lastResult.output);
+  const slide = slides.find(s => s._index === idx);
+  pexelsContext.slideIndex = idx;
+  pexelsContext.keyword = slide?.video_keyword || slide?.heading || '';
+  document.getElementById('pex-slide-idx').textContent = idx === 0 ? 'COVER' : idx === -1 ? 'OUTRO' : '#' + idx;
+  document.getElementById('pex-keyword').value = pexelsContext.keyword;
+  document.getElementById('pex-results').innerHTML = '<div class="muted-text" style="grid-column:1/-1;color:#A8A29E;font-size:13px">검색 버튼을 누르세요</div>';
+  document.getElementById('pexels-modal').style.display = 'flex';
+  if(pexelsContext.keyword) searchPexelsForSlide();
+}
+
+function closePexelsModal(){ document.getElementById('pexels-modal').style.display = 'none'; }
+
+async function searchPexelsForSlide(){
+  if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+  const keyword = document.getElementById('pex-keyword').value.trim();
+  if(!keyword){ alert('키워드 필요'); return; }
+  const box = document.getElementById('pex-results');
+  box.innerHTML = '<div class="muted-text" style="grid-column:1/-1;color:#A8A29E;font-size:13px">검색 중...</div>';
+  const styleId = document.getElementById('styleSelect').value || null;
+  try {
+    const resp = await fetch(FN_SEARCH_PEXELS, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keyword, style_id: styleId, per_page: 12 }),
+    });
+    const data = await resp.json();
+    if(!resp.ok){ box.innerHTML = `<div style="color:#DC2626;grid-column:1/-1">${esc(data.error || '검색 실패')}</div>`; return; }
+    if(!data.photos || data.photos.length === 0){ box.innerHTML = '<div class="muted-text" style="grid-column:1/-1">결과 없음</div>'; return; }
+    pexelsPhotoMap = {};
+    box.innerHTML = data.photos.map(p => {
+      pexelsPhotoMap[p.id] = p;
+      return `<div class="pex-thumb" onclick="pickPexelsById(${p.id})">
+        <img src="${esc(p.thumb)}" alt="${esc(p.alt || '')}" loading="lazy">
+        <div class="credit">${esc(p.photographer)}</div>
+      </div>`;
+    }).join('');
+    log(`Pexels ${data.photos.length}장 (augmented: "${esc(data.augmented)}")`, 'ok');
+  } catch(e){
+    box.innerHTML = `<div style="color:#DC2626;grid-column:1/-1">예외: ${esc(e.message)}</div>`;
+  }
+}
+
+function pickPexelsById(id){
+  const p = pexelsPhotoMap[id];
+  if(p) pickPexels(p);
+}
+
+async function pickPexels(photo){
+  const idx = pexelsContext.slideIndex;
+  if(idx === null) return;
+  slideMediaMap[idx] = {
+    source: 'pexels', pexels_url: photo.url, signed_url: photo.url,
+    photographer: photo.photographer, pexels_id: photo.id,
+  };
+  // 영구 저장: generations.slide_media 업데이트
+  try {
+    const { data: gen } = await supabase.from('generations').select('slide_media').eq('id', lastResult.generation_id).single();
+    const existing = Array.isArray(gen?.slide_media) ? gen.slide_media : [];
+    const filtered = existing.filter(m => m.index !== idx);
+    filtered.push({
+      index: idx, source: 'pexels', pexels_id: photo.id, url: photo.url,
+      photographer: photo.photographer, created_at: new Date().toISOString(),
+    });
+    await supabase.from('generations').update({ slide_media: filtered }).eq('id', lastResult.generation_id);
+  } catch(e){ log('slide_media 저장 실패: ' + e.message, 'err'); }
+
+  const slides = collectSlides(lastResult.output);
+  const old = document.getElementById('vs-' + idx);
+  const fresh = renderVisualSlide(slides.find(s => s._index === idx));
+  old.replaceWith(fresh);
+  closePexelsModal();
+  log(`✓ Pexels 선택 #${idx}: ${photo.photographer}`, 'ok');
+}
+
+async function uploadImageForSlide(idx){
+  if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
+  if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+  const input = document.getElementById('hidden-upload');
+  input.onchange = null;
+  input.onchange = async (ev) => {
+    const file = ev.target.files?.[0];
+    if(!file) return;
+    const ext = file.name.split('.').pop().toLowerCase();
+    const path = `${session.user.id}/${lastResult.generation_id}/upload-${idx}-${Date.now()}.${ext}`;
+    log(`📤 업로드 #${idx}: ${file.name} → ${path}`);
+    const { error: upErr } = await supabase.storage.from(BUCKET_SLIDE).upload(path, file, { contentType: file.type, upsert: false });
+    if(upErr){ alert('업로드 실패: ' + upErr.message); return; }
+    const { data: signed } = await supabase.storage.from(BUCKET_SLIDE).createSignedUrl(path, 3600);
+    slideMediaMap[idx] = { source: 'upload', signed_url: signed?.signedUrl, storage_path: path };
+    // 영구 저장
+    try {
+      const { data: gen } = await supabase.from('generations').select('slide_media').eq('id', lastResult.generation_id).single();
+      const existing = Array.isArray(gen?.slide_media) ? gen.slide_media : [];
+      const filtered = existing.filter(m => m.index !== idx);
+      filtered.push({ index: idx, source: 'upload', storage_path: path, created_at: new Date().toISOString() });
+      await supabase.from('generations').update({ slide_media: filtered }).eq('id', lastResult.generation_id);
+    } catch(e){ log('slide_media 저장 실패: ' + e.message, 'err'); }
+    const slides = collectSlides(lastResult.output);
+    const old = document.getElementById('vs-' + idx);
+    const fresh = renderVisualSlide(slides.find(s => s._index === idx));
+    old.replaceWith(fresh);
+    log(`✓ 업로드 완료 #${idx}`, 'ok');
+    input.value = '';
+  };
+  input.click();
+}
+
+async function loadExistingSlideMedia(){
+  if(!lastResult?.generation_id) return;
+  slideMediaMap = {};
+  try {
+    const { data: gen } = await supabase.from('generations').select('slide_media').eq('id', lastResult.generation_id).single();
+    if(!Array.isArray(gen?.slide_media)) return;
+    for(const m of gen.slide_media){
+      const entry = { source: m.source, photographer: m.photographer, model: m.model, storage_path: m.storage_path };
+      if(m.source === 'pexels'){
+        entry.pexels_url = m.url; entry.signed_url = m.url;
+      } else if(m.storage_path){
+        const { data: signed } = await supabase.storage.from(BUCKET_SLIDE).createSignedUrl(m.storage_path, 3600);
+        entry.signed_url = signed?.signedUrl;
+      }
+      slideMediaMap[m.index] = entry;
+    }
+  } catch(e){ log('slide_media 로드 실패: ' + e.message, 'err'); }
 }
 
 function renderReview(r){
@@ -260,10 +618,12 @@ function renderVersionsStrip(){
   }).join('');
 }
 
-function switchToVersion(genId){
+async function switchToVersion(genId){
   const v = versionHistory.find(x => x.generation_id === genId);
   if(!v) return;
   lastResult = { output: v.output, generation_id: v.generation_id, carousel_id: currentCarouselId, version: v.version };
+  slideMediaMap = {};
+  await loadExistingSlideMedia();
   renderCarousel(v.output);
   document.getElementById('output').textContent = JSON.stringify(v.output, null, 2);
   document.getElementById('statusChip').textContent = '✅ 버전 ' + v.version + ' 활성';
@@ -379,6 +739,7 @@ async function doGenerate(){
     lastResult = data;
     currentCarouselId = data.carousel_id;
     versionHistory = [{ version: data.version, generation_id: data.generation_id, output: data.output, review: null }];
+    slideMediaMap = {};
     document.getElementById('result-card').style.display = 'block';
     document.getElementById('stat-engine').textContent = data.engine_version ?? '—';
     document.getElementById('stat-quota').textContent = `${data.quota.used} / ${data.quota.limit}`;
@@ -523,6 +884,7 @@ async function doRegenerate(){
     // 새 버전 추가
     lastResult = data;
     versionHistory.push({ version: data.version, generation_id: data.generation_id, output: data.output, review: null });
+    slideMediaMap = {};
     document.getElementById('stat-quota').textContent = `${data.quota.used} / ${data.quota.limit}`;
     document.getElementById('stat-cost').textContent = '$' + (data.usage?.cost_usd ?? 0).toFixed(4);
     document.getElementById('output').textContent = JSON.stringify(data.output, null, 2);

@@ -6,6 +6,14 @@
 <title>생성 E2E 테스트 · BDM Lab Studio</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --style-accent:#059669;
+  --style-accent-rgb:5,150,105;
+  --style-accent-dark:#047857;
+  --style-font-heading:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;
+  --style-font-body:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;
+  --style-heading-weight:800;
+}
 body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",system-ui,sans-serif;background:#FAFAF9;color:#1C1917;min-height:100vh;padding:24px}
 .wrap{max-width:900px;margin:0 auto}
 .card{background:#fff;border:1px solid #E7E5E4;border-radius:12px;padding:28px;margin-bottom:16px;box-shadow:0 4px 16px rgba(28,25,23,.04)}
@@ -36,8 +44,8 @@ details summary{cursor:pointer;padding:6px 0;user-select:none}
 .slide-tag.light{background:#F5F5F4;color:#1C1917;border:1px solid #E7E5E4}
 .slide-tag.variant{background:#ECFDF5;color:#047857;border:1px solid #059669}
 .slide-tag.media{background:#EFF6FF;color:#1D4ED8;border:1px solid #3B82F6}
-.slide-heading{font-size:17px;font-weight:800;color:#1C1917;margin-bottom:8px;line-height:1.35;letter-spacing:-0.01em}
-.slide-body{font-size:13px;line-height:1.7;color:#292524;white-space:pre-wrap;word-break:keep-all}
+.slide-heading{font-family:var(--style-font-heading);font-size:17px;font-weight:var(--style-heading-weight);color:#1C1917;margin-bottom:8px;line-height:1.35;letter-spacing:-0.01em}
+.slide-body{font-family:var(--style-font-body);font-size:13px;line-height:1.7;color:#292524;white-space:pre-wrap;word-break:keep-all}
 .slide-meta{margin-top:8px;font-size:11px;color:#A8A29E;font-family:ui-monospace,monospace}
 .outro-field{display:flex;gap:8px;align-items:baseline;margin:4px 0;font-size:13px}
 .outro-key{font-size:10px;font-weight:700;color:#A8A29E;text-transform:uppercase;letter-spacing:1px;min-width:70px}
@@ -73,21 +81,21 @@ nav a:hover:not(.active){background:#F5F5F4}
 .visual-canvas .v-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#78716C;font-size:12px;text-align:center;padding:12px}
 .visual-canvas .v-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,0.75) 100%)}
 .visual-canvas.variant-light .v-overlay{background:linear-gradient(to bottom, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.88) 90%)}
-.visual-canvas.variant-green .v-overlay{background:linear-gradient(to bottom, rgba(5,150,105,0) 30%, rgba(5,150,105,0.82) 100%)}
+.visual-canvas.variant-green .v-overlay{background:linear-gradient(to bottom, rgba(var(--style-accent-rgb),0) 30%, rgba(var(--style-accent-rgb),0.82) 100%)}
 .visual-canvas .v-tag{position:absolute;top:10px;left:10px;padding:3px 9px;background:rgba(255,255,255,0.9);color:#1C1917;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;border-radius:4px}
 .visual-canvas .v-num{position:absolute;top:10px;right:10px;padding:3px 8px;background:rgba(28,25,23,0.7);color:#fff;font-size:10px;font-weight:700;border-radius:10px}
 .visual-canvas .v-text{position:absolute;left:12px;right:12px;bottom:10px;color:#fff;z-index:2}
 .visual-canvas.variant-light .v-text{color:#1C1917;text-shadow:none}
-.visual-canvas .v-heading{font-size:15px;font-weight:800;line-height:1.25;letter-spacing:-0.01em;margin-bottom:4px;text-shadow:0 2px 10px rgba(0,0,0,0.4);word-break:keep-all}
-.visual-canvas .v-body{font-size:10.5px;line-height:1.4;opacity:0.95;text-shadow:0 1px 6px rgba(0,0,0,0.4);word-break:keep-all;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.visual-canvas .v-heading{font-family:var(--style-font-heading);font-size:15px;font-weight:var(--style-heading-weight);line-height:1.25;letter-spacing:-0.01em;margin-bottom:4px;text-shadow:0 2px 10px rgba(0,0,0,0.4);word-break:keep-all}
+.visual-canvas .v-body{font-family:var(--style-font-body);font-size:10.5px;line-height:1.4;opacity:0.95;text-shadow:0 1px 6px rgba(0,0,0,0.4);word-break:keep-all;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .visual-canvas.variant-light .v-heading,.visual-canvas.variant-light .v-body{text-shadow:none}
 
 /* 인라인 마크다운 / 하이라이트 토큰 */
 .slide-heading strong,.slide-body strong,.v-heading strong,.v-body strong,.outro-val strong{font-weight:900}
 .slide-heading em,.slide-body em,.v-heading em,.v-body em,.outro-val em{font-style:italic}
-mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.38) 55%);color:inherit;padding:0 2px;border-radius:2px;font-weight:inherit}
-.visual-canvas .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.62) 55%);color:#fff}
-.visual-canvas.variant-light .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.32) 55%);color:#065F46}
+mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accent-rgb),0.38) 55%);color:inherit;padding:0 2px;border-radius:2px;font-weight:inherit}
+.visual-canvas .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accent-rgb),0.62) 55%);color:#fff}
+.visual-canvas.variant-light .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accent-rgb),0.32) 55%);color:var(--style-accent-dark)}
 .visual-source{padding:6px 8px;font-size:10px;color:#78716C;background:#FAFAF9;border-top:1px solid #E7E5E4;display:flex;justify-content:space-between;align-items:center;gap:4px}
 .visual-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1px solid #E7E5E4}
 .visual-controls button{padding:6px 4px;background:#fff;border:none;border-right:1px solid #E7E5E4;color:#1C1917;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
@@ -108,6 +116,25 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.38) 5
 .pex-thumb:hover{border-color:#059669}
 .pex-thumb .credit{position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:rgba(0,0,0,0.55);color:#fff;font-size:9px;text-align:center}
 .close-x{background:#F5F5F4;border:1px solid #E7E5E4;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:700;cursor:pointer}
+
+/* 피드백 모달 — 집단지성 데이터 수집 */
+.fb-section{margin:14px 0 6px;font-size:11px;font-weight:800;color:#57534E;text-transform:uppercase;letter-spacing:1px}
+.fb-question{font-size:13px;color:#1C1917;margin-bottom:6px}
+.fb-question small{color:#A8A29E;font-weight:500;margin-left:6px}
+.fb-score-row{display:flex;gap:6px;margin-bottom:4px}
+.fb-score-btn{flex:1;padding:8px 0;border:1px solid #E7E5E4;background:#fff;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;color:#57534E;transition:all .12s}
+.fb-score-btn:hover{border-color:#059669;background:#F0FDF4}
+.fb-score-btn.selected{background:#059669;color:#fff;border-color:#059669}
+.fb-score-legend{display:flex;justify-content:space-between;font-size:10px;color:#A8A29E;margin-top:2px}
+.fb-chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.fb-chip{padding:6px 10px;border:1px solid #E7E5E4;border-radius:16px;font-size:12px;background:#fff;cursor:pointer;user-select:none;transition:all .12s}
+.fb-chip:hover{border-color:#059669;background:#F0FDF4}
+.fb-chip.selected{background:#ECFDF5;color:#047857;border-color:#059669;font-weight:700}
+.fb-chip .emoji{margin-right:3px}
+.fb-input,.fb-textarea{width:100%;padding:8px 10px;border:1px solid #E7E5E4;border-radius:8px;font-size:13px;font-family:inherit;margin-top:4px;background:#fff;color:#1C1917}
+.fb-textarea{resize:vertical;min-height:70px;line-height:1.5}
+.fb-input:focus,.fb-textarea:focus{outline:none;border-color:#059669}
+.fb-footer{padding:12px 20px;border-top:1px solid #E7E5E4;display:flex;gap:8px;justify-content:flex-end}
 </style>
 </head>
 <body>
@@ -210,6 +237,37 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(5,150,105,0.38) 5
     <button id="confirmBtn" class="btn" onclick="doConfirmFinal()">✓ 현재 버전을 최종 컨펌</button>
     <button id="reflectBtn" class="btn btn-green" onclick="doReflectToStyle()">🎨 스타일에 반영하기</button>
     <span id="final-status" class="chip muted"></span>
+  </div>
+</div>
+
+<!-- 집단지성 피드백 카드 (상시 인라인 — 생성 직후부터 언제든 남기기 가능) -->
+<div id="fb-card" class="card" style="display:none">
+  <h2>💬 집단지성 피드백</h2>
+  <p class="sub" style="margin-bottom:12px">이 결과가 어땠는지 남겨주세요. 누적된 피드백은 <b>1~2주마다 메인 엔진 프롬프트 업데이트</b>에 반영됩니다. 테마 "기타"에 반복 등장하는 입력은 정식 카테고리로 승격. <b>전부 선택사항</b> — 하나만 남겨도 됩니다.</p>
+
+  <div class="fb-section">점수 (1=별로, 5=훌륭)</div>
+
+  <div class="fb-question">주제 적합도 <small>주제를 얼마나 제대로 다뤘나</small></div>
+  <div class="fb-score-row" data-score="topic_fit"></div>
+
+  <div class="fb-question" style="margin-top:10px">스타일 일관성 <small>선택한 레퍼런스 스타일과 얼마나 맞나</small></div>
+  <div class="fb-score-row" data-score="style_consistency"></div>
+
+  <div class="fb-question" style="margin-top:10px">훅 강도 <small>첫 슬라이드가 사람을 멈추게 하나</small></div>
+  <div class="fb-score-row" data-score="hook_strength"></div>
+
+  <div class="fb-section">주제 분야 (복수 선택)</div>
+  <div id="fb-themes" class="fb-chip-grid"><div style="font-size:12px;color:#A8A29E">테마 로딩 중...</div></div>
+
+  <div class="fb-question" style="margin-top:10px">기타 주제 <small>목록에 없으면 직접 입력. 많이 쌓이면 정식 카테고리로 승격</small></div>
+  <input id="fb-theme-custom" class="fb-input" placeholder="예: 서비스 디자인, 팟캐스트, 교육 콘텐츠..." maxlength="300">
+
+  <div class="fb-section">자유 피드백</div>
+  <textarea id="fb-free" class="fb-textarea" placeholder="뭐가 좋았는지 / 뭐가 아쉬운지 / 다음 버전에 반영하고 싶은 방향. 여기 남긴 내용이 엔진 개선의 핵심 재료입니다." maxlength="2000"></textarea>
+
+  <div class="row" style="margin-top:14px;align-items:center">
+    <button id="fb-submit-btn" class="btn btn-green" onclick="submitFeedback()">💾 피드백 저장</button>
+    <span id="fb-status" class="chip muted"></span>
   </div>
 </div>
 
@@ -675,21 +733,119 @@ async function signOut(){
   location.reload();
 }
 
+const stylesMap = {};  // id → { name, analyzed, ... }
+
+function hexToRgbTriplet(hex){
+  const m = /^#?([a-fA-F0-9]{6})$/.exec(String(hex).trim());
+  if(!m) return null;
+  const n = parseInt(m[1], 16);
+  return `${(n>>16)&255}, ${(n>>8)&255}, ${n&255}`;
+}
+
+function extractAccentFromProfile(profile){
+  const colors = Array.isArray(profile?.color_signature) ? profile.color_signature : [];
+  // 1순위: 명시된 hex
+  for(const c of colors){
+    const hex = /#([a-fA-F0-9]{6})/.exec(String(c));
+    if(hex) return '#' + hex[1];
+  }
+  // 2순위: 색상명 → hex 매핑 (대략적)
+  const NAME_MAP = {
+    'black':'#1C1917','white':'#FAFAF9','green':'#059669','emerald':'#059669',
+    'blue':'#2563EB','red':'#DC2626','yellow':'#EAB308','pink':'#EC4899',
+    'purple':'#7C3AED','orange':'#EA580C','gray':'#57534E','grey':'#57534E',
+    'beige':'#D6C7A7','brown':'#78350F','navy':'#1E3A8A','teal':'#0D9488',
+  };
+  for(const c of colors){
+    const low = String(c).toLowerCase();
+    for(const [k,v] of Object.entries(NAME_MAP)){
+      if(low.includes(k)) return v;
+    }
+  }
+  return null;
+}
+
+function extractFontFromProfile(profile){
+  const typo = String(profile?.typography || '').toLowerCase();
+  if(/세리프|serif|명조/.test(typo)) {
+    return { heading: '"Noto Serif KR", Georgia, serif', body: '"Noto Serif KR", Georgia, serif', weight: 700 };
+  }
+  if(/손글씨|hand|script|cursive/.test(typo)) {
+    return { heading: '"Nanum Pen Script", "Gaegu", cursive', body: '-apple-system, "Noto Sans KR", sans-serif', weight: 700 };
+  }
+  if(/mono|코드|타자|typewriter/.test(typo)) {
+    return { heading: '"JetBrains Mono", ui-monospace, monospace', body: '-apple-system, "Noto Sans KR", sans-serif', weight: 700 };
+  }
+  if(/두꺼운|bold|heavy|진한/.test(typo)) {
+    return { heading: '-apple-system, "Noto Sans KR", sans-serif', body: '-apple-system, "Noto Sans KR", sans-serif', weight: 900 };
+  }
+  return null; // 기본값 유지
+}
+
+function darkenHex(hex, pct){
+  // pct: 0~1, 더 어둡게
+  const m = /^#?([a-fA-F0-9]{6})$/.exec(hex);
+  if(!m) return hex;
+  const n = parseInt(m[1], 16);
+  const r = Math.max(0, Math.round(((n>>16)&255) * (1-pct)));
+  const g = Math.max(0, Math.round(((n>>8)&255) * (1-pct)));
+  const b = Math.max(0, Math.round((n&255) * (1-pct)));
+  return '#' + ((r<<16)|(g<<8)|b).toString(16).padStart(6,'0');
+}
+
+function applyStyleToCSS(styleId){
+  const root = document.documentElement;
+  // 기본값으로 초기화
+  root.style.setProperty('--style-accent', '#059669');
+  root.style.setProperty('--style-accent-rgb', '5, 150, 105');
+  root.style.setProperty('--style-accent-dark', '#047857');
+  root.style.setProperty('--style-font-heading', '-apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, sans-serif');
+  root.style.setProperty('--style-font-body', '-apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, sans-serif');
+  root.style.setProperty('--style-heading-weight', '800');
+
+  const profile = stylesMap[styleId]?.analyzed;
+  if(!profile) return;
+
+  const accent = extractAccentFromProfile(profile);
+  if(accent){
+    const rgb = hexToRgbTriplet(accent);
+    if(rgb){
+      root.style.setProperty('--style-accent', accent);
+      root.style.setProperty('--style-accent-rgb', rgb);
+      root.style.setProperty('--style-accent-dark', darkenHex(accent, 0.15));
+    }
+  }
+  const font = extractFontFromProfile(profile);
+  if(font){
+    root.style.setProperty('--style-font-heading', font.heading);
+    root.style.setProperty('--style-font-body', font.body);
+    root.style.setProperty('--style-heading-weight', String(font.weight));
+  }
+}
+
 async function loadStyles(){
   const { data, error } = await supabase
     .from('styles')
-    .select('id, name, is_default, item_count')
+    .select('id, name, is_default, item_count, analyzed')
     .order('is_default', { ascending: false })
     .order('created_at', { ascending: true });
   if(error){ log('스타일 조회 실패: ' + error.message, 'err'); return; }
   const sel = document.getElementById('styleSelect');
   sel.innerHTML = '';
+  // stylesMap 갱신
+  for(const k of Object.keys(stylesMap)) delete stylesMap[k];
   for(const s of data){
+    stylesMap[s.id] = s;
     const opt = document.createElement('option');
     opt.value = s.id;
-    opt.textContent = `${s.name}${s.is_default ? ' (기본)' : ''} — ${s.item_count}개 레퍼런스`;
+    const hasProfile = s.analyzed && Object.keys(s.analyzed).length > 0;
+    opt.textContent = `${s.name}${s.is_default ? ' (기본)' : ''} — ${s.item_count}개 레퍼런스${hasProfile ? ' ✓' : ''}`;
     sel.appendChild(opt);
   }
+  // 선택 변경 시 CSS 변수 재주입
+  sel.onchange = () => applyStyleToCSS(sel.value);
+  // 초기 적용 (기본 스타일)
+  applyStyleToCSS(sel.value);
   log(`스타일 ${data.length}개 로드`, 'ok');
 }
 
@@ -749,10 +905,12 @@ async function doGenerate(){
     document.getElementById('reviewBtn').disabled = false;
     document.getElementById('statusChip').textContent = '✅ 완료 · 버전 ' + data.version;
     document.getElementById('statusChip').className = 'chip';
-    // reset feedback/final cards for new carousel
+    // 재생성용 큐레이션 카드는 숨김. 최종 승인 + 집단지성 피드백 카드는 생성 직후 상시 노출.
     document.getElementById('feedback-card').style.display = 'none';
-    document.getElementById('final-card').style.display = 'none';
+    document.getElementById('final-card').style.display = 'block';
+    document.getElementById('fb-card').style.display = 'block';
     document.getElementById('final-status').textContent = '';
+    loadExistingFeedback();  // 현재 generation에 남긴 피드백 있으면 미리 채움
     renderVersionsStrip();
     log('생성 완료 · carousel_id=' + data.carousel_id, 'ok');
   } catch(e){
@@ -922,6 +1080,150 @@ async function doConfirmFinal(){
   log('최종 컨펌 완료 · v' + lastResult.version, 'ok');
 }
 
+// ─ 피드백 수집 (집단지성 데이터) ─────────────────────────────
+let feedbackThemes = [];
+const fbState = {
+  scores: { topic_fit: null, style_consistency: null, hook_strength: null },
+  selectedSlugs: new Set(),
+};
+
+async function loadFeedbackThemes(){
+  const { data, error } = await supabase
+    .from('feedback_themes')
+    .select('slug, label, emoji, sort_order')
+    .eq('is_active', true)
+    .order('sort_order', { ascending: true });
+  if(error){ log('테마 로드 실패: ' + error.message, 'err'); return; }
+  feedbackThemes = data || [];
+  renderFeedbackChips();
+}
+
+function renderFeedbackChips(){
+  const box = document.getElementById('fb-themes');
+  if(!box) return;
+  if(feedbackThemes.length === 0){
+    box.innerHTML = '<div style="font-size:12px;color:#A8A29E">테마 없음</div>';
+    return;
+  }
+  box.innerHTML = feedbackThemes.map(t =>
+    `<div class="fb-chip" data-slug="${esc(t.slug)}" onclick="toggleFbChip('${esc(t.slug)}')"><span class="emoji">${esc(t.emoji || '')}</span>${esc(t.label)}</div>`
+  ).join('');
+  // 선택 상태 반영
+  box.querySelectorAll('.fb-chip').forEach(el => {
+    el.classList.toggle('selected', fbState.selectedSlugs.has(el.dataset.slug));
+  });
+}
+
+function toggleFbChip(slug){
+  if(fbState.selectedSlugs.has(slug)) fbState.selectedSlugs.delete(slug);
+  else fbState.selectedSlugs.add(slug);
+  renderFeedbackChips();
+}
+
+function renderFbScoreRows(){
+  for(const key of ['topic_fit', 'style_consistency', 'hook_strength']){
+    const row = document.querySelector(`.fb-score-row[data-score="${key}"]`);
+    if(!row) continue;
+    row.innerHTML = '';
+    for(let n=1; n<=5; n++){
+      const btn = document.createElement('button');
+      btn.className = 'fb-score-btn' + (fbState.scores[key] === n ? ' selected' : '');
+      btn.textContent = n;
+      btn.onclick = () => {
+        // 같은 값 다시 누르면 해제
+        fbState.scores[key] = fbState.scores[key] === n ? null : n;
+        renderFbScoreRows();
+      };
+      row.appendChild(btn);
+    }
+    // 범례 한 번만 추가
+    if(!row.nextElementSibling || !row.nextElementSibling.classList.contains('fb-score-legend')){
+      const legend = document.createElement('div');
+      legend.className = 'fb-score-legend';
+      legend.innerHTML = '<span>1 별로</span><span>3 보통</span><span>5 훌륭</span>';
+      row.parentNode.insertBefore(legend, row.nextSibling);
+    }
+  }
+}
+
+function resetFbState(){
+  fbState.scores = { topic_fit: null, style_consistency: null, hook_strength: null };
+  fbState.selectedSlugs = new Set();
+  const custom = document.getElementById('fb-theme-custom');
+  const free = document.getElementById('fb-free');
+  if(custom) custom.value = '';
+  if(free) free.value = '';
+}
+
+async function loadExistingFeedback(){
+  // 현재 generation에 유저가 이미 남긴 피드백이 있으면 폼에 채움 (수정 모드)
+  resetFbState();
+  if(!lastResult?.generation_id || !session) {
+    renderFbScoreRows();
+    renderFeedbackChips();
+    document.getElementById('fb-status').textContent = '';
+    return;
+  }
+  const { data: existing } = await supabase
+    .from('generation_feedback')
+    .select('*')
+    .eq('generation_id', lastResult.generation_id)
+    .eq('user_id', session.user.id)
+    .maybeSingle();
+  if(existing){
+    fbState.scores.topic_fit = existing.topic_fit_score;
+    fbState.scores.style_consistency = existing.style_consistency_score;
+    fbState.scores.hook_strength = existing.hook_strength_score;
+    if(Array.isArray(existing.theme_slugs)) existing.theme_slugs.forEach(s => fbState.selectedSlugs.add(s));
+    document.getElementById('fb-theme-custom').value = existing.theme_custom || '';
+    document.getElementById('fb-free').value = existing.free_feedback || '';
+    document.getElementById('fb-status').textContent = '✓ 저장됨 (수정 가능)';
+    document.getElementById('fb-status').className = 'chip';
+  } else {
+    document.getElementById('fb-status').textContent = '';
+  }
+  renderFbScoreRows();
+  renderFeedbackChips();
+}
+
+async function submitFeedback(){
+  if(!lastResult?.generation_id){ alert('generation 없음'); return; }
+  const btn = document.getElementById('fb-submit-btn');
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+  try {
+    if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+    const payload = {
+      generation_id: lastResult.generation_id,
+      topic_fit_score: fbState.scores.topic_fit,
+      style_consistency_score: fbState.scores.style_consistency,
+      hook_strength_score: fbState.scores.hook_strength,
+      theme_slugs: [...fbState.selectedSlugs],
+      theme_custom: document.getElementById('fb-theme-custom').value.trim() || null,
+      free_feedback: document.getElementById('fb-free').value.trim() || null,
+    };
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/submit-feedback`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    const json = await resp.json();
+    if(!resp.ok){
+      alert('저장 실패: ' + (json.error || resp.status));
+      return;
+    }
+    log('피드백 저장됨 · id=' + json.feedback?.id, 'ok');
+    document.getElementById('fb-status').textContent = '✓ 저장됨 · 엔진 개선 데이터에 반영됨';
+    document.getElementById('fb-status').className = 'chip';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 피드백 저장';
+  }
+}
+
 async function doReflectToStyle(){
   if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
   const styleId = document.getElementById('styleSelect').value;
@@ -960,6 +1262,7 @@ async function init(){
   document.getElementById('form-card').style.display = 'block';
   log('인증 OK', 'ok');
   await loadStyles();
+  await loadFeedbackThemes();
   // 탭으로 돌아왔을 때 스타일 목록 새로고침 (스타일 라이브러리에서 변경됐을 수 있음)
   document.addEventListener('visibilitychange', () => {
     if(document.visibilityState === 'visible' && session) loadStyles();

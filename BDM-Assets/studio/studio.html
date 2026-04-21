@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BDM Lab Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Newsreader:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ==== 디자인 토큰 — bigdatamarketinglab.com 과 동일 ==== */
+:root{
+  --color-bg:#0B0F14;
+  --color-surface:#111820;
+  --color-surface-alt:#1A2230;
+  --color-text:#EAEDF2;
+  --color-subtext:#8B95A5;
+  --color-muted:#505C6E;
+  --color-accent:#4C9EEB;
+  --color-accent-dim:#3A7FCC;
+  --color-accent-bg:rgba(76,158,235,0.08);
+  --color-border:#1E2A3A;
+  --color-success:#22C55E;
+  --color-warning:#F59E0B;
+  --color-danger:#EF4444;
+
+  --font-sans:'Outfit','Noto Sans KR',ui-sans-serif,system-ui,sans-serif;
+  --font-serif:'Newsreader','Noto Sans KR',ui-serif,Georgia,serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+
+  /* 스타일 프로필 주입용 (B단계) */
+  --style-accent:#4C9EEB;
+  --style-accent-rgb:76,158,235;
+  --style-font-heading:var(--font-sans);
+  --style-font-body:var(--font-sans);
+  --style-heading-weight:800;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* 스크롤바 — 메인 사이트와 동일 */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--color-bg)}
+::-webkit-scrollbar-thumb{background:#2A3545;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--color-muted)}
+::selection{background:var(--color-accent);color:#0B0F14}
+
+/* ==== 레이아웃 ==== */
+.topbar{border-bottom:1px solid var(--color-border);background:var(--color-bg);position:sticky;top:0;z-index:50}
+.topbar-inner{max-width:1240px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:20px}
+.brand{font-family:var(--font-sans);font-weight:800;letter-spacing:-0.02em;font-size:18px;color:var(--color-text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(76,158,235,0.5)}
+.brand .sub{color:var(--color-subtext);font-weight:500}
+.topbar-spacer{flex:1}
+.topbar a.nav-link{color:var(--color-subtext);text-decoration:none;font-size:13px;font-weight:500;padding:6px 10px;border-radius:6px}
+.topbar a.nav-link:hover{background:var(--color-surface);color:var(--color-text)}
+.user-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--color-border);border-radius:999px;font-size:12px;color:var(--color-subtext);background:var(--color-surface)}
+.user-chip.auth{color:var(--color-accent);border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
+
+.page{max-width:1240px;margin:0 auto;padding:24px 28px 96px}
+
+/* ==== 스텝 네비 ==== */
+.steps-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 28px;border-bottom:1px solid var(--color-border);padding-bottom:0}
+.step-tab{padding:14px 16px;background:transparent;border:none;color:var(--color-muted);text-align:left;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;transition:all .15s;display:flex;flex-direction:column;gap:3px}
+.step-tab:hover:not(:disabled){color:var(--color-subtext);background:var(--color-surface)}
+.step-tab:disabled{cursor:not-allowed;opacity:0.4}
+.step-tab .step-num{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:inherit}
+.step-tab .step-label{font-size:15px;font-weight:700;letter-spacing:-0.01em;color:inherit}
+.step-tab.active{color:var(--color-text);border-bottom-color:var(--color-accent)}
+.step-tab.active .step-num{color:var(--color-accent)}
+.step-tab.done{color:var(--color-subtext)}
+.step-tab.done .step-num::before{content:'✓ ';color:var(--color-success)}
+
+/* ==== 카드 & 섹션 ==== */
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:14px;padding:24px;margin-bottom:16px}
+.card-lg{padding:28px}
+.card h1,.card h2,.card h3{font-family:var(--font-sans);letter-spacing:-0.02em;margin:0 0 10px}
+.card h1{font-size:26px;font-weight:800}
+.card h2{font-size:19px;font-weight:700}
+.card h3{font-size:15px;font-weight:700;color:var(--color-subtext);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px}
+.card p{margin:0 0 10px;color:var(--color-subtext);font-size:14px;line-height:1.7}
+.card .lead{font-family:var(--font-serif);font-size:15px;color:var(--color-text);line-height:1.8;margin-bottom:16px}
+
+.section-title{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;gap:16px}
+.section-title h2{margin:0}
+.section-sub{font-size:12px;color:var(--color-muted);font-family:var(--font-mono)}
+
+.step-panel{display:none}
+.step-panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* 스텝 하단 네비 */
+.step-footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:20px;border-top:1px solid var(--color-border);gap:12px}
+.step-footer .spacer{flex:1}
+
+/* ==== 버튼 ==== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .12s;text-decoration:none}
+.btn:hover:not(:disabled){border-color:var(--color-accent-dim);color:var(--color-accent);background:var(--color-accent-bg)}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn-primary{background:var(--color-accent);color:#0B0F14;border-color:var(--color-accent)}
+.btn-primary:hover:not(:disabled){background:#6BB0F0;color:#0B0F14;border-color:#6BB0F0}
+.btn-ghost{background:transparent;color:var(--color-subtext);border-color:transparent}
+.btn-ghost:hover:not(:disabled){color:var(--color-text);background:var(--color-surface-alt)}
+.btn-danger{color:var(--color-danger)}
+.btn-danger:hover:not(:disabled){color:var(--color-danger);border-color:var(--color-danger);background:rgba(239,68,68,0.08)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px}
+.btn-lg{padding:14px 22px;font-size:15px;font-weight:700}
+
+/* ==== 폼 ==== */
+label{display:block;font-size:12px;font-weight:600;color:var(--color-subtext);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;margin-top:14px}
+label:first-of-type{margin-top:0}
+input[type=text],input:not([type]),input[type=url],input[type=number],textarea,select{width:100%;padding:11px 14px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;color:var(--color-text);font-family:inherit;font-size:14px;transition:border-color .12s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--color-accent)}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%238B95A5' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;-webkit-appearance:none;appearance:none;padding-right:36px}
+.hint{font-size:11px;color:var(--color-muted);margin-top:4px}
+.row{display:flex;gap:12px;align-items:flex-start}
+.row>*{flex:1}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+/* ==== 스타일 미리보기 ==== */
+.style-preview{display:flex;align-items:center;gap:16px;padding:14px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;margin-top:10px}
+.style-swatch{width:48px;height:48px;border-radius:10px;background:var(--style-accent);box-shadow:0 0 24px rgba(var(--style-accent-rgb),0.3)}
+.style-meta{flex:1;min-width:0}
+.style-meta .name{font-size:14px;font-weight:700;margin-bottom:2px}
+.style-meta .tone{font-size:12px;color:var(--color-subtext);line-height:1.5;font-family:var(--font-serif)}
+.style-meta .tokens{font-size:10px;color:var(--color-muted);font-family:var(--font-mono);margin-top:4px}
+
+/* ==== 상태 칩 ==== */
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;background:var(--color-surface-alt);color:var(--color-subtext);border:1px solid var(--color-border)}
+.chip.ok{color:var(--color-success);border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.08)}
+.chip.err{color:var(--color-danger);border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.08)}
+.chip.warn{color:var(--color-warning);border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.08)}
+.chip.accent{color:var(--color-accent);border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
+
+/* ==== 슬라이드 카드 (Step 2 텍스트 리스트) ==== */
+.slide-text{background:var(--color-bg);border:1px solid var(--color-border);border-radius:12px;padding:16px 18px;margin:10px 0;transition:border-color .12s}
+.slide-text.cover{border-left:3px solid var(--color-accent)}
+.slide-text.outro{border-left:3px solid var(--color-warning)}
+.slide-text-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.slide-label{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--color-muted);letter-spacing:1.5px;min-width:36px}
+.slide-tag{display:inline-block;padding:2px 9px;background:var(--color-surface-alt);color:var(--color-text);border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;border:1px solid var(--color-border)}
+.slide-tag.variant{background:var(--color-accent-bg);color:var(--color-accent);border-color:var(--color-accent-dim)}
+.slide-heading{font-family:var(--style-font-heading);font-size:17px;font-weight:var(--style-heading-weight);color:var(--color-text);margin-bottom:8px;line-height:1.35;letter-spacing:-0.01em}
+.slide-body{font-family:var(--style-font-body);font-size:13.5px;line-height:1.75;color:#C8CDD6;white-space:pre-wrap;word-break:keep-all}
+.slide-meta{margin-top:8px;font-size:11px;color:var(--color-muted);font-family:var(--font-mono)}
+
+/* 마크다운 파서용 */
+.slide-heading strong,.slide-body strong,.v-heading strong,.v-body strong{font-weight:900;color:var(--color-text)}
+.slide-heading em,.slide-body em,.v-heading em,.v-body em{font-style:italic}
+mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accent-rgb),0.35) 55%);color:inherit;padding:0 2px;border-radius:2px;font-weight:inherit}
+.visual-canvas .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accent-rgb),0.62) 55%);color:#fff}
+.visual-canvas.variant-light .v-text mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accent-rgb),0.32) 55%);color:#0B0F14}
+
+/* ==== 비주얼 슬라이드 그리드 (Step 3) ==== */
+.visual-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:8px}
+.visual-slide{background:var(--color-bg);border:1px solid var(--color-border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.visual-canvas{position:relative;aspect-ratio:4/5;background:#1A2230;overflow:hidden}
+.visual-canvas img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.visual-canvas .v-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--color-muted);font-size:12px;gap:6px;padding:12px;text-align:center}
+.visual-canvas .v-empty .big{font-size:22px}
+.visual-canvas .v-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,0.78) 100%)}
+.visual-canvas.variant-light .v-overlay{background:linear-gradient(to bottom, rgba(255,255,255,0.05) 30%, rgba(234,237,242,0.9) 90%)}
+.visual-canvas.variant-green .v-overlay{background:linear-gradient(to bottom, rgba(var(--style-accent-rgb),0) 30%, rgba(var(--style-accent-rgb),0.82) 100%)}
+.visual-canvas .v-tag{position:absolute;top:10px;left:10px;padding:3px 9px;background:rgba(17,24,32,0.88);color:var(--color-text);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;border-radius:4px;backdrop-filter:blur(4px)}
+.visual-canvas .v-num{position:absolute;top:10px;right:10px;padding:3px 8px;background:rgba(11,15,20,0.75);color:var(--color-subtext);font-size:10px;font-weight:700;border-radius:10px;font-family:var(--font-mono)}
+.visual-canvas .v-text{position:absolute;left:12px;right:12px;bottom:12px;color:#fff;z-index:2}
+.visual-canvas.variant-light .v-text{color:#0B0F14;text-shadow:none}
+.visual-canvas .v-heading{font-family:var(--style-font-heading);font-size:15px;font-weight:var(--style-heading-weight);line-height:1.25;letter-spacing:-0.01em;margin-bottom:4px;text-shadow:0 2px 10px rgba(0,0,0,0.5);word-break:keep-all}
+.visual-canvas .v-body{font-family:var(--style-font-body);font-size:10.5px;line-height:1.4;opacity:0.95;text-shadow:0 1px 6px rgba(0,0,0,0.5);word-break:keep-all;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.visual-canvas.variant-light .v-heading,.visual-canvas.variant-light .v-body{text-shadow:none}
+.visual-source{padding:7px 10px;font-size:10px;color:var(--color-muted);background:var(--color-surface);border-top:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;gap:4px;font-family:var(--font-mono)}
+.visual-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1px solid var(--color-border)}
+.visual-controls button{padding:8px 4px;background:var(--color-surface);border:none;border-right:1px solid var(--color-border);color:var(--color-subtext);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .1s}
+.visual-controls button:last-child{border-right:none}
+.visual-controls button:hover:not(:disabled){background:var(--color-surface-alt);color:var(--color-text)}
+.visual-controls button:disabled{opacity:0.35;cursor:not-allowed}
+.visual-controls button.loading{background:var(--color-accent);color:#0B0F14}
+.visual-controls button.active{color:var(--color-accent)}
+
+/* ==== 모달 (Pexels 검색) ==== */
+.modal-backdrop{position:fixed;inset:0;background:rgba(11,15,20,0.88);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:var(--color-surface);border:1px solid var(--color-border);border-radius:14px;max-width:900px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal-head h2{margin:0}
+.modal-body{padding:18px 22px;overflow-y:auto;flex:1}
+.pexels-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:14px}
+.pex-thumb{aspect-ratio:4/5;background:var(--color-bg);border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;position:relative}
+.pex-thumb img{width:100%;height:100%;object-fit:cover}
+.pex-thumb:hover{border-color:var(--color-accent)}
+.pex-thumb .credit{position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:rgba(0,0,0,0.7);color:#fff;font-size:9px;text-align:center}
+
+/* ==== 버전 히스토리 ==== */
+.versions-strip{display:flex;gap:6px;flex-wrap:wrap}
+.version-chip{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:var(--color-surface-alt);color:var(--color-subtext);border:1px solid var(--color-border);border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-mono);transition:all .1s}
+.version-chip:hover{color:var(--color-text);border-color:var(--color-accent-dim)}
+.version-chip.current{background:var(--color-accent);color:#0B0F14;border-color:var(--color-accent);cursor:default}
+
+/* ==== Gemini 평가 박스 ==== */
+.review-box{background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;padding:16px;margin-top:12px}
+.review-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.rev-score{text-align:center;padding:10px;background:var(--color-surface);border-radius:8px;border:1px solid var(--color-border)}
+.rev-score .label{font-size:10px;color:var(--color-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.rev-score .value{font-size:22px;font-weight:800;margin-top:2px;font-family:var(--font-sans)}
+.rev-score .value.hi{color:var(--color-success)}
+.rev-score .value.mid{color:var(--color-warning)}
+.rev-score .value.lo{color:var(--color-danger)}
+.rev-feedback{font-family:var(--font-serif);font-size:14px;line-height:1.8;color:#C8CDD6}
+
+/* ==== 피드백 큐레이션 (재생성용) ==== */
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;margin:6px 0;cursor:pointer;transition:all .12s}
+.check-row:hover{border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
+.check-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:var(--color-accent)}
+.check-row label{font-size:13px;color:#C8CDD6;cursor:pointer;margin:0;text-transform:none;letter-spacing:0;font-weight:500;line-height:1.55}
+
+/* ==== 피드백 수집 (Step 4) ==== */
+.fb-section{margin:16px 0 8px;font-size:11px;font-weight:700;color:var(--color-subtext);text-transform:uppercase;letter-spacing:1.5px}
+.fb-question{font-size:13.5px;color:var(--color-text);margin-bottom:8px;font-weight:500}
+.fb-question small{color:var(--color-muted);font-weight:400;margin-left:8px}
+.fb-score-row{display:flex;gap:6px;margin-bottom:4px}
+.fb-score-btn{flex:1;padding:10px 0;border:1px solid var(--color-border);background:var(--color-bg);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;color:var(--color-subtext);transition:all .12s;font-family:inherit}
+.fb-score-btn:hover{border-color:var(--color-accent-dim);color:var(--color-text);background:var(--color-accent-bg)}
+.fb-score-btn.selected{background:var(--color-accent);color:#0B0F14;border-color:var(--color-accent)}
+.fb-score-legend{display:flex;justify-content:space-between;font-size:10px;color:var(--color-muted);margin-top:4px;font-family:var(--font-mono)}
+.fb-chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fb-chip{padding:7px 12px;border:1px solid var(--color-border);border-radius:20px;font-size:12px;background:var(--color-bg);color:var(--color-subtext);cursor:pointer;user-select:none;transition:all .1s;font-weight:500}
+.fb-chip:hover{border-color:var(--color-accent-dim);color:var(--color-text)}
+.fb-chip.selected{background:var(--color-accent-bg);color:var(--color-accent);border-color:var(--color-accent);font-weight:700}
+
+/* ==== 로그 (개발용 펼침) ==== */
+.log{margin-top:12px;padding:12px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:8px;font-size:11px;font-family:var(--font-mono);color:var(--color-subtext);max-height:200px;overflow-y:auto}
+.log-line{margin:2px 0;line-height:1.5}
+.log-err{color:var(--color-danger)}
+.log-ok{color:var(--color-success)}
+details>summary{cursor:pointer;color:var(--color-muted);font-size:12px;margin-top:14px;font-family:var(--font-mono);padding:4px 0}
+details>summary:hover{color:var(--color-subtext)}
+details pre{background:var(--color-bg);border:1px solid var(--color-border);border-radius:8px;padding:12px;overflow-x:auto;font-size:11px;font-family:var(--font-mono);color:var(--color-subtext);margin-top:6px}
+
+/* ==== 알림 bar ==== */
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin:10px 0;border:1px solid}
+.alert-info{background:var(--color-accent-bg);border-color:var(--color-accent-dim);color:var(--color-text)}
+.alert-warn{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.3);color:var(--color-text)}
+.alert-err{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.3);color:var(--color-text)}
+
+.muted{color:var(--color-muted)}
+.mt-0{margin-top:0}
+
+@media (max-width:720px){
+  .topbar-inner{padding:12px 16px}
+  .page{padding:16px 16px 80px}
+  .steps-nav{grid-template-columns:repeat(4,1fr);gap:4px}
+  .step-tab{padding:10px 8px}
+  .step-tab .step-label{font-size:12px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .review-scores{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="studio.html" class="brand"><span class="dot"></span> BDM Lab <span class="sub">Studio</span></a>
+    <div class="topbar-spacer"></div>
+    <a href="styles.html" class="nav-link">🎨 스타일 라이브러리</a>
+    <a href="test-generate.html" class="nav-link">🧪 개발자</a>
+    <span id="auth-bar"><span class="user-chip">인증 확인 중...</span></span>
+  </div>
+</header>
+
+<div class="page">
+
+<!-- ============ 스텝 네비 ============ -->
+<nav class="steps-nav" id="steps-nav">
+  <button class="step-tab active" data-step="1" onclick="goStep(1)">
+    <span class="step-num">STEP 01</span>
+    <span class="step-label">입력</span>
+  </button>
+  <button class="step-tab" data-step="2" onclick="goStep(2)" disabled>
+    <span class="step-num">STEP 02</span>
+    <span class="step-label">텍스트</span>
+  </button>
+  <button class="step-tab" data-step="3" onclick="goStep(3)" disabled>
+    <span class="step-num">STEP 03</span>
+    <span class="step-label">이미지</span>
+  </button>
+  <button class="step-tab" data-step="4" onclick="goStep(4)" disabled>
+    <span class="step-num">STEP 04</span>
+    <span class="step-label">완료 · 피드백</span>
+  </button>
+</nav>
+
+<!-- ============ STEP 1: 입력 ============ -->
+<section class="step-panel active" id="panel-1">
+  <div class="card card-lg">
+    <div class="section-title">
+      <h1>어떤 캐러셀을 만들까요?</h1>
+      <span class="section-sub">Step 01 · Input</span>
+    </div>
+    <p class="lead">주제와 스타일만 고르면 됩니다. 생성 엔진은 당신의 스타일 레퍼런스를 Claude 프롬프트에 자동 주입해서 일관된 톤으로 9슬라이드를 만듭니다.</p>
+
+    <label>스타일 레퍼런스 *</label>
+    <select id="styleSelect"></select>
+    <div id="style-preview" class="style-preview" style="display:none">
+      <div class="style-swatch" id="sp-swatch"></div>
+      <div class="style-meta">
+        <div class="name" id="sp-name">—</div>
+        <div class="tone" id="sp-tone">—</div>
+        <div class="tokens" id="sp-tokens">—</div>
+      </div>
+    </div>
+
+    <label>주제 / 제목 *</label>
+    <input id="topic" placeholder="예: 인스타 알고리즘이 당신의 팔로워를 숨기는 이유">
+
+    <label>본문 <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(선택 — 비우면 제목만으로 생성)</span></label>
+    <textarea id="body_text" placeholder="기초 자료/근거/주장을 여기에 붙여넣으세요."></textarea>
+
+    <div class="grid-3" style="margin-top:8px">
+      <div><label>카테고리</label><input id="category" placeholder="마케팅 / 연구 / 플랫폼..."></div>
+      <div><label>톤</label><input id="tone" placeholder="학술적 / 가벼운 / 도발적..."></div>
+      <div><label>분량</label>
+        <select id="length">
+          <option value="5-7">5-7 슬라이드</option>
+          <option value="7-10" selected>7-10 슬라이드</option>
+          <option value="10-12">10-12 슬라이드</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="step-footer">
+      <div class="spacer"></div>
+      <button class="btn btn-primary btn-lg" id="generateBtn" onclick="doGenerate()">🚀 생성 시작 →</button>
+      <span id="gen-status" class="chip"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEP 2: 텍스트 ============ -->
+<section class="step-panel" id="panel-2">
+  <div class="card card-lg">
+    <div class="section-title">
+      <h1>텍스트 슬라이드 <span id="v-label" class="chip accent" style="font-size:12px;vertical-align:middle">v1</span></h1>
+      <span class="section-sub">Step 02 · Text</span>
+    </div>
+    <p>Claude가 생성한 9슬라이드. 괜찮으면 다음 단계, 아쉬우면 Gemini로 평가받고 피드백 선택해서 재생성.</p>
+
+    <div id="versions-wrap" style="display:none;margin:14px 0">
+      <h3>버전 히스토리 <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(클릭해서 전환)</span></h3>
+      <div id="versions-list" class="versions-strip"></div>
+    </div>
+
+    <div id="preview"></div>
+
+    <details><summary>원본 JSON 보기</summary><pre id="output"></pre></details>
+  </div>
+
+  <div class="card">
+    <h3>📋 Gemini 자동 평가</h3>
+    <p style="margin:0 0 10px">4항목 스코어 + 개선 제안. 재생성 시 이 제안을 선택해서 반영할 수 있습니다.</p>
+    <div class="row" style="align-items:center">
+      <div style="flex:1"></div>
+      <button class="btn" id="reviewBtn" onclick="doReview()">📋 평가 받기</button>
+      <span id="rev-status" class="chip"></span>
+    </div>
+    <div id="reviewBox" style="display:none" class="review-box"></div>
+    <details id="reviewRawWrap" style="display:none"><summary>평가 원본 JSON</summary><pre id="reviewOutput"></pre></details>
+  </div>
+
+  <div class="card" id="regen-card" style="display:none">
+    <h3>🔄 피드백 반영 → 재생성</h3>
+    <p>Gemini 제안 중 반영할 것을 체크하거나, 자유 지시 입력.</p>
+    <div id="suggestList"></div>
+    <label style="margin-top:14px">자유 지시 (선택)</label>
+    <textarea id="regenText" placeholder="더 강한 훅 / 사례 추가 / 더 짧게 ..."></textarea>
+    <div class="step-footer">
+      <button class="btn btn-ghost" onclick="goStep(1)">← Step 1</button>
+      <div class="spacer"></div>
+      <button class="btn" id="regenBtn" onclick="doRegenerate()">🔄 피드백 반영 재생성</button>
+      <span id="regen-status" class="chip"></span>
+    </div>
+  </div>
+
+  <div class="step-footer" style="padding:0 4px">
+    <button class="btn btn-ghost" onclick="goStep(1)">← 입력 수정</button>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" onclick="goStep(3)">이미지 작업 →</button>
+  </div>
+</section>
+
+<!-- ============ STEP 3: 이미지 ============ -->
+<section class="step-panel" id="panel-3">
+  <div class="card card-lg">
+    <div class="section-title">
+      <h1>슬라이드 이미지</h1>
+      <span class="section-sub">Step 03 · Visual</span>
+    </div>
+    <p>1080×1350 미리보기. 각 슬라이드마다 <b>🎨 AI 생성</b> (Replicate Flux, 스타일 자동 반영) / <b>🖼 Pexels</b> (스톡) / <b>📤 업로드</b>. <br>또는 아래 <b>⚡ 한 방 생성</b>으로 9장 전부 AI 일괄 생성 (rate limit 자동 우회).</p>
+
+    <div class="alert alert-info" id="rate-alert" style="display:none">
+      <b>ℹ️ Replicate 크레딧 확인</b>: 잔액 $5 미만이면 throttle 걸려 일괄 생성이 느려집니다. <a href="https://replicate.com/account/billing" target="_blank" style="color:var(--color-accent)">크레딧 충전</a> 권장.
+    </div>
+
+    <div id="visual-grid" class="visual-grid"></div>
+
+    <div class="step-footer">
+      <button class="btn btn-ghost" onclick="goStep(2)">← 텍스트로</button>
+      <div class="spacer"></div>
+      <button class="btn" id="autoGenBtn" onclick="autoGenerateAllImages()" disabled>⚡ 한 방 생성 (빈 슬라이드 AI 일괄)</button>
+      <span id="autogen-status" class="chip"></span>
+      <button class="btn btn-primary" onclick="goStep(4)">완료 단계 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEP 4: 완료 · 피드백 ============ -->
+<section class="step-panel" id="panel-4">
+
+  <div class="card card-lg">
+    <div class="section-title">
+      <h1>최종 승인</h1>
+      <span class="section-sub">Step 04 · Publish</span>
+    </div>
+    <p>만족스러운 버전이면 컨펌하고, 잘 된 결과는 스타일 라이브러리에 반영해 다음 생성의 레퍼런스로.</p>
+
+    <div class="row" style="align-items:center">
+      <div style="flex:1"></div>
+      <button class="btn" id="confirmBtn" onclick="doConfirmFinal()">✓ 현재 버전 최종 컨펌</button>
+      <button class="btn btn-primary" id="reflectBtn" onclick="doReflectToStyle()">🎨 스타일에 반영하기</button>
+      <span id="final-status" class="chip"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📊 포스팅 성과 등록 <span class="chip warn" style="margin-left:6px">Coming Soon</span></h3>
+    <p class="mt-0">컨펌 후 실제 인스타 포스팅하시면 URL + 게시 시각을 등록하세요. 3일/7일 후 조회·저장·공유 수치를 넣으면 어떤 스타일·주제가 잘 먹히는지 집계됩니다. (다음 작업에서 구현)</p>
+  </div>
+
+  <div class="card card-lg">
+    <div class="section-title">
+      <h2>💬 집단지성 피드백</h2>
+      <span class="chip accent">항상 수정 가능</span>
+    </div>
+    <p>이 결과가 어땠는지 남겨주세요. 누적된 피드백은 <b>1~2주마다 메인 엔진 프롬프트 업데이트</b>에 반영됩니다. 테마 "기타"에 반복 등장하는 입력은 정식 카테고리로 승격됩니다. 전부 선택사항.</p>
+
+    <div class="fb-section">점수 (1 별로 · 5 훌륭)</div>
+
+    <div class="fb-question">주제 적합도 <small>주제를 얼마나 제대로 다뤘나</small></div>
+    <div class="fb-score-row" data-score="topic_fit"></div>
+    <div class="fb-score-legend"><span>1 별로</span><span>3 보통</span><span>5 훌륭</span></div>
+
+    <div class="fb-question" style="margin-top:14px">스타일 일관성 <small>레퍼런스 스타일과 얼마나 맞나</small></div>
+    <div class="fb-score-row" data-score="style_consistency"></div>
+
+    <div class="fb-question" style="margin-top:14px">훅 강도 <small>첫 슬라이드가 사람을 멈추게 하나</small></div>
+    <div class="fb-score-row" data-score="hook_strength"></div>
+
+    <div class="fb-section">주제 분야 (복수 선택)</div>
+    <div id="fb-themes" class="fb-chip-grid"><div class="muted" style="font-size:12px">테마 로딩 중...</div></div>
+
+    <div class="fb-question" style="margin-top:14px">기타 주제 <small>목록에 없으면 직접 입력 · 많이 쌓이면 정식 카테고리로 승격</small></div>
+    <input id="fb-theme-custom" placeholder="예: 서비스 디자인, 팟캐스트, 교육 콘텐츠..." maxlength="300">
+
+    <div class="fb-section">자유 피드백</div>
+    <textarea id="fb-free" placeholder="뭐가 좋았는지 / 뭐가 아쉬운지 / 다음 버전에 반영하고 싶은 방향. 여기 남긴 내용이 엔진 개선의 핵심 재료입니다." maxlength="2000"></textarea>
+
+    <div class="step-footer">
+      <button class="btn btn-ghost" onclick="goStep(3)">← 이미지로</button>
+      <div class="spacer"></div>
+      <button class="btn btn-primary btn-lg" id="fb-submit-btn" onclick="submitFeedback()">💾 피드백 저장</button>
+      <span id="fb-status" class="chip"></span>
+    </div>
+  </div>
+
+  <details>
+    <summary>디버그 로그</summary>
+    <div id="logBox" class="log"><div class="log-line">[log] 시작...</div></div>
+  </details>
+</section>
+
+</div>
+
+<!-- ============ Pexels 모달 ============ -->
+<div id="pexels-modal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="modal-head">
+      <div style="flex:1">
+        <h2>🖼 Pexels 이미지 선택</h2>
+        <div class="muted" style="font-size:12px;margin-top:2px">슬라이드 <span id="pex-slide-idx"></span></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closePexelsModal()">✕ 닫기</button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <input id="pex-keyword" placeholder="검색 키워드 (영어 권장)">
+        <button class="btn btn-primary btn-sm" onclick="searchPexelsForSlide()">검색</button>
+      </div>
+      <div id="pex-results" class="pexels-results">
+        <div class="muted" style="grid-column:1/-1;font-size:13px">검색 키워드 입력 후 검색하세요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="hidden-upload" accept="image/png,image/jpeg,image/webp" style="display:none">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ============================================================
+ * BDM Lab Studio — Step-by-Step UI
+ * 디자인: bigdatamarketinglab.com 토큰 공유
+ * ============================================================ */
+
+const SUPABASE_URL = 'https://mnynajxjgjidnojxsafr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_I9Jf-KnpKOnLDDNoMq0E8A_oZ1E7lLt';
+
+let supabase, session;
+let lastResult = null;           // { generation_id, carousel_id, version, output, ... }
+let lastReview = null;
+let slideMediaMap = {};          // slide_index → media entry
+let versionHistory = [];
+let currentCarouselId = null;
+const stylesMap = {};            // id → { name, analyzed, ... }
+let feedbackThemes = [];
+const fbState = {
+  scores: { topic_fit: null, style_consistency: null, hook_strength: null },
+  selectedSlugs: new Set(),
+};
+let pexelsContext = { slide_index: null, keyword: '' };
+
+/* ---- Utils ---- */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function mdInline(s){
+  let out = esc(s);
+  out = out.replace(/\{\{([^{}\n]+)\}\}/g, '<mark class="hl">$1</mark>');
+  out = out.replace(/\*\*([^\n*]+?)\*\*/g, '<strong>$1</strong>');
+  out = out.replace(/(^|[^*])\*([^\n*]+?)\*(?!\*)/g, '$1<em>$2</em>');
+  return out;
+}
+function log(msg, kind){
+  const box = $('logBox'); if(!box) return;
+  const el = document.createElement('div');
+  el.className = 'log-line' + (kind === 'err' ? ' log-err' : kind === 'ok' ? ' log-ok' : '');
+  const t = new Date().toTimeString().slice(0,8);
+  el.textContent = `[${t}] ${msg}`;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+function setChip(el, text, cls){
+  if(!el) return;
+  el.textContent = text || '';
+  el.className = 'chip' + (cls ? ' ' + cls : '');
+}
+async function ensureFreshSession(){
+  const { data: { session: s } } = await supabase.auth.getSession();
+  session = s; return !!s;
+}
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+/* ==================== 스텝 네비 ==================== */
+function goStep(n){
+  const tab = document.querySelector(`.step-tab[data-step="${n}"]`);
+  if(tab && tab.disabled) return;
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  $('panel-' + n).classList.add('active');
+  if(tab) tab.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function unlockStep(n){
+  const tab = document.querySelector(`.step-tab[data-step="${n}"]`);
+  if(tab) tab.disabled = false;
+}
+function markStepDone(n){
+  const tab = document.querySelector(`.step-tab[data-step="${n}"]`);
+  if(tab) tab.classList.add('done');
+}
+
+/* ==================== 스타일 프로필 → CSS 주입 (B) ==================== */
+function hexToRgbTriplet(hex){
+  const m = /^#?([a-fA-F0-9]{6})$/.exec(String(hex).trim());
+  if(!m) return null;
+  const n = parseInt(m[1], 16);
+  return `${(n>>16)&255}, ${(n>>8)&255}, ${n&255}`;
+}
+function extractAccentFromProfile(profile){
+  const colors = Array.isArray(profile?.color_signature) ? profile.color_signature : [];
+  for(const c of colors){
+    const hex = /#([a-fA-F0-9]{6})/.exec(String(c));
+    if(hex) return '#' + hex[1];
+  }
+  const NAME_MAP = {
+    'black':'#1C1917','white':'#FAFAF9','green':'#22C55E','emerald':'#059669',
+    'blue':'#4C9EEB','red':'#EF4444','yellow':'#EAB308','pink':'#EC4899',
+    'purple':'#A855F7','orange':'#F97316','gray':'#6B7280','grey':'#6B7280',
+    'beige':'#D6C7A7','brown':'#78350F','navy':'#1E3A8A','teal':'#0D9488',
+  };
+  for(const c of colors){
+    const low = String(c).toLowerCase();
+    for(const [k,v] of Object.entries(NAME_MAP)){
+      if(low.includes(k)) return v;
+    }
+  }
+  return null;
+}
+function extractFontFromProfile(profile){
+  const typo = String(profile?.typography || '').toLowerCase();
+  if(/세리프|serif|명조/.test(typo))   return { heading: 'Newsreader, "Noto Serif KR", Georgia, serif', body: 'Newsreader, "Noto Serif KR", Georgia, serif', weight: 700 };
+  if(/손글씨|hand|script|cursive/.test(typo)) return { heading: '"Nanum Pen Script", "Gaegu", cursive', body: '"Noto Sans KR", sans-serif', weight: 700 };
+  if(/mono|코드|타자/.test(typo))       return { heading: '"JetBrains Mono", ui-monospace, monospace', body: '"Noto Sans KR", sans-serif', weight: 700 };
+  if(/두꺼운|bold|heavy|진한/.test(typo))return { heading: 'Outfit, "Noto Sans KR", sans-serif', body: 'Outfit, "Noto Sans KR", sans-serif', weight: 900 };
+  return null;
+}
+function applyStyleToCSS(styleId){
+  const root = document.documentElement;
+  root.style.setProperty('--style-accent', '#4C9EEB');
+  root.style.setProperty('--style-accent-rgb', '76, 158, 235');
+  root.style.setProperty('--style-font-heading', "'Outfit','Noto Sans KR',sans-serif");
+  root.style.setProperty('--style-font-body', "'Outfit','Noto Sans KR',sans-serif");
+  root.style.setProperty('--style-heading-weight', '800');
+
+  const style = stylesMap[styleId];
+  if(!style?.analyzed){ renderStylePreview(style, null, null); return; }
+
+  const accent = extractAccentFromProfile(style.analyzed);
+  if(accent){
+    const rgb = hexToRgbTriplet(accent);
+    if(rgb){
+      root.style.setProperty('--style-accent', accent);
+      root.style.setProperty('--style-accent-rgb', rgb);
+    }
+  }
+  const font = extractFontFromProfile(style.analyzed);
+  if(font){
+    root.style.setProperty('--style-font-heading', font.heading);
+    root.style.setProperty('--style-font-body', font.body);
+    root.style.setProperty('--style-heading-weight', String(font.weight));
+  }
+  renderStylePreview(style, accent, font);
+}
+function renderStylePreview(style, accent, font){
+  const wrap = $('style-preview');
+  if(!style){ wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+  $('sp-name').textContent = style.name + (style.is_default ? ' (기본)' : '');
+  const profile = style.analyzed || {};
+  $('sp-tone').textContent = profile.overall_tone || '스타일 분석 전 — 스타일 라이브러리에서 🤖 분석하기 실행하면 더 정확해집니다.';
+  const tokens = [];
+  if(accent) tokens.push(`accent ${accent}`);
+  if(font?.heading) tokens.push(`font ${font.heading.split(',')[0].replace(/['"]/g,'')}`);
+  if(Array.isArray(profile.color_signature) && profile.color_signature.length) tokens.push('colors: ' + profile.color_signature.slice(0,3).join(', '));
+  $('sp-tokens').textContent = tokens.join(' · ') || '—';
+}
+
+/* ==================== 스타일 로드 ==================== */
+async function loadStyles(){
+  const { data, error } = await supabase
+    .from('styles')
+    .select('id, name, is_default, item_count, analyzed')
+    .order('is_default', { ascending: false })
+    .order('created_at', { ascending: true });
+  if(error){ log('스타일 조회 실패: ' + error.message, 'err'); return; }
+  const sel = $('styleSelect');
+  sel.innerHTML = '';
+  for(const k of Object.keys(stylesMap)) delete stylesMap[k];
+  for(const s of data || []){
+    stylesMap[s.id] = s;
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    const hasProfile = s.analyzed && Object.keys(s.analyzed).length > 0;
+    opt.textContent = `${s.name}${s.is_default ? ' (기본)' : ''} — ${s.item_count}개 레퍼런스${hasProfile ? ' ✓' : ' ·분석 전'}`;
+    sel.appendChild(opt);
+  }
+  sel.onchange = () => applyStyleToCSS(sel.value);
+  applyStyleToCSS(sel.value);
+  log(`스타일 ${(data||[]).length}개 로드`, 'ok');
+}
+
+/* ==================== 생성 ==================== */
+async function doGenerate(){
+  const topic = $('topic').value.trim();
+  if(!topic){ alert('주제 입력 필요'); return; }
+  const btn = $('generateBtn');
+  btn.disabled = true;
+  setChip($('gen-status'), '생성 중... (30–60초)', 'warn');
+  if(!(await ensureFreshSession())){ alert('세션 만료. 다시 로그인'); btn.disabled = false; return; }
+
+  const payload = {
+    topic,
+    body_text: $('body_text').value,
+    category: $('category').value,
+    tone: $('tone').value,
+    length: $('length').value,
+    style_id: $('styleSelect').value || null,
+    mode: 'generate',
+  };
+  log('POST /generate-carousel ...');
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-carousel`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json();
+    if(!resp.ok){
+      alert('생성 실패 (' + resp.status + '): ' + (data.error || JSON.stringify(data)));
+      setChip($('gen-status'), '실패', 'err');
+      return;
+    }
+    lastResult = data;
+    currentCarouselId = data.carousel_id;
+    versionHistory = [{ version: data.version, generation_id: data.generation_id, output: data.output, review: null, slide_media: [] }];
+    slideMediaMap = {};
+    $('output').textContent = JSON.stringify(data.output, null, 2);
+    renderCarousel(data.output);
+    renderVisualGrid(data.output);
+    renderVersionsStrip();
+    $('v-label').textContent = 'v' + data.version;
+    setChip($('gen-status'), '✓ 완료 v' + data.version, 'ok');
+    log('생성 완료 · carousel_id=' + data.carousel_id, 'ok');
+
+    // 스텝 해금 + 이동
+    unlockStep(2); unlockStep(3); unlockStep(4);
+    markStepDone(1);
+    goStep(2);
+
+    // Step 4 피드백 기존 로드
+    loadExistingFeedback();
+  } catch(e){
+    log('예외: ' + e.message, 'err');
+    alert('네트워크 에러: ' + e.message);
+    setChip($('gen-status'), '에러', 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderCarousel(out){
+  const preview = $('preview');
+  if(!out){ preview.innerHTML = '<p class="muted">출력 없음</p>'; return; }
+  let html = '';
+  if(out.cover) html += renderSlideText(out.cover, 0, 'cover');
+  if(Array.isArray(out.slides)) out.slides.forEach((s,i) => { html += renderSlideText(s, i+1, ''); });
+  if(out.outro) html += renderOutro(out.outro);
+  preview.innerHTML = html;
+}
+function renderSlideText(slide, num, cls){
+  const tag = slide.tag ? `<span class="slide-tag">${esc(slide.tag)}</span>` : '';
+  const variant = slide.variant ? `<span class="slide-tag variant">${esc(slide.variant)}</span>` : '';
+  const heading = slide.heading ? `<div class="slide-heading">${mdInline(slide.heading)}</div>` : '';
+  const body = slide.body ? `<div class="slide-body">${mdInline(slide.body)}</div>` : '';
+  const kw = slide.video_keyword ? `<div class="slide-meta">🎬 ${esc(slide.video_keyword)}</div>` : '';
+  const label = num === 0 ? 'COVER' : num === -1 ? 'OUTRO' : '#' + String(num).padStart(2,'0');
+  return `<div class="slide-text ${cls}">
+    <div class="slide-text-head"><span class="slide-label">${label}</span>${tag}${variant}</div>
+    ${heading}${body}${kw}
+  </div>`;
+}
+function renderOutro(o){
+  if(!o) return '';
+  const rows = [
+    ['brand_sub', o.brand_sub],
+    ['closing', o.closing],
+    ['cta', o.cta],
+    ['links', Array.isArray(o.links) ? o.links.join(', ') : o.links],
+  ].filter(([,v]) => v).map(([k,v]) => `<div class="slide-meta"><b style="color:var(--color-muted)">${k}</b> &nbsp; ${mdInline(v)}</div>`).join('');
+  return `<div class="slide-text outro"><div class="slide-text-head"><span class="slide-label">OUTRO</span></div>${rows}</div>`;
+}
+
+/* ==================== 버전 히스토리 ==================== */
+function renderVersionsStrip(){
+  const wrap = $('versions-wrap');
+  const list = $('versions-list');
+  if(versionHistory.length <= 1){ wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  list.innerHTML = versionHistory.map(v =>
+    `<span class="version-chip${v.generation_id === lastResult.generation_id ? ' current' : ''}" onclick="switchVersion('${v.generation_id}')">v${v.version}</span>`
+  ).join('');
+}
+function switchVersion(genId){
+  const v = versionHistory.find(x => x.generation_id === genId);
+  if(!v) return;
+  lastResult = { ...lastResult, version: v.version, generation_id: v.generation_id, output: v.output };
+  slideMediaMap = {};
+  (v.slide_media || []).forEach(m => { slideMediaMap[m.index] = m; });
+  $('output').textContent = JSON.stringify(v.output, null, 2);
+  renderCarousel(v.output);
+  renderVisualGrid(v.output);
+  renderVersionsStrip();
+  $('v-label').textContent = 'v' + v.version;
+  loadExistingFeedback();
+}
+
+/* ==================== Gemini 평가 ==================== */
+async function doReview(){
+  if(!lastResult?.output){ alert('먼저 생성하세요'); return; }
+  const btn = $('reviewBtn');
+  btn.disabled = true;
+  setChip($('rev-status'), '평가 중...', 'warn');
+  if(!(await ensureFreshSession())){ alert('세션 만료'); btn.disabled = false; return; }
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/review-carousel`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ generation_id: lastResult.generation_id }),
+    });
+    const data = await resp.json();
+    if(!resp.ok){ alert('평가 실패: ' + (data.error || resp.status)); setChip($('rev-status'), '실패', 'err'); return; }
+    lastReview = data;
+    renderReview(data);
+    setChip($('rev-status'), '✓ 완료', 'ok');
+    // 재생성 카드 노출
+    $('regen-card').style.display = 'block';
+    renderSuggestions(data);
+  } catch(e){ alert('네트워크: ' + e.message); setChip($('rev-status'), '에러', 'err'); }
+  finally { btn.disabled = false; }
+}
+function renderReview(d){
+  const box = $('reviewBox'); box.style.display = 'block';
+  const cls = (n) => n >= 8 ? 'hi' : n >= 6 ? 'mid' : 'lo';
+  box.innerHTML = `
+    <div class="review-scores">
+      ${['hook','data','flow','cta'].map(k => `
+        <div class="rev-score">
+          <div class="label">${k}</div>
+          <div class="value ${cls(d.ratings?.[k+'_score'] ?? 0)}">${d.ratings?.[k+'_score'] ?? '—'}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="rev-feedback">${mdInline(d.feedback || '')}</div>
+  `;
+  $('reviewOutput').textContent = JSON.stringify(d, null, 2);
+  $('reviewRawWrap').style.display = 'block';
+}
+function renderSuggestions(d){
+  const box = $('suggestList');
+  const arr = Array.isArray(d.suggestions) ? d.suggestions : [];
+  if(arr.length === 0){ box.innerHTML = '<p class="muted">Gemini 제안 없음. 아래 자유 지시로 재생성하세요.</p>'; return; }
+  box.innerHTML = arr.map((s, i) => `
+    <div class="check-row" onclick="document.getElementById('sug-${i}').click()">
+      <input type="checkbox" id="sug-${i}" data-text="${esc(s)}">
+      <label for="sug-${i}">${esc(s)}</label>
+    </div>
+  `).join('');
+}
+
+/* ==================== 재생성 ==================== */
+async function doRegenerate(){
+  if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
+  const selected = Array.from(document.querySelectorAll('#suggestList input[type=checkbox]:checked')).map(c => c.dataset.text);
+  const custom = $('regenText').value.trim();
+  if(selected.length === 0 && !custom){ alert('제안 체크 또는 자유 지시 입력 필요'); return; }
+
+  const btn = $('regenBtn');
+  btn.disabled = true;
+  setChip($('regen-status'), '재생성 중...', 'warn');
+  if(!(await ensureFreshSession())){ alert('세션 만료'); btn.disabled = false; return; }
+
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-carousel`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        topic: $('topic').value,
+        body_text: $('body_text').value,
+        category: $('category').value,
+        tone: $('tone').value,
+        length: $('length').value,
+        style_id: $('styleSelect').value || null,
+        mode: 'regenerate',
+        previous_generation_id: lastResult.generation_id,
+        previous_output: lastResult.output,
+        selected_suggestions: selected,
+        custom_instruction: custom || null,
+        carousel_id: currentCarouselId,
+      }),
+    });
+    const data = await resp.json();
+    if(!resp.ok){ alert('재생성 실패: ' + (data.error || resp.status)); setChip($('regen-status'), '실패', 'err'); return; }
+    lastResult = data;
+    versionHistory.push({ version: data.version, generation_id: data.generation_id, output: data.output, review: null, slide_media: [] });
+    slideMediaMap = {};
+    $('output').textContent = JSON.stringify(data.output, null, 2);
+    renderCarousel(data.output);
+    renderVisualGrid(data.output);
+    renderVersionsStrip();
+    $('v-label').textContent = 'v' + data.version;
+    setChip($('regen-status'), '✓ v' + data.version, 'ok');
+    log('재생성 완료 · v' + data.version, 'ok');
+    loadExistingFeedback();
+  } catch(e){ alert('네트워크: ' + e.message); setChip($('regen-status'), '에러', 'err'); }
+  finally { btn.disabled = false; }
+}
+
+/* ==================== 비주얼 슬라이드 그리드 ==================== */
+function collectSlides(out){
+  const arr = [];
+  if(out?.cover) arr.push({ ...out.cover, _role: 'cover', _index: 0 });
+  if(Array.isArray(out?.slides)) out.slides.forEach((s, i) => arr.push({ ...s, _role: 'slide', _index: i + 1 }));
+  if(out?.outro) arr.push({ _role: 'outro', _index: -1, heading: out.outro.closing, body: out.outro.cta, tag: 'OUTRO', variant: 'light' });
+  return arr;
+}
+function renderVisualGrid(out){
+  const grid = $('visual-grid'); grid.innerHTML = '';
+  collectSlides(out).forEach(s => grid.appendChild(renderVisualSlide(s)));
+  $('autoGenBtn').disabled = false;
+}
+function renderVisualSlide(s){
+  const idx = s._index;
+  const variant = (s.variant || 'dark').toLowerCase();
+  const card = document.createElement('div');
+  card.className = 'visual-slide';
+  card.id = 'vs-' + idx;
+
+  const media = slideMediaMap[idx];
+  const imgUrl = media?.signed_url || media?.pexels_url || '';
+  const sourceLabel = media?.source === 'ai' ? '🎨 AI · ' + (media.model || '') : media?.source === 'pexels' ? '🖼 Pexels' : media?.source === 'upload' ? '📤 업로드' : '없음';
+
+  const label = idx === 0 ? 'COVER' : idx === -1 ? 'OUTRO' : '#' + idx;
+  const heading = s.heading || '';
+  const body = s.body || '';
+  const tag = s.tag || label;
+
+  card.innerHTML = `
+    <div class="visual-canvas variant-${esc(variant)}">
+      ${imgUrl ? `<img src="${esc(imgUrl)}" alt="">` : `<div class="v-empty"><div class="big">📭</div>이미지 없음<br>아래 버튼 선택</div>`}
+      ${imgUrl ? `<div class="v-overlay"></div>` : ''}
+      <div class="v-tag">${esc(tag)}</div>
+      <div class="v-num">${esc(label)}</div>
+      ${imgUrl ? `<div class="v-text">
+        ${heading ? `<div class="v-heading">${mdInline(heading)}</div>` : ''}
+        ${body ? `<div class="v-body">${mdInline(body)}</div>` : ''}
+      </div>` : ''}
+    </div>
+    <div class="visual-source">
+      <span>${sourceLabel}</span>
+      <span class="muted">${media?.photographer ? 'by ' + esc(media.photographer) : ''}</span>
+    </div>
+    <div class="visual-controls">
+      <button onclick="generateAIImageForSlide(${idx})" title="Replicate Flux (스타일 자동 반영)">🎨 AI</button>
+      <button onclick="openPexelsModal(${idx})" title="Pexels 검색">🖼 Pexels</button>
+      <button onclick="triggerUpload(${idx})" title="로컬 업로드">📤</button>
+    </div>`;
+  return card;
+}
+
+/* ==================== AI 이미지 생성 (단건) ==================== */
+async function generateAIImageForSlide(slide_index, retryAttempt = 0){
+  if(!lastResult) return;
+  const out = lastResult.output;
+  const slide = collectSlides(out).find(s => s._index === slide_index);
+  if(!slide){ alert('슬라이드 없음'); return; }
+
+  const btn = document.querySelector(`#vs-${slide_index} .visual-controls button:nth-child(1)`);
+  if(btn){ btn.classList.add('loading'); btn.textContent = '생성중'; btn.disabled = true; }
+
+  if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/generate-slide-image`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        generation_id: lastResult.generation_id,
+        slide_index,
+        slide: { role: slide._role, tag: slide.tag, heading: slide.heading, body: slide.body, video_keyword: slide.video_keyword, variant: slide.variant, media_type: slide.media_type },
+      }),
+    });
+    const data = await resp.json();
+    if(!resp.ok){
+      // 429 rate limit → retry_after 후 자동 재시도 (최대 2회)
+      const retryAfter = data?.retry_after || (data?.detail && /retry_after":(\d+)/.exec(data.detail)?.[1]);
+      if(resp.status === 502 && /429/.test(JSON.stringify(data)) && retryAttempt < 2 && retryAfter){
+        log(`Replicate throttle — ${retryAfter}s 대기 후 재시도 (#${slide_index})`, 'err');
+        if(btn){ btn.textContent = `대기 ${retryAfter}s`; }
+        await sleep((parseInt(retryAfter) + 1) * 1000);
+        return generateAIImageForSlide(slide_index, retryAttempt + 1);
+      }
+      alert('AI 생성 실패 (' + resp.status + '): ' + (data.error || JSON.stringify(data)));
+      $('rate-alert').style.display = /credit|throttle|429/.test(JSON.stringify(data)) ? 'block' : 'none';
+      return;
+    }
+    slideMediaMap[slide_index] = { ...data, source: 'ai' };
+    const v = versionHistory.find(x => x.generation_id === lastResult.generation_id);
+    if(v){ v.slide_media = (v.slide_media || []).filter(m => m.index !== slide_index); v.slide_media.push({ index: slide_index, ...data, source: 'ai' }); }
+    renderVisualGrid(lastResult.output);
+    log('AI 이미지 생성 · #' + slide_index, 'ok');
+  } catch(e){ alert('네트워크: ' + e.message); }
+  finally { if(btn){ btn.classList.remove('loading'); btn.disabled = false; btn.textContent = '🎨 AI'; } }
+}
+
+/* ==================== 한 방 생성 ==================== */
+async function autoGenerateAllImages(){
+  if(!lastResult) return;
+  if(!confirm(`빈 슬라이드에 AI 이미지 일괄 생성?\n(slide당 ~$0.003, rate limit 자동 우회 — 429 만나면 대기 후 재시도)`)) return;
+  const slides = collectSlides(lastResult.output);
+  const targets = slides.filter(s => !slideMediaMap[s._index]);
+  if(targets.length === 0){ alert('이미 모든 슬라이드에 이미지가 있음'); return; }
+  const btn = $('autoGenBtn'); btn.disabled = true;
+  let done = 0;
+  for(const s of targets){
+    setChip($('autogen-status'), `${++done}/${targets.length} 생성중`, 'warn');
+    await generateAIImageForSlide(s._index);
+    await sleep(1100);  // burst=1 회피를 위한 기본 간격
+  }
+  setChip($('autogen-status'), `✓ ${targets.length}장 완료`, 'ok');
+  btn.disabled = false;
+}
+
+/* ==================== Pexels ==================== */
+function openPexelsModal(slide_index){
+  if(!lastResult) return;
+  const slide = collectSlides(lastResult.output).find(s => s._index === slide_index);
+  pexelsContext.slide_index = slide_index;
+  pexelsContext.keyword = slide?.video_keyword || slide?.heading || '';
+  $('pex-slide-idx').textContent = slide_index === 0 ? 'COVER' : slide_index === -1 ? 'OUTRO' : '#' + slide_index;
+  $('pex-keyword').value = pexelsContext.keyword;
+  $('pex-results').innerHTML = '<div class="muted" style="grid-column:1/-1;font-size:13px">검색 버튼을 누르세요.</div>';
+  $('pexels-modal').style.display = 'flex';
+}
+function closePexelsModal(){ $('pexels-modal').style.display = 'none'; }
+async function searchPexelsForSlide(){
+  const keyword = $('pex-keyword').value.trim();
+  if(!keyword) return;
+  const styleId = $('styleSelect').value || null;
+  $('pex-results').innerHTML = '<div class="muted" style="grid-column:1/-1">검색 중...</div>';
+  if(!(await ensureFreshSession())) return;
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/search-pexels`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keyword, style_id: styleId, per_page: 12 }),
+    });
+    const data = await resp.json();
+    if(!resp.ok){ $('pex-results').innerHTML = `<div class="alert alert-err" style="grid-column:1/-1">실패: ${esc(data.error || resp.status)}</div>`; return; }
+    if(!data.photos?.length){ $('pex-results').innerHTML = '<div class="muted" style="grid-column:1/-1">결과 없음</div>'; return; }
+    $('pex-results').innerHTML = data.photos.map(p => `
+      <div class="pex-thumb" onclick='pickPexelsPhoto(${JSON.stringify(p).replace(/'/g,"&apos;")})'>
+        <img src="${esc(p.thumb || p.url)}" alt="">
+        <div class="credit">${esc(p.photographer || '')}</div>
+      </div>
+    `).join('');
+  } catch(e){ $('pex-results').innerHTML = `<div class="alert alert-err" style="grid-column:1/-1">${esc(e.message)}</div>`; }
+}
+async function pickPexelsPhoto(p){
+  const idx = pexelsContext.slide_index;
+  slideMediaMap[idx] = { source: 'pexels', pexels_url: p.original || p.url, photographer: p.photographer };
+  const v = versionHistory.find(x => x.generation_id === lastResult.generation_id);
+  if(v){
+    v.slide_media = (v.slide_media || []).filter(m => m.index !== idx);
+    v.slide_media.push({ index: idx, source: 'pexels', pexels_url: p.original || p.url, photographer: p.photographer });
+  }
+  // DB 저장
+  try {
+    await supabase.from('generations').select('slide_media').eq('id', lastResult.generation_id).maybeSingle().then(async ({ data }) => {
+      const arr = Array.isArray(data?.slide_media) ? data.slide_media : [];
+      const filtered = arr.filter(m => m.index !== idx);
+      filtered.push({ index: idx, source: 'pexels', pexels_url: p.original || p.url, photographer: p.photographer, created_at: new Date().toISOString() });
+      await supabase.from('generations').update({ slide_media: filtered }).eq('id', lastResult.generation_id);
+    });
+  } catch(e){ log('Pexels DB 저장 실패: ' + e.message, 'err'); }
+  renderVisualGrid(lastResult.output);
+  closePexelsModal();
+}
+
+/* ==================== 업로드 ==================== */
+let uploadTargetIdx = null;
+function triggerUpload(idx){ uploadTargetIdx = idx; $('hidden-upload').value = ''; $('hidden-upload').click(); }
+$('hidden-upload').addEventListener('change', async (e) => {
+  const file = e.target.files?.[0]; if(!file || uploadTargetIdx === null) return;
+  if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+  try {
+    const ext = file.name.split('.').pop() || 'png';
+    const path = `${session.user.id}/${lastResult.generation_id}/slide-${uploadTargetIdx}-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from('slide-images').upload(path, file, { contentType: file.type });
+    if(upErr){ alert('업로드 실패: ' + upErr.message); return; }
+    const { data: signed } = await supabase.storage.from('slide-images').createSignedUrl(path, 3600);
+    slideMediaMap[uploadTargetIdx] = { source: 'upload', signed_url: signed.signedUrl, storage_path: path };
+    // DB 갱신
+    const { data: gen } = await supabase.from('generations').select('slide_media').eq('id', lastResult.generation_id).maybeSingle();
+    const arr = Array.isArray(gen?.slide_media) ? gen.slide_media : [];
+    const filtered = arr.filter(m => m.index !== uploadTargetIdx);
+    filtered.push({ index: uploadTargetIdx, source: 'upload', storage_path: path, created_at: new Date().toISOString() });
+    await supabase.from('generations').update({ slide_media: filtered }).eq('id', lastResult.generation_id);
+    renderVisualGrid(lastResult.output);
+    log('업로드 완료 · #' + uploadTargetIdx, 'ok');
+  } catch(err){ alert('업로드 에러: ' + err.message); }
+});
+
+/* ==================== 최종 컨펌 & 스타일 반영 ==================== */
+async function doConfirmFinal(){
+  if(!lastResult?.generation_id || !currentCarouselId){ alert('먼저 생성하세요'); return; }
+  if(!confirm(`현재 버전(v${lastResult.version})을 최종 컨펌?`)) return;
+  const { error } = await supabase.from('carousels').update({
+    status: 'finalized',
+    finalized_generation_id: lastResult.generation_id,
+    final_approved_at: new Date().toISOString(),
+  }).eq('id', currentCarouselId);
+  if(error){ alert('컨펌 실패: ' + error.message); return; }
+  setChip($('final-status'), '✓ 컨펌됨 v' + lastResult.version, 'ok');
+  markStepDone(4);
+  log('최종 컨펌 · v' + lastResult.version, 'ok');
+}
+async function doReflectToStyle(){
+  if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
+  const styleId = $('styleSelect').value;
+  if(!styleId){ alert('스타일 선택 필요'); return; }
+  const label = prompt('이 버전을 어떤 라벨로 스타일에 추가할까요? (선택)', $('topic').value.slice(0, 40));
+  if(label === null) return;
+  const { data, error } = await supabase.rpc('reflect_generation_to_style', {
+    p_generation_id: lastResult.generation_id,
+    p_style_id: styleId,
+    p_label: label || null,
+  });
+  if(error){ alert('반영 실패: ' + error.message); return; }
+  setChip($('final-status'), '🎨 스타일에 반영됨', 'ok');
+  log('스타일 반영 · style_item_id=' + data, 'ok');
+  alert('✓ 스타일에 반영됨.\n스타일 라이브러리에서 🤖 분석하기 다시 눌러야 새 프로필 반영됩니다.');
+}
+
+/* ==================== 집단지성 피드백 ==================== */
+async function loadFeedbackThemes(){
+  const { data, error } = await supabase.from('feedback_themes').select('slug, label, emoji, sort_order').eq('is_active', true).order('sort_order');
+  if(error){ log('테마 로드 실패: ' + error.message, 'err'); return; }
+  feedbackThemes = data || [];
+  renderFeedbackChips();
+}
+function renderFeedbackChips(){
+  const box = $('fb-themes'); if(!box) return;
+  if(feedbackThemes.length === 0){ box.innerHTML = '<div class="muted" style="font-size:12px">테마 없음</div>'; return; }
+  box.innerHTML = feedbackThemes.map(t =>
+    `<div class="fb-chip${fbState.selectedSlugs.has(t.slug) ? ' selected' : ''}" onclick="toggleFbChip('${esc(t.slug)}')">${esc(t.emoji || '')} ${esc(t.label)}</div>`
+  ).join('');
+}
+function toggleFbChip(slug){
+  if(fbState.selectedSlugs.has(slug)) fbState.selectedSlugs.delete(slug);
+  else fbState.selectedSlugs.add(slug);
+  renderFeedbackChips();
+}
+function renderFbScoreRows(){
+  for(const key of ['topic_fit', 'style_consistency', 'hook_strength']){
+    const row = document.querySelector(`.fb-score-row[data-score="${key}"]`);
+    if(!row) continue;
+    row.innerHTML = '';
+    for(let n=1; n<=5; n++){
+      const btn = document.createElement('button');
+      btn.className = 'fb-score-btn' + (fbState.scores[key] === n ? ' selected' : '');
+      btn.textContent = n;
+      btn.onclick = () => { fbState.scores[key] = fbState.scores[key] === n ? null : n; renderFbScoreRows(); };
+      row.appendChild(btn);
+    }
+  }
+}
+function resetFbState(){
+  fbState.scores = { topic_fit: null, style_consistency: null, hook_strength: null };
+  fbState.selectedSlugs = new Set();
+  if($('fb-theme-custom')) $('fb-theme-custom').value = '';
+  if($('fb-free')) $('fb-free').value = '';
+}
+async function loadExistingFeedback(){
+  resetFbState();
+  if(!lastResult?.generation_id || !session){ renderFbScoreRows(); renderFeedbackChips(); setChip($('fb-status'), '', ''); return; }
+  const { data: existing } = await supabase.from('generation_feedback').select('*').eq('generation_id', lastResult.generation_id).eq('user_id', session.user.id).maybeSingle();
+  if(existing){
+    fbState.scores.topic_fit = existing.topic_fit_score;
+    fbState.scores.style_consistency = existing.style_consistency_score;
+    fbState.scores.hook_strength = existing.hook_strength_score;
+    (existing.theme_slugs || []).forEach(s => fbState.selectedSlugs.add(s));
+    $('fb-theme-custom').value = existing.theme_custom || '';
+    $('fb-free').value = existing.free_feedback || '';
+    setChip($('fb-status'), '✓ 저장됨 (수정 가능)', 'ok');
+  } else setChip($('fb-status'), '', '');
+  renderFbScoreRows();
+  renderFeedbackChips();
+}
+async function submitFeedback(){
+  if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
+  const btn = $('fb-submit-btn');
+  btn.disabled = true; btn.textContent = '저장 중...';
+  try {
+    if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+    const payload = {
+      generation_id: lastResult.generation_id,
+      topic_fit_score: fbState.scores.topic_fit,
+      style_consistency_score: fbState.scores.style_consistency,
+      hook_strength_score: fbState.scores.hook_strength,
+      theme_slugs: [...fbState.selectedSlugs],
+      theme_custom: $('fb-theme-custom').value.trim() || null,
+      free_feedback: $('fb-free').value.trim() || null,
+    };
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/submit-feedback`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const json = await resp.json();
+    if(!resp.ok){ alert('저장 실패: ' + (json.error || resp.status)); return; }
+    log('피드백 저장 · id=' + json.feedback?.id, 'ok');
+    setChip($('fb-status'), '✓ 저장 · 엔진 개선에 반영됨', 'ok');
+  } finally { btn.disabled = false; btn.textContent = '💾 피드백 저장'; }
+}
+
+/* ==================== 인증 ==================== */
+async function signIn(){
+  const redirectTo = window.location.href;
+  const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } });
+  if(error) alert('로그인 실패: ' + error.message);
+}
+async function signOut(){ await supabase.auth.signOut(); location.reload(); }
+
+async function init(){
+  if(typeof window.supabase === 'undefined'){ log('SDK 로드 실패', 'err'); return; }
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const { data: { session: s } } = await supabase.auth.getSession();
+  session = s;
+
+  const bar = $('auth-bar');
+  if(!session){
+    bar.innerHTML = '<button class="btn btn-primary btn-sm" onclick="signIn()">Google 로그인</button>';
+    return;
+  }
+  bar.innerHTML = `<span class="user-chip auth">✓ ${esc(session.user.email)}</span><button class="btn btn-ghost btn-sm" onclick="signOut()">로그아웃</button>`;
+  log('인증 OK', 'ok');
+
+  await loadStyles();
+  await loadFeedbackThemes();
+  renderFbScoreRows();
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'visible' && session) loadStyles();
+  });
+}
+
+window.addEventListener('load', init);
+</script>
+</body>
+</html>

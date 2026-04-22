@@ -2,6 +2,42 @@
 
 > 이 파일은 **"지금 어디까지 왔는가"**를 한눈에 보게 하는 상태 스냅샷. 새 환경 시작 시 여기부터 읽으면 바로 복귀 가능.
 
+## 🗓 2026-04-22 새벽 — 베타 테스터 초대 단계 (현재)
+
+### 최종 구조 (커밋 `6d2ea0e`)
+- **로그인 게이트** (비로그인 시 풀 화면) → 로그인 → **스타일 카드 그리드**가 Step 1 최상단
+- 스타일 카드 그리드 안에 "+ 새 스타일 만들기" / "✨ 스타일 없이 만들기" **액션 카드도 동등 크기**로 배치
+- 카드 선택 → 주제 입력 카드 펼쳐짐 → 카테고리·톤·분량 모두 **chip 선택식** (프리셋 + "기타 직접 입력")
+- 4-step 네비 (입력 / 텍스트 / 이미지 / 완료)
+- 🐛 문제 제보 버튼 상단 상시 노출
+- 👋 1분 안내 모달 (집단지성 철학 강조)
+- test-generate.html / test-auth.html → studio.html 리다이렉트 전환 (레거시 북마크 커버)
+
+### 🔐 이메일 Allowlist 현황 (2026-04-22 09:52 KST)
+| 이메일 | 메모 | 역할 |
+|---|---|---|
+| `boram8235@gmail.com` | 관리자 · 교수님 | admin |
+| `brlim@hanyang.ac.kr` | 관리자 · 한양대 계정 | admin |
+| `sakie2000@hanyang.ac.kr` | 사키에 | 학생 |
+| `fireandicet@hanyang.ac.kr` | 김채현 | 학생 |
+| `jejin0811c@hanyang.ac.kr` | 조은진 | 학생 |
+
+**추가 방법 (CLI로 즉시)**:
+```bash
+cd /Users/boramlim/Dropbox/Website-BigDMKTG/BDM-Assets/studio
+npx supabase@latest db query "INSERT INTO allowed_emails (email, note) VALUES ('<email>', '<이름>') ON CONFLICT (email) DO UPDATE SET note = EXCLUDED.note RETURNING email, note, created_at;" --linked
+```
+또는 styles.html 하단 "🔑 베타 초대 관리" 카드에서 여러 개 한 번에.
+
+### 🚀 배포 진행 중
+- 교수님이 터미널에서 `npx vercel` 대화형 실행 중
+- Vercel 프로젝트 이름: `bdm-studio`
+- 배포 URL 받은 뒤 해야 할 것:
+  1. Supabase Dashboard → Authentication → URL Configuration
+     - Site URL: `https://<vercel-url>`
+     - Redirect URLs: `https://<vercel-url>/**` + `/studio.html` + `/styles.html`
+  2. 학생들에게 URL + 템플릿 메시지 전송 (대화 히스토리에 준비됨)
+
 ## ✅ 2026-04-21 저녁 — 배포/마이그레이션 현황 (검증 완료)
 
 ### Edge Functions 배포 상태 (`npx supabase@latest functions list` 결과)

@@ -5,6 +5,31 @@
 
 ---
 
+### 2026-04-22 · 베타 테스터 초대 준비 완료 → Vercel 배포 진행
+
+**UX 재구성:**
+- Step 1을 **스타일 퍼스트**로 전면 개편. 스타일 카드 그리드 + "+ 새 스타일 만들기" + "✨ 스타일 없이 만들기" 액션 카드를 **동등한 크기로 한 그리드에** 배치. 선택 시 주제 입력 카드가 펼쳐짐
+- 카테고리·톤·분량 전부 **chip 선택식**으로 교체 (프리셋 + "기타 직접 입력")
+- 부정 문구 전면 제거 ("품질 낮음" → "✓ 스타일 없이 진행")
+- test-generate.html + test-auth.html → studio.html 리다이렉트 (레거시 북마크 커버)
+
+**신규 메모리:**
+- `_memory/11-ui-ux-principles.md` — 교수님이 반복적으로 지적한 UI/UX 원칙 9개 (동등 가중치, 부정 문구 금지, 투명성, chip 선택식 등)
+
+**이메일 Allowlist 현황 (2026-04-22 09:52 KST):**
+- boram8235@gmail.com (관리자), brlim@hanyang.ac.kr (관리자)
+- sakie2000@hanyang.ac.kr (사키에)
+- fireandicet@hanyang.ac.kr (김채현)
+- jejin0811c@hanyang.ac.kr (조은진)
+
+**Vercel 배포:**
+- 교수님이 `npx vercel` 대화형 진행 중 (프로젝트명 `bdm-studio`)
+- 배포 URL 받는 즉시 Supabase Auth URL Configuration에 Site URL + Redirect URLs 등록 필요
+
+**관련 커밋:** `9b950df` (로그인 게이트 + allowlist), `6d2ea0e` (스타일 퍼스트 + chip)
+
+---
+
 ### 2026-04-21 · 이미지 레이어 1차 구현 완료 (배포 대기)
 
 Replicate + Pexels + 업로드 3-tier 이미지 소스 구조 구현.

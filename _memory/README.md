@@ -16,7 +16,8 @@
 8. **`08-current-state.md`** ⭐ — **지금 어디까지 왔는지 스냅샷** (파일 트리, DB, 배포 상태)
 9. **`09-apis-and-secrets.md`** — 모든 외부 API + 비밀 키 + 비용 구조
 10. **`10-deployment-runbook.md`** ⭐ — **새 환경에서 복귀 단계별 가이드**
-11. **`99-decisions-log.md`** — 날짜별 주요 결정사항 로그 (append-only, 최상단이 최신)
+11. **`11-ui-ux-principles.md`** ⭐ — **교수님이 반복적으로 지적한 UI/UX 원칙** (프론트 작업 전 필독)
+12. **`99-decisions-log.md`** — 날짜별 주요 결정사항 로그 (append-only, 최상단이 최신)
 
 ## 업데이트 규칙
 

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>창업경진대회 멘토링 · BDM Lab</title>
+<meta name="robots" content="noindex,nofollow" />
+<script src="./auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" />
+<style>
+  :root{
+    --bg:#FAFAF9; --fg:#1C1917; --sub:#57534E; --mute:#A8A29E;
+    --accent:#059669; --accent-bg:#ECFDF5; --border:#E7E5E4; --card:#fff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:'Noto Sans KR',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:40px 20px 80px}
+  h1{font-size:28px;margin:0 0 6px;letter-spacing:-.02em}
+  .lede{color:var(--sub);font-size:15px;margin:0 0 32px;line-height:1.7}
+  h2{font-size:18px;margin:32px 0 12px;letter-spacing:-.01em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-decoration:none;color:inherit;display:block;transition:all .15s}
+  .card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.04)}
+  .card .t{font-weight:700;font-size:16px;margin-bottom:4px}
+  .card .d{color:var(--sub);font-size:13px;line-height:1.6}
+  .big{background:var(--accent);color:#fff;border:1px solid var(--accent)}
+  .big:hover{background:#047857;border-color:#047857;color:#fff}
+  .big .d{color:#D1FAE5}
+  .admin{background:#F5F5F4}
+  .note{font-size:13px;color:var(--sub);background:var(--accent-bg);border:1px solid #A7F3D0;border-radius:10px;padding:14px 16px;margin:16px 0;line-height:1.7}
+  code{background:#F5F5F4;padding:2px 6px;border-radius:4px;font-size:12px}
+  .teams{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 0}
+  .tag{background:var(--card);border:1px solid var(--border);border-radius:999px;padding:4px 10px;font-size:13px;color:var(--sub)}
+  header .brand{font-size:12px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">BDM Lab · Mentoring</div>
+    <h1>창업경진대회 멘토링 툴킷</h1>
+    <p class="lede">스케줄 조율 → 멘토링 진행 → 팀 간 협업까지. 2개의 간단한 도구.</p>
+  </header>
+
+  <h2>참여 팀 (5팀)</h2>
+  <div class="teams" id="teamList"></div>
+
+  <h2 style="margin-top:36px">1. 스케줄 조율</h2>
+  <div class="note">
+    먼저 각 팀에게 <b>자기 팀 링크</b>를 보내서 <b>가능한 모든 시간</b>을 체크하게 한다.<br/>
+    5팀이 모두 제출한 코드를 교수님이 관리자 화면에 붙여넣으면, <b>공통 시간</b>이 자동으로 표시된다.
+  </div>
+  <div class="grid">
+    <a class="card big" href="./schedule.html?mode=admin">
+      <div class="t">📊 관리자 (교수님용)</div>
+      <div class="d">팀별 제출 코드 → 공통 시간 자동 집계</div>
+    </a>
+    <a class="card" href="./schedule.html?team=%EC%9D%B8%ED%94%BC%EB%8B%88%EC%95%84%EB%9E%A9"><div class="t">인피니아랩 →</div><div class="d">가능한 시간 체크 및 제출</div></a>
+    <a class="card" href="./schedule.html?team=VinsLab"><div class="t">VinsLab →</div><div class="d">가능한 시간 체크 및 제출</div></a>
+    <a class="card" href="./schedule.html?team=%EC%A7%80%EC%9B%90%EC%9D%B4%EC%99%80%EC%B9%9C%EA%B5%AC%EB%93%A4"><div class="t">지원이와친구들 →</div><div class="d">가능한 시간 체크 및 제출</div></a>
+    <a class="card" href="./schedule.html?team=%EC%8A%A4%ED%86%A0%EB%A6%AC%EB%B8%8C%EB%A6%BF%EC%A7%80"><div class="t">스토리브릿지 →</div><div class="d">가능한 시간 체크 및 제출</div></a>
+    <a class="card" href="./schedule.html?team=%ED%8C%80%20AOS"><div class="t">팀 AOS →</div><div class="d">가능한 시간 체크 및 제출</div></a>
+  </div>
+
+  <h2 style="margin-top:36px">2. 팀 협업 워크스페이스</h2>
+  <div class="note">
+    팀별 대시보드. <b>진행 체크리스트, 주간 업데이트, 멘토 피드백, 팀 간 공유게시판.</b><br/>
+    각 팀은 자기 링크를 북마크. 기본은 브라우저 로컬 저장이며, 팀 간 공유는 "내보내기/가져오기"로 교환한다.
+  </div>
+  <div class="grid">
+    <a class="card" href="./workspace.html?team=%EC%9D%B8%ED%94%BC%EB%8B%88%EC%95%84%EB%9E%A9"><div class="t">인피니아랩</div><div class="d">체크리스트 · 피드백 · 공유</div></a>
+    <a class="card" href="./workspace.html?team=VinsLab"><div class="t">VinsLab</div><div class="d">체크리스트 · 피드백 · 공유</div></a>
+    <a class="card" href="./workspace.html?team=%EC%A7%80%EC%9B%90%EC%9D%B4%EC%99%80%EC%B9%9C%EA%B5%AC%EB%93%A4"><div class="t">지원이와친구들</div><div class="d">체크리스트 · 피드백 · 공유</div></a>
+    <a class="card" href="./workspace.html?team=%EC%8A%A4%ED%86%A0%EB%A6%AC%EB%B8%8C%EB%A6%BF%EC%A7%80"><div class="t">스토리브릿지</div><div class="d">체크리스트 · 피드백 · 공유</div></a>
+    <a class="card" href="./workspace.html?team=%ED%8C%80%20AOS"><div class="t">팀 AOS</div><div class="d">체크리스트 · 피드백 · 공유</div></a>
+    <a class="card admin" href="./workspace.html?team=ALL"><div class="t">전체 대시보드 (교수님용)</div><div class="d">5팀 진행률 한눈에</div></a>
+  </div>
+</div>
+<script>
+  const TEAMS = ['인피니아랩','VinsLab','지원이와친구들','스토리브릿지','팀 AOS'];
+  const host = document.getElementById('teamList');
+  TEAMS.forEach(t => {
+    const el = document.createElement('span');
+    el.className = 'tag';
+    el.textContent = t;
+    host.appendChild(el);
+  });
+</script>
+</body>
+</html>

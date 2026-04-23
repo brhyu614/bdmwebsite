@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>팀 워크스페이스 · BDM Lab 멘토링</title>
+<meta name="robots" content="noindex,nofollow" />
+<script src="./auth.js"></script>
+<script type="module" src="./firebase-sync.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+  :root{
+    --bg:#FAFAF9; --fg:#1C1917; --sub:#57534E; --mute:#A8A29E;
+    --accent:#059669; --accent-bg:#ECFDF5; --border:#E7E5E4; --card:#fff;
+    --warn:#F59E0B; --warn-bg:#FFFBEB;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:'Noto Sans KR',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 16px 80px}
+  .back{color:var(--sub);text-decoration:none;font-size:13px}
+  .back:hover{color:var(--accent)}
+  .team-head{display:flex;align-items:center;gap:12px;margin:10px 0 4px;flex-wrap:wrap}
+  .team-badge{background:var(--accent);color:#fff;font-size:13px;padding:4px 12px;border-radius:999px;font-weight:500}
+  .team-select{border:1px solid var(--border);background:#fff;padding:4px 10px;border-radius:6px;font-size:13px;font-family:inherit;color:var(--sub)}
+  h1{font-size:26px;margin:6px 0 4px;letter-spacing:-.02em}
+  .lede{color:var(--sub);font-size:14px;margin:0 0 8px;line-height:1.7}
+  .progress-bar{margin:10px 0 20px;background:#F5F5F4;border-radius:999px;height:8px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--accent);transition:width .3s}
+  .progress-label{font-size:12px;color:var(--sub);margin:0 0 4px}
+
+  .tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin:22px 0 0;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{padding:10px 16px;background:transparent;border:none;font-family:inherit;font-size:14px;color:var(--sub);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-weight:500}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tab:hover{color:var(--fg)}
+  .panel{display:none;padding:22px 0}
+  .panel.active{display:block}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px}
+  .card h3{margin:0 0 12px;font-size:15px;display:flex;align-items:center;gap:8px}
+  .card h3 .pct{margin-left:auto;font-size:12px;color:var(--sub);font-weight:400}
+  .task{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid #F5F5F4}
+  .task:first-of-type{border-top:none}
+  .task input[type=checkbox]{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
+  .task label{flex:1;cursor:pointer;font-size:14px;line-height:1.5}
+  .task.done label{color:var(--mute);text-decoration:line-through}
+  .task .note{font-size:12px;color:var(--sub);display:block;margin-top:2px}
+
+  .add-row{display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+  .add-row input{flex:1;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:inherit;font-size:13px}
+  .add-row button{white-space:nowrap}
+
+  button,.btn{appearance:none;border:1px solid var(--border);background:#fff;color:var(--fg);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  button.primary:hover{background:#047857;border-color:#047857;color:#fff}
+  button.ghost{background:transparent}
+  button.danger{color:#B91C1C;border-color:#FCA5A5}
+  button.small{padding:4px 10px;font-size:12px}
+  button.icon{padding:4px 8px;border:none;background:transparent;color:var(--mute);font-size:14px}
+  button.icon:hover{color:#B91C1C;background:transparent}
+
+  textarea,input[type=text]{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;line-height:1.6;resize:vertical;background:#fff}
+  textarea:focus,input[type=text]:focus{outline:none;border-color:var(--accent)}
+  textarea{min-height:80px}
+
+  .entry{border-left:3px solid var(--accent);background:var(--accent-bg);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0}
+  .entry.mentor{border-left-color:#7C3AED;background:#F5F3FF}
+  .entry.peer{border-left-color:#F59E0B;background:var(--warn-bg)}
+  .entry .meta{font-size:12px;color:var(--sub);margin-bottom:4px;display:flex;gap:10px;align-items:center}
+  .entry .meta .from{font-weight:600;color:var(--fg)}
+  .entry .text{font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+  .entry .icon{margin-left:auto}
+
+  .empty{color:var(--mute);font-size:13px;text-align:center;padding:24px 0;font-style:italic}
+
+  .toolbar{display:flex;gap:8px;justify-content:flex-end;margin:-4px 0 16px;flex-wrap:wrap}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;z-index:1000;pointer-events:none}
+  .toast.show{opacity:1}
+
+  /* 전체 대시보드 */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:14px}
+  .team-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .team-card h4{margin:0 0 6px;font-size:15px}
+  .team-card a{color:var(--accent);text-decoration:none;font-size:12px}
+  .team-card .bar{background:#F5F5F4;border-radius:999px;height:6px;margin:8px 0;overflow:hidden}
+  .team-card .fill{height:100%;background:var(--accent)}
+  .team-card .stat{font-size:12px;color:var(--sub);display:flex;justify-content:space-between;margin-top:4px}
+
+  .hint-box{font-size:13px;color:var(--sub);background:var(--accent-bg);border:1px solid #A7F3D0;border-radius:10px;padding:12px 14px;margin:0 0 14px;line-height:1.7}
+
+  @media (max-width:640px){
+    h1{font-size:22px}
+    .tabs{margin:18px -16px 0;padding:0 16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← 멘토링 허브</a>
+
+  <!-- ========= 팀 대시보드 ========= -->
+  <div id="team-root" style="display:none">
+    <div class="team-head">
+      <div class="team-badge" id="team-name">팀</div>
+      <select class="team-select" id="team-switch"></select>
+    </div>
+    <h1 id="team-title">워크스페이스</h1>
+    <p class="lede">진행 상태 체크 · 멘토 피드백 수집 · 팀 간 자료 공유 · 주간 업데이트</p>
+
+    <div class="progress-label"><span id="overall-pct">0%</span> 진행 (<span id="overall-done">0</span>/<span id="overall-total">0</span>)</div>
+    <div class="progress-bar"><div class="progress-fill" id="overall-fill" style="width:0%"></div></div>
+
+    <div class="toolbar">
+      <span style="font-size:12px;color:var(--sub);margin-right:auto">💾 자동 저장됨</span>
+      <button class="small ghost danger" id="btn-reset">초기화</button>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="checklist">✅ 체크리스트</button>
+      <button class="tab" data-tab="updates">📝 주간 업데이트</button>
+      <button class="tab" data-tab="feedback">💬 멘토 피드백</button>
+      <button class="tab" data-tab="board">🤝 팀 간 공유</button>
+      <button class="tab" data-tab="info">ℹ️ 팀 정보</button>
+    </div>
+
+    <!-- Checklist -->
+    <div class="panel active" data-panel="checklist">
+      <div class="hint-box">
+        💡 각 단계별 완료 여부를 체크하세요. 커스텀 항목을 추가할 수도 있어요. <b>완료 시점</b>이 자동 기록됩니다.
+      </div>
+      <div id="checklist-root"></div>
+    </div>
+
+    <!-- Weekly updates -->
+    <div class="panel" data-panel="updates">
+      <div class="hint-box">
+        💡 이번 주에 한 일, 다음 주 계획, 막힌 부분을 짧게 남기세요. 멘토가 매주 확인합니다.
+      </div>
+      <div class="card">
+        <h3>새 업데이트 작성</h3>
+        <input type="text" id="update-title" placeholder="주제 (예: Week 2 · 고객 인터뷰 5건 완료)" />
+        <div style="height:8px"></div>
+        <textarea id="update-text" placeholder="이번 주 한 일 / 다음 주 계획 / 막힌 부분"></textarea>
+        <div style="margin-top:10px;text-align:right">
+          <button class="primary" id="btn-add-update">저장</button>
+        </div>
+      </div>
+      <div id="updates-list"></div>
+    </div>
+
+    <!-- Mentor feedback -->
+    <div class="panel" data-panel="feedback">
+      <div class="hint-box">
+        💡 멘토가 남긴 피드백과, 팀이 받고 싶은 질문을 정리하는 공간. 멘토링 전에 <b>질문 리스트</b>를 미리 올려두세요.
+      </div>
+      <div class="card">
+        <h3>피드백 / 질문 추가</h3>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <select id="fb-kind" style="border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:inherit;font-size:13px">
+            <option value="question">❓ 멘토에게 질문</option>
+            <option value="mentor">💬 멘토 피드백 기록</option>
+            <option value="todo">🔖 액션 아이템</option>
+          </select>
+          <input type="text" id="fb-from" placeholder="작성자 (예: 팀장, 멘토)" style="flex:1" />
+        </div>
+        <textarea id="fb-text" placeholder="내용"></textarea>
+        <div style="margin-top:10px;text-align:right">
+          <button class="primary" id="btn-add-fb">저장</button>
+        </div>
+      </div>
+      <div id="fb-list"></div>
+    </div>
+
+    <!-- Peer board -->
+    <div class="panel" data-panel="board">
+      <div class="hint-box">
+        💡 다른 팀이 도와줄 수 있는 질문, 공유하고 싶은 자료/링크를 올리세요. 공유 방식: <b>내보내기 JSON</b>을 멘토링 단톡/디스코드에 올리거나 멘토가 병합합니다.
+      </div>
+      <div class="card">
+        <h3>게시물 작성</h3>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <select id="post-kind" style="border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:inherit;font-size:13px">
+            <option value="help">🙋 도움 요청</option>
+            <option value="resource">📎 자료 공유</option>
+            <option value="insight">💡 인사이트</option>
+          </select>
+          <input type="text" id="post-title" placeholder="제목 (예: Figma 협업 어떻게 하세요?)" style="flex:1" />
+        </div>
+        <textarea id="post-text" placeholder="내용 · 링크 · 질문 상세"></textarea>
+        <div style="margin-top:10px;text-align:right">
+          <button class="primary" id="btn-add-post">게시</button>
+        </div>
+      </div>
+      <div id="board-list"></div>
+    </div>
+
+    <!-- Team info -->
+    <div class="panel" data-panel="info">
+      <div class="card">
+        <h3>👥 팀원</h3>
+        <textarea id="info-members" placeholder="이름 / 역할&#10;예) 김OO — PM&#10;    이OO — 개발"></textarea>
+      </div>
+      <div class="card">
+        <h3>🎯 아이템 요약</h3>
+        <textarea id="info-pitch" placeholder="한 문장 피치, 타겟, 차별점"></textarea>
+      </div>
+      <div class="card">
+        <h3>🔗 외부 링크</h3>
+        <textarea id="info-links" placeholder="노션, 깃허브, 피그마, 슬라이드 등 링크들"></textarea>
+      </div>
+      <div style="text-align:right">
+        <button class="primary" id="btn-save-info">💾 저장</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========= 전체 대시보드 (ALL) ========= -->
+  <div id="all-root" style="display:none">
+    <div class="team-badge" style="background:#111">관리자</div>
+    <h1 style="margin-top:10px">📊 전체 팀 대시보드</h1>
+    <p class="lede" id="all-lede">6팀 진행 상태 한눈에.</p>
+    <div class="team-grid" id="all-grid"></div>
+  </div>
+
+  <div id="hub-root" style="display:none">
+    <h1>팀 워크스페이스</h1>
+    <p class="lede">팀 링크로 접속해주세요. <a href="./index.html">허브로 가기</a></p>
+  </div>
+</div>
+
+<div class="toast" id="toast">저장됨</div>
+
+<script>
+const TEAMS = ['인피니아랩','VinsLab','지원이와친구들','스토리브릿지','팀 AOS'];
+
+// 기본 체크리스트 템플릿 (창업경진대회 기준)
+const DEFAULT_CHECKLIST = [
+  { section: '🔍 문제 정의', items: [
+    '해결하려는 문제를 한 문장으로 정의',
+    '문제를 겪는 사람이 누구인지 구체적으로 묘사',
+    '기존 해결책의 한계 3가지',
+    '시장 규모 추정 (TAM / SAM / SOM)',
+  ]},
+  { section: '🧑 고객 이해', items: [
+    '고객 인터뷰 5명 이상 진행',
+    '인터뷰 내용 정리 + 인사이트 도출',
+    '페르소나 1~2개 정의',
+    '고객 여정(Customer Journey) 작성',
+  ]},
+  { section: '💡 솔루션', items: [
+    '핵심 가치 제안(Value Proposition) 정의',
+    '경쟁사 분석 (최소 3개)',
+    '차별점 명확화',
+    'MVP 범위 확정',
+  ]},
+  { section: '🛠 실행', items: [
+    'MVP 초안 (스케치/와이어프레임)',
+    '프로토타입 제작',
+    '사용자 테스트 3명 이상',
+    '피드백 반영한 v2',
+  ]},
+  { section: '💰 비즈니스 모델', items: [
+    '수익 모델 정의 (구독/수수료/광고 등)',
+    '핵심 지표(KPI) 정의',
+    '초기 비용 추정',
+    '6개월 로드맵',
+  ]},
+  { section: '🎤 피칭 준비', items: [
+    '피치 덱 초안 (10~12장)',
+    '3분 버전 스피치 연습',
+    '예상 질문 & 답변 준비',
+    '최종 리허설',
+  ]},
+];
+
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const params = new URLSearchParams(location.search);
+const team = params.get('team');
+
+function waitForSync(timeoutMs = 8000) {
+  return new Promise(resolve => {
+    if (window.BDM_SYNC?.set) return resolve(window.BDM_SYNC);
+    const timer = setTimeout(() => resolve(null), timeoutMs);
+    document.addEventListener('bdm-sync-ready', () => {
+      clearTimeout(timer);
+      resolve(window.BDM_SYNC);
+    }, { once: true });
+  });
+}
+
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1400);
+}
+
+function storageKey(t){ return `bdm:workspace:${t}`; }
+function syncKey(t){ return `workspace-${t}`; }
+
+// Firebase 저장 (디바운스)
+const _saveTimers = new Map();
+function pushToSync(t, data) {
+  clearTimeout(_saveTimers.get(t));
+  _saveTimers.set(t, setTimeout(async () => {
+    const backend = await waitForSync(3000);
+    if (!backend?.set) return;
+    backend.set(syncKey(t), data).catch(e => console.warn('sync fail', e));
+  }, 500));
+}
+
+function defaultData(t){
+  return {
+    team: t,
+    checklist: DEFAULT_CHECKLIST.map(sec => ({
+      section: sec.section,
+      items: sec.items.map(txt => ({ id: cryptoId(), text: txt, done: false, doneAt: null }))
+    })),
+    updates: [],
+    feedback: [],
+    posts: [],
+    info: { members: '', pitch: '', links: '' },
+    updatedAt: Date.now(),
+  };
+}
+function cryptoId(){
+  return 'i' + Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4);
+}
+function loadData(t){
+  try {
+    const raw = localStorage.getItem(storageKey(t));
+    if (!raw) return defaultData(t);
+    const parsed = JSON.parse(raw);
+    // 누락된 필드 보강
+    const def = defaultData(t);
+    return { ...def, ...parsed, info: { ...def.info, ...(parsed.info||{}) } };
+  } catch { return defaultData(t); }
+}
+function saveData(t, data){
+  data.updatedAt = Date.now();
+  localStorage.setItem(storageKey(t), JSON.stringify(data));
+  pushToSync(t, data);
+}
+function fmtDate(ts){
+  if (!ts) return '';
+  const d = new Date(ts);
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function esc(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ========= Team workspace =========
+function initTeamView(currentTeam){
+  $('#team-root').style.display = 'block';
+  $('#team-name').textContent = currentTeam;
+  $('#team-title').textContent = currentTeam + ' 워크스페이스';
+  document.title = `${currentTeam} · 워크스페이스`;
+
+  // team switcher
+  const sel = $('#team-switch');
+  TEAMS.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    if (t === currentTeam) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.onchange = () => {
+    location.search = `?team=${encodeURIComponent(sel.value)}`;
+  };
+
+  let data = loadData(currentTeam);
+
+  // Tabs
+  $$('.tab').forEach(btn => {
+    btn.onclick = () => {
+      $$('.tab').forEach(b => b.classList.remove('active'));
+      $$('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      $(`.panel[data-panel="${btn.dataset.tab}"]`).classList.add('active');
+    };
+  });
+
+  function renderChecklist(){
+    const root = $('#checklist-root');
+    let totalAll = 0, doneAll = 0;
+    let html = '';
+    data.checklist.forEach((sec, si) => {
+      const done = sec.items.filter(x => x.done).length;
+      const total = sec.items.length;
+      totalAll += total; doneAll += done;
+      const pct = total ? Math.round(done/total*100) : 0;
+      html += `<div class="card"><h3>${esc(sec.section)} <span class="pct">${done}/${total} · ${pct}%</span></h3>`;
+      sec.items.forEach(it => {
+        html += `
+          <div class="task${it.done?' done':''}" data-id="${it.id}">
+            <input type="checkbox" ${it.done?'checked':''} />
+            <label>
+              ${esc(it.text)}
+              ${it.doneAt ? `<span class="note">✓ ${fmtDate(it.doneAt)} 완료</span>` : ''}
+            </label>
+            <button class="icon" title="삭제" data-del="${it.id}">✕</button>
+          </div>
+        `;
+      });
+      html += `
+        <div class="add-row">
+          <input type="text" placeholder="항목 추가 후 엔터" data-add-section="${si}" />
+          <button class="small" data-add-btn="${si}">+ 추가</button>
+        </div>
+      </div>`;
+    });
+    root.innerHTML = html;
+    $('#overall-total').textContent = totalAll;
+    $('#overall-done').textContent = doneAll;
+    const pct = totalAll ? Math.round(doneAll/totalAll*100) : 0;
+    $('#overall-pct').textContent = pct + '%';
+    $('#overall-fill').style.width = pct + '%';
+
+    // wire events
+    root.querySelectorAll('.task').forEach(row => {
+      const id = row.dataset.id;
+      row.querySelector('input').onchange = e => {
+        for (const sec of data.checklist) {
+          const it = sec.items.find(x => x.id === id);
+          if (it) {
+            it.done = e.target.checked;
+            it.doneAt = it.done ? Date.now() : null;
+            break;
+          }
+        }
+        saveData(currentTeam, data);
+        renderChecklist();
+      };
+      row.querySelector('[data-del]').onclick = () => {
+        if (!confirm('이 항목을 삭제할까요?')) return;
+        for (const sec of data.checklist) {
+          sec.items = sec.items.filter(x => x.id !== id);
+        }
+        saveData(currentTeam, data);
+        renderChecklist();
+      };
+    });
+    root.querySelectorAll('[data-add-section]').forEach(inp => {
+      inp.onkeydown = e => {
+        if (e.key === 'Enter') {
+          const si = +inp.dataset.addSection;
+          const txt = inp.value.trim();
+          if (!txt) return;
+          data.checklist[si].items.push({ id: cryptoId(), text: txt, done: false, doneAt: null });
+          saveData(currentTeam, data);
+          renderChecklist();
+        }
+      };
+    });
+    root.querySelectorAll('[data-add-btn]').forEach(btn => {
+      btn.onclick = () => {
+        const si = +btn.dataset.addBtn;
+        const inp = root.querySelector(`input[data-add-section="${si}"]`);
+        const txt = inp.value.trim();
+        if (!txt) return;
+        data.checklist[si].items.push({ id: cryptoId(), text: txt, done: false, doneAt: null });
+        saveData(currentTeam, data);
+        renderChecklist();
+      };
+    });
+  }
+
+  function renderUpdates(){
+    const root = $('#updates-list');
+    if (!data.updates.length) { root.innerHTML = '<div class="empty">아직 업데이트가 없습니다. 첫 주간 업데이트를 작성해보세요.</div>'; return; }
+    root.innerHTML = data.updates.map(u => `
+      <div class="entry">
+        <div class="meta">
+          <span class="from">${esc(u.title || '업데이트')}</span>
+          <span>${fmtDate(u.ts)}</span>
+          <button class="icon" data-del-update="${u.id}" title="삭제">✕</button>
+        </div>
+        <div class="text">${esc(u.text)}</div>
+      </div>
+    `).join('');
+    root.querySelectorAll('[data-del-update]').forEach(b => {
+      b.onclick = () => {
+        if (!confirm('이 업데이트를 삭제할까요?')) return;
+        data.updates = data.updates.filter(x => x.id !== b.dataset.delUpdate);
+        saveData(currentTeam, data);
+        renderUpdates();
+      };
+    });
+  }
+
+  function renderFeedback(){
+    const root = $('#fb-list');
+    if (!data.feedback.length) { root.innerHTML = '<div class="empty">아직 피드백/질문이 없습니다.</div>'; return; }
+    root.innerHTML = data.feedback.map(f => {
+      const cls = f.kind === 'mentor' ? 'mentor' : (f.kind === 'todo' ? 'peer' : '');
+      const icon = f.kind === 'mentor' ? '💬 멘토' : (f.kind === 'todo' ? '🔖 액션' : '❓ 질문');
+      return `
+        <div class="entry ${cls}">
+          <div class="meta">
+            <span class="from">${icon} · ${esc(f.from || '-')}</span>
+            <span>${fmtDate(f.ts)}</span>
+            <button class="icon" data-del-fb="${f.id}" title="삭제">✕</button>
+          </div>
+          <div class="text">${esc(f.text)}</div>
+        </div>
+      `;
+    }).join('');
+    root.querySelectorAll('[data-del-fb]').forEach(b => {
+      b.onclick = () => {
+        if (!confirm('삭제할까요?')) return;
+        data.feedback = data.feedback.filter(x => x.id !== b.dataset.delFb);
+        saveData(currentTeam, data);
+        renderFeedback();
+      };
+    });
+  }
+
+  function renderBoard(){
+    const root = $('#board-list');
+    if (!data.posts.length) { root.innerHTML = '<div class="empty">아직 게시물이 없습니다.</div>'; return; }
+    root.innerHTML = data.posts.map(p => {
+      const cls = p.kind === 'resource' ? 'mentor' : (p.kind === 'insight' ? 'peer' : '');
+      const icon = p.kind === 'resource' ? '📎 자료' : (p.kind === 'insight' ? '💡 인사이트' : '🙋 도움 요청');
+      return `
+        <div class="entry ${cls}">
+          <div class="meta">
+            <span class="from">${icon} · ${esc(p.title || '-')}</span>
+            <span>${fmtDate(p.ts)}</span>
+            <button class="icon" data-del-post="${p.id}" title="삭제">✕</button>
+          </div>
+          <div class="text">${esc(p.text)}</div>
+        </div>
+      `;
+    }).join('');
+    root.querySelectorAll('[data-del-post]').forEach(b => {
+      b.onclick = () => {
+        if (!confirm('삭제할까요?')) return;
+        data.posts = data.posts.filter(x => x.id !== b.dataset.delPost);
+        saveData(currentTeam, data);
+        renderBoard();
+      };
+    });
+  }
+
+  function renderInfo(){
+    $('#info-members').value = data.info.members || '';
+    $('#info-pitch').value = data.info.pitch || '';
+    $('#info-links').value = data.info.links || '';
+  }
+
+  // Add update
+  $('#btn-add-update').onclick = () => {
+    const title = $('#update-title').value.trim();
+    const text = $('#update-text').value.trim();
+    if (!text) return toast('내용을 입력하세요');
+    data.updates.unshift({ id: cryptoId(), title, text, ts: Date.now() });
+    saveData(currentTeam, data);
+    $('#update-title').value = ''; $('#update-text').value = '';
+    renderUpdates();
+    toast('저장됨');
+  };
+  // Add feedback
+  $('#btn-add-fb').onclick = () => {
+    const kind = $('#fb-kind').value;
+    const from = $('#fb-from').value.trim();
+    const text = $('#fb-text').value.trim();
+    if (!text) return toast('내용을 입력하세요');
+    data.feedback.unshift({ id: cryptoId(), kind, from, text, ts: Date.now() });
+    saveData(currentTeam, data);
+    $('#fb-from').value = ''; $('#fb-text').value = '';
+    renderFeedback();
+    toast('저장됨');
+  };
+  // Add post
+  $('#btn-add-post').onclick = () => {
+    const kind = $('#post-kind').value;
+    const title = $('#post-title').value.trim();
+    const text = $('#post-text').value.trim();
+    if (!text) return toast('내용을 입력하세요');
+    data.posts.unshift({ id: cryptoId(), kind, title, text, ts: Date.now() });
+    saveData(currentTeam, data);
+    $('#post-title').value = ''; $('#post-text').value = '';
+    renderBoard();
+    toast('게시됨');
+  };
+  // Save info
+  $('#btn-save-info').onclick = () => {
+    data.info.members = $('#info-members').value;
+    data.info.pitch = $('#info-pitch').value;
+    data.info.links = $('#info-links').value;
+    saveData(currentTeam, data);
+    toast('저장됨');
+  };
+
+  $('#btn-reset').onclick = () => {
+    if (!confirm(`${currentTeam} 팀의 모든 워크스페이스 데이터를 초기화합니다. 계속할까요?`)) return;
+    localStorage.removeItem(storageKey(currentTeam));
+    data = defaultData(currentTeam);
+    renderChecklist(); renderUpdates(); renderFeedback(); renderBoard(); renderInfo();
+    toast('초기화됨');
+  };
+
+  renderChecklist();
+  renderUpdates();
+  renderFeedback();
+  renderBoard();
+  renderInfo();
+
+  // Firebase 실시간 동기화
+  (async () => {
+    const backend = await waitForSync();
+    if (!backend) return;
+    // 초기 pull (원격이 로컬보다 최신이면 교체)
+    try {
+      const remote = await backend.get(syncKey(currentTeam));
+      if (remote && (remote.updatedAt || 0) > (data.updatedAt || 0)) {
+        data = Object.assign({}, defaultData(currentTeam), remote, {
+          info: Object.assign({}, defaultData(currentTeam).info, remote.info || {})
+        });
+        localStorage.setItem(storageKey(currentTeam), JSON.stringify(data));
+        renderChecklist(); renderUpdates(); renderFeedback(); renderBoard(); renderInfo();
+      }
+    } catch (e) { console.warn('initial pull fail', e); }
+
+    // 실시간 구독
+    backend.subscribe(syncKey(currentTeam), remote => {
+      if (!remote) return;
+      // 자기가 방금 쓴 echo는 무시 (500ms 디바운스 근사)
+      if (((remote.updatedAt || 0) - (data.updatedAt || 0)) < 200) return;
+      data = Object.assign({}, defaultData(currentTeam), remote, {
+        info: Object.assign({}, defaultData(currentTeam).info, remote.info || {})
+      });
+      localStorage.setItem(storageKey(currentTeam), JSON.stringify(data));
+      renderChecklist(); renderUpdates(); renderFeedback(); renderBoard();
+      // info 탭 입력 중이면 렌더 스킵해서 입력 보호
+      if (!document.activeElement?.closest('[data-panel="info"]')) {
+        renderInfo();
+      }
+      toast('✏️ 방금 업데이트됨');
+    });
+  })();
+}
+
+// ========= ALL (admin dashboard) =========
+function initAllView(){
+  $('#all-root').style.display = 'block';
+  document.title = '전체 팀 대시보드 · BDM';
+
+  const cache = new Map(); // team -> data
+
+  function render(){
+    const grid = $('#all-grid');
+    grid.innerHTML = '';
+    TEAMS.forEach(t => {
+      const data = cache.get(t) || loadData(t);
+      const allItems = data.checklist.flatMap(s => s.items);
+      const done = allItems.filter(x => x.done).length;
+      const total = allItems.length;
+      const pct = total ? Math.round(done/total*100) : 0;
+      const lastUpdate = data.updates[0];
+      const tracked = cache.has(t);
+
+      const card = document.createElement('div');
+      card.className = 'team-card';
+      card.innerHTML = `
+        <h4>${esc(t)}</h4>
+        <div style="font-size:12px;color:var(--mute)">${tracked ? '🟢 실시간 연결됨' : '⚪ 아직 데이터 없음'}</div>
+        <div class="bar"><div class="fill" style="width:${pct}%"></div></div>
+        <div class="stat"><span>진행률</span><b>${done}/${total} · ${pct}%</b></div>
+        <div class="stat"><span>업데이트</span><b>${data.updates.length}건</b></div>
+        <div class="stat"><span>피드백/질문</span><b>${data.feedback.length}건</b></div>
+        <div class="stat"><span>최근 활동</span><b>${tracked && data.updatedAt ? fmtDate(data.updatedAt) : '—'}</b></div>
+        <div style="margin-top:10px"><a href="./workspace.html?team=${encodeURIComponent(t)}">열기 →</a></div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  // Firebase 실시간 구독 (모든 팀)
+  (async () => {
+    const backend = await waitForSync();
+    if (!backend) return;
+    const lede = $('#all-lede');
+    if (lede) lede.innerHTML = backend.mode === 'firestore'
+      ? '6팀 진행 상태를 <b>실시간</b>으로 자동 반영합니다.'
+      : '⚠️ Firebase 미연결 — 이 브라우저 로컬 데이터만 표시.';
+    TEAMS.forEach(t => {
+      backend.subscribe(syncKey(t), remote => {
+        if (remote) {
+          cache.set(t, Object.assign({}, defaultData(t), remote, {
+            info: Object.assign({}, defaultData(t).info, remote.info || {})
+          }));
+        } else {
+          cache.delete(t);
+        }
+        render();
+      });
+    });
+  })();
+}
+
+// ========= Routing =========
+if (team === 'ALL' || team === 'all') {
+  initAllView();
+} else if (team) {
+  initTeamView(team);
+} else {
+  $('#hub-root').style.display = 'block';
+}
+</script>
+</body>
+</html>

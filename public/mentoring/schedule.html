@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>스케줄 조율 · BDM Lab 멘토링</title>
+<meta name="robots" content="noindex,nofollow" />
+<script src="./auth.js"></script>
+<script type="module" src="./firebase-sync.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+  :root{
+    --bg:#FAFAF9; --fg:#1C1917; --sub:#57534E; --mute:#A8A29E;
+    --accent:#059669; --accent-bg:#ECFDF5; --border:#E7E5E4; --card:#fff;
+    --warn:#F59E0B; --warn-bg:#FFFBEB;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:'Noto Sans KR',system-ui,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 16px 80px}
+  .back{color:var(--sub);text-decoration:none;font-size:13px}
+  .back:hover{color:var(--accent)}
+  h1{font-size:26px;margin:10px 0 4px;letter-spacing:-.02em}
+  .team-badge{display:inline-block;background:var(--accent);color:#fff;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:6px;font-weight:500}
+  .lede{color:var(--sub);font-size:14px;margin:0 0 24px;line-height:1.7}
+  .instructions{background:var(--accent-bg);border:1px solid #A7F3D0;border-radius:10px;padding:14px 16px;margin:0 0 20px;font-size:14px;color:#064E3B;line-height:1.7}
+  .instructions b{color:var(--accent)}
+
+  /* Grid table */
+  .scroller{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+  table.grid{border-collapse:collapse;width:100%;font-size:13px}
+  .grid th,.grid td{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:0;text-align:center}
+  .grid th:last-child,.grid td:last-child{border-right:none}
+  .grid thead th{background:#F5F5F4;padding:10px 8px;font-weight:700;font-size:12px;position:sticky;top:0;z-index:2}
+  .grid thead th.sub{font-weight:400;color:var(--sub);font-size:11px;padding-top:2px}
+  .grid thead tr.dhead th{border-bottom:2px solid var(--border)}
+  .grid tbody th{background:#FAFAF9;padding:6px 10px;font-weight:500;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--sub);white-space:nowrap;position:sticky;left:0;z-index:1;border-right:2px solid var(--border)}
+  .cell{width:100%;height:44px;display:block;cursor:pointer;transition:background .08s;user-select:none}
+  .cell:hover{background:#F5F5F4}
+  .cell.on{background:var(--accent);color:#fff;font-weight:700}
+  .cell.on::after{content:'✓';font-size:14px}
+  .cell.off-limits{background:repeating-linear-gradient(45deg,#F5F5F4,#F5F5F4 4px,#FAFAF9 4px,#FAFAF9 8px);cursor:not-allowed;color:var(--mute)}
+  .cell.off-limits::after{content:'–';font-size:13px;color:var(--mute)}
+
+  /* Heatmap coloring for admin view */
+  .cell.h0{background:#fff}
+  .cell.h1{background:#F0FDF4}
+  .cell.h2{background:#D1FAE5}
+  .cell.h3{background:#A7F3D0}
+  .cell.h4{background:#6EE7B7}
+  .cell.h5{background:#34D399}
+  .cell.h6{background:#059669;color:#fff}
+  .cell.h6::after{content:'★';font-size:13px}
+
+  .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0}
+  button,.btn{appearance:none;border:1px solid var(--border);background:#fff;color:var(--fg);padding:9px 16px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  button.primary:hover{background:#047857;border-color:#047857;color:#fff}
+  button.ghost{background:transparent}
+  button.danger{color:#B91C1C;border-color:#FCA5A5}
+  .count{background:#F5F5F4;padding:6px 12px;border-radius:999px;font-size:13px;color:var(--sub)}
+  .count b{color:var(--fg)}
+
+  .share{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin:20px 0}
+  .share h3{margin:0 0 10px;font-size:15px}
+  .share textarea{width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;resize:vertical;background:#FAFAF9}
+  .share .hint{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.6}
+
+  /* Admin */
+  .codes-input{width:100%;min-height:160px;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px}
+  .legend{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--sub);margin:10px 0 0}
+  .legend .sw{width:22px;height:14px;border-radius:3px;border:1px solid var(--border);display:inline-block;vertical-align:middle;margin:0 4px}
+  .summary{margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+  .summary h3{margin:0 0 12px}
+  .slot-pill{display:inline-flex;align-items:center;gap:6px;background:var(--accent-bg);border:1px solid #A7F3D0;color:#064E3B;padding:6px 12px;border-radius:999px;font-size:13px;margin:4px 6px 0 0;font-weight:500}
+  .slot-pill.partial{background:#FFFBEB;border-color:#FDE68A;color:#92400E}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;z-index:1000;pointer-events:none}
+  .toast.show{opacity:1}
+
+  details.admin-teams{margin-top:16px}
+  details.admin-teams summary{cursor:pointer;font-size:14px;color:var(--sub);padding:8px 0}
+  .team-chip{display:inline-flex;align-items:center;gap:8px;background:#F5F5F4;border-radius:999px;padding:4px 10px 4px 12px;font-size:13px;margin:4px 6px 0 0}
+  .team-chip button{border:none;background:transparent;padding:2px 4px;color:var(--sub);font-size:14px}
+  .team-chip button:hover{color:#B91C1C}
+
+  @media (max-width:640px){
+    h1{font-size:22px}
+    .grid td,.grid th{font-size:11px}
+    .cell{height:38px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← 멘토링 허브</a>
+
+  <div id="team-view" style="display:none">
+    <div class="team-badge" id="team-name">팀</div>
+    <h1>가능한 시간을 모두 체크해주세요</h1>
+    <p class="lede">1시간 단위로 가능한 모든 슬롯을 눌러주세요. 귀찮아도 <b>최대한 많이</b> 열어둬야 공통 시간이 나옵니다.</p>
+    <div class="instructions">
+      <b>체크 기준</b> · "이 시간에 확실히 멘토링 참석이 가능하다"고 판단되는 모든 슬롯을 선택.<br/>
+      <b>애매하면 체크 X</b> · 나중에 "사실 안 돼요"가 나오면 전체 재조율입니다.<br/>
+      <b>제출 방법</b> · 맨 아래 <b>제출 코드</b>를 복사해서 교수님께 전송 (카톡/이메일 등).
+    </div>
+
+    <div class="bar">
+      <span class="count">선택한 슬롯: <b id="count">0</b> / <span id="total">0</span></span>
+      <button id="btn-all" class="ghost">전부 선택</button>
+      <button id="btn-none" class="ghost">모두 해제</button>
+    </div>
+
+    <div class="scroller">
+      <table class="grid" id="grid"></table>
+    </div>
+
+    <div class="share">
+      <h3>📤 제출하기</h3>
+      <div class="hint" style="margin:0 0 14px">선택은 <b>실시간으로 교수님 화면에 자동 반영</b>됩니다. 끝냈으면 "제출하기"로 확정.</div>
+      <div class="bar" style="margin:0">
+        <button class="primary" id="btn-submit" style="flex:1;padding:14px 16px;font-size:15px;font-weight:700">✅ 제출하기</button>
+        <button class="ghost danger" id="btn-reset">초기화</button>
+      </div>
+      <textarea id="share-code" readonly style="display:none"></textarea>
+      <div class="hint" id="submit-hint" style="display:none;color:var(--accent);font-weight:500;margin-top:12px">✅ 제출 확정. 교수님이 자동으로 확인합니다. 수정하면 자동 반영됩니다.</div>
+    </div>
+  </div>
+
+  <div id="admin-view" style="display:none">
+    <div class="team-badge" style="background:#111">관리자 · 실시간</div>
+    <h1>📊 공통 시간 집계</h1>
+    <p class="lede">각 팀이 선택하는 즉시 <b>실시간으로 자동 반영</b>됩니다. <span id="sync-status" style="color:var(--mute);font-size:12px">연결 중…</span></p>
+
+    <details class="admin-teams" open>
+      <summary>📝 참여 팀: <b id="team-count">0</b> / 6 <span id="submit-count" style="color:var(--sub);font-size:12px;font-weight:400"></span></summary>
+      <div id="team-chips"></div>
+    </details>
+
+    <div class="bar">
+      <span class="count">★ <b id="common-count">0</b>개 슬롯에서 <b id="max-teams">0</b>개 팀 모두 가능</span>
+    </div>
+    <div class="legend">
+      참여팀 수:
+      <span><span class="sw" style="background:#fff"></span>0</span>
+      <span><span class="sw" style="background:#F0FDF4"></span>1</span>
+      <span><span class="sw" style="background:#D1FAE5"></span>2</span>
+      <span><span class="sw" style="background:#A7F3D0"></span>3</span>
+      <span><span class="sw" style="background:#6EE7B7"></span>4</span>
+      <span><span class="sw" style="background:#34D399"></span>5</span>
+      <span><span class="sw" style="background:#059669"></span>6 (전원)</span>
+    </div>
+
+    <div class="scroller" style="margin-top:14px">
+      <table class="grid" id="admin-grid"></table>
+    </div>
+
+    <div class="summary">
+      <h3>🎯 추천 멘토링 시간</h3>
+      <div id="summary-list">
+        <div style="color:var(--sub);font-size:13px">팀 코드를 붙여넣으면 자동으로 추천됩니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="hub-view" style="display:none">
+    <h1>스케줄 조율</h1>
+    <p class="lede">팀 링크로 접속해야 합니다. <a href="./index.html">허브로 돌아가기</a></p>
+  </div>
+</div>
+
+<div class="toast" id="toast">복사됨</div>
+
+<script>
+// ===== 구성: 팀 & 슬롯 =====
+const TEAMS = ['인피니아랩','VinsLab','지원이와친구들','스토리브릿지','팀 AOS'];
+
+// 슬롯 = [{date, label, day, hour}], 순서대로 bitmap 인덱스
+const SLOTS = (() => {
+  const out = [];
+  // 이번주 목 4/23: 13~17시 (13,14,15,16)
+  [13,14,15,16].forEach(h => out.push({ date:'2026-04-23', day:'목 4/23', hour:h }));
+  // 다음주 월~목: 10~22시 (10..21)
+  const days = [
+    {date:'2026-04-27', day:'월 4/27'},
+    {date:'2026-04-28', day:'화 4/28'},
+    {date:'2026-04-29', day:'수 4/29'},
+    {date:'2026-04-30', day:'목 4/30'},
+  ];
+  days.forEach(d => {
+    for (let h=10; h<=21; h++) out.push({ date:d.date, day:d.day, hour:h });
+  });
+  return out;
+})();
+const DAYS = [...new Set(SLOTS.map(s => s.day))];
+const HOURS = [...new Set(SLOTS.map(s => s.hour))].sort((a,b)=>a-b);
+
+// ===== 유틸 =====
+const $ = (s) => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+const team = params.get('team');
+const mode = params.get('mode');
+
+// BDM_SYNC 모듈이 로드될 때까지 대기 (defer 순서 문제 해결)
+function waitForSync(timeoutMs = 8000) {
+  return new Promise(resolve => {
+    if (window.BDM_SYNC?.set) return resolve(window.BDM_SYNC);
+    const timer = setTimeout(() => resolve(null), timeoutMs);
+    document.addEventListener('bdm-sync-ready', () => {
+      clearTimeout(timer);
+      resolve(window.BDM_SYNC);
+    }, { once: true });
+  });
+}
+
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1400);
+}
+
+// bitmap <-> base64(URL-safe)
+function bitsToCode(bits){
+  // bits: boolean[] length = SLOTS.length
+  const bytes = new Uint8Array(Math.ceil(bits.length/8));
+  bits.forEach((b,i) => { if (b) bytes[i>>3] |= (1 << (i&7)); });
+  let s = btoa(String.fromCharCode(...bytes));
+  return s.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function codeToBits(code){
+  if (!code) return new Array(SLOTS.length).fill(false);
+  try {
+    let s = code.replace(/-/g,'+').replace(/_/g,'/');
+    while (s.length % 4) s += '=';
+    const bytes = Uint8Array.from(atob(s), c => c.charCodeAt(0));
+    const bits = new Array(SLOTS.length).fill(false);
+    for (let i=0; i<SLOTS.length; i++) bits[i] = !!(bytes[i>>3] & (1 << (i&7)));
+    return bits;
+  } catch { return new Array(SLOTS.length).fill(false); }
+}
+
+function hourLabel(h){ return `${String(h).padStart(2,'0')}:00 – ${String(h+1).padStart(2,'0')}:00`; }
+
+// ===== 팀 화면 =====
+async function renderTeamView(){
+  $('#hub-view').style.display = 'none';
+  $('#admin-view').style.display = 'none';
+  $('#team-view').style.display = 'block';
+  $('#team-name').textContent = team + ' 팀';
+  document.title = `${team} · 스케줄 체크 · BDM`;
+
+  const syncKey = `schedule-${team}`;
+  let bits = new Array(SLOTS.length).fill(false);
+
+  // 로컬 캐시로 즉시 렌더 → 클라우드로 덮어쓰기
+  const cached = localStorage.getItem(`bdm:schedule:${team}`);
+  if (cached) bits = codeToBits(cached);
+  // URL code override
+  const urlCode = params.get('code');
+  if (urlCode) bits = codeToBits(urlCode);
+
+  // 그리드 빌드: 행=시간, 열=날짜
+  const grid = $('#grid');
+  let html = '<thead><tr class="dhead"><th></th>';
+  DAYS.forEach(d => html += `<th>${d}</th>`);
+  html += '</tr></thead><tbody>';
+  HOURS.forEach(h => {
+    html += `<tr><th>${String(h).padStart(2,'0')}–${String(h+1).padStart(2,'0')}</th>`;
+    DAYS.forEach(d => {
+      const idx = SLOTS.findIndex(s => s.day===d && s.hour===h);
+      if (idx < 0) {
+        html += `<td><div class="cell off-limits" title="해당 날짜에는 이 시간 슬롯이 없습니다"></div></td>`;
+      } else {
+        html += `<td><div class="cell${bits[idx]?' on':''}" data-i="${idx}"></div></td>`;
+      }
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  grid.innerHTML = html;
+  $('#total').textContent = SLOTS.length;
+
+  let saveTimer = null;
+  let suppressSave = false;
+  function updateAll(){
+    $('#count').textContent = bits.filter(Boolean).length;
+    const code = bitsToCode(bits);
+    $('#share-code').value = `${team}: ${code}`;
+    localStorage.setItem(`bdm:schedule:${team}`, code);
+    if (suppressSave) return;
+    // 디바운스 저장 (Firestore)
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      const backend = await waitForSync(3000);
+      if (!backend?.set) return;
+      backend.set(syncKey, {
+        team, code, count: bits.filter(Boolean).length, updatedAt: Date.now()
+      }).catch(e => console.warn('sync set failed', e));
+    }, 400);
+  }
+
+  // Firebase 연결 & 원격 구독
+  (async () => {
+    const backend = await waitForSync();
+    if (!backend) return;
+    // 초기 pull
+    const remote = await backend.get(syncKey);
+    if (remote?.code) {
+      suppressSave = true;
+      bits = codeToBits(remote.code);
+      grid.querySelectorAll('.cell:not(.off-limits)').forEach(cell => {
+        const i = +cell.dataset.i;
+        cell.classList.toggle('on', bits[i]);
+      });
+      updateAll();
+      suppressSave = false;
+    }
+    // 원격 구독
+    backend.subscribe(syncKey, payload => {
+      if (!payload?.code) return;
+      const remoteBits = codeToBits(payload.code);
+      if (remoteBits.every((b, i) => b === bits[i])) return; // no change
+      suppressSave = true;
+      bits = remoteBits;
+      grid.querySelectorAll('.cell:not(.off-limits)').forEach(cell => {
+        const i = +cell.dataset.i;
+        cell.classList.toggle('on', bits[i]);
+      });
+      updateAll();
+      suppressSave = false;
+    });
+  })();
+
+  grid.addEventListener('click', e => {
+    const cell = e.target.closest('.cell');
+    if (!cell || cell.classList.contains('off-limits')) return;
+    const i = +cell.dataset.i;
+    bits[i] = !bits[i];
+    cell.classList.toggle('on', bits[i]);
+    updateAll();
+  });
+
+  $('#btn-all').onclick = () => {
+    bits = bits.map(() => true);
+    grid.querySelectorAll('.cell:not(.off-limits)').forEach(c => c.classList.add('on'));
+    updateAll();
+  };
+  $('#btn-none').onclick = () => {
+    bits = bits.map(() => false);
+    grid.querySelectorAll('.cell').forEach(c => c.classList.remove('on'));
+    updateAll();
+  };
+  $('#btn-reset').onclick = () => {
+    if (!confirm('모든 선택을 초기화할까요? (교수님 화면에서도 초기화됨)')) return;
+    bits = new Array(SLOTS.length).fill(false);
+    grid.querySelectorAll('.cell').forEach(c => c.classList.remove('on'));
+    localStorage.removeItem(`bdm:schedule:${team}`);
+    updateAll();
+    toast('초기화됨');
+  };
+  $('#btn-submit').onclick = async () => {
+    const picked = bits.filter(Boolean).length;
+    if (picked === 0) {
+      toast('하나 이상 선택해주세요');
+      return;
+    }
+    // 제출 확정 플래그 기록
+    const backend = await waitForSync(3000);
+    if (backend?.set) {
+      try {
+        await backend.set(syncKey, {
+          team, code: bitsToCode(bits), count: picked,
+          submitted: true, submittedAt: Date.now(), updatedAt: Date.now()
+        });
+      } catch (e) { console.warn('submit failed', e); }
+    }
+    $('#submit-hint').style.display = 'block';
+    toast('✅ 제출 완료! 교수님이 자동으로 확인합니다.');
+  };
+
+  updateAll();
+}
+
+// ===== 관리자 화면 =====
+async function renderAdminView(){
+  $('#hub-view').style.display = 'none';
+  $('#team-view').style.display = 'none';
+  $('#admin-view').style.display = 'block';
+
+  // 집계 데이터: team name -> { bits, submitted, submittedAt, updatedAt }
+  const teamData = new Map();
+
+  function render(){
+    // team chips
+    const chips = $('#team-chips');
+    chips.innerHTML = '';
+    let submittedCount = 0;
+    [...teamData.entries()].sort((a,b)=>a[0].localeCompare(b[0])).forEach(([name, info]) => {
+      const chip = document.createElement('span');
+      chip.className = 'team-chip';
+      const cnt = info.bits.filter(Boolean).length;
+      const badge = info.submitted ? '✅' : '✏️';
+      if (info.submitted) submittedCount++;
+      chip.innerHTML = `<span>${badge}</span><b>${name}</b> <span style="color:var(--sub);font-size:12px">${cnt}슬롯</span>`;
+      chips.appendChild(chip);
+    });
+    $('#team-count').textContent = teamData.size;
+    $('#submit-count').textContent = teamData.size > 0 ? `· 제출확정 ${submittedCount}팀 · 수정중 ${teamData.size - submittedCount}팀` : '';
+
+    // per-slot count
+    const total = teamData.size;
+    const counts = SLOTS.map((_,i) => {
+      let c = 0;
+      for (const info of teamData.values()) if (info.bits[i]) c++;
+      return c;
+    });
+
+    const fullCount = counts.filter(c => c === total && total > 0).length;
+    $('#common-count').textContent = fullCount;
+    $('#max-teams').textContent = total;
+
+    // heatmap grid (same layout as team grid)
+    const grid = $('#admin-grid');
+    let html = '<thead><tr class="dhead"><th></th>';
+    DAYS.forEach(d => html += `<th>${d}</th>`);
+    html += '</tr></thead><tbody>';
+    HOURS.forEach(h => {
+      html += `<tr><th>${String(h).padStart(2,'0')}–${String(h+1).padStart(2,'0')}</th>`;
+      DAYS.forEach(d => {
+        const idx = SLOTS.findIndex(s => s.day===d && s.hour===h);
+        if (idx < 0) {
+          html += `<td><div class="cell off-limits"></div></td>`;
+        } else {
+          const c = counts[idx];
+          const tip = c > 0 ? `${c}팀 가능: ${[...teamData.entries()].filter(([_,v]) => v.bits[idx]).map(([t])=>t).join(', ')}` : '0팀';
+          html += `<td><div class="cell h${c}" title="${tip.replace(/"/g,'&quot;')}">${c>0&&c<total?c:''}</div></td>`;
+        }
+      });
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    grid.innerHTML = html;
+
+    // summary
+    const sumEl = $('#summary-list');
+    if (total === 0) {
+      sumEl.innerHTML = '<div style="color:var(--sub);font-size:13px">팀 코드를 붙여넣으면 자동으로 추천됩니다.</div>';
+      return;
+    }
+    // sort by count desc, then by date/hour
+    const ranked = SLOTS.map((s,i) => ({...s, i, c:counts[i]}))
+      .filter(x => x.c >= Math.max(1, total-1))
+      .sort((a,b) => b.c - a.c || a.date.localeCompare(b.date) || a.hour - b.hour);
+
+    if (!ranked.length) {
+      sumEl.innerHTML = '<div style="color:var(--sub);font-size:13px">아직 겹치는 시간이 없어요. 팀별로 가능한 시간을 더 열어달라고 요청해보세요.</div>';
+      return;
+    }
+
+    let h = '';
+    const fullRanked = ranked.filter(x => x.c === total);
+    const partialRanked = ranked.filter(x => x.c === total - 1);
+
+    if (fullRanked.length) {
+      h += `<div style="margin-bottom:10px"><b style="color:var(--accent)">✅ ${total}팀 전원 가능</b></div>`;
+      fullRanked.forEach(s => {
+        h += `<span class="slot-pill">${s.day} ${hourLabel(s.hour)}</span>`;
+      });
+    }
+    if (partialRanked.length) {
+      h += `<div style="margin:16px 0 10px"><b style="color:#B45309">⚠️ ${total-1}팀 가능 (1팀 제외)</b></div>`;
+      partialRanked.forEach(s => {
+        const missing = [...teamData.entries()].filter(([_,v]) => !v.bits[s.i]).map(([t])=>t);
+        h += `<span class="slot-pill partial" title="제외: ${missing.join(', ')}">${s.day} ${hourLabel(s.hour)} <span style="opacity:.7;font-size:11px">· ${missing.join(', ')} 제외</span></span>`;
+      });
+    }
+    sumEl.innerHTML = h;
+  }
+
+  render();
+
+  // Firebase 실시간 구독
+  const backend = await waitForSync();
+  if (!backend) {
+    $('#sync-status').textContent = '❌ 연결 실패';
+    return;
+  }
+  $('#sync-status').textContent = backend.mode === 'firestore' ? '🟢 실시간 연결됨' : '⚠️ 로컬 모드 (Firebase 미연결)';
+  TEAMS.forEach(t => {
+    backend.subscribe(`schedule-${t}`, payload => {
+      if (!payload?.code) {
+        teamData.delete(t);
+      } else {
+        teamData.set(t, {
+          bits: codeToBits(payload.code),
+          submitted: !!payload.submitted,
+          submittedAt: payload.submittedAt || 0,
+          updatedAt: payload.updatedAt || 0
+        });
+      }
+      render();
+    });
+  });
+}
+
+// ===== 라우팅 =====
+if (mode === 'admin') {
+  renderAdminView();
+} else if (team && TEAMS.some(t => t === team)) {
+  renderTeamView();
+} else if (team) {
+  // unknown team name but still allow (freeform)
+  renderTeamView();
+} else {
+  $('#hub-view').style.display = 'block';
+}
+</script>
+</body>
+</html>

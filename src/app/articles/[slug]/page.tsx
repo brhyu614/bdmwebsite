@@ -92,6 +92,16 @@ export default async function ArticlePage({ params }: PageProps) {
               tags: frontmatter.tags,
             }}
           />
+          <JsonLd
+            type="breadcrumb"
+            data={{
+              items: [
+                { name: '홈', url: SITE_URL },
+                { name: '인사이트', url: `${SITE_URL}/articles` },
+                { name: frontmatter.title, url: `${SITE_URL}/articles/${slug}` },
+              ],
+            }}
+          />
           <SeriesLabel series={frontmatter.series} size="md" />
           <h1 className="mt-4 text-3xl font-bold leading-tight text-text sm:text-4xl lg:text-[42px] lg:leading-tight">
             {frontmatter.title}

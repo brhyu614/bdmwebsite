@@ -1,7 +1,7 @@
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, AUTHOR_NAME, INSTAGRAM_URL, CONTACT_EMAIL } from '@/lib/constants'
 
 interface JsonLdProps {
-  type: 'website' | 'article' | 'person' | 'organization'
+  type: 'website' | 'article' | 'person' | 'organization' | 'breadcrumb'
   data?: Record<string, unknown>
 }
 
@@ -92,6 +92,19 @@ function generateSchema(type: string, data?: Record<string, unknown>) {
           alternateName: 'Hanyang University',
         },
         sameAs: [INSTAGRAM_URL],
+      }
+    case 'breadcrumb':
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: (data?.items as Array<{ name: string; url: string }> ?? []).map(
+          (item, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: item.name,
+            item: item.url,
+          })
+        ),
       }
     default:
       return {}

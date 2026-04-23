@@ -1,0 +1,19 @@
+# 빅데이터마케팅 랩 (Big Data Marketing Lab)
+
+> 소비자 행동을 데이터로 읽고, 매출·수요·인구를 예측합니다. 한양대학교 Big Data Marketing Lab의 공개 인사이트 아카이브.
+
+## Series
+
+- **알고리즘 디코드** (`algorithm-decode`) — 플랫폼 알고리즘, 추천 시스템, 브랜디드 콘텐츠, AEO 분석
+- **랩 리서치** (`lab-research`) — BDM Lab이 수행한 연구 및 기업 프로젝트 결과
+
+## Canonical URLs
+
+- Home: https://bigdatamarketinglab.com
+- Insights: https://bigdatamarketinglab.com/articles
+- Sitemap: https://bigdatamarketinglab.com/sitemap.xml
+- About: https://bigdatamarketinglab.com/about
+
+## Licensing
+
+개별 아티클의 참고문헌과 출처는 각 글 말미에 표기. 인용 시 출처와 원문 링크를 함께 표기해 주세요.

@@ -3,42 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BDM Lab Studio</title>
+<title>BDM Studio — Carousel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Newsreader:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared/design-system.css">
 <style>
-/* ==== 디자인 토큰 — bigdatamarketinglab.com 과 동일 ==== */
+/* design tokens are loaded from _shared/design-system.css */
 :root{
-  --color-bg:#0B0F14;
-  --color-surface:#121922;
-  --color-surface-alt:#1C2533;
-  --color-text:#F1F5F9;
-  --color-subtext:#A3B0C2;
-  --color-muted:#5A6778;
-  --color-accent:#60A5FA;
-  --color-accent-dim:#3B82F6;
-  --color-accent-bg:rgba(96,165,250,0.09);
-  --color-border:#1E2A3A;
-  --color-success:#22C55E;
-  --color-warning:#F59E0B;
-  --color-danger:#EF4444;
-
-  --font-sans:'Outfit','Noto Sans KR',ui-sans-serif,system-ui,sans-serif;
-  --font-serif:'Newsreader','Noto Sans KR',ui-serif,Georgia,serif;
-  --font-mono:'JetBrains Mono',ui-monospace,monospace;
-
-  /* 스타일 프로필 주입용 (B단계) */
-  --style-accent:#60A5FA;
-  --style-accent-rgb:76,158,235;
-  --style-font-heading:var(--font-sans);
-  --style-font-body:var(--font-sans);
-  --style-heading-weight:800;
+  /* 스타일 프로필 주입용 (B단계) — 이 변수만 페이지 로컬 */
+  --style-accent: var(--color-accent);
+  --style-accent-rgb: 52,211,153;
+  --style-font-heading: var(--font-sans);
+  --style-font-body: var(--font-sans);
+  --style-heading-weight: 800;
 }
-
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-sans);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{line-height:1.5}
 
 /* 스크롤바 — 메인 사이트와 동일 */
 ::-webkit-scrollbar{width:6px;height:6px}
@@ -49,20 +29,25 @@ body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-s
 
 /* ==== 레이아웃 ==== */
 .topbar{border-bottom:1px solid var(--color-border);background:var(--color-bg);position:sticky;top:0;z-index:50}
-.topbar-inner{max-width:1240px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:20px}
+.topbar-inner{max-width:1240px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:16px;flex-wrap:nowrap}
+.ch-nav{display:flex;gap:2px;align-items:center}
+.ch-nav .nav-link{font-size:13px;padding:6px 12px}
+.ch-nav .nav-link.active{color:var(--color-text);background:var(--color-surface)}
+.nav-link.icon-link{white-space:nowrap}
 .brand{font-family:var(--font-sans);font-weight:800;letter-spacing:-0.02em;font-size:18px;color:var(--color-text);text-decoration:none;display:flex;align-items:center;gap:8px}
-.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(96,165,250,0.55)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(52,211,153,0.55)}
 .brand .sub{color:var(--color-subtext);font-weight:500}
 .topbar-spacer{flex:1}
-.topbar a.nav-link{color:var(--color-subtext);text-decoration:none;font-size:13px;font-weight:500;padding:6px 10px;border-radius:6px}
-.topbar a.nav-link:hover{background:var(--color-surface);color:var(--color-text)}
-.user-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--color-border);border-radius:999px;font-size:12px;color:var(--color-subtext);background:var(--color-surface)}
+.topbar .nav-link{color:var(--color-subtext);text-decoration:none;font-size:13px;font-weight:500;padding:6px 10px;border-radius:6px;background:transparent;border:none;cursor:pointer;font-family:inherit}
+.topbar .nav-link:hover{background:var(--color-surface);color:var(--color-text)}
+.user-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--color-border);border-radius:999px;font-size:12px;color:var(--color-subtext);background:var(--color-surface);max-width:180px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+@media (max-width:640px){.user-chip{max-width:110px;font-size:11px;padding:5px 9px}}
 .user-chip.auth{color:var(--color-accent);border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
 
 .page{max-width:1240px;margin:0 auto;padding:24px 28px 96px}
 
 /* ==== 스텝 네비 ==== */
-.steps-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 28px;border-bottom:1px solid var(--color-border);padding-bottom:0}
+.steps-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 28px;border-bottom:1px solid var(--color-border);padding-bottom:0;position:sticky;top:60px;background:var(--color-bg);z-index:10}
 .step-tab{padding:14px 16px;background:transparent;border:none;color:var(--color-muted);text-align:left;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;transition:all .15s;display:flex;flex-direction:column;gap:3px}
 .step-tab:hover:not(:disabled){color:var(--color-subtext);background:var(--color-surface)}
 .step-tab:disabled{cursor:not-allowed;opacity:0.4}
@@ -87,8 +72,18 @@ body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-s
 .section-title h2{margin:0}
 .section-sub{font-size:12px;color:var(--color-muted);font-family:var(--font-mono)}
 
+/* Step 분리 — 한 번에 한 step 만 active. 각 step 안에 그 step 용 [🔁 다시 만들기] */
 .step-panel{display:none}
 .step-panel.active{display:block;animation:fadeIn .25s ease}
+
+/* 각 step 안의 "다시 만들기" 박스 */
+.step-redo-box{margin-top:24px;padding:18px 22px;background:rgba(52,211,153,0.05);border:1.5px solid var(--color-accent-dim);border-radius:12px}
+.step-redo-box h3{font-size:14px;font-weight:700;color:var(--color-accent);margin-bottom:6px}
+.step-redo-box .hint{font-size:12px;color:var(--color-muted);margin-bottom:10px;line-height:1.6}
+.step-redo-box textarea{width:100%;padding:10px 14px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:8px;color:var(--color-text);font-family:inherit;font-size:13.5px;line-height:1.6;resize:vertical;min-height:60px}
+.step-redo-box textarea:focus{outline:none;border-color:var(--color-accent);box-shadow:0 0 0 3px var(--color-accent-bg)}
+.step-redo-box .actions{display:flex;gap:10px;align-items:center;margin-top:10px}
+.step-redo-box .redo-status{font-size:12px;color:var(--color-muted)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
 /* 스텝 하단 네비 */
@@ -137,8 +132,26 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .chip.accent{color:var(--color-accent);border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
 
 /* ==== 슬라이드 카드 (Step 2 텍스트 리스트) ==== */
-.slide-text{background:var(--color-bg);border:1px solid var(--color-border);border-radius:12px;padding:16px 18px;margin:10px 0;transition:border-color .12s}
-.slide-text.cover{border-left:3px solid var(--color-accent)}
+.slide-text{background:var(--color-bg);border:1px solid var(--color-border);border-radius:12px;padding:16px 18px;margin:10px 0;transition:border-color .12s;position:relative}
+/* 커버 슬라이드 = 인스타 캐러셀의 첫 페이지 = 가장 중요 (시각 강조) */
+.slide-text.cover{border:2px solid var(--color-accent);background:linear-gradient(180deg,rgba(52,211,153,0.04),transparent)}
+.slide-text.cover::before{content:'⭐ 가장 중요한 페이지 — 첫 인상 결정';position:absolute;top:-10px;left:14px;font-size:10px;font-weight:700;background:var(--color-accent);color:var(--color-bg);padding:2px 10px;border-radius:4px;letter-spacing:0.5px}
+.slide-text.cover .slide-heading{font-size:19px;font-weight:800}
+.slide-heading.is-empty-warn{
+  border:2px dashed var(--color-danger);
+  border-radius:8px;
+  padding:14px 16px;
+  background:rgba(248,113,113,0.08);
+  font-size:14px; font-weight:500;
+  color:var(--color-danger);
+  cursor:text; min-height:60px;
+  position:relative;
+}
+.slide-heading.is-empty-warn:empty::before{
+  content:attr(data-placeholder);
+  color:var(--color-danger);
+  font-weight:600; line-height:1.5;
+}
 .slide-text.outro{border-left:3px solid var(--color-warning)}
 .slide-text-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .slide-label{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--color-muted);letter-spacing:1.5px;min-width:36px}
@@ -154,8 +167,38 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .editable-field:focus,.editable-field.editing{background:var(--color-surface-alt);box-shadow:inset 0 0 0 2px var(--color-accent);font-family:var(--font-mono);font-size:13px;line-height:1.55;color:var(--color-text);white-space:pre-wrap}
 .editable-field.editing strong,.editable-field.editing em,.editable-field.editing mark.hl{all:unset}
 .outro-field{display:inline-block;min-width:180px}
-.edit-hint{margin-left:auto;font-size:10px;font-family:var(--font-mono);opacity:.5}
+.edit-hint{font-size:10px;font-family:var(--font-mono);opacity:.5}
 .slide-text:hover .edit-hint{opacity:.9;color:var(--color-accent)}
+
+/* G-4 슬라이드 단위 인라인 피드백 */
+.slide-fb-btn{background:transparent;border:1px solid var(--color-border);color:var(--color-muted);font-size:11px;padding:3px 9px;border-radius:6px;cursor:pointer;font-family:inherit;opacity:0;transition:opacity .12s,color .12s,border-color .12s}
+.slide-text:hover .slide-fb-btn{opacity:1}
+.slide-fb-btn:hover{color:var(--color-accent);border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
+.slide-fb-btn.active{opacity:1;color:var(--color-accent);border-color:var(--color-accent-dim);background:var(--color-accent-bg)}
+.slide-fb-panel{margin-top:10px;padding:10px;background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:8px}
+.slide-fb-text{width:100%;background:var(--color-bg);border:1px solid var(--color-border);color:var(--color-text);font-family:inherit;font-size:13px;padding:8px 10px;border-radius:6px;resize:vertical;line-height:1.55}
+.slide-fb-text:focus{outline:none;border-color:var(--color-accent);box-shadow:0 0 0 3px var(--color-accent-bg)}
+.slide-fb-status.ok{color:var(--color-success)}
+.slide-fb-status.err{color:var(--color-danger)}
+
+/* v1 → v2 변경 알림 — 새 버전에서 텍스트가 바뀐 슬라이드는 주황 테두리 + "🔁 변경됨" 배지 */
+.slide-text.changed{border-color:var(--color-warning) !important;background:rgba(245,158,11,0.04)}
+.slide-text.changed::after{content:'🔁 이번 버전에서 변경됨';position:absolute;top:-10px;right:14px;font-size:10px;font-weight:700;background:var(--color-warning);color:var(--color-bg);padding:2px 10px;border-radius:4px;letter-spacing:0.3px}
+.slide-text.cover.changed::before{content:'⭐ 가장 중요한 페이지 (이번 버전 변경됨)';background:var(--color-warning)}
+
+/* F02 단일 페이지 — 슬라이드 카드 안에서 텍스트 + 이미지 동시 보기 */
+.slide-text-body{display:grid;grid-template-columns:1fr 88px;gap:14px;align-items:flex-start}
+.slide-text-main{min-width:0}
+.slide-mini-thumb{display:block;width:88px;aspect-ratio:9/12;border-radius:8px;overflow:hidden;border:1px solid var(--color-border);background:var(--color-surface-alt);position:relative;text-decoration:none;color:var(--color-muted);transition:border-color .12s, transform .12s;flex-shrink:0}
+.slide-mini-thumb:hover{border-color:var(--color-accent);transform:translateY(-1px)}
+.slide-mini-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.slide-mini-thumb .mini-tag{position:absolute;top:4px;right:4px;font-size:10px;background:rgba(11,15,20,0.78);color:#fff;padding:1px 5px;border-radius:4px;font-family:var(--font-mono)}
+.slide-mini-thumb.empty{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--color-muted);background:repeating-linear-gradient(45deg,var(--color-surface-alt) 0,var(--color-surface-alt) 6px,transparent 6px,transparent 12px),var(--color-bg);text-align:center;padding:6px}
+.slide-mini-thumb.empty:hover{color:var(--color-accent)}
+@media(max-width:600px){
+  .slide-text-body{grid-template-columns:1fr 72px}
+  .slide-mini-thumb{width:72px}
+}
 
 /* 마크다운 파서용 */
 .slide-heading strong,.slide-body strong,.v-heading strong,.v-body strong{font-weight:900;color:var(--color-text)}
@@ -248,8 +291,8 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .style-empty-card p{font-size:13px;line-height:1.7;max-width:520px;margin:0 auto}
 
 /* === 스타일 카드 그리드 안에 들어가는 액션 카드 (스타일 카드와 동등 크기) === */
-.style-action-card{border:1px dashed var(--color-border);background:linear-gradient(135deg,rgba(96,165,250,0.04),transparent 70%);justify-content:center;align-items:center;text-align:center;text-decoration:none;min-height:180px;gap:6px;padding:22px 20px}
-.style-action-card:hover{border-style:solid;background:linear-gradient(135deg,rgba(96,165,250,0.1),rgba(96,165,250,0.02) 70%);transform:translateY(-1px)}
+.style-action-card{border:1px dashed var(--color-border);background:linear-gradient(135deg,rgba(52,211,153,0.04),transparent 70%);justify-content:center;align-items:center;text-align:center;text-decoration:none;min-height:180px;gap:6px;padding:22px 20px}
+.style-action-card:hover{border-style:solid;background:linear-gradient(135deg,rgba(52,211,153,0.1),rgba(52,211,153,0.02) 70%);transform:translateY(-1px)}
 .style-action-card.style-action-add:hover{border-color:var(--color-accent)}
 .style-action-card.style-action-none{border-color:rgba(148,163,184,0.35)}
 .style-action-card.style-action-none:hover{border-color:var(--color-subtext);background:rgba(163,176,194,0.05)}
@@ -275,7 +318,7 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .login-hero{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
 .login-card{max-width:520px;width:100%;background:var(--color-surface);border:1px solid var(--color-border);border-radius:18px;padding:42px 40px;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
 .login-brand{font-family:var(--font-sans);font-size:13px;font-weight:600;color:var(--color-subtext);display:flex;align-items:center;gap:8px;letter-spacing:0.5px;margin-bottom:22px}
-.login-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(96,165,250,0.6)}
+.login-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--color-accent);box-shadow:0 0 12px rgba(52,211,153,0.6)}
 .login-title{font-family:var(--font-sans);font-size:32px;font-weight:800;letter-spacing:-0.025em;line-height:1.15;margin-bottom:18px;color:var(--color-text)}
 .login-lead{font-size:15px;line-height:1.75;color:var(--color-subtext);margin-bottom:30px}
 .login-lead b{color:var(--color-text)}
@@ -297,7 +340,7 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .intro-foot .spacer{flex:1}
 
 /* ==== 상단 🐛 문제 제보 링크 강조 ==== */
-.topbar .nav-link.bug-link{color:#F59E0B;border:1px dashed rgba(245,158,11,0.4);padding:4px 10px;border-radius:6px}
+.topbar .nav-link.bug-link{color:#F59E0B;border:1px dashed rgba(245,158,11,0.4) !important;padding:4px 10px;border-radius:6px;background:transparent}
 .topbar .nav-link.bug-link:hover{background:rgba(245,158,11,0.1);color:#FBBF24}
 
 /* textarea 공통 */
@@ -364,6 +407,21 @@ mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--style-accen
 .version-chip:hover{color:var(--color-text);border-color:var(--color-accent-dim)}
 .version-chip.current{background:var(--color-accent);color:#0B0F14;border-color:var(--color-accent);cursor:default}
 
+/* ==== Step 3 일괄 생성 바 (사용자 핵심 액션, 가장 위에 크게) ==== */
+.step3-bulk-bar{
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  padding:18px 20px; margin:0 0 16px;
+  background:linear-gradient(90deg, var(--color-accent-bg), rgba(52,211,153,0.04));
+  border:2px solid var(--color-accent-dim);
+  border-radius:14px;
+}
+.step3-bulk-info{flex:1; min-width:240px}
+.step3-bulk-info h4{margin:0 0 4px; font-size:15px; font-weight:700; color:var(--color-text)}
+.step3-bulk-info p{margin:0; font-size:12px; color:var(--color-subtext); line-height:1.55}
+.step3-bulk-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.step3-bulk-actions .btn-lg{padding:11px 22px; font-size:14px; font-weight:700}
+.step3-bulk-bar.is-running{border-color:var(--color-warning); background:rgba(245,158,11,0.08)}
+
 /* ==== Gemini 평가 박스 ==== */
 .review-box{background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;padding:16px;margin-top:12px}
 .review-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
@@ -413,6 +471,20 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
 .muted{color:var(--color-muted)}
 .mt-0{margin-top:0}
 
+@media (max-width:900px){
+  .ch-nav .nav-link{padding:5px 8px;font-size:12px}
+  .nav-label{display:none}
+  .brand{font-size:16px}
+}
+@media (max-width:640px){
+  .topbar-inner{padding:10px 12px;gap:8px;overflow-x:auto;flex-wrap:nowrap}
+  .brand{flex-shrink:0}
+  .ch-nav{flex-shrink:0}
+  .ch-nav .nav-link{padding:4px 7px;font-size:11px}
+  .topbar-spacer{display:none}
+  .nav-link.icon-link{padding:4px 6px;font-size:14px}
+  .bug-link{display:none}
+}
 @media (max-width:720px){
   .topbar-inner{padding:12px 16px}
   .page{padding:16px 16px 80px}
@@ -429,11 +501,19 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
 <!-- ============ TOPBAR ============ -->
 <header class="topbar">
   <div class="topbar-inner">
-    <a href="studio.html" class="brand"><span class="dot"></span> BDM Lab <span class="sub">Studio</span></a>
+    <a href="channels.html" class="brand"><span class="dot"></span> BDM <span class="sub">Studio</span></a>
+    <nav class="ch-nav">
+      <a href="studio.html" class="nav-link active">Carousel</a>
+      <a href="channels.html?ch=naver" class="nav-link">Blog</a>
+      <a href="channels.html?ch=threads" class="nav-link">Threads</a>
+      <a href="pulse.html" class="nav-link">📡 Pulse</a>
+      <a href="gallery.html" class="nav-link">📂 내 작업</a>
+    </nav>
     <div class="topbar-spacer"></div>
-    <a href="styles.html" class="nav-link">🎨 스타일 라이브러리</a>
-    <button type="button" class="nav-link" onclick="openIntro()" title="프로그램 안내 다시 보기">❓ 안내</button>
-    <button type="button" class="nav-link bug-link" onclick="openBugReport()" title="버그/문제 제보">🐛 문제 제보</button>
+    <a href="styles.html" class="nav-link icon-link" title="스타일 라이브러리">🎨<span class="nav-label"> 스타일</span></a>
+    <a href="faq.html" class="nav-link icon-link" title="자주 묻는 질문">❓<span class="nav-label"> FAQ</span></a>
+    <button type="button" class="nav-link icon-link" onclick="openIntro()" title="이 페이지 사용법" style="opacity:.7">📖<span class="nav-label"> 안내</span></button>
+    <button type="button" class="nav-link icon-link bug-link" onclick="openBugReport()" title="버그·개선사항 요청">💬<span class="nav-label"> 개선사항</span></button>
     <span id="auth-bar"><span class="user-chip">인증 확인 중...</span></span>
   </div>
 </header>
@@ -445,11 +525,9 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
   <div class="login-hero">
     <div class="login-card">
       <div class="login-brand"><span class="dot"></span> BDM Lab Studio</div>
-      <h1 class="login-title">인스타 캐러셀 자동화</h1>
+      <h1 class="login-title">아이디어 한 줄로 시작하는 SNS</h1>
       <p class="login-lead">
-        스타일 레퍼런스 한두 개 등록해두면, 그 톤을 닮은 캐러셀 초안을
-        자동으로 뽑아줍니다. 사용자 피드백이 모여 엔진이 주기적으로
-        개선되는 <b>집단지성 구조</b>입니다.
+        떠오르는 트렌드 신호 또는 내 아이디어를 골라, <b>캐러셀·블로그·Threads</b> 초안을 빠르게 만들고 마음에 들 때까지 고칩니다.
       </p>
       <button class="btn btn-primary btn-lg login-btn" onclick="signIn()">
         <span class="g-icon">G</span> Google로 로그인
@@ -507,6 +585,14 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
     <span class="step-label">완료 · 피드백</span>
   </button>
 </nav>
+
+<!-- 헤더 sticky 다시 만들기 바 제거 — 각 step 안에 그 step 용 redo 박스 신설 -->
+<input type="hidden" id="quick-redo-input" value="">
+
+<!-- St-01: Step disabled 의 의도 안내 (생성 후 자동으로 사라짐 — script 에서 처리) -->
+<div id="step-locked-hint" style="font-size:12px;color:var(--color-muted);margin:-18px 0 22px;padding:8px 12px;background:var(--color-surface-alt);border:1px dashed var(--color-border);border-radius:8px;line-height:1.55">
+  💡 Step 1 입력 후 <b>🚀 생성 시작</b> 을 누르면 Step 2~4 가 같은 화면에 펼쳐지면서 텍스트·이미지·완료를 자유롭게 오갈 수 있습니다.
+</div>
 
 <!-- ============ STEP 1: 입력 ============ -->
 <section class="step-panel active" id="panel-1">
@@ -597,7 +683,7 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
       <h1>텍스트 슬라이드 <span id="v-label" class="chip accent" style="font-size:12px;vertical-align:middle">v1</span></h1>
       <span class="section-sub">Step 02 · Text</span>
     </div>
-    <p>Claude가 생성한 9슬라이드. 괜찮으면 다음 단계, 아쉬우면 Gemini로 평가받고 피드백 선택해서 재생성.</p>
+    <p>Claude가 생성한 슬라이드. 분량은 입력 단계의 옵션에 따라 달라집니다 (5~12장 가변). 괜찮으면 다음 단계, 아쉬우면 Gemini로 평가받고 피드백 선택해서 재생성.</p>
 
     <div id="versions-wrap" style="display:none;margin:14px 0">
       <h3>버전 히스토리 <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">(클릭해서 전환)</span></h3>
@@ -609,12 +695,24 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
     <details><summary>원본 JSON 보기</summary><pre id="output"></pre></details>
   </div>
 
-  <div class="card">
-    <h3>📋 Gemini 자동 평가</h3>
-    <p style="margin:0 0 10px">4항목 스코어 + 개선 제안. 재생성 시 이 제안을 선택해서 반영할 수 있습니다.</p>
+  <!-- Step 2 텍스트 단계 — 그 단계용 [🔁 텍스트 다시 만들기] 박스 (가장 자주 쓰는 도구이므로 최상단) -->
+  <div class="step-redo-box">
+    <h3>🔁 텍스트 마음에 안 드는 부분이 있나요?</h3>
+    <p class="hint">전체적으로 또는 특정 슬라이드에 대한 의견을 한 줄 적으면 그대로 반영된 새 버전이 만들어집니다. 슬라이드 카드의 [💬 피드백] 으로 남긴 의견이 자동으로 여기에 누적됩니다.<br><span style="color:var(--color-muted);font-size:11px">예시 — <code style="background:var(--color-bg);padding:2px 6px;border-radius:4px">[커버] 제목 더 강하게</code> / <code style="background:var(--color-bg);padding:2px 6px;border-radius:4px">[슬라이드 #3] 데이터 출처 명시</code> / <code style="background:var(--color-bg);padding:2px 6px;border-radius:4px">전체: Z세대 관점 강화</code></span></p>
+    <textarea id="step2-redo-input" placeholder="여기에 한 줄 적어주세요…"></textarea>
+    <div class="actions" style="flex-wrap:wrap;gap:8px">
+      <button type="button" class="btn btn-primary" onclick="redoFromStep2()">🔁 텍스트 다시 만들기</button>
+      <span id="step2-redo-status" class="redo-status"></span>
+    </div>
+  </div>
+
+  <!-- 보조 도구 — Gemini 자동 평가 (덜 자주 씀, 아래로) -->
+  <div class="card" style="opacity:.85">
+    <h3 style="font-size:14px">📋 Gemini 자동 평가 <span style="font-size:11px;color:var(--color-muted);font-weight:400;margin-left:6px">선택 도구</span></h3>
+    <p style="margin:0 0 10px;color:var(--color-muted);font-size:12px">4항목 스코어 + 개선 제안. 재생성 시 이 제안을 선택해서 반영할 수 있습니다.</p>
     <div class="row" style="align-items:center">
       <div style="flex:1"></div>
-      <button class="btn" id="reviewBtn" onclick="doReview()">📋 평가 받기</button>
+      <button class="btn btn-ghost btn-sm" id="reviewBtn" onclick="doReview()">📋 평가 받기</button>
       <span id="rev-status" class="chip"></span>
     </div>
     <div id="reviewBox" style="display:none" class="review-box"></div>
@@ -622,7 +720,7 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
   </div>
 
   <div class="card" id="regen-card" style="display:none">
-    <h3>🔄 피드백 반영 → 재생성</h3>
+    <h3>🔄 Gemini 피드백 반영 → 재생성</h3>
     <p>Gemini 제안 중 반영할 것을 체크하거나, 자유 지시 입력.</p>
     <div id="suggestList"></div>
     <label style="margin-top:14px">자유 지시 (선택)</label>
@@ -635,10 +733,10 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
     </div>
   </div>
 
-  <div class="step-footer" style="padding:0 4px">
+  <div class="step-footer" style="padding:0 4px;margin-top:16px">
     <button class="btn btn-ghost" onclick="goStep(1)">← 입력 수정</button>
     <div class="spacer"></div>
-    <button class="btn btn-primary" onclick="goStep(3)">이미지 작업 →</button>
+    <button class="btn btn-primary" onclick="goStep(3)">✓ 텍스트 확정 → 이미지 작업 →</button>
   </div>
 </section>
 
@@ -649,24 +747,48 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
       <h1>슬라이드 이미지</h1>
       <span class="section-sub">Step 03 · Visual</span>
     </div>
-    <p>1080×1350 미리보기. 슬라이드마다 <b>🎨 AI</b>(스타일 자동 반영) / <b>🖼 Pexels</b>(스톡) / <b>📤 업로드</b>. 마음에 안 들면 <b>💬 피드백</b>으로 수정 방향 적어서 다시 생성할 수 있습니다. <b>🔍</b> 눌러서 실제 AI에 보낸 프롬프트도 확인하세요.</p>
+    <p>1080×1350 미리보기. 슬라이드마다 <b>🎨 AI</b>(스타일 자동 반영) / <b>🖼 무료 사진</b>(스톡) / <b>📤 업로드</b>. 마음에 안 들면 <b>💬 피드백</b>으로 수정 방향 적어서 다시 생성할 수 있습니다.</p>
 
     <!-- 스타일 투명성 배너 — 이번 생성에 주입될 스타일 요약 -->
     <div class="style-transparency" id="style-transparency"></div>
 
     <div class="alert alert-warn" id="rate-alert" style="display:none">
-      <b>⚠️ 이미지 서버 잔액이 적을 때</b>: 잔액이 얼마 안 남으면 서버가 일부러 천천히 받아요. 계속 느리게 나오면 <a href="https://replicate.com/account/billing" target="_blank" style="color:var(--color-accent)">여기에서 충전</a>하시면 즉시 빨라집니다 ($10만 충전해도 약 3700장).
+      <b>⚠️ 이미지 서버 잔액이 적을 때</b>: 잔액이 얼마 안 남으면 서버가 일부러 천천히 받아요. 계속 느리게 나오면 <a href="https://replicate.com/account/billing" target="_blank" style="color:var(--color-accent)">여기에서 충전</a>하면 즉시 빨라집니다.
+    </div>
+
+    <!-- 🎨 일괄 생성 — 가장 중요한 액션, Step 3 진입 시 자동 시작 + 사용자가 직접 누를 수도 있음 -->
+    <div id="step3-bulk-bar" class="step3-bulk-bar">
+      <div class="step3-bulk-info">
+        <h4>🎨 슬라이드 이미지 — 스타일대로 자동 생성</h4>
+        <p id="step3-bulk-status">Step 3 진입 시 자동으로 시작됩니다. 마음에 안 들면 아래 슬라이드 카드별 🎨/🖼/📤 또는 [다시 만들기] 박스로 수정 가능.</p>
+      </div>
+      <div class="step3-bulk-actions">
+        <button type="button" class="btn btn-primary btn-lg" id="autoDesignBtn" onclick="applyStyleCardsAll()" title="HTML/CSS 템플릿 기반 — 사용자 스타일 (색/구조) 100% 일치">🎨 디자인 카드 (스타일 100% 일치)</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="autoGenBtn" onclick="autoGenerateAllImages()" disabled title="AI 이미지 생성 (모델 한계로 스타일 미세 차이 있음)">🤖 AI 이미지로</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="autoPexelsBtn" onclick="autoApplyPexelsAll()" disabled title="빈 슬라이드에 무료 스톡 사진 자동 채움">🖼 대신 무료 사진으로</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="emergencyRegisterStyle1()" title="styles.html 우회 — 사용자 스타일1 (사진+녹색박스+검정텍스트) 즉시 등록" style="border:1px dashed var(--color-warning);color:var(--color-warning)">🚨 응급: 내 스타일1 등록</button>
+        <span id="autogen-status" class="chip"></span>
+      </div>
     </div>
 
     <div id="visual-grid" class="visual-grid"></div>
+  </div>
 
-    <div class="step-footer">
-      <button class="btn btn-ghost" onclick="goStep(2)">← 텍스트로</button>
-      <div class="spacer"></div>
-      <button class="btn" id="autoGenBtn" onclick="autoGenerateAllImages()" disabled>🎨 스타일대로 AI 이미지 일괄 생성</button>
-      <span id="autogen-status" class="chip"></span>
-      <button class="btn btn-primary" onclick="goStep(4)">완료 단계 →</button>
+  <!-- Step 3 이미지 단계 — 그 단계용 [🔁 이미지 다시 만들기] 박스 -->
+  <div class="step-redo-box" id="step3-redo-box" style="display:none">
+    <h3>🔁 이미지 마음에 안 드는 부분이 있나요?</h3>
+    <p class="hint">슬라이드별로 또는 전체적으로 어떻게 고치고 싶은지 적어주세요. 슬라이드 카드의 🎨 AI / 🖼 무료 사진 / 📤 업로드 로 개별 변경도 가능.<br><span style="color:var(--color-muted);font-size:11px">예시 — <code style="background:var(--color-bg);padding:2px 6px;border-radius:4px">[커버] 더 어두운 톤</code> / <code style="background:var(--color-bg);padding:2px 6px;border-radius:4px">[슬라이드 #3] 사람 없게</code> / <code style="background:var(--color-bg);padding:2px 6px;border-radius:4px">전체: 미니멀하게</code></span></p>
+    <textarea id="step3-redo-input" placeholder="여기에 한 줄 적어주세요…"></textarea>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" onclick="redoFromStep3()">🔁 이미지 다시 만들기 (전체)</button>
+      <span id="step3-redo-status" class="redo-status"></span>
     </div>
+  </div>
+
+  <div class="step-footer" style="padding:0 4px;margin-top:16px">
+    <button class="btn btn-ghost" onclick="goStep(2)">← 텍스트로</button>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" onclick="goStep(4)">✓ 이미지 확정 → 최종 단계 →</button>
   </div>
 </section>
 
@@ -686,61 +808,71 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
 <!-- ============ STEP 4: 완료 · 피드백 ============ -->
 <section class="step-panel" id="panel-4">
 
-  <div class="card card-lg">
-    <div class="section-title">
-      <h1>최종 승인</h1>
-      <span class="section-sub">Step 04 · Publish</span>
+  <!-- 단순화: ✓ 최종 확정 메인 버튼 + 한 줄 의견 + 그 외는 접기 -->
+  <div class="card card-lg" style="text-align:center;padding:36px 24px">
+    <div style="font-size:14px;color:var(--color-muted);margin-bottom:6px">Step 04</div>
+    <h1 style="font-size:24px;margin-bottom:8px">결과가 마음에 드시나요?</h1>
+    <p style="color:var(--color-subtext);max-width:540px;margin:0 auto 24px;line-height:1.7">위로 올라가서 슬라이드를 직접 고치거나 [💬 피드백] 으로 다시 만들 수 있어요. 만족하시면 아래 한 번 누르면 끝.</p>
+
+    <div style="margin-bottom:16px">
+      <textarea id="fb-free" placeholder="(선택) 이 결과 어땠어요? 한 줄 — 다음에 더 좋아져요" maxlength="2000" rows="2" style="max-width:540px;width:100%;padding:12px 14px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;color:var(--color-text);font-family:inherit;font-size:13.5px;line-height:1.6;resize:vertical"></textarea>
     </div>
-    <p>만족스러운 버전이면 컨펌하고, 잘 된 결과는 스타일 라이브러리에 반영해 다음 생성의 레퍼런스로.</p>
 
-    <div class="row" style="align-items:center">
-      <div style="flex:1"></div>
-      <button class="btn" id="confirmBtn" onclick="doConfirmFinal()">✓ 현재 버전 최종 컨펌</button>
-      <button class="btn btn-primary" id="reflectBtn" onclick="doReflectToStyle()">🎨 스타일에 반영하기</button>
-      <span id="final-status" class="chip"></span>
+    <button class="btn btn-primary" id="confirmBtn" onclick="doConfirmFinalSimple()" style="font-size:16px;padding:14px 36px;font-weight:700">✓ 최종 확정</button>
+    <div style="margin-top:10px"><span id="final-status" class="chip"></span></div>
+
+    <!-- 🧠 학습 (사용자 강한 요구 2026-04-27): redo box 가 아니라 마지막 컨펌 시점에 -->
+    <div style="margin-top:28px;padding:18px 22px;background:linear-gradient(135deg, rgba(52,211,153,0.06), rgba(52,211,153,0.02));border:1.5px solid var(--color-accent-dim);border-radius:14px;max-width:560px;margin-left:auto;margin-right:auto">
+      <div style="font-size:13px;color:var(--color-text);font-weight:700;margin-bottom:6px">🧠 이 버전이 마음에 드신다면</div>
+      <p style="font-size:12px;color:var(--color-subtext);margin:0 0 12px;line-height:1.6">현재 캐러셀의 톤·구조·표현 패턴을 <b>나만의 스타일로 학습</b>시키면, 다음 캐러셀부터 매번 같은 지시 안 적어도 자동 적용됩니다.</p>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="learnCurrentVersionAsStyle()" style="background:rgba(52,211,153,0.12);border-color:var(--color-accent);color:var(--color-accent);font-weight:600">🧠 이 버전을 내 스타일로 학습</button>
+      <span id="learn-final-status" style="font-size:12px;margin-left:10px;color:var(--color-subtext)"></span>
+      <div id="learned-rules-summary-final" style="margin-top:10px;font-size:11px;color:var(--color-muted);display:none">
+        <span id="learned-rules-text-final"></span>
+      </div>
     </div>
-  </div>
 
-  <div class="card">
-    <h3>📊 포스팅 성과 등록 <span class="chip warn" style="margin-left:6px">Coming Soon</span></h3>
-    <p class="mt-0">컨펌 후 실제 인스타 포스팅하시면 URL + 게시 시각을 등록하세요. 3일/7일 후 조회·저장·공유 수치를 넣으면 어떤 스타일·주제가 잘 먹히는지 집계됩니다. (다음 작업에서 구현)</p>
-  </div>
-
-  <div class="card card-lg">
-    <div class="section-title">
-      <h2>💬 집단지성 피드백</h2>
-      <span class="chip accent">항상 수정 가능</span>
-    </div>
-    <p>이 결과가 어땠는지 남겨주세요. 누적된 피드백은 <b>1~2주마다 메인 엔진 프롬프트 업데이트</b>에 반영됩니다. 테마 "기타"에 반복 등장하는 입력은 정식 카테고리로 승격됩니다. 전부 선택사항.</p>
-
-    <div class="fb-section">점수 (1 별로 · 5 훌륭)</div>
-
-    <div class="fb-question">주제 적합도 <small>주제를 얼마나 제대로 다뤘나</small></div>
-    <div class="fb-score-row" data-score="topic_fit"></div>
-    <div class="fb-score-legend"><span>1 별로</span><span>3 보통</span><span>5 훌륭</span></div>
-
-    <div class="fb-question" style="margin-top:14px">스타일 일관성 <small>레퍼런스 스타일과 얼마나 맞나</small></div>
-    <div class="fb-score-row" data-score="style_consistency"></div>
-
-    <div class="fb-question" style="margin-top:14px">훅 강도 <small>첫 슬라이드가 사람을 멈추게 하나</small></div>
-    <div class="fb-score-row" data-score="hook_strength"></div>
-
-    <div class="fb-section">주제 분야 (복수 선택)</div>
-    <div id="fb-themes" class="fb-chip-grid"><div class="muted" style="font-size:12px">테마 로딩 중...</div></div>
-
-    <div class="fb-question" style="margin-top:14px">기타 주제 <small>목록에 없으면 직접 입력 · 많이 쌓이면 정식 카테고리로 승격</small></div>
-    <input id="fb-theme-custom" placeholder="예: 서비스 디자인, 팟캐스트, 교육 콘텐츠..." maxlength="300">
-
-    <div class="fb-section">자유 피드백</div>
-    <textarea id="fb-free" placeholder="뭐가 좋았는지 / 뭐가 아쉬운지 / 다음 버전에 반영하고 싶은 방향. 여기 남긴 내용이 엔진 개선의 핵심 재료입니다." maxlength="2000"></textarea>
-
-    <div class="step-footer">
-      <button class="btn btn-ghost" onclick="goStep(3)">← 이미지로</button>
-      <div class="spacer"></div>
-      <button class="btn btn-primary btn-lg" id="fb-submit-btn" onclick="submitFeedback()">💾 피드백 저장</button>
-      <span id="fb-status" class="chip"></span>
+    <div style="margin-top:24px;padding-top:20px;border-top:1px dashed var(--color-border);display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" id="downloadBtn" onclick="doDownloadCarousel()" title="PNG 이미지 묶음 다운로드">📥 PNG 다운로드</button>
+      <button class="btn btn-ghost btn-sm" id="reflectBtn" onclick="doReflectToStyle()" title="이 결과의 스타일을 라이브러리에 추가">🎨 스타일에 반영</button>
+      <button class="btn btn-ghost btn-sm" id="saveStyleBtn" onclick="doSaveAsNewStyle()" title="이 톤으로 새 스타일 만들기">⭐ 새 스타일로 저장</button>
     </div>
   </div>
+
+  <!-- 더 자세한 피드백 (선택) — 접어두기 -->
+  <details style="margin-top:14px">
+    <summary style="cursor:pointer;padding:14px 18px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:10px;font-size:13px;color:var(--color-subtext);user-select:none">▸ 더 자세한 피드백 남기기 (별점·테마, 선택)</summary>
+    <div class="card" style="margin-top:8px">
+      <p style="font-size:12.5px;color:var(--color-muted);margin-bottom:14px;line-height:1.7">한 줄 피드백만으로도 충분합니다. 더 정교하게 의견 남기고 싶으신 분만 아래 작성해주세요. 누적된 피드백이 1~2주마다 엔진 개선에 반영됩니다.</p>
+
+      <div class="fb-section">점수 (선택)</div>
+      <div class="fb-question">주제 적합도 <small>주제를 얼마나 제대로 다뤘나</small></div>
+      <div class="fb-score-row" data-score="topic_fit"></div>
+
+      <div class="fb-question" style="margin-top:14px">스타일 일관성 <small>레퍼런스 스타일과 얼마나 맞나</small></div>
+      <div class="fb-score-row" data-score="style_consistency"></div>
+
+      <div class="fb-question" style="margin-top:14px">훅 강도 <small>첫 슬라이드가 사람을 멈추게 하나</small></div>
+      <div class="fb-score-row" data-score="hook_strength"></div>
+
+      <div class="fb-section">주제 분야 (복수 선택)</div>
+      <div id="fb-themes" class="fb-chip-grid"><div class="muted" style="font-size:12px">테마 로딩 중...</div></div>
+
+      <div class="fb-question" style="margin-top:14px">기타 주제 <small>목록에 없으면 직접 입력</small></div>
+      <input id="fb-theme-custom" placeholder="예: 서비스 디자인, 팟캐스트, 교육 콘텐츠..." maxlength="300">
+
+      <div class="step-footer" style="margin-top:18px">
+        <div class="spacer"></div>
+        <button class="btn btn-primary" id="fb-submit-btn" onclick="submitFeedback()">💾 자세한 피드백 저장</button>
+        <span id="fb-status" class="chip"></span>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>디버그 로그</summary>
+    <div id="logBox" class="log"><div class="log-line">[log] 시작...</div></div>
+  </details>
 
   <details>
     <summary>디버그 로그</summary>
@@ -757,7 +889,7 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
   <div class="modal">
     <div class="modal-head">
       <div style="flex:1">
-        <h2>🖼 Pexels 이미지 선택</h2>
+        <h2>🖼 무료 사진 검색 <span style="font-size:11px;color:var(--color-muted);font-weight:400;margin-left:6px">출처: Pexels</span></h2>
         <div class="muted" style="font-size:12px;margin-top:2px">슬라이드 <span id="pex-slide-idx"></span></div>
       </div>
       <button class="btn btn-ghost btn-sm" onclick="closePexelsModal()">✕ 닫기</button>
@@ -774,38 +906,69 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
   </div>
 </div>
 
-<!-- ============ 처음 안내 (1분 읽기) ============ -->
+<!-- ============ 처음 안내 ============ -->
 <div id="intro-modal" class="modal-backdrop" style="display:none">
   <div class="modal intro-modal">
     <div class="modal-head">
       <div style="flex:1">
-        <h2>BDM Lab Studio</h2>
-        <div class="muted" style="font-size:12px;margin-top:2px">인스타 캐러셀 자동화 프로그램입니다. 1분이면 사용법을 알 수 있습니다.</div>
+        <h2>BDM Lab Studio 에 오신 걸 환영합니다</h2>
+        <div class="muted" style="font-size:12px;margin-top:2px">아이디어 한 줄 또는 트렌드 한 개로, SNS 콘텐츠 초안을 빠르게 만들어보세요.</div>
       </div>
       <button class="btn btn-ghost btn-sm" onclick="closeIntro()">✕</button>
     </div>
     <div class="modal-body">
       <p class="intro-lead">
-        스타일 레퍼런스 한두 개 등록해두면, 그 톤을 닮은 캐러셀 초안을 자동으로 뽑아줍니다.
-      </p>
-      <p class="intro-lead">
-        사용자들의 피드백이 모여서 엔진 프롬프트가 주기적으로 개선되는 <b>집단지성 구조</b>입니다.
-        많이 쓸수록 모두에게 좋아집니다. 지금은 연구용 베타입니다.
+        세 채널 (📸 Carousel · 📝 Blog · 🧵 Threads) 의 초안을 만들어주는 도구입니다.
+        제일 강력한 무기는 <b>'집단지성'</b> 이에요. 여러분이 콘텐츠를 만들고, 수정하고, 피드백 한 줄을 남기는 그 모든 행동이 모여 시스템이 어제보다 오늘 더 똑똑해집니다.
       </p>
 
-      <h3 class="intro-h3">4단계 흐름</h3>
+      <h3 class="intro-h3">시작은 두 갈래</h3>
       <ol class="intro-steps">
-        <li><b>Step 1 · 입력</b> — 주제를 쓰고 스타일을 고릅니다. 스타일은 <a href="styles.html" style="color:var(--color-accent)">🎨 스타일 라이브러리</a>에서 인스타 계정·게시물 URL을 넣어 만들어두면 여러 번 재활용됩니다.</li>
-        <li><b>Step 2 · 텍스트</b> — Claude가 쓴 슬라이드 초안. 마음에 안 드는 문장은 <b>클릭해서 직접 고치거나</b>, Gemini 평가 후 피드백으로 재생성하세요.</li>
-        <li><b>Step 3 · 이미지</b> — 각 슬라이드에 🎨 AI / 🖼 Pexels / 📤 업로드 중 선택. <b>⚙️ 버튼</b>으로 텍스트 크기·위치·표시 여부를 조정하고, <b>"전체에 적용"</b>으로 한 번에 통일할 수 있습니다.</li>
-        <li><b>Step 4 · 완료</b> — 최종 컨펌 + 별점 + 테마 태그 + 자유 피드백. 이게 엔진 개선 재료가 됩니다.</li>
+        <li><b>내 아이디어로</b> — 다루고 싶은 주제를 적으면 알아서 초안으로 풀어줍니다.</li>
+        <li><b>트렌드로</b> — <a href="pulse.html" style="color:var(--color-accent)">📡 Pulse</a> 에서 시스템이 포착한 신선한 신호를 골라, 남보다 한발 빠르게 내 콘텐츠로.</li>
       </ol>
 
-      <h3 class="intro-h3">꼭 기억할 3가지</h3>
+      <h3 class="intro-h3">🧬 집단지성이 작동하는 방식</h3>
+      <div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.25);border-radius:10px;padding:14px;font-size:13px;line-height:1.75;color:var(--color-text)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:11px;color:var(--color-accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">여러분의 행동이 데이터가 됩니다</div>
+            <ul style="margin:0;padding-left:18px;font-size:12.5px;color:var(--color-subtext);line-height:1.85">
+              <li>텍스트 직접 수정 (어떻게 고쳤나)</li>
+              <li>재생성 시 한 줄 피드백</li>
+              <li>슬라이드별 💬 인라인 의견</li>
+              <li>Pulse 의 Pin / Keep / Skip 판정</li>
+              <li>완료 시 별점·테마 태그·자유 응답</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--color-accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">데이터가 룰로, 룰이 진화로</div>
+            <ul style="margin:0;padding-left:18px;font-size:12.5px;color:var(--color-subtext);line-height:1.85">
+              <li>모든 행동이 DB 자동 누적</li>
+              <li>관리자가 주기적으로 패턴 검토</li>
+              <li>반복되는 패턴 → 새 룰 추출</li>
+              <li>새 엔진 버전으로 승격</li>
+              <li>다음 호출부터 모든 사용자에게 즉시 적용</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(52,211,153,0.3);font-size:12.5px;line-height:1.75">
+          <b>예시:</b> 이번 주 5명이 "데이터 출처가 모호하다" 라고 피드백을 남기면 → 다음 버전에 <i>"수치 인용 시 출처 명시 강제"</i> 룰이 자동 추가되어 → 모든 사용자에게 즉시 반영됩니다.
+        </div>
+      </div>
+
+      <h3 class="intro-h3">3가지 채널</h3>
+      <ol class="intro-steps">
+        <li><b>📸 Carousel</b> — 인스타 캐러셀 (분량은 입력 단계에서 5~12장 자유 선택). 텍스트 + 이미지 시각화 중심.</li>
+        <li><b>📝 <a href="channels.html?ch=naver" style="color:var(--color-accent)">Blog</a></b> — 네이버 블로그 장문. SEO 최적화 + 무료 사진 자동 첨부.</li>
+        <li><b>🧵 <a href="channels.html?ch=threads" style="color:var(--color-accent)">Threads</a></b> — 짧은 호흡, 한 주제를 3가지 톤으로 동시 생성.</li>
+      </ol>
+
+      <h3 class="intro-h3">잘 쓰는 비결 3가지</h3>
       <ul class="intro-tips">
-        <li><b>스타일 품질이 곧 결과 품질이다.</b> 개수보다 분석(🤖 분석하기)이 끝나 있는지가 더 중요합니다. 지금은 토큰 제한이 있어서 한두 개만 등록·분석해두고 쓰시길 권장합니다.</li>
-        <li><b>피드백은 집단지성 자산이다.</b> "텍스트가 흐리다", "제목이 약하다" 같은 한 줄도 전체 사용자 데이터에 합쳐져서 다음 버전 시스템 프롬프트 개선 재료가 됩니다.</li>
-        <li><b>막히면 상단 🐛 문제 제보.</b> 쓰다가 어색하거나 에러 나면 그 자리에서 바로 보내주세요.</li>
+        <li><b>스타일 분석을 먼저.</b> <a href="styles.html" style="color:var(--color-accent)">🎨 스타일 라이브러리</a> 에서 채널별로 1~2개의 레퍼런스를 등록하고 <b>🤖 분석하기</b> 까지 끝내두면 톤이 잘 맞는 결과가 나옵니다.</li>
+        <li><b>한 줄 피드백이 전부를 바꿉니다.</b> "말투가 어색", "결론이 약함" 같은 사소한 의견도 전체 사용자 데이터에 합쳐져 다음 버전의 룰이 됩니다.</li>
+        <li><b>막히면 상단 💬 개선사항</b> 또는 <a href="faq.html" style="color:var(--color-accent)">❓ FAQ</a> 를 봐주세요.</li>
       </ul>
 
       <div class="intro-foot">
@@ -822,8 +985,8 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
   <div class="modal" style="max-width:620px">
     <div class="modal-head">
       <div style="flex:1">
-        <h2>🐛 문제 제보</h2>
-        <div class="muted" style="font-size:12px;margin-top:2px">에러, 어색한 동작, UI 문제 아무거나. 교수님이 직접 봅니다.</div>
+        <h2>💬 개선사항 요청</h2>
+        <div class="muted" style="font-size:12px;margin-top:2px">에러, 어색한 동작, UI 문제, 있었으면 하는 기능 — 아무거나. BDM Lab 시스템에 누적됩니다.</div>
       </div>
       <button class="btn btn-ghost btn-sm" onclick="closeBugReport()">✕ 닫기</button>
     </div>
@@ -847,7 +1010,7 @@ details pre{background:var(--color-bg);border:1px solid var(--color-border);bord
 
       <div class="row" style="margin-top:14px;align-items:center">
         <div class="muted" style="font-size:11px;flex:1">브라우저/URL/현재 단계는 자동으로 함께 전송됩니다.</div>
-        <button class="btn btn-primary" onclick="submitBugReport()" id="bug-submit">제보 보내기</button>
+        <button class="btn btn-primary" onclick="submitBugReport()" id="bug-submit">보내기</button>
         <span id="bug-status" class="chip"></span>
       </div>
     </div>
@@ -943,6 +1106,7 @@ async function ensureFreshSession(){
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
 /* ==================== 스텝 네비 ==================== */
+// Step 분리: 한 번에 한 step 만 active. 다른 step 으로 갈 때 hide
 function goStep(n){
   const tab = document.querySelector(`.step-tab[data-step="${n}"]`);
   if(tab && tab.disabled) return;
@@ -951,7 +1115,11 @@ function goStep(n){
   $('panel-' + n).classList.add('active');
   if(tab) tab.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if(n === 3) renderTransparencyBanner();
+  if(n === 3) {
+    renderTransparencyBanner();
+    // Step 3 진입 시 빈 슬라이드 자동으로 스타일대로 AI 이미지 생성
+    setTimeout(() => maybeAutoFillImagesOnStep3(), 400);
+  }
 }
 function unlockStep(n){
   const tab = document.querySelector(`.step-tab[data-step="${n}"]`);
@@ -977,7 +1145,7 @@ function extractAccentFromProfile(profile){
   }
   const NAME_MAP = {
     'black':'#1C1917','white':'#FAFAF9','green':'#22C55E','emerald':'#059669',
-    'blue':'#60A5FA','red':'#EF4444','yellow':'#EAB308','pink':'#EC4899',
+    'blue':'#34D399','red':'#EF4444','yellow':'#EAB308','pink':'#EC4899',
     'purple':'#A855F7','orange':'#F97316','gray':'#6B7280','grey':'#6B7280',
     'beige':'#D6C7A7','brown':'#78350F','navy':'#1E3A8A','teal':'#0D9488',
   };
@@ -999,7 +1167,7 @@ function extractFontFromProfile(profile){
 }
 function applyStyleToCSS(styleId){
   const root = document.documentElement;
-  root.style.setProperty('--style-accent', '#60A5FA');
+  root.style.setProperty('--style-accent', '#34D399');
   root.style.setProperty('--style-accent-rgb', '76, 158, 235');
   root.style.setProperty('--style-font-heading', "'Outfit','Noto Sans KR',sans-serif");
   root.style.setProperty('--style-font-body', "'Outfit','Noto Sans KR',sans-serif");
@@ -1043,6 +1211,7 @@ async function loadStyles(){
   const { data, error } = await supabase
     .from('styles')
     .select('id, name, is_default, item_count, analyzed, description')
+    .eq('channel', 'carousel')
     .order('is_default', { ascending: false })
     .order('created_at', { ascending: true });
   if(error){ log('스타일 조회 실패: ' + error.message, 'err'); return; }
@@ -1079,7 +1248,7 @@ function renderStylePicker(list){
       <button type="button" class="style-pick-card${s.is_default ? ' is-default' : ''}"
               data-id="${esc(s.id)}" onclick="pickStyle('${esc(s.id)}')">
         <div class="spc-head">
-          <div class="spc-dot" style="background:${esc(accent || '#60A5FA')}"></div>
+          <div class="spc-dot" style="background:${esc(accent || '#34D399')}"></div>
           <div class="spc-name">${esc(s.name)}${s.is_default ? ' <span class=\"spc-badge\">기본</span>' : ''}</div>
           ${hasProfile ? '<span class="spc-ok">✓ 분석됨</span>' : '<span class="spc-warn">분석 전</span>'}
         </div>
@@ -1254,6 +1423,10 @@ async function doGenerate(){
     unlockStep(2); unlockStep(3); unlockStep(4);
     markStepDone(1);
     goStep(2);
+    // St-01: 생성 후 잠금 안내 숨김
+    const hint = document.getElementById('step-locked-hint');
+    if(hint) hint.style.display = 'none';
+    // 헤더 sticky 바 제거됨 — 각 step 안에 그 step 용 redo 박스로 분리
 
     // Step 4 피드백 기존 로드
     loadExistingFeedback();
@@ -1279,13 +1452,48 @@ function renderSlideText(slide, num, cls){
   const tag = slide.tag ? `<span class="slide-tag">${esc(slide.tag)}</span>` : '';
   const variant = slide.variant ? `<span class="slide-tag variant">${esc(slide.variant)}</span>` : '';
   const path = num === 0 ? 'cover' : `slides.${num - 1}`;
-  const heading = slide.heading !== undefined ? editableField(slide.heading || '', `${path}.heading`, 'slide-heading', '제목을 입력하세요') : '';
+  // Cover heading 이 빈 채로 오는 경우 (Edge Function deploy 안됨 + Claude가 비워둠) 강한 경고로 표시
+  const headingRaw = slide.heading || '';
+  const isCoverEmpty = num === 0 && headingRaw.trim().length === 0;
+  let heading = '';
+  if(slide.heading !== undefined){
+    if(isCoverEmpty){
+      heading = `<div class="slide-heading is-empty-warn" data-path="${path}.heading" contenteditable="true" data-placeholder="⚠️ AI가 빈 채로 응답함 — 여기 클릭해서 직접 입력하거나 [🔁 텍스트 다시 만들기] 사용"></div>`;
+    } else {
+      heading = editableField(headingRaw, `${path}.heading`, 'slide-heading', '제목을 입력하세요');
+    }
+  }
   const body = slide.body !== undefined ? editableField(slide.body || '', `${path}.body`, 'slide-body', '본문을 입력하세요') : '';
   const kw = slide.video_keyword ? `<div class="slide-meta">🎬 ${esc(slide.video_keyword)}</div>` : '';
   const label = num === 0 ? 'COVER' : '#' + String(num).padStart(2,'0');
-  return `<div class="slide-text ${cls}" data-slide-num="${num}">
-    <div class="slide-text-head"><span class="slide-label">${label}</span>${tag}${variant}<span class="edit-hint muted">클릭해서 수정</span></div>
-    ${heading}${body}${kw}
+  const targetKind = num === 0 ? 'cover' : 'slide';
+  const targetId = num === 0 ? 'cover' : String(num);
+
+  // 단계 분리 원칙 (2026-04-27 사용자 지적): Step 2 는 텍스트만, Step 3 는 이미지만.
+  // 이전엔 텍스트 슬라이드 카드 안에 이미지 mini-thumb 을 넣었으나 (F02 잔재),
+  // "텍스트 단계에서 이미지 교체 entry point가 보이는 게 단계 분리 의미를 깬다" 는 지적에 따라 제거.
+  const mediaThumb = '';
+
+  return `<div class="slide-text ${cls}" data-slide-num="${num}" data-target-kind="${esc(targetKind)}" data-target-id="${esc(targetId)}">
+    <div class="slide-text-head">
+      <span class="slide-label">${label}</span>${tag}${variant}
+      <span class="edit-hint muted">클릭해서 수정</span>
+      <span style="flex:1"></span>
+      <button type="button" class="slide-fb-btn" onclick="toggleSlideFeedback(this)" title="이 슬라이드에 대한 한 줄 피드백을 남기면 집단지성 데이터로 누적됩니다">💬 피드백</button>
+    </div>
+    <div class="slide-text-body">
+      <div class="slide-text-main">${heading}${body}${kw}</div>
+      ${mediaThumb}
+    </div>
+    <div class="slide-fb-panel" style="display:none">
+      <textarea class="slide-fb-text" placeholder="이 슬라이드에 대한 의견 (예: 제목이 약하다 / 데이터 출처가 모호하다 / 너무 길다). 한 줄도 좋습니다." rows="2" maxlength="800"></textarea>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+        <span class="slide-fb-status muted" style="font-size:11px"></span>
+        <span style="flex:1"></span>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="cancelSlideFeedback(this)">취소</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="saveSlideFeedback(this)">저장</button>
+      </div>
+    </div>
   </div>`;
 }
 function renderOutro(o){
@@ -1386,7 +1594,12 @@ async function doReview(){
     const resp = await fetch(`${SUPABASE_URL}/functions/v1/review-carousel`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ generation_id: lastResult.generation_id }),
+      body: JSON.stringify({
+        carousel: lastResult.output,                   // Edge Function 이 평가할 본문
+        generation_id: lastResult.generation_id,
+        carousel_id: lastResult.carousel_id || null,
+        channel: 'carousel',
+      }),
     });
     const data = await resp.json();
     if(!resp.ok){ alert('평가 실패: ' + (data.error || resp.status)); setChip($('rev-status'), '실패', 'err'); return; }
@@ -1429,6 +1642,344 @@ function renderSuggestions(d){
 }
 
 /* ==================== 재생성 ==================== */
+/* ==================== Step 2 텍스트 다시 만들기 (그 단계 안에 박힘) ==================== */
+async function redoFromStep2(){
+  const input = document.getElementById('step2-redo-input');
+  const status = document.getElementById('step2-redo-status');
+  const text = (input?.value || '').trim();
+  if(!text){
+    if(status){ status.textContent = '한 줄 적어주세요'; status.style.color = 'var(--color-warning)'; }
+    input?.focus();
+    return;
+  }
+  if(!lastResult?.generation_id){
+    if(status){ status.textContent = '먼저 생성하세요'; status.style.color = 'var(--color-warning)'; }
+    return;
+  }
+  const regenText = document.getElementById('regenText');
+  if(regenText) regenText.value = text;
+  if(status){ status.textContent = '🔁 v' + ((lastResult.version || 1) + 1) + ' 만드는 중…'; status.style.color = 'var(--color-warning)'; }
+  await doRegenerate();
+  if(input) input.value = '';
+  if(status){
+    if(lastResult?.version){
+      status.textContent = '✓ v' + lastResult.version + ' 생성됨';
+      status.style.color = 'var(--color-success)';
+      setTimeout(() => { if(status) status.textContent = ''; }, 4000);
+    } else {
+      status.textContent = '실패';
+      status.style.color = 'var(--color-danger)';
+    }
+  }
+}
+
+/* ==================== 🧠 개인 프롬프트 학습 (031 마이그레이션 + learn-from-feedback) ==================== */
+/*
+ * 사용자가 redo 박스에 적은 피드백 한 줄을 "이건 내 평소 선호다 — 매번 안 적게 자동 적용해줘"
+ * 라고 명시적으로 학습 시키는 기능.
+ *
+ * 동작:
+ *   1. add_personalization_rule RPC → confirmed_rules 에 추가
+ *   2. needs_resummarize=true 면 learn-from-feedback Edge Function 호출 →
+ *      Claude Haiku 가 누적 규칙을 압축해서 summary_prompt 생성
+ *   3. 다음 generate-carousel 호출부터 systemPrompt 끝에 자동 합쳐짐
+ */
+async function learnThisFeedback(){
+  const input = document.getElementById('step2-redo-input');
+  const status = document.getElementById('learn-status');
+  const text = (input?.value || '').trim();
+  if(!text){
+    if(status){ status.textContent = '먼저 피드백 한 줄을 적어주세요'; status.style.color = 'var(--color-warning)'; }
+    input?.focus();
+    return;
+  }
+  if(!session){ alert('로그인 후 사용 가능'); return; }
+  if(status){ status.textContent = '🧠 학습 중…'; status.style.color = 'var(--color-accent)'; }
+
+  try {
+    // 1) RPC — confirmed_rules 에 추가
+    const { data: addResult, error: addErr } = await supabase.rpc('add_personalization_rule', {
+      p_channel: 'carousel',
+      p_rule_text: text,
+    });
+    if(addErr) throw new Error(addErr.message);
+
+    const rulesCount = addResult?.rules_count || 0;
+    const needsResum = addResult?.needs_resummarize === true;
+
+    // 2) 필요하면 learn-from-feedback Edge Function 호출 (요약 갱신)
+    if(needsResum){
+      if(status) status.textContent = '🧠 누적 규칙 요약 중… (' + rulesCount + '개)';
+      const resp = await fetch(`${SUPABASE_URL}/functions/v1/learn-from-feedback`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ channel: 'carousel' }),
+      });
+      if(!resp.ok){
+        const txt = await resp.text();
+        log('learn-from-feedback 실패: ' + txt.slice(0, 200), 'err');
+      }
+    }
+
+    if(status){
+      status.textContent = `✓ 내 스타일로 학습됨 (총 ${rulesCount}개 규칙) — 다음 생성부터 자동 적용`;
+      status.style.color = 'var(--color-success)';
+      setTimeout(() => { if(status) status.textContent = ''; }, 6000);
+    }
+    log(`🧠 개인 프롬프트 학습: "${text.slice(0, 60)}..." (총 ${rulesCount}개)`, 'ok');
+
+    // 3) 학습된 규칙 카운트 UI 업데이트
+    await refreshLearnedRulesUI();
+  } catch(e){
+    if(status){ status.textContent = '실패: ' + (e.message || e); status.style.color = 'var(--color-danger)'; }
+    log('학습 실패: ' + e.message, 'err');
+  }
+}
+
+/* 🧠 현재 버전의 톤/구조 패턴을 통째로 내 스타일로 학습
+ * (사용자 강한 요구 2026-04-27): redo box 학습이 아니라 마지막 컨펌 시점에.
+ * "이 버전이 마음에 들면" → 그 결과의 cover heading, body 톤, 슬라이드 구조를 누적 규칙으로. */
+async function learnCurrentVersionAsStyle(){
+  if(!lastResult?.output){ alert('먼저 캐러셀을 생성해주세요'); return; }
+  if(!session) return;
+  const status = document.getElementById('learn-final-status');
+  const summaryWrap = document.getElementById('learned-rules-summary-final');
+  const summaryText = document.getElementById('learned-rules-text-final');
+  const out = lastResult.output;
+  const ver = lastResult.version || 1;
+
+  // 현재 버전의 핵심 패턴 추출
+  const slideCount = (out.slides || []).length;
+  const coverHead = String(out.cover?.heading || '').slice(0, 60);
+  const slide1Head = String(out.slides?.[0]?.heading || '').slice(0, 60);
+  const sampleBody = String(out.slides?.[0]?.body || '').slice(0, 120);
+
+  const ruleText = `이 결과(v${ver}) 의 톤·구조·표현을 기준으로 따라 만들기:
+- cover.heading 패턴 예: "${coverHead}"
+- slides[0].heading 패턴 예: "${slide1Head}"
+- 전체 슬라이드 수: ${slideCount}장
+- 본문 톤 샘플: "${sampleBody}..."
+이 캐러셀의 톤(어조/포맷/길이/구조) 을 다음 캐러셀에서도 일관되게 유지할 것.`;
+
+  if(status){ status.textContent = '🧠 학습 중…'; status.style.color = 'var(--color-accent)'; }
+
+  try {
+    const { data, error } = await supabase.rpc('add_personalization_rule', {
+      p_channel: 'carousel', p_rule_text: ruleText,
+    });
+    if(error) throw new Error(error.message);
+
+    // 5개 이상 누적되면 Claude Haiku 가 압축 요약
+    if(data?.needs_resummarize){
+      if(status) status.textContent = `🧠 누적 ${data.rules_count}개 패턴 압축 중…`;
+      await fetch(`${SUPABASE_URL}/functions/v1/learn-from-feedback`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channel: 'carousel' }),
+      });
+    }
+
+    if(status){
+      status.textContent = `✓ 내 스타일로 학습됨 (총 ${data.rules_count}개 패턴 누적)`;
+      status.style.color = 'var(--color-success)';
+    }
+    if(summaryWrap && summaryText){
+      summaryWrap.style.display = 'block';
+      summaryText.textContent = `🧠 누적 ${data.rules_count}개 패턴이 다음 캐러셀부터 자동 적용됩니다`;
+    }
+    log(`🧠 v${ver} 패턴 학습됨 (총 ${data.rules_count}개)`, 'ok');
+  } catch(e){
+    if(status){ status.textContent = '학습 실패: ' + e.message; status.style.color = 'var(--color-danger)'; }
+    log('학습 실패: ' + e.message, 'err');
+  }
+}
+
+async function refreshLearnedRulesUI(){
+  if(!session) return;
+  try {
+    const { data, error } = await supabase
+      .from('user_personalization')
+      .select('rules_count, summary_prompt, is_enabled')
+      .eq('user_id', session.user.id)
+      .eq('channel', 'carousel')
+      .maybeSingle();
+    if(error || !data || !data.rules_count) return;
+
+    const summaryWrap = document.getElementById('learned-rules-summary');
+    const text = document.getElementById('learned-rules-text');
+    if(summaryWrap && text){
+      summaryWrap.style.display = 'block';
+      text.innerHTML = `🧠 <b>내 스타일 학습됨</b>: ${data.rules_count}개 규칙 ${data.is_enabled === false ? '<span style="color:var(--color-warning)">(꺼짐)</span>' : '<span style="color:var(--color-success)">(자동 적용 중)</span>'}`;
+      // 캐시
+      window._learnedSummary = data.summary_prompt || '';
+    }
+  } catch(_){}
+}
+
+function toggleLearnedRulesView(){
+  const el = document.getElementById('learned-rules-detail');
+  if(!el) return;
+  if(el.style.display === 'none'){
+    el.textContent = window._learnedSummary || '아직 요약된 규칙이 없습니다.';
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+/* ==================== Step 3 이미지 다시 만들기 ==================== */
+async function redoFromStep3(){
+  const input = document.getElementById('step3-redo-input');
+  const status = document.getElementById('step3-redo-status');
+  const text = (input?.value || '').trim();
+  if(!text){
+    if(status){ status.textContent = '한 줄 적어주세요'; status.style.color = 'var(--color-warning)'; }
+    input?.focus();
+    return;
+  }
+  if(!lastResult?.generation_id){
+    if(status){ status.textContent = '먼저 생성하세요'; status.style.color = 'var(--color-warning)'; }
+    return;
+  }
+  // 이미지 다시 만들기 = 전체 슬라이드 비우고 autoGenerateAllImages 호출
+  // 단, 사용자 input 텍스트를 image_prompt 추가 hint 로 사용 (지금은 단순히 모든 빈 슬라이드 재생성)
+  if(status){ status.textContent = '🎨 다시 만드는 중…'; status.style.color = 'var(--color-warning)'; }
+  // 모든 slide media 비우고 다시 생성
+  Object.keys(slideMediaMap || {}).forEach(k => delete slideMediaMap[k]);
+  // DB 의 slide_media 도 비움
+  try { await supabase.from('generations').update({ slide_media: [] }).eq('id', lastResult.generation_id); } catch(_){}
+  // feedback 누적
+  try {
+    await supabase.from('feedback').insert({
+      user_id: session.user.id, channel: 'carousel', source: 'inline_image',
+      generation_id: lastResult.generation_id, carousel_id: lastResult.carousel_id || currentCarouselId,
+      target_kind: 'image_global', target_id: 'all',
+      raw_text: text,
+    });
+  } catch(_){}
+  renderVisualGrid(lastResult.output);
+  await autoGenerateAllImages();
+  if(input) input.value = '';
+  if(status){ status.textContent = '✓ 새 이미지 생성됨'; status.style.color = 'var(--color-success)'; setTimeout(() => { if(status) status.textContent = ''; }, 4000); }
+}
+
+/* ==================== Step 3 진입 시 자동으로 스타일대로 이미지 일괄 생성 ====================
+ * 사용자 요구 (2026-04-27 분노): "스타일대로 자동으로 만들라니까 왜 아무것도 안 만들어져?"
+ *
+ * 동작:
+ *   1. Step 3 들어오면 무조건 자동 시작 (사용자 클릭 X) — styleId 없어도 시작
+ *   2. 이미 이미지가 있으면 스킵 (재진입 시 무한 호출 방지)
+ *   3. 503 / 일시 실패 시 자동 재시도 2회 (사용자가 OK 누를 일 없게)
+ *   4. 진행 중에는 step3-bulk-bar 가 노란색으로 깜빡임
+ *   5. 완료 후 step3-redo-box 표시 (이미지가 있어야 의미가 있는 박스이므로)
+ *
+ * 한 캐러셀 세션 동안 한 번만 자동 호출 — 사용자가 명시적으로 "다시 만들기" 누르면 별도 함수 호출.
+ */
+let _autoFilledOnce = false;
+async function maybeAutoFillImagesOnStep3(){
+  if(_autoFilledOnce) return;
+  if(!lastResult?.output) return;
+  const slides = collectSlides(lastResult.output);
+  const empty = slides.filter(s => !slideMediaMap[s._index]);
+  if(empty.length === 0){
+    // 이미 다 차 있으면 redo 박스만 노출
+    const redo = document.getElementById('step3-redo-box');
+    if(redo) redo.style.display = 'block';
+    return;
+  }
+  _autoFilledOnce = true;
+  const bar = document.getElementById('step3-bulk-bar');
+  const status = document.getElementById('autogen-status');
+  const subText = document.getElementById('step3-bulk-status');
+  if(bar) bar.classList.add('is-running');
+  if(status){ status.textContent = '🎨 디자인 카드 적용 중…'; status.className = 'chip warn'; }
+  if(subText) subText.textContent = '슬라이드 ' + slides.length + '장에 사용자 스타일 100% 적용 — 즉시 완료';
+  // ✓ 사용자 스타일 100% 일치 = 디자인 카드 (HTML/CSS 템플릿) 우선 사용
+  // AI 이미지로 바꾸려면 사용자가 명시적으로 [🤖 AI 이미지로] 버튼 클릭
+  await applyStyleCardsAll();
+  if(bar) bar.classList.remove('is-running');
+  // 일괄 생성 끝났으면 redo 박스 노출 (이미지가 있어야 의미 있음)
+  const redo = document.getElementById('step3-redo-box');
+  if(redo) redo.style.display = 'block';
+  if(subText) subText.textContent = '마음에 안 드는 슬라이드는 카드별 🎨/🖼/📤 또는 아래 [다시 만들기] 박스로 수정 가능.';
+}
+
+/* ==================== 🔁 (legacy) 헤더 다시 만들기 바 — 유지 (slide-fb-btn 가 여기로 누적) ==================== */
+async function quickRedoFromBar(){
+  const input = document.getElementById('quick-redo-input');
+  const status = document.getElementById('quick-redo-status');
+  const text = (input?.value || '').trim();
+  if(!text){
+    if(status){ status.textContent = '한 줄 적어주세요'; status.className = 'chip warn'; }
+    input?.focus();
+    return;
+  }
+  if(!lastResult?.generation_id){
+    if(status){ status.textContent = '먼저 생성하세요'; status.className = 'chip warn'; }
+    return;
+  }
+  // 자유 지시 textarea 에 그대로 채워넣고 doRegenerate 호출
+  const regenText = document.getElementById('regenText');
+  if(regenText) regenText.value = text;
+  if(status){ status.textContent = '🔁 v' + ((lastResult.version || 1) + 1) + ' 만드는 중…'; status.className = 'chip warn'; }
+  await doRegenerate();
+  // 결과 처리 후 input 비우고 v 표시 갱신
+  if(input) input.value = '';
+  if(status){
+    if(lastResult?.version){
+      status.textContent = '✓ v' + lastResult.version + ' 생성됨 — 또 고칠 부분?';
+      status.className = 'chip ok';
+      setTimeout(() => { if(status) status.textContent = ''; }, 4000);
+    } else {
+      status.textContent = '실패 — 다시 시도';
+      status.className = 'chip err';
+    }
+  }
+}
+
+/* ==================== 🛡 재생성 범위 최소화 (client-side 강제) ====================
+ * Claude prompt 가 무시되어도 client 에서 강제로 차단:
+ *   - 사용자 피드백에 [커버] / [슬라이드 #N] / [OUTRO] 마커가 있으면
+ *     → 그 슬라이드만 v2 사용, 나머지는 v1 그대로 복사
+ *   - 마커가 없으면 (Gemini 제안 채택 등 전역 피드백) → newOutput 그대로 사용
+ */
+function parseTargetedSlides(feedback){
+  if(!feedback) return null;
+  const targets = { cover: false, outro: false, slides: new Set() };
+  let hasMarker = false;
+  if(/\[\s*커버\s*\]|\[\s*cover\s*\]/i.test(feedback)){ targets.cover = true; hasMarker = true; }
+  if(/\[\s*outro\s*\]|\[\s*아웃로\s*\]|\[\s*마지막\s*\]/i.test(feedback)){ targets.outro = true; hasMarker = true; }
+  const slideRegex = /\[\s*(?:슬라이드|slide)\s*#?\s*(\d+)\s*\]/gi;
+  let m;
+  while((m = slideRegex.exec(feedback)) !== null){
+    const n = parseInt(m[1], 10);
+    if(!isNaN(n) && n >= 1){ targets.slides.add(n - 1); hasMarker = true; }
+  }
+  return hasMarker ? targets : null;
+}
+function enforceMinimalChange(prevOutput, newOutput, feedback){
+  const targets = parseTargetedSlides(feedback);
+  if(!targets) return { output: newOutput, enforced: false, kept: 0 };
+  if(!prevOutput || !newOutput) return { output: newOutput, enforced: false, kept: 0 };
+  const result = JSON.parse(JSON.stringify(prevOutput));
+  let kept = 0, replaced = 0;
+  if(targets.cover && newOutput.cover){ result.cover = newOutput.cover; replaced++; }
+  else if(prevOutput.cover) kept++;
+  if(targets.outro && newOutput.outro){ result.outro = newOutput.outro; replaced++; }
+  else if(prevOutput.outro) kept++;
+  const prevSlides = Array.isArray(prevOutput.slides) ? prevOutput.slides : [];
+  const newSlides = Array.isArray(newOutput.slides) ? newOutput.slides : [];
+  // result.slides 는 prev 의 깊은 복사본이므로 길이도 prev 기준
+  for(let i = 0; i < prevSlides.length; i++){
+    if(targets.slides.has(i) && newSlides[i]){ result.slides[i] = newSlides[i]; replaced++; }
+    else { kept++; }
+  }
+  return { output: result, enforced: true, kept, replaced, targets };
+}
+
 async function doRegenerate(){
   if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
   const selected = Array.from(document.querySelectorAll('#suggestList input[type=checkbox]:checked')).map(c => c.dataset.text);
@@ -1461,6 +2012,41 @@ async function doRegenerate(){
     });
     const data = await resp.json();
     if(!resp.ok){ alert('재생성 실패: ' + (data.error || resp.status)); setChip($('regen-status'), '실패', 'err'); return; }
+
+    // ─ G-5: 재생성 시점에 자동으로 feedback INSERT (집단지성 누적)
+    //    사용자가 어떤 Gemini 제안을 채택했는지 + 자유 지시 텍스트가 그대로 데이터가 됨
+    try {
+      const fbText = [
+        custom ? `[자유 지시] ${custom}` : null,
+        selected.length > 0 ? `[Gemini 제안 채택] ${selected.join(' / ')}` : null,
+      ].filter(Boolean).join('\n');
+      if(fbText){
+        await supabase.from('feedback').insert({
+          user_id: session.user.id,
+          channel: 'carousel',
+          source: 'regen_request',
+          generation_id: lastResult.generation_id,        // 이전 버전 generation_id
+          carousel_id: currentCarouselId,
+          target_kind: 'global',
+          target_id: 'v' + (lastResult?.version || '?'),
+          raw_text: fbText,
+        });
+      }
+    } catch(_) { /* 피드백 저장 실패는 재생성 흐름 막지 않음 */ }
+
+    // 🛡 재생성 범위 최소화 — 사용자가 [커버] / [슬라이드 #N] 마커를 사용하면
+    //    그 슬라이드만 v2 사용, 나머지는 v1 그대로 (Claude prompt 무시되어도 client 차단)
+    const prevOutput = lastResult.output;
+    const allFeedback = [custom, ...selected].filter(Boolean).join(' / ');
+    const enforced = enforceMinimalChange(prevOutput, data.output, allFeedback);
+    if(enforced.enforced){
+      data.output = enforced.output;
+      const targetLabels = [];
+      if(enforced.targets.cover) targetLabels.push('커버');
+      enforced.targets.slides.forEach(i => targetLabels.push(`#${i+1}`));
+      if(enforced.targets.outro) targetLabels.push('OUTRO');
+      log(`🛡 범위 강제: ${targetLabels.join(', ')} 만 교체, ${enforced.kept}개 슬라이드 v${lastResult.version || '?'} 유지`, 'ok');
+    }
     lastResult = data;
     versionHistory.push({ version: data.version, generation_id: data.generation_id, output: data.output, review: null, slide_media: [] });
     slideMediaMap = {};
@@ -1473,8 +2059,45 @@ async function doRegenerate(){
     setChip($('regen-status'), '✓ v' + data.version, 'ok');
     log('재생성 완료 · v' + data.version, 'ok');
     loadExistingFeedback();
+    // 🔁 변경된 슬라이드 highlight
+    setTimeout(() => markChangedSlides(prevOutput, data.output), 100);
   } catch(e){ alert('네트워크: ' + e.message); setChip($('regen-status'), '에러', 'err'); }
   finally { btn.disabled = false; }
+}
+
+/* 🔁 v1 → v2 변경된 슬라이드 자동 표시
+ * 헤딩 또는 본문이 바뀐 슬라이드 카드에 .changed 클래스 추가 → 주황 테두리 + "🔁 변경됨" 배지
+ */
+function markChangedSlides(prev, curr){
+  if(!prev || !curr) return;
+  document.querySelectorAll('.slide-text.changed').forEach(el => el.classList.remove('changed'));
+  const norm = (s) => (s || '').toString().trim();
+  const compare = (a, b) => norm(a?.heading) !== norm(b?.heading) || norm(a?.body) !== norm(b?.body) || norm(a?.title) !== norm(b?.title);
+  const cards = document.querySelectorAll('.slide-text');
+  cards.forEach(card => {
+    const num = Number(card.dataset.slideNum);
+    let prevSlide, currSlide;
+    if(num === 0){
+      prevSlide = prev.cover;
+      currSlide = curr.cover;
+    } else {
+      const idx = num - 1;
+      prevSlide = prev.slides?.[idx];
+      currSlide = curr.slides?.[idx];
+    }
+    if(prevSlide && currSlide && compare(prevSlide, currSlide)){
+      card.classList.add('changed');
+    }
+  });
+  // 변경 알림 토스트 (간단히)
+  const changedCount = document.querySelectorAll('.slide-text.changed').length;
+  if(changedCount > 0){
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;top:80px;right:24px;background:var(--color-warning);color:var(--color-bg);padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.3);animation:slideIn .3s';
+    toast.textContent = `🔁 ${changedCount}개 슬라이드 변경됨`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
 }
 
 /* ==================== 비주얼 슬라이드 그리드 ==================== */
@@ -1485,11 +2108,345 @@ function collectSlides(out){
   if(out?.outro) arr.push({ _role: 'outro', _index: -1, heading: out.outro.closing, body: out.outro.cta, tag: 'OUTRO', variant: 'light' });
   return arr;
 }
+/* ============================================================
+ * 🎨 디자인 카드 시스템 (HTML/CSS 템플릿 — 스타일 100% consistent)
+ *
+ * 사용자 강한 요구 (2026-04-27 분노): "스타일 적용 1도 안 됨"
+ *   AI 이미지 생성 모델(flux-schnell)은 사용자 스크린샷 스타일을 정확히 재현 못 함.
+ *   해결: SVG 기반 카드 — styleRow.analyzed 의 색/구조를 CSS-like 변수로 inject.
+ *   이러면 매번 호출해도 100% 동일한 디자인 + 텍스트만 변경.
+ * ============================================================ */
+function extractStyleVars(analyzed){
+  const colors = (analyzed?.color_signature || []).map(c => {
+    const m = String(c).match(/#[0-9a-fA-F]{3,6}/);
+    return m ? m[0] : null;
+  }).filter(Boolean);
+  return {
+    bg: colors[0] || '#4ADE80',
+    accent: colors[1] || '#000000',
+    text: colors[2] || '#000000',
+    sub: colors[3] || '#374151',
+  };
+}
+
+function escapeXml(s){
+  return String(s ?? '').replace(/[<>&'"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}[c]));
+}
+
+/* ============================================================
+ * 사용자 스크린샷 → Claude Vision 추출한 SVG 템플릿에 텍스트 치환
+ * (extract-style-svg-template Edge Function 이 styles.svg_template 에 저장한 코드 사용)
+ * ============================================================ */
+function renderFromSvgTemplate(template, slide, idx, total, imageUrl){
+  const tag = slide.tag || '';
+  const heading = slide.heading || '';
+  const body = slide.body || '';
+  let replaced = String(template)
+    .replaceAll('{{HEADING}}', escapeXml(heading))
+    .replaceAll('{{BODY}}', escapeXml(body))
+    .replaceAll('{{TAG}}', escapeXml(tag))
+    .replaceAll('{{INDEX}}', String(idx + 1).padStart(2, '0'))
+    .replaceAll('{{TOTAL}}', String(total).padStart(2, '0'))
+    .replaceAll('{{BRAND_NAME}}', 'BDM Lab')
+    .replaceAll('{{IMAGE_URL}}', imageUrl || '');
+  // 🛡 SVG 추출 시 Claude 가 placeholder 글자([IMAGE], [ IMAGE ], 사진 영역 등)를 박아넣은 경우 자동 제거
+  //   사용자 지적: "[ IMAGE ] 글자가 카드 안에 그대로 보인다"
+  replaced = replaced
+    .replace(/<text[^>]*>\s*\[\s*IMAGE\s*\]\s*<\/text>/gi, '')
+    .replace(/<text[^>]*>\s*사진\s*영역\s*<\/text>/g, '')
+    .replace(/<text[^>]*>\s*PHOTO\s*<\/text>/gi, '')
+    .replace(/<text[^>]*>\s*이미지\s*<\/text>/g, '');
+  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(replaced)));
+}
+
+function styleCardSvgDataUrl(slide, vars, idx, total){
+  const heading = slide.heading || slide.tag || `Slide ${idx+1}`;
+  const body = slide.body || '';
+  const tagLabel = slide.tag || '';
+  const isCover = idx === 0;
+  // 텍스트 줄바꿈 (대략 자수 기준)
+  const wrap = (txt, maxChars) => {
+    const lines = []; let line = '';
+    for(const ch of String(txt)){
+      if(ch === '\n'){ lines.push(line); line = ''; continue; }
+      line += ch;
+      if(line.length >= maxChars && /[\s.,!?]/.test(ch)){ lines.push(line); line = ''; }
+    }
+    if(line) lines.push(line);
+    return lines;
+  };
+  const headingLines = wrap(heading, isCover ? 12 : 16);
+  const bodyLines = wrap(body, 22);
+  const headingFontSize = isCover ? 86 : 64;
+  const bodyFontSize = isCover ? 36 : 32;
+  const headingY = isCover ? 540 : 380;
+  const bodyY = isCover ? 540 + headingLines.length * (headingFontSize+10) + 40 : 380 + headingLines.length * (headingFontSize+10) + 30;
+
+  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(`
+<svg viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1350" fill="${vars.bg}" />
+  ${tagLabel ? `<rect x="60" y="120" width="${tagLabel.length*22 + 40}" height="48" fill="${vars.accent}" rx="6" />
+  <text x="${80}" y="154" font-size="22" fill="${vars.bg}" font-weight="700" font-family="Pretendard, 'Noto Sans KR', sans-serif">${escapeXml(tagLabel)}</text>` : ''}
+  ${headingLines.map((line, i) => `
+  <text x="60" y="${headingY + i*(headingFontSize+10)}" font-size="${headingFontSize}" fill="${vars.text}" font-weight="900" font-family="Pretendard, 'Noto Sans KR', sans-serif">${escapeXml(line)}</text>
+  `).join('')}
+  ${bodyLines.slice(0, 8).map((line, i) => `
+  <text x="60" y="${bodyY + i*(bodyFontSize+12)}" font-size="${bodyFontSize}" fill="${vars.sub}" font-family="Pretendard, 'Noto Sans KR', sans-serif">${escapeXml(line)}</text>
+  `).join('')}
+  <rect x="60" y="1240" width="40" height="40" fill="${vars.accent}" rx="6" />
+  <text x="76" y="1268" font-size="22" fill="${vars.bg}" font-weight="900" font-family="Pretendard, 'Noto Sans KR', sans-serif" text-anchor="middle">B</text>
+  <text x="115" y="1268" font-size="22" fill="${vars.text}" font-weight="700" font-family="Pretendard, 'Noto Sans KR', sans-serif">BDM Lab</text>
+  <text x="1020" y="1268" font-size="24" fill="${vars.text}" font-weight="700" font-family="Pretendard, 'Noto Sans KR', sans-serif" text-anchor="end">${String(idx+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}</text>
+</svg>`)));
+}
+
+/* ==================== 🚨 응급: 사용자 스타일1 즉시 등록 ====================
+ * styles.html 흐름이 막혀있을 때 우회 — render_v3.py 디자인 (사진+녹색박스+검정텍스트)을
+ * svg_template 으로 직접 styles 테이블에 INSERT/UPDATE.
+ * 한 번 클릭이면 끝, 페이지 새로고침 후 Step 1 에서 자동 선택됨.
+ */
+async function emergencyRegisterStyle1(){
+  if(!session?.user?.id){ alert('로그인 필요'); return; }
+  if(!confirm('내 스타일1 (사진 위 + 녹색 박스 + 검정 텍스트 + BDM Lab 워터마크) 을 즉시 등록합니다.\n\n이미 등록되어 있으면 svg_template 만 갱신됩니다.\n\n진행할까요?')) return;
+
+  // render_v3.py 디자인을 SVG 템플릿으로 변환 — foreignObject 로 한글 자동 줄바꿈 보장
+  const svg = `<svg viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <clipPath id="photoClip"><rect x="0" y="0" width="1080" height="680"/></clipPath>
+  </defs>
+  <rect x="0" y="0" width="1080" height="1350" fill="#000"/>
+  <image x="0" y="0" width="1080" height="680" preserveAspectRatio="xMidYMid slice" xlink:href="{{IMAGE_URL}}" clip-path="url(#photoClip)"/>
+  <rect x="0" y="680" width="1080" height="670" fill="#00FF88"/>
+  <foreignObject x="60" y="730" width="960" height="540">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:'Noto Sans KR',sans-serif;color:#000">
+      <div style="display:inline-block;background:#000;color:#00FF88;padding:6px 18px;font-size:20px;font-weight:800;border-radius:4px;margin-bottom:16px;letter-spacing:1px">{{TAG}}</div>
+      <div style="font-size:54px;font-weight:900;line-height:1.2;letter-spacing:-0.025em;margin-bottom:24px">{{HEADING}}</div>
+      <div style="font-size:30px;line-height:1.6;font-weight:500">{{BODY}}</div>
+    </div>
+  </foreignObject>
+  <rect x="60" y="1290" width="32" height="32" fill="#000" rx="5"/>
+  <text x="76" y="1313" text-anchor="middle" font-size="18" font-weight="900" fill="#00FF88" font-family="Noto Sans KR, sans-serif">B</text>
+  <text x="100" y="1313" font-size="18" font-weight="800" fill="#000" font-family="Noto Sans KR, sans-serif">BDM Lab</text>
+  <text x="1020" y="1313" text-anchor="end" font-size="18" font-weight="800" fill="#000" font-family="JetBrains Mono, monospace">{{INDEX}} / {{TOTAL}}</text>
+</svg>`;
+
+  const analyzed = {
+    color_signature: ['#00FF88','#000000','#FFFFFF','#1A1A1A'],
+    typography: { head: 'Noto Sans KR 900', body: 'Noto Sans KR 500' },
+    layout: 'top_photo_bottom_green_box',
+    rules: [
+      '상단 절반(0-680px) = 깨끗한 사진, 텍스트 없음',
+      '하단 절반(680-1350px) = 녹색(#00FF88) 박스 + 검정 텍스트',
+      '태그는 검정 박스 안 녹색 글씨',
+      'BDM Lab 워터마크 좌하단, 페이지 카운터 우하단'
+    ],
+    _source: 'emergency_inject',
+    _emergency_registered_at: new Date().toISOString()
+  };
+
+  // upsert: 이미 같은 이름이 있으면 update, 없으면 insert
+  const styleName = '내 스타일1 (응급 등록)';
+  const { data: existing, error: selErr } = await supabase
+    .from('styles')
+    .select('id')
+    .eq('user_id', session.user.id)
+    .eq('name', styleName)
+    .maybeSingle();
+  if(selErr){ alert('조회 실패: ' + selErr.message); return; }
+
+  let result;
+  if(existing){
+    result = await supabase
+      .from('styles')
+      .update({ svg_template: svg, analyzed, channel: 'carousel', is_default: true })
+      .eq('id', existing.id);
+  } else {
+    // 다른 default 해제 (carousel 채널)
+    await supabase
+      .from('styles')
+      .update({ is_default: false })
+      .eq('user_id', session.user.id)
+      .eq('channel', 'carousel');
+    result = await supabase
+      .from('styles')
+      .insert({
+        user_id: session.user.id,
+        name: styleName,
+        channel: 'carousel',
+        is_default: true,
+        svg_template: svg,
+        analyzed
+      });
+  }
+  if(result.error){ alert('등록 실패: ' + result.error.message); return; }
+  alert('✓ 스타일1 등록 완료.\n\n페이지를 새로고침합니다. Step 1 에서 "내 스타일1 (응급 등록)" 자동 선택되고, [🎨 디자인 카드] 버튼 누르면 100% 일치합니다.');
+  location.reload();
+}
+
+async function applyStyleCardsAll(){
+  if(!lastResult?.output) return;
+  // 현재 활성 스타일 가져오기 (svg_template 우선)
+  const styleId = $('styleSelect')?.value;
+  let styleRow = null;
+  if(styleId){
+    const { data } = await supabase.from('styles').select('id, name, analyzed, svg_template').eq('id', styleId).maybeSingle();
+    styleRow = data;
+  } else {
+    const { data } = await supabase.from('styles').select('id, name, analyzed, svg_template').eq('user_id', session.user.id).eq('channel', 'carousel').eq('is_default', true).maybeSingle();
+    styleRow = data;
+  }
+  let analyzed = styleRow?.analyzed;
+  let svgTemplate = styleRow?.svg_template;
+
+  // 사용자 강한 지적 (2026-04-27): "스타일 적용 1도 안 되고 있어 아주 심각해"
+  // 분석/SVG 미완 시 자동 트리거 옵션 제공 (styles.html 안 가도 됨)
+  if(!svgTemplate && !analyzed && styleRow?.id){
+    const choice = window.prompt(
+      `⚠️ 스타일 "${styleRow.name}" 분석이 안 됐습니다.\n\n` +
+      `옵션:\n` +
+      `1 = 지금 자동 분석 (30초~1분, Claude Vision)\n` +
+      `2 = 자동 분석 + SVG 템플릿 정밀 추출 (60~90초, 100% 디자인 일치)\n` +
+      `3 = 그냥 fallback 으로 진행 (단순 녹색+검정)\n\n` +
+      `숫자만 입력하세요 (1/2/3):`,
+      '2'
+    );
+    if(choice === '1' || choice === '2'){
+      const status = $('autogen-status');
+      if(status){ status.textContent = '🤖 분석 중… (Claude Vision)'; status.className = 'chip warn'; }
+      try {
+        const r1 = await fetch(`${SUPABASE_URL}/functions/v1/analyze-style-items`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ style_id: styleRow.id }),
+        });
+        if(!r1.ok) throw new Error('분석 실패: ' + r1.status);
+        log('✓ 스타일 분석 완료', 'ok');
+
+        if(choice === '2'){
+          if(status) status.textContent = '🎨 SVG 템플릿 추출 중… (Claude Sonnet)';
+          const r2 = await fetch(`${SUPABASE_URL}/functions/v1/extract-style-svg-template`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ style_id: styleRow.id }),
+          });
+          if(!r2.ok) log('SVG 추출 실패 (분석은 OK) — fallback SVG 사용: ' + r2.status, 'err');
+          else log('✓ SVG 템플릿 추출 완료', 'ok');
+        }
+
+        // 다시 styles 조회 (방금 업데이트된 내용 가져옴)
+        const { data: refreshed } = await supabase.from('styles').select('analyzed, svg_template').eq('id', styleRow.id).maybeSingle();
+        analyzed = refreshed?.analyzed;
+        svgTemplate = refreshed?.svg_template;
+        if(status){ status.textContent = '✓ 스타일 준비됨'; status.className = 'chip'; }
+      } catch(e){
+        alert('자동 분석 실패: ' + e.message + '\nstyles.html 로 이동해서 수동 분석해주세요.');
+        return;
+      }
+    } else if(choice === '3'){
+      // 그냥 진행
+    } else {
+      return;  // 사용자가 취소
+    }
+  } else if(!svgTemplate && analyzed){
+    log('💡 더 정확한 디자인 일치를 원하시면 styles.html → [🎨 SVG 템플릿 추출] 클릭', 'ok');
+  }
+  const vars = extractStyleVars(analyzed);
+  const slides = collectSlides(lastResult.output);
+  const total = slides.length;
+
+  // 사용자 강한 요구 (2026-04-27): 사용자 스타일에 사진 영역 있으면 자동으로 사진 inject
+  // svg_template 에 {{IMAGE_URL}} placeholder 있으면 → 슬라이드별 사진 가져오기 (Pexels)
+  const needsImage = svgTemplate && svgTemplate.includes('{{IMAGE_URL}}');
+  const imageMap = {};   // slide._index -> photo URL
+  const status = $('autogen-status');
+  const setProgress = (txt) => { if(status){ status.textContent = txt; status.className = 'chip warn'; } };
+  if(needsImage){
+    let done = 0;
+    for(const s of slides){
+      done++;
+      setProgress(`🖼 사진 매칭 ${done}/${total}…`);
+      // 이미 slideMediaMap 에 사진 있으면 그거 재사용
+      const existing = slideMediaMap[s._index];
+      if(existing && (existing.signed_url || existing.pexels_url) && !existing.is_design_card){
+        imageMap[s._index] = existing.signed_url || existing.pexels_url;
+        continue;
+      }
+      // 없으면 search-pexels 호출 — slide.image_prompt 또는 video_keyword 또는 heading 키워드
+      const kw = s.image_prompt || s.video_keyword || s.heading || s.tag || 'business';
+      try {
+        const r = await fetch(`${SUPABASE_URL}/functions/v1/search-pexels`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ keyword: kw, per_page: 1 }),  // 🛡 fix: search-pexels 는 keyword 받음 (이전 query 로 보내서 매번 400)
+        });
+        if(r.ok){
+          const d = await r.json();
+          const photoUrl = d?.photos?.[0]?.src?.large2x || d?.photos?.[0]?.src?.large || d?.photos?.[0]?.src?.original;
+          if(photoUrl) imageMap[s._index] = photoUrl;
+        }
+      } catch(e){
+        log('Pexels 호출 실패 (slide ' + s._index + '): ' + e.message, 'err');
+      }
+    }
+  }
+
+  let renderedCount = 0;
+  slides.forEach((s, i) => {
+    renderedCount++;
+    setProgress(`🎨 디자인 카드 ${renderedCount}/${total}…`);
+    let url;
+    if(svgTemplate){
+      // ✓ 사용자 스크린샷에서 추출한 정밀 SVG 템플릿 + 자동 사진 inject
+      url = renderFromSvgTemplate(svgTemplate, s, i, total, imageMap[s._index]);
+    } else {
+      // fallback: 기본 SVG (스크린샷 분석 안 된 스타일)
+      url = styleCardSvgDataUrl(s, vars, i, total);
+    }
+    slideMediaMap[s._index] = { signed_url: url, source: 'design_card', is_design_card: true, used_template: !!svgTemplate, image_url: imageMap[s._index] };
+  });
+  // DB 에 slide_media 저장
+  if(lastResult.generation_id){
+    const slide_media = Object.entries(slideMediaMap).map(([i, m]) => ({ index: Number(i), ...m }));
+    try { await supabase.from('generations').update({ slide_media }).eq('id', lastResult.generation_id); } catch(_){}
+  }
+  renderVisualGrid(lastResult.output);
+  if(status){ status.textContent = `✓ ${total}장 적용 완료${svgTemplate ? ' · 스타일 100% 일치' : ' · fallback'}`; status.className = 'chip ok'; }
+  log(`🎨 디자인 카드 ${slides.length}장 적용${svgTemplate ? ' · 스타일 100% 일치' : ' · fallback (스크린샷 분석 권장)'}`, 'ok');
+}
+
 function renderVisualGrid(out){
   const grid = $('visual-grid'); grid.innerHTML = '';
   collectSlides(out).forEach(s => grid.appendChild(renderVisualSlide(s)));
   $('autoGenBtn').disabled = false;
+  $('autoPexelsBtn').disabled = false;
   renderTransparencyBanner();
+  // F02: Step 2 텍스트 카드 안의 미니 썸네일도 갱신 (텍스트 입력 상태 유지하기 위해 mini-thumb 만 재구성)
+  refreshSlideMiniThumbs();
+}
+
+/* F02: Step 2 슬라이드 카드의 미니 썸네일만 부분 갱신 */
+function refreshSlideMiniThumbs(){
+  document.querySelectorAll('.slide-text').forEach(card => {
+    const num = Number(card.dataset.slideNum);
+    const body = card.querySelector('.slide-text-body');
+    if(!body) return;
+    const old = body.querySelector('.slide-mini-thumb');
+    if(!old) return;
+    const media = slideMediaMap?.[num];
+    let html;
+    if(media){
+      const url = media.signed_url || media.pexels_url || '';
+      if(url){
+        const tag = media.source === 'ai' ? '🎨' : media.source === 'pexels' ? '🖼' : media.source === 'upload' ? '📤' : '';
+        html = `<a href="#panel-3" onclick="goStep(3); return false;" class="slide-mini-thumb" title="이미지 단계로 이동해서 수정"><img src="${esc(url)}" alt=""><span class="mini-tag">${tag}</span></a>`;
+      } else {
+        html = `<a href="#panel-3" onclick="goStep(3); return false;" class="slide-mini-thumb empty" title="이미지 단계에서 이미지 추가"><span>+ 이미지</span></a>`;
+      }
+    } else {
+      html = `<a href="#panel-3" onclick="goStep(3); return false;" class="slide-mini-thumb empty" title="이미지 단계에서 이미지 추가"><span>+ 이미지</span></a>`;
+    }
+    old.outerHTML = html;
+  });
 }
 
 /* ==================== 스타일 투명성 배너 ====================
@@ -1504,7 +2461,7 @@ function renderTransparencyBanner(){
     return;
   }
   const profile = style.analyzed || {};
-  const accent = extractAccentFromProfile(profile) || '#60A5FA';
+  const accent = extractAccentFromProfile(profile) || '#34D399';
   const tone = profile.overall_tone || '(스타일 분석 전)';
   const colors = Array.isArray(profile.color_signature) ? profile.color_signature.slice(0, 5) : [];
   const guides = Array.isArray(profile.visual_guidelines) ? profile.visual_guidelines.slice(0, 3) : [];
@@ -1535,7 +2492,9 @@ function renderVisualSlide(s){
 
   const media = slideMediaMap[idx];
   const imgUrl = media?.signed_url || media?.pexels_url || '';
-  const sourceLabel = media?.source === 'ai' ? '🎨 AI · ' + (media.model || '') : media?.source === 'pexels' ? '🖼 Pexels' : media?.source === 'upload' ? '📤 업로드' : '없음';
+  const sourceLabel = media?.source === 'ai' ? '🎨 AI · ' + (media.model || '') : media?.source === 'pexels' ? '🖼 Pexels' : media?.source === 'upload' ? '📤 업로드' : media?.source === 'design_card' ? '🎨 디자인 카드' : '없음';
+  // 🛡 design_card 는 SVG 자체에 헤딩/본문/태그가 이미 그려져 있음 — 오버레이 텍스트 숨김 (헤딩 중복 방지)
+  const isDesignCard = !!media?.is_design_card;
 
   const label = idx === 0 ? 'COVER' : idx === -1 ? 'OUTRO' : '#' + idx;
   const heading = s.heading || '';
@@ -1547,12 +2506,12 @@ function renderVisualSlide(s){
   const dataAttrs = `data-variant="${variant}" data-pos="${ov.position}" data-align="${ov.align}" data-heading-size="${ov.heading_size}" data-body-size="${ov.body_size}" data-color="${ov.color_mode}" data-heading-visible="${ov.heading_visible}" data-body-visible="${ov.body_visible}"`;
 
   card.innerHTML = `
-    <div class="visual-canvas variant-${esc(variant)}" ${dataAttrs}>
+    <div class="visual-canvas variant-${esc(variant)}${isDesignCard ? ' design-card' : ''}" ${dataAttrs}>
       ${imgUrl ? `<img src="${esc(imgUrl)}" alt="">` : `<div class="v-empty"><div class="big">📭</div>이미지 없음<br>아래 버튼 선택</div>`}
-      ${imgUrl ? `<div class="v-overlay"></div>` : ''}
-      <div class="v-tag">${esc(tag)}</div>
-      <div class="v-num">${esc(label)}</div>
-      ${imgUrl ? `<div class="v-text">
+      ${imgUrl && !isDesignCard ? `<div class="v-overlay"></div>` : ''}
+      ${isDesignCard ? '' : `<div class="v-tag">${esc(tag)}</div>`}
+      ${isDesignCard ? '' : `<div class="v-num">${esc(label)}</div>`}
+      ${imgUrl && !isDesignCard ? `<div class="v-text">
         ${heading ? `<div class="v-heading">${mdInline(heading)}</div>` : ''}
         ${body ? `<div class="v-body">${mdInline(body)}</div>` : ''}
       </div>` : ''}
@@ -1693,7 +2652,7 @@ function openTextOverride(idx){
       <div class="tov-row"><b>정렬</b>${btnGroup('align', [['left','왼쪽'],['center','가운데'],['right','오른쪽']], ov.align)}</div>
       <div class="tov-row"><b>색상</b>${btnGroup('color_mode', [['auto','자동'],['light','밝게'],['dark','어둡게'],['accent','액센트']], ov.color_mode)}</div>
       <div class="tov-foot">
-        <button class="btn btn-sm tov-apply-all">이 설정을 9장 전체에 적용</button>
+        <button class="btn btn-sm tov-apply-all">이 설정을 전체 슬라이드에 적용</button>
         <button class="btn btn-sm btn-ghost tov-reset">초기화</button>
         <div class="spacer"></div>
         <button class="btn btn-sm btn-ghost tov-close">닫기</button>
@@ -1799,16 +2758,27 @@ async function generateAIImageForSlide(slide_index, opts){
     });
     const data = await resp.json();
     if(!resp.ok){
-      // 이미지 서버가 잠깐 느려질 때(HTTP 429) → 안내된 시간만큼 대기 후 자동 재시도 (최대 2회)
+      const errStr = JSON.stringify(data);
+      // ① 이미지 서버 일시 느림 (HTTP 429) → 안내된 시간만큼 대기 후 자동 재시도 (최대 2회)
       const retryAfter = data?.retry_after || (data?.detail && /retry_after":(\d+)/.exec(data.detail)?.[1]);
-      if(resp.status === 502 && /429/.test(JSON.stringify(data)) && retryAttempt < 2 && retryAfter){
+      if(resp.status === 502 && /429/.test(errStr) && retryAttempt < 2 && retryAfter){
         log(`이미지 서버 잠깐 느림 — ${retryAfter}초 기다렸다 재시도 (슬라이드 #${slide_index})`, 'err');
         if(btn){ btn.textContent = `대기 ${retryAfter}초`; }
         await sleep((parseInt(retryAfter) + 1) * 1000);
         return generateAIImageForSlide(slide_index, { customHint, retryAttempt: retryAttempt + 1 });
       }
-      alert('AI 생성 실패 (' + resp.status + '): ' + (data.error || JSON.stringify(data)));
-      $('rate-alert').style.display = /credit|throttle|429/.test(JSON.stringify(data)) ? 'block' : 'none';
+      // ② Edge Function 콜드스타트/일시 다운 (503 SUPABASE_EDGE_RUNTIME_ERROR) → 5초 대기 후 자동 재시도 (최대 2회, alert 안 띄움)
+      if(resp.status === 503 && /EDGE_RUNTIME|temporarily/i.test(errStr) && retryAttempt < 2){
+        log(`Edge Function 콜드스타트 — 5초 후 재시도 (슬라이드 #${slide_index}, 시도 ${retryAttempt + 2}/3)`, 'err');
+        if(btn){ btn.textContent = `재시도…`; }
+        await sleep(5000);
+        return generateAIImageForSlide(slide_index, { customHint, retryAttempt: retryAttempt + 1 });
+      }
+      // ③ 그 외 실제 실패 → 사용자에게 alert (한 번만)
+      if(retryAttempt === 0){
+        alert('AI 생성 실패 (' + resp.status + '): ' + (data.error || errStr.slice(0, 200)));
+      }
+      $('rate-alert').style.display = /credit|throttle|429/.test(errStr) ? 'block' : 'none';
       return;
     }
     slideMediaMap[slide_index] = { ...data, source: 'ai' };
@@ -1820,10 +2790,28 @@ async function generateAIImageForSlide(slide_index, opts){
   finally { if(btn){ btn.classList.remove('loading'); btn.disabled = false; btn.textContent = '🎨 AI'; } }
 }
 
-/* ==================== 스타일대로 AI 일괄 생성 ==================== */
+/* ==================== 스타일대로 AI 일괄 생성 ====================
+ * 두 경로:
+ *   1) Step 3 진입 시 자동 호출 (maybeAutoFillImagesOnStep3) — confirm 안 띄움
+ *   2) 사용자가 명시적으로 [🎨 스타일대로 AI 일괄] 버튼 클릭 — confirm 안 띄움 (이미 명시적 의사)
+ * 어느 경로든 confirm 안 띄움 — 사용자 분노 max → 클릭 한 번 줄이기
+ */
 async function autoGenerateAllImages(){
   if(!lastResult) return;
-  if(!confirm(`빈 슬라이드에 스타일대로 이미지를 한꺼번에 만들까요?\n(슬라이드당 약 $0.003 · 서버가 잠깐 느려지면 자동으로 잠시 기다렸다가 이어서 생성합니다)`)) return;
+  // 사용자 강한 지적: 디자인 카드 적용 후 [🤖 AI 이미지로] 누르면 "이미 있음" 거부 → 교체 가능하게
+  const slidesAll = collectSlides(lastResult.output);
+  const designCardCount = slidesAll.filter(s => slideMediaMap[s._index]?.is_design_card).length;
+  if(designCardCount > 0){
+    const ok = confirm(`현재 ${designCardCount}장이 디자인 카드(스타일 SVG)입니다. AI 이미지로 교체할까요?\n\n(약 2~3분 소요. 마음에 안 들면 다시 [🎨 디자인 카드] 클릭하면 즉시 복원됩니다.)`);
+    if(!ok) return;
+    // 디자인 카드는 비어있는 것처럼 처리 (제거)
+    slidesAll.forEach(s => {
+      if(slideMediaMap[s._index]?.is_design_card){
+        delete slideMediaMap[s._index];
+      }
+    });
+    renderVisualGrid(lastResult.output);
+  }
   const slides = collectSlides(lastResult.output);
   const targets = slides.filter(s => !slideMediaMap[s._index]);
   if(targets.length === 0){ alert('이미 모든 슬라이드에 이미지가 있음'); return; }
@@ -1838,12 +2826,54 @@ async function autoGenerateAllImages(){
   btn.disabled = false;
 }
 
+/* ==================== Pexels 일괄 채우기 (무료 스톡, 빠름) ==================== */
+async function autoApplyPexelsAll(){
+  if(!lastResult) return;
+  const slides = collectSlides(lastResult.output);
+  const targets = slides.filter(s => !slideMediaMap[s._index]);
+  if(targets.length === 0){ alert('이미 모든 슬라이드에 이미지가 있음'); return; }
+  if(!confirm(`빈 슬라이드 ${targets.length}개에 Pexels 무료 스톡 사진을 자동으로 채울까요?\n(슬라이드별 키워드의 첫 번째 검색 결과를 적용)`)) return;
+  if(!(await ensureFreshSession())) return;
+
+  const btn = $('autoPexelsBtn'); btn.disabled = true;
+  const styleId = $('styleSelect').value || null;
+  let done = 0, fail = 0;
+  for(const s of targets){
+    // 🛡 image_prompt 우선 (generate-carousel 이 의미매칭 영어 키워드로 채움) → fallback video_keyword/heading
+    const keyword = (s.image_prompt || s.video_keyword || s.heading || s.body || '').toString().trim();
+    if(!keyword){ fail++; continue; }
+    setChip($('autogen-status'), `Pexels ${++done}/${targets.length} 검색중`, 'warn');
+    try {
+      const resp = await fetch(`${SUPABASE_URL}/functions/v1/search-pexels`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword, style_id: styleId, per_page: 1 }),
+      });
+      const data = await resp.json();
+      if(!resp.ok || !data.photos?.[0]){ fail++; continue; }
+      const p = data.photos[0];
+      const idx = s._index;
+      slideMediaMap[idx] = { source: 'pexels', pexels_url: p.original || p.url, photographer: p.photographer };
+      // DB 저장
+      const { data: gen } = await supabase.from('generations').select('slide_media').eq('id', lastResult.generation_id).maybeSingle();
+      const arr = Array.isArray(gen?.slide_media) ? gen.slide_media : [];
+      const filtered = arr.filter(m => m.index !== idx);
+      filtered.push({ index: idx, source: 'pexels', pexels_url: p.original || p.url, photographer: p.photographer, created_at: new Date().toISOString() });
+      await supabase.from('generations').update({ slide_media: filtered }).eq('id', lastResult.generation_id);
+    } catch(_){ fail++; }
+    await sleep(250);
+  }
+  renderVisualGrid(lastResult.output);
+  setChip($('autogen-status'), fail > 0 ? `✓ ${done - fail}장 적용 · ${fail}장 실패` : `✓ ${done}장 적용`, fail > 0 ? 'warn' : 'ok');
+  btn.disabled = false;
+}
+
 /* ==================== Pexels ==================== */
 function openPexelsModal(slide_index){
   if(!lastResult) return;
   const slide = collectSlides(lastResult.output).find(s => s._index === slide_index);
   pexelsContext.slide_index = slide_index;
-  pexelsContext.keyword = slide?.video_keyword || slide?.heading || '';
+  pexelsContext.keyword = slide?.image_prompt || slide?.video_keyword || slide?.heading || '';
   $('pex-slide-idx').textContent = slide_index === 0 ? 'COVER' : slide_index === -1 ? 'OUTRO' : '#' + slide_index;
   $('pex-keyword').value = pexelsContext.keyword;
   $('pex-results').innerHTML = '<div class="muted" style="grid-column:1/-1;font-size:13px">검색 버튼을 누르세요.</div>';
@@ -1949,6 +2979,192 @@ async function doReflectToStyle(){
   alert('✓ 스타일에 반영됨.\n스타일 라이브러리에서 🤖 분석하기 다시 눌러야 새 프로필 반영됩니다.');
 }
 
+/* ==================== ⭐ 새 스타일로 저장 ==================== */
+async function doSaveAsNewStyle(){
+  if(!lastResult?.generation_id){ alert('먼저 생성하세요'); return; }
+  if(!session?.user?.id){ alert('로그인이 필요합니다'); return; }
+  const srcId = $('styleSelect').value;
+  const src = srcId ? stylesMap[srcId] : null;
+  const defaultName = (src?.name ? src.name + ' 복사본' : ($('topic').value.slice(0, 30) + ' 스타일')).trim();
+  const name = prompt('새 스타일 이름을 입력하세요', defaultName);
+  if(!name) return;
+  const description = src?.description || `"${$('topic').value.slice(0, 50)}" 생성 결과에서 저장`;
+  const analyzed = src?.analyzed || {};
+  const { data, error } = await supabase.from('styles').insert({
+    user_id: session.user.id,
+    channel: 'carousel',
+    name,
+    description,
+    is_default: false,
+    analyzed,
+  }).select('id').single();
+  if(error){ alert('저장 실패: ' + error.message); return; }
+  setChip($('final-status'), '⭐ 새 스타일로 저장됨', 'ok');
+  log('새 스타일 생성 · id=' + data.id, 'ok');
+  await loadStyles();
+  alert('✓ 내 스타일 라이브러리에 저장되었습니다.\n레퍼런스 아이템을 더 추가하려면 /styles.html 에서 🤖 분석하기를 다시 실행하세요.');
+}
+
+/* ==================== 📥 PNG 다운로드 (ZIP) ==================== */
+let _exportLibsLoading = null;
+function _loadScript(src){
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[data-src="${src}"]`);
+    if(existing){ if(existing.dataset.loaded) resolve(); else existing.addEventListener('load', resolve); return; }
+    const s = document.createElement('script');
+    s.src = src; s.dataset.src = src;
+    s.onload = () => { s.dataset.loaded = '1'; resolve(); };
+    s.onerror = () => reject(new Error('load fail: ' + src));
+    document.head.appendChild(s);
+  });
+}
+async function _ensureExportLibs(){
+  if(window.html2canvas && window.JSZip) return;
+  if(!_exportLibsLoading){
+    _exportLibsLoading = Promise.all([
+      _loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+      _loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'),
+    ]);
+  }
+  await _exportLibsLoading;
+}
+async function doDownloadCarousel(){
+  if(!lastResult?.output){ alert('먼저 생성하세요'); return; }
+  const cards = document.querySelectorAll('#visual-grid .visual-slide');
+  if(!cards.length){ alert('비주얼 슬라이드가 없습니다. Step 3에서 먼저 렌더링하세요.'); return; }
+  const btn = $('downloadBtn');
+  const origText = btn.textContent;
+  btn.disabled = true; btn.textContent = '📥 준비 중…';
+  try {
+    await _ensureExportLibs();
+    // 이미지 CORS 허용 시도
+    document.querySelectorAll('#visual-grid .visual-canvas img').forEach(img => {
+      if(!img.crossOrigin) img.crossOrigin = 'anonymous';
+    });
+    const zip = new JSZip();
+    let done = 0;
+    for(const card of cards){
+      const canvasEl = card.querySelector('.visual-canvas');
+      if(!canvasEl) continue;
+      btn.textContent = `📥 렌더링 ${done+1}/${cards.length}…`;
+      const canvas = await html2canvas(canvasEl, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: null,
+        logging: false,
+      });
+      const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+      const name = String(card.id || `slide-${done+1}`).padStart(2, '0');
+      zip.file(`${String(done+1).padStart(2,'0')}-${name}.png`, blob);
+      done++;
+    }
+    const topic = ($('topic').value || 'carousel').replace(/[^\w가-힣-]+/g, '_').slice(0, 40);
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `carousel-${topic}-v${lastResult.version || 1}.zip`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    setChip($('final-status'), `📥 ${done}장 다운로드됨`, 'ok');
+    log(`PNG ZIP 다운로드 · ${done}장`, 'ok');
+  } catch(e){
+    console.error(e);
+    alert('다운로드 실패: ' + (e.message || e) + '\n\n이미지가 외부 URL(Pexels/AI 생성)이면 CORS 때문에 실패할 수 있습니다. 업로드한 이미지로 바꿔 다시 시도하세요.');
+  } finally {
+    btn.disabled = false; btn.textContent = origText;
+  }
+}
+
+/* ==================== G-4 슬라이드 단위 인라인 피드백 ==================== */
+/* 슬라이드 카드의 [💬 피드백] 클릭 → 카드 안에서 textarea 토글
+ * 저장 시 feedback 테이블 INSERT (channel='carousel', source='inline_slide', target_kind/target_id 자동 채움)
+ * processed=FALSE 로 들어감 → admin 의 auto-categorize-feedback 가 분류 + 임베딩 처리
+ */
+function toggleSlideFeedback(btn){
+  const card = btn.closest('.slide-text');
+  if(!card) return;
+  const panel = card.querySelector('.slide-fb-panel');
+  if(!panel) return;
+  const isOpen = panel.style.display !== 'none';
+  panel.style.display = isOpen ? 'none' : 'block';
+  btn.classList.toggle('active', !isOpen);
+  if(!isOpen){
+    const ta = panel.querySelector('.slide-fb-text');
+    if(ta){ ta.focus(); }
+  }
+}
+
+function cancelSlideFeedback(btn){
+  const card = btn.closest('.slide-text');
+  if(!card) return;
+  const panel = card.querySelector('.slide-fb-panel');
+  const ta = panel?.querySelector('.slide-fb-text');
+  const fbBtn = card.querySelector('.slide-fb-btn');
+  if(ta) ta.value = '';
+  if(panel) panel.style.display = 'none';
+  if(fbBtn) fbBtn.classList.remove('active');
+}
+
+async function saveSlideFeedback(btn){
+  const card = btn.closest('.slide-text');
+  if(!card) return;
+  const ta = card.querySelector('.slide-fb-text');
+  const status = card.querySelector('.slide-fb-status');
+  const text = (ta?.value || '').trim();
+  if(!text){
+    if(status){ status.textContent = '내용 입력 필요'; status.className = 'slide-fb-status err'; }
+    return;
+  }
+  if(!(await ensureFreshSession())){
+    if(status){ status.textContent = '세션 만료. 다시 로그인'; status.className = 'slide-fb-status err'; }
+    return;
+  }
+  btn.disabled = true;
+  if(status){ status.textContent = '저장 중...'; status.className = 'slide-fb-status'; }
+
+  const targetKind = card.dataset.targetKind || 'slide';
+  const targetId   = card.dataset.targetId   || card.dataset.slideNum || '';
+  // 슬라이드 라벨 (헤더 입력에 prefix 로 사용)
+  const slideLabel = targetKind === 'cover' ? '커버' : `슬라이드 #${targetId}`;
+  const payload = {
+    user_id: session.user.id,
+    channel: 'carousel',
+    source: 'inline_slide',
+    generation_id: lastResult?.generation_id || null,
+    carousel_id:   lastResult?.carousel_id   || currentCarouselId || null,
+    target_kind: targetKind,
+    target_id:   targetId,
+    raw_text:    text,
+  };
+  const { error } = await supabase.from('feedback').insert(payload);
+  if(error){
+    if(status){ status.textContent = '저장 실패: ' + (error.message || error).slice(0, 80); status.className = 'slide-fb-status err'; }
+    btn.disabled = false;
+    return;
+  }
+
+  // 🔗 Step 2 의 [🔁 텍스트 다시 만들기] 입력에 자동 누적 — "[커버] 제목 강하게 / [슬라이드 #3] 데이터 추가" 식
+  // 사용자가 마지막에 [🔁 텍스트 다시 만들기] 한 번 누르면 슬라이드별 피드백이 모두 반영된 v2 생성
+  const redoInput = document.getElementById('step2-redo-input');
+  if(redoInput){
+    const newPart = `[${slideLabel}] ${text}`;
+    redoInput.value = redoInput.value
+      ? `${redoInput.value} / ${newPart}`
+      : newPart;
+    redoInput.style.transition = 'box-shadow .3s';
+    redoInput.style.boxShadow = '0 0 0 3px rgba(52,211,153,0.4)';
+    setTimeout(() => { redoInput.style.boxShadow = ''; }, 600);
+  }
+
+  if(status){ status.textContent = `✓ 저장 + 텍스트 다시 만들기에 누적 (${slideLabel})`; status.className = 'slide-fb-status ok'; }
+  if(ta) ta.value = '';
+  setTimeout(() => {
+    cancelSlideFeedback(btn);
+    btn.disabled = false;
+  }, 1500);
+}
+
 /* ==================== 집단지성 피드백 ==================== */
 async function loadFeedbackThemes(){
   const { data, error } = await supabase.from('feedback_themes').select('slug, label, emoji, sort_order').eq('is_active', true).order('sort_order');
@@ -2031,6 +3247,92 @@ async function submitFeedback(){
   } finally { btn.disabled = false; btn.textContent = '💾 피드백 저장'; }
 }
 
+/* ==================== 갤러리 → 작업 이어가기 ====================
+ * gallery.html 에서 "수정" 클릭 시 studio.html?carousel=<id> 로 이동.
+ * 해당 캐러셀의 모든 generations 를 versionHistory 로 복원하고,
+ * 가장 최신 버전을 화면에 띄운다.
+ * ============================================================ */
+async function loadCarouselFromUrl(){
+  const params = new URLSearchParams(location.search);
+  const cid = params.get('carousel');
+  if(!cid) return false;
+  if(!session) return false;
+
+  log('갤러리 → 캐러셀 로드: ' + cid);
+  const { data: car, error: ce } = await supabase
+    .from('carousels')
+    .select('id, title, channel, user_id, status')
+    .eq('id', cid)
+    .maybeSingle();
+  if(ce || !car){
+    log('캐러셀 로드 실패: ' + (ce?.message || 'not found'), 'err');
+    alert('캐러셀을 찾을 수 없습니다 (URL이 만료되었거나 삭제됨)');
+    return false;
+  }
+  if(car.user_id !== session.user.id){
+    alert('이 작업은 다른 사용자의 캐러셀입니다');
+    return false;
+  }
+
+  const { data: gens, error: ge } = await supabase
+    .from('generations')
+    .select('id, version, output, created_at, slide_media')
+    .eq('carousel_id', cid)
+    .order('version', { ascending: true });
+  if(ge || !gens || gens.length === 0){
+    log('이 캐러셀에 generation 이 없음', 'err');
+    alert('이 캐러셀에는 생성된 버전이 아직 없습니다');
+    return false;
+  }
+
+  const latest = gens[gens.length - 1];
+  currentCarouselId = cid;
+  lastResult = {
+    generation_id: latest.id,
+    carousel_id: cid,
+    version: latest.version,
+    output: latest.output,
+  };
+  versionHistory = gens.map(g => ({
+    version: g.version,
+    generation_id: g.id,
+    output: g.output,
+    review: null,
+    slide_media: g.slide_media || [],
+  }));
+  slideMediaMap = {};
+  // slide_media 가 generation 별로 저장돼 있다면 latest 것을 슬라이드별 매핑으로 풀어둠
+  if(Array.isArray(latest.slide_media)){
+    latest.slide_media.forEach((m, i) => { if(m) slideMediaMap[i] = m; });
+  }
+  loadTextOverrides();
+
+  // 화면 그리기
+  const outputEl = $('output'); if(outputEl) outputEl.textContent = JSON.stringify(latest.output, null, 2);
+  renderCarousel(latest.output);
+  renderVisualGrid(latest.output);
+  renderVersionsStrip();
+  const vLabel = $('v-label'); if(vLabel) vLabel.textContent = 'v' + latest.version;
+  setChip($('gen-status'), '✓ 갤러리에서 불러옴 · v' + latest.version + (gens.length > 1 ? ' (총 ' + gens.length + '개 버전)' : ''), 'ok');
+
+  // 모든 단계 해금 (이미 생성된 작업이므로)
+  if(typeof unlockStep === 'function'){ unlockStep(2); unlockStep(3); unlockStep(4); }
+  if(typeof markStepDone === 'function') markStepDone(1);
+
+  // 사용자에게 명확히 알려줌
+  setTimeout(() => {
+    const banner = document.createElement('div');
+    banner.className = 'gallery-load-banner';
+    banner.innerHTML = `<span>📂 <b>${esc(car.title || '제목 없는 캐러셀')}</b> 이어서 편집 · v${latest.version} 표시 중</span><button onclick="this.parentNode.remove()" style="background:transparent;border:none;color:inherit;cursor:pointer;font-size:18px;line-height:1;padding:0 4px">×</button>`;
+    banner.style.cssText = 'position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;margin:0 0 12px;background:var(--color-accent-bg);border:1px solid var(--color-accent-dim);border-radius:8px;font-size:13px;color:var(--color-accent)';
+    const main = $('main-flow');
+    if(main) main.insertBefore(banner, main.firstChild);
+  }, 100);
+
+  log('✓ 갤러리 캐러셀 로드 완료 (' + gens.length + '개 버전)', 'ok');
+  return true;
+}
+
 /* ==================== 인증 ==================== */
 async function signIn(){
   const redirectTo = window.location.href;
@@ -2076,7 +3378,15 @@ async function init(){
 
   await loadFeedbackThemes();
   renderFbScoreRows();
-  if(hasStyles) maybeAutoShowIntro();
+
+  // 🧠 학습된 개인 규칙 표시 (031 마이그레이션)
+  refreshLearnedRulesUI();
+
+  // 갤러리에서 ?carousel=<id> 로 진입했으면 그 작업을 복원
+  const loadedFromGallery = await loadCarouselFromUrl();
+
+  // 첫 진입자에게는 안내 모달 (한 번만) — 단, 갤러리 복원 중이면 띄우지 않음
+  if(!loadedFromGallery) maybeAutoShowIntro();
   document.addEventListener('visibilitychange', async () => {
     if(document.visibilityState === 'visible' && session){
       await loadStyles();
@@ -2090,5 +3400,6 @@ async function init(){
 
 window.addEventListener('load', init);
 </script>
+<script src="evolution-widget.js"></script>
 </body>
 </html>

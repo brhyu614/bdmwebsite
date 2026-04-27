@@ -2200,6 +2200,75 @@ function styleCardSvgDataUrl(slide, vars, idx, total){
 </svg>`)));
 }
 
+/* ==================== 💡 스타일 분석/SVG 미완 인라인 안내 banner ====================
+ * window.prompt() 가 페이지를 멈추는 문제 해결 — Step 3 상단에 fallback 안내 + [지금 분석/추출] 버튼.
+ * 사용자가 흐름 멈추지 않고 작업 계속 가능, 더 정확한 디자인 원하면 한 번 클릭으로 60~90초 후 재적용.
+ */
+function showStyleAnalysisBanner(styleId, styleName, hasAnalyzed){
+  let host = document.getElementById('style-analysis-banner');
+  if(!host){
+    host = document.createElement('div');
+    host.id = 'style-analysis-banner';
+    host.style.cssText = 'background:rgba(255,193,7,0.08);border:1px dashed var(--color-warning);border-radius:8px;padding:14px 18px;margin:14px 0;display:flex;align-items:center;gap:14px;font-size:13px;color:var(--color-text)';
+    const bar = document.getElementById('step3-bulk-bar');
+    if(bar && bar.parentNode) bar.parentNode.insertBefore(host, bar);
+  }
+  const action = hasAnalyzed ? '🎨 SVG 템플릿 추출 (60초)' : '✨ 분석 + SVG 추출 (60~90초)';
+  host.innerHTML = `
+    <div style="font-size:18px">⚠️</div>
+    <div style="flex:1">
+      <div style="font-weight:700;margin-bottom:4px">스타일 "${esc(styleName)}" SVG 템플릿 없음 — 일단 fallback 디자인 적용 중</div>
+      <div style="color:var(--color-muted);font-size:12px">정확한 디자인 일치를 원하시면 아래 버튼 클릭. 끝나면 자동으로 9장 다시 그립니다.</div>
+    </div>
+    <button class="btn btn-warning btn-sm" onclick="runAnalyzeAndReapply('${styleId}', ${hasAnalyzed})">${action}</button>
+    <button class="btn btn-ghost btn-sm" onclick="hideStyleAnalysisBanner()" style="font-size:11px">나중에</button>
+  `;
+  host.style.display = 'flex';
+}
+function hideStyleAnalysisBanner(){
+  const host = document.getElementById('style-analysis-banner');
+  if(host) host.style.display = 'none';
+}
+async function runAnalyzeAndReapply(styleId, alreadyAnalyzed){
+  const host = document.getElementById('style-analysis-banner');
+  if(!(await ensureFreshSession())){ alert('세션 만료'); return; }
+  if(host){
+    host.innerHTML = `<div style="font-size:18px">⏳</div>
+      <div style="flex:1"><div style="font-weight:700">${alreadyAnalyzed ? 'SVG 템플릿 추출' : '분석 + SVG 추출'} 중…</div>
+      <div style="color:var(--color-muted);font-size:12px;margin-top:4px" id="ban-progress">시작 중...</div></div>`;
+  }
+  const setProg = (txt) => { const el = document.getElementById('ban-progress'); if(el) el.textContent = txt; };
+  try {
+    if(!alreadyAnalyzed){
+      setProg('🤖 Claude Vision 분석 중… (~30초)');
+      const r1 = await fetch(`${SUPABASE_URL}/functions/v1/analyze-style-items`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ style_id: styleId }),
+      });
+      if(!r1.ok) throw new Error('분석 실패: ' + r1.status);
+    }
+    setProg('🎨 SVG 템플릿 추출 중… (~60초)');
+    const r2 = await fetch(`${SUPABASE_URL}/functions/v1/extract-style-svg-template`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ style_id: styleId }),
+    });
+    if(!r2.ok) throw new Error('SVG 추출 실패: ' + r2.status);
+    setProg('✓ 완료. 9장 다시 그리는 중…');
+    log('✓ 분석 + SVG 추출 완료 — 디자인 카드 재적용', 'ok');
+    hideStyleAnalysisBanner();
+    await applyStyleCardsAll();
+  } catch(e){
+    if(host){
+      host.innerHTML = `<div style="font-size:18px">❌</div>
+        <div style="flex:1"><div style="font-weight:700;color:var(--color-danger)">실패: ${esc(e.message)}</div>
+        <div style="color:var(--color-muted);font-size:12px;margin-top:4px">styles.html 에서 수동 분석 후 다시 시도하세요.</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="hideStyleAnalysisBanner()">닫기</button>`;
+    }
+  }
+}
+
 /* ==================== 🚨 응급: 사용자 스타일1 즉시 등록 ====================
  * styles.html 흐름이 막혀있을 때 우회 — render_v3.py 디자인 (사진+녹색박스+검정텍스트)을
  * svg_template 으로 직접 styles 테이블에 INSERT/UPDATE.
@@ -2298,57 +2367,15 @@ async function applyStyleCardsAll(){
   let analyzed = styleRow?.analyzed;
   let svgTemplate = styleRow?.svg_template;
 
-  // 사용자 강한 지적 (2026-04-27): "스타일 적용 1도 안 되고 있어 아주 심각해"
-  // 분석/SVG 미완 시 자동 트리거 옵션 제공 (styles.html 안 가도 됨)
-  if(!svgTemplate && !analyzed && styleRow?.id){
-    const choice = window.prompt(
-      `⚠️ 스타일 "${styleRow.name}" 분석이 안 됐습니다.\n\n` +
-      `옵션:\n` +
-      `1 = 지금 자동 분석 (30초~1분, Claude Vision)\n` +
-      `2 = 자동 분석 + SVG 템플릿 정밀 추출 (60~90초, 100% 디자인 일치)\n` +
-      `3 = 그냥 fallback 으로 진행 (단순 녹색+검정)\n\n` +
-      `숫자만 입력하세요 (1/2/3):`,
-      '2'
-    );
-    if(choice === '1' || choice === '2'){
-      const status = $('autogen-status');
-      if(status){ status.textContent = '🤖 분석 중… (Claude Vision)'; status.className = 'chip warn'; }
-      try {
-        const r1 = await fetch(`${SUPABASE_URL}/functions/v1/analyze-style-items`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ style_id: styleRow.id }),
-        });
-        if(!r1.ok) throw new Error('분석 실패: ' + r1.status);
-        log('✓ 스타일 분석 완료', 'ok');
-
-        if(choice === '2'){
-          if(status) status.textContent = '🎨 SVG 템플릿 추출 중… (Claude Sonnet)';
-          const r2 = await fetch(`${SUPABASE_URL}/functions/v1/extract-style-svg-template`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ style_id: styleRow.id }),
-          });
-          if(!r2.ok) log('SVG 추출 실패 (분석은 OK) — fallback SVG 사용: ' + r2.status, 'err');
-          else log('✓ SVG 템플릿 추출 완료', 'ok');
-        }
-
-        // 다시 styles 조회 (방금 업데이트된 내용 가져옴)
-        const { data: refreshed } = await supabase.from('styles').select('analyzed, svg_template').eq('id', styleRow.id).maybeSingle();
-        analyzed = refreshed?.analyzed;
-        svgTemplate = refreshed?.svg_template;
-        if(status){ status.textContent = '✓ 스타일 준비됨'; status.className = 'chip'; }
-      } catch(e){
-        alert('자동 분석 실패: ' + e.message + '\nstyles.html 로 이동해서 수동 분석해주세요.');
-        return;
-      }
-    } else if(choice === '3'){
-      // 그냥 진행
-    } else {
-      return;  // 사용자가 취소
-    }
-  } else if(!svgTemplate && analyzed){
-    log('💡 더 정확한 디자인 일치를 원하시면 styles.html → [🎨 SVG 템플릿 추출] 클릭', 'ok');
+  // 🛡 svg_template 없으면 자동 fallback + 인라인 banner 표시 (window.prompt 제거 — 페이지 멈춤 방지)
+  //   사용자가 banner [지금 분석/SVG 추출] 누르면 그때 60~90초 후 다시 적용
+  const needsAnalysisBanner = !svgTemplate && !!styleRow?.id;
+  if(needsAnalysisBanner){
+    log(`💡 스타일 "${styleRow.name}" 에 SVG 템플릿 없음 → 일단 fallback 디자인으로 진행 (상단 안내 참고)`, 'ok');
+    // banner DOM 생성/업데이트
+    showStyleAnalysisBanner(styleRow.id, styleRow.name, !!analyzed);
+  } else {
+    hideStyleAnalysisBanner();
   }
   const vars = extractStyleVars(analyzed);
   const slides = collectSlides(lastResult.output);

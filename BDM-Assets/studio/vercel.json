@@ -3,7 +3,13 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/", "destination": "/studio.html", "permanent": false }
+    { "source": "/", "destination": "/landing.html", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/carousel", "destination": "/studio.html" },
+    { "source": "/blog", "destination": "/channels.html?ch=naver" },
+    { "source": "/threads", "destination": "/channels.html?ch=threads" },
+    { "source": "/pulse", "destination": "/pulse.html" }
   ],
   "headers": [
     {

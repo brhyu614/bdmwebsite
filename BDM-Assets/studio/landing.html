@@ -80,6 +80,9 @@ a { color: inherit; }
 .section-eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 2.5px; color: var(--accent); text-transform: uppercase; font-weight: 700; margin-bottom: 16px; }
 .section-title { font-family: var(--font-display); font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; max-width: 760px; }
 .section-title .accent { color: var(--accent); }
+.section-title-xl { font-family: var(--font-display); font-size: 64px; font-weight: 800; line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 22px; max-width: 920px; }
+.section-title-xl .dot-accent { color: var(--accent); }
+@media (max-width: 768px) { .section-title-xl { font-size: 38px; } }
 .section-sub { color: var(--subtext); font-size: 17px; max-width: 660px; margin-bottom: 56px; line-height: 1.6; }
 @media (max-width: 768px) {
   .section { padding: 60px 24px; }
@@ -143,7 +146,6 @@ a { color: inherit; }
     BDM Studio
   </a>
   <div class="nav-spacer"></div>
-  <a href="#features" class="nav-link">기능</a>
   <a href="#channels" class="nav-link">채널</a>
   <a href="#how" class="nav-link">사용 방법</a>
   <a href="faq.html" class="nav-link">FAQ</a>
@@ -168,36 +170,10 @@ a { color: inherit; }
   <div class="demo-caption">↑ 인스타 캐러셀 9장 — 30초 만에 자동 생성</div>
 </section>
 
-<!-- 3 Features -->
-<section class="section" id="features">
-  <div class="section-eyebrow">핵심 기능</div>
-  <h2 class="section-title">스타일을 한 번 등록하면<br><span class="accent">매일 새 콘텐츠</span>가 나옵니다.</h2>
-  <p class="section-sub">번거로운 디자인 작업 없이, 사용자 인스타에서 본 그 톤앤매너를 시스템이 학습해 모든 슬라이드에 100% 동일하게 적용합니다.</p>
-
-  <div class="feature-grid">
-    <div class="feature-card">
-      <span class="feature-icon">🎨</span>
-      <h3 class="feature-title">스타일 학습 + 100% 일치</h3>
-      <p class="feature-text">인스타 게시물 스크린샷 1장만 업로드. <b>Claude Vision</b>이 색·폰트·구조를 자동 추출해 SVG 템플릿으로 만듭니다. 9장 캐러셀 전부 동일한 디자인.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📡</span>
-      <h3 class="feature-title">트렌드 신호 자동 포착</h3>
-      <p class="feature-text">YouTube · Reddit · Naver · Google Trends에서 <b>"수면 위로 떠오르는"</b> 신호만 골라 알려줍니다. 클릭 한 번이면 그 주제로 9장 콘텐츠가 즉시.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🧠</span>
-      <h3 class="feature-title">집단지성으로 매일 진화</h3>
-      <p class="feature-text">사용자 피드백이 다음 생성에 자동 반영됩니다. <b>"커버 더 강하게"</b> 한 번 적으면 다음부터 더 강한 커버. 사용자가 늘수록 엔진이 똑똑해집니다.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 3 Channels -->
+<!-- 3 Channels (위로 이동 + 글씨 크게) -->
 <section class="section" id="channels">
-  <div class="section-eyebrow">3가지 채널 동시 지원</div>
-  <h2 class="section-title">한 주제 →<br>인스타·블로그·Threads로<span class="accent"> 한 번에</span></h2>
-  <p class="section-sub">같은 아이디어를 채널 별 호흡과 길이에 맞게 자동 변환합니다. 채널마다 다른 톤은 자동, 일관된 메시지는 유지.</p>
+  <h2 class="section-title-xl">3가지 채널 동시 지원<span class="dot-accent">.</span></h2>
+  <p class="section-sub">한 주제 → 인스타·블로그·Threads로 한 번에. 같은 아이디어를 채널 별 호흡과 길이에 맞게 자동 변환합니다. 채널마다 다른 톤은 자동, 일관된 메시지는 유지.</p>
 
   <div class="channel-grid">
     <a href="channels.html" class="channel-card insta">

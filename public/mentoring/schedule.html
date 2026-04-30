@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>스케줄 조율 · BDM Lab 멘토링</title>
 <meta name="robots" content="noindex,nofollow" />
-<script src="./auth.js"></script>
 <script type="module" src="./firebase-sync.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -95,7 +94,16 @@
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="./index.html">← 멘토링 허브</a>
+  <div id="name-view" style="display:none">
+    <div class="team-badge">BDM Lab 멘토링</div>
+    <h1>이름을 입력해주세요</h1>
+    <p class="lede">5/4(월) · 5/6(수) · 5/7(목) 중 가능한 시간을 체크합니다.</p>
+    <div class="bar">
+      <input id="name-input" type="text" placeholder="예: 김지원 / 인피니아랩 김지원" style="flex:1;min-width:240px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-family:inherit" />
+      <button class="primary" id="btn-name-go">시작</button>
+    </div>
+    <div class="hint" style="font-size:12px;color:var(--sub);margin-top:8px">팀명+이름으로 적어주시면 누구인지 구분이 쉬워요. 같은 이름으로 다시 들어오면 이전 선택을 이어서 수정할 수 있어요.</div>
+  </div>
 
   <div id="team-view" style="display:none">
     <div class="team-badge" id="team-name">팀</div>
@@ -104,7 +112,7 @@
     <div class="instructions">
       <b>체크 기준</b> · "이 시간에 확실히 멘토링 참석이 가능하다"고 판단되는 모든 슬롯을 선택.<br/>
       <b>애매하면 체크 X</b> · 나중에 "사실 안 돼요"가 나오면 전체 재조율입니다.<br/>
-      <b>제출 방법</b> · 맨 아래 <b>제출 코드</b>를 복사해서 교수님께 전송 (카톡/이메일 등).
+      <b>실시간 동기화</b> · 선택은 자동으로 저장됩니다. 끝났으면 맨 아래 "제출하기"를 눌러주세요.
     </div>
 
     <div class="bar">
@@ -135,7 +143,7 @@
     <p class="lede">각 팀이 선택하는 즉시 <b>실시간으로 자동 반영</b>됩니다. <span id="sync-status" style="color:var(--mute);font-size:12px">연결 중…</span></p>
 
     <details class="admin-teams" open>
-      <summary>📝 참여 팀: <b id="team-count">0</b> / 6 <span id="submit-count" style="color:var(--sub);font-size:12px;font-weight:400"></span></summary>
+      <summary>📝 참여자: <b id="team-count">0</b>명 <span id="submit-count" style="color:var(--sub);font-size:12px;font-weight:400"></span></summary>
       <div id="team-chips"></div>
     </details>
 
@@ -165,43 +173,47 @@
     </div>
   </div>
 
-  <div id="hub-view" style="display:none">
-    <h1>스케줄 조율</h1>
-    <p class="lede">팀 링크로 접속해야 합니다. <a href="./index.html">허브로 돌아가기</a></p>
-  </div>
 </div>
 
 <div class="toast" id="toast">복사됨</div>
 
 <script>
-// ===== 구성: 팀 & 슬롯 =====
-const TEAMS = ['인피니아랩','VinsLab','지원이와친구들','스토리브릿지','팀 AOS'];
-
-// 슬롯 = [{date, label, day, hour}], 순서대로 bitmap 인덱스
+// ===== 구성: 슬롯 =====
+// 슬롯 = [{date, day, hour}], 순서대로 bitmap 인덱스
 const SLOTS = (() => {
   const out = [];
-  // 이번주 목 4/23: 13~17시 (13,14,15,16)
-  [13,14,15,16].forEach(h => out.push({ date:'2026-04-23', day:'목 4/23', hour:h }));
-  // 다음주 월~목: 10~22시 (10..21)
   const days = [
-    {date:'2026-04-27', day:'월 4/27'},
-    {date:'2026-04-28', day:'화 4/28'},
-    {date:'2026-04-29', day:'수 4/29'},
-    {date:'2026-04-30', day:'목 4/30'},
+    {date:'2026-05-04', day:'월 5/4'},
+    {date:'2026-05-06', day:'수 5/6'},
+    {date:'2026-05-07', day:'목 5/7'},
   ];
   days.forEach(d => {
     for (let h=10; h<=21; h++) out.push({ date:d.date, day:d.day, hour:h });
   });
   return out;
 })();
+const PARTICIPANTS_KEY = 'participants-index';
 const DAYS = [...new Set(SLOTS.map(s => s.day))];
 const HOURS = [...new Set(SLOTS.map(s => s.hour))].sort((a,b)=>a-b);
 
 // ===== 유틸 =====
 const $ = (s) => document.querySelector(s);
 const params = new URLSearchParams(location.search);
-const team = params.get('team');
+let team = params.get('team') || params.get('name');
 const mode = params.get('mode');
+
+async function registerParticipant(name) {
+  const backend = await waitForSync(3000);
+  if (!backend?.set) return;
+  try {
+    const cur = (await backend.get(PARTICIPANTS_KEY)) || { names: [] };
+    const names = Array.isArray(cur.names) ? cur.names : [];
+    if (!names.includes(name)) {
+      names.push(name);
+      await backend.set(PARTICIPANTS_KEY, { names, updatedAt: Date.now() });
+    }
+  } catch (e) { console.warn('register failed', e); }
+}
 
 // BDM_SYNC 모듈이 로드될 때까지 대기 (defer 순서 문제 해결)
 function waitForSync(timeoutMs = 8000) {
@@ -244,11 +256,12 @@ function hourLabel(h){ return `${String(h).padStart(2,'0')}:00 – ${String(h+1)
 
 // ===== 팀 화면 =====
 async function renderTeamView(){
-  $('#hub-view').style.display = 'none';
+  $('#name-view').style.display = 'none';
   $('#admin-view').style.display = 'none';
   $('#team-view').style.display = 'block';
-  $('#team-name').textContent = team + ' 팀';
+  $('#team-name').textContent = team;
   document.title = `${team} · 스케줄 체크 · BDM`;
+  registerParticipant(team);
 
   const syncKey = `schedule-${team}`;
   let bits = new Array(SLOTS.length).fill(false);
@@ -384,7 +397,7 @@ async function renderTeamView(){
 
 // ===== 관리자 화면 =====
 async function renderAdminView(){
-  $('#hub-view').style.display = 'none';
+  $('#name-view').style.display = 'none';
   $('#team-view').style.display = 'none';
   $('#admin-view').style.display = 'block';
 
@@ -487,7 +500,11 @@ async function renderAdminView(){
     return;
   }
   $('#sync-status').textContent = backend.mode === 'firestore' ? '🟢 실시간 연결됨' : '⚠️ 로컬 모드 (Firebase 미연결)';
-  TEAMS.forEach(t => {
+
+  const subscribed = new Set();
+  function subscribeOne(t) {
+    if (subscribed.has(t)) return;
+    subscribed.add(t);
     backend.subscribe(`schedule-${t}`, payload => {
       if (!payload?.code) {
         teamData.delete(t);
@@ -501,19 +518,40 @@ async function renderAdminView(){
       }
       render();
     });
+  }
+  backend.subscribe(PARTICIPANTS_KEY, payload => {
+    const names = Array.isArray(payload?.names) ? payload.names : [];
+    names.forEach(subscribeOne);
   });
 }
 
 // ===== 라우팅 =====
+function showNameView(){
+  $('#name-view').style.display = 'block';
+  const input = $('#name-input');
+  const stored = localStorage.getItem('bdm:my-name');
+  if (stored) input.value = stored;
+  input.focus();
+  function go(){
+    const v = input.value.trim();
+    if (!v) { input.focus(); return; }
+    localStorage.setItem('bdm:my-name', v);
+    team = v;
+    const url = new URL(location.href);
+    url.searchParams.set('team', v);
+    history.replaceState(null, '', url.toString());
+    renderTeamView();
+  }
+  $('#btn-name-go').onclick = go;
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+}
+
 if (mode === 'admin') {
   renderAdminView();
-} else if (team && TEAMS.some(t => t === team)) {
-  renderTeamView();
 } else if (team) {
-  // unknown team name but still allow (freeform)
   renderTeamView();
 } else {
-  $('#hub-view').style.display = 'block';
+  showNameView();
 }
 </script>
 </body>

@@ -96,13 +96,9 @@
 <div class="wrap">
   <div id="name-view" style="display:none">
     <div class="team-badge">BDM Lab 멘토링</div>
-    <h1>이름을 입력해주세요</h1>
-    <p class="lede">5/4(월) · 5/6(수) · 5/7(목) 중 가능한 시간을 체크합니다.</p>
-    <div class="bar">
-      <input id="name-input" type="text" placeholder="예: 김지원 / 인피니아랩 김지원" style="flex:1;min-width:240px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-family:inherit" />
-      <button class="primary" id="btn-name-go">시작</button>
-    </div>
-    <div class="hint" style="font-size:12px;color:var(--sub);margin-top:8px">팀명+이름으로 적어주시면 누구인지 구분이 쉬워요. 같은 이름으로 다시 들어오면 이전 선택을 이어서 수정할 수 있어요.</div>
+    <h1>소속 팀을 선택해주세요</h1>
+    <p class="lede">5/4(월) · 5/6(수) · 5/7(목) 중 가능한 시간을 체크합니다. 팀당 한 번만 제출하면 되며, 다시 들어오면 이전 선택을 수정할 수 있어요.</p>
+    <div id="team-picker" style="display:flex;flex-direction:column;gap:8px;margin-top:12px"></div>
   </div>
 
   <div id="team-view" style="display:none">
@@ -178,7 +174,9 @@
 <div class="toast" id="toast">복사됨</div>
 
 <script>
-// ===== 구성: 슬롯 =====
+// ===== 구성: 팀 & 슬롯 =====
+const TEAMS = ['인피니아랩','VinsLab','지원이와친구들','스토리브릿지','팀 AOS'];
+
 // 슬롯 = [{date, day, hour}], 순서대로 bitmap 인덱스
 const SLOTS = (() => {
   const out = [];
@@ -519,6 +517,7 @@ async function renderAdminView(){
       render();
     });
   }
+  TEAMS.forEach(subscribeOne);
   backend.subscribe(PARTICIPANTS_KEY, payload => {
     const names = Array.isArray(payload?.names) ? payload.names : [];
     names.forEach(subscribeOne);
@@ -526,31 +525,44 @@ async function renderAdminView(){
 }
 
 // ===== 라우팅 =====
-function showNameView(){
+async function showNameView(){
   $('#name-view').style.display = 'block';
-  const input = $('#name-input');
-  const stored = localStorage.getItem('bdm:my-name');
-  if (stored) input.value = stored;
-  input.focus();
-  function go(){
-    const v = input.value.trim();
-    if (!v) { input.focus(); return; }
-    localStorage.setItem('bdm:my-name', v);
-    team = v;
-    const url = new URL(location.href);
-    url.searchParams.set('team', v);
-    history.replaceState(null, '', url.toString());
-    renderTeamView();
+  const picker = $('#team-picker');
+
+  // 이미 제출/저장된 팀 표시용
+  let submittedSet = new Set();
+  const backend = await waitForSync(3000);
+  if (backend?.get) {
+    try {
+      const results = await Promise.all(TEAMS.map(t => backend.get(`schedule-${t}`)));
+      results.forEach((r, i) => { if (r?.code) submittedSet.add(TEAMS[i]); });
+    } catch {}
   }
-  $('#btn-name-go').onclick = go;
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+
+  picker.innerHTML = '';
+  TEAMS.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'primary';
+    btn.style.cssText = 'padding:16px 18px;font-size:16px;text-align:left;display:flex;justify-content:space-between;align-items:center';
+    const tag = submittedSet.has(t) ? '<span style="font-size:12px;opacity:.85">✏️ 수정하기</span>' : '<span style="font-size:12px;opacity:.85">시작 →</span>';
+    btn.innerHTML = `<b>${t}</b>${tag}`;
+    btn.onclick = () => {
+      team = t;
+      const url = new URL(location.href);
+      url.searchParams.set('team', t);
+      history.replaceState(null, '', url.toString());
+      renderTeamView();
+    };
+    picker.appendChild(btn);
+  });
 }
 
 if (mode === 'admin') {
   renderAdminView();
-} else if (team) {
+} else if (team && TEAMS.includes(team)) {
   renderTeamView();
 } else {
+  team = null;
   showNameView();
 }
 </script>

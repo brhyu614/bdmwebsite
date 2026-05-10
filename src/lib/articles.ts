@@ -81,12 +81,11 @@ export function getAllArticles(): Article[] {
   return files
     .map(readArticle)
     .sort((a, b) => {
-      const orderA = a.frontmatter.order
-      const orderB = b.frontmatter.order
-      if (orderA != null && orderB != null) return orderA - orderB
-      if (orderA != null) return -1
-      if (orderB != null) return 1
-      return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+      const dateDiff = new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+      if (dateDiff !== 0) return dateDiff
+      const orderA = a.frontmatter.order ?? 0
+      const orderB = b.frontmatter.order ?? 0
+      return orderA - orderB
     })
 }
 

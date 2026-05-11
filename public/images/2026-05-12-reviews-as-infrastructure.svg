@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1f17"/>
+      <stop offset="55%" stop-color="#1c3a2c"/>
+      <stop offset="100%" stop-color="#0a140f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.32" r="0.55">
+      <stop offset="0%" stop-color="#34d39955"/>
+      <stop offset="100%" stop-color="#34d39900"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Phone mock right -->
+  <g transform="translate(820 95)">
+    <rect x="0" y="0" width="240" height="440" rx="34" fill="#0b0f0d" stroke="#2a3f33" stroke-width="3"/>
+    <rect x="14" y="22" width="212" height="396" rx="20" fill="#fafaf9"/>
+    <rect x="32" y="46" width="120" height="10" rx="3" fill="#a8a29e"/>
+    <!-- review stars -->
+    <g transform="translate(32 78)">
+      <text x="0" y="14" font-family="sans-serif" font-size="18" font-weight="700" fill="#dc2626">★★★★★</text>
+      <text x="0" y="38" font-family="sans-serif" font-size="9" fill="#1c1917">"AI가 우리를 외운다"</text>
+    </g>
+    <rect x="32" y="130" width="176" height="6" rx="2" fill="#1c1917"/>
+    <rect x="32" y="144" width="160" height="6" rx="2" fill="#1c1917"/>
+    <rect x="32" y="158" width="140" height="6" rx="2" fill="#1c1917"/>
+    <g transform="translate(32 184)">
+      <text x="0" y="14" font-family="sans-serif" font-size="18" font-weight="700" fill="#dc2626">★★★★☆</text>
+    </g>
+    <rect x="32" y="216" width="176" height="6" rx="2" fill="#1c1917"/>
+    <rect x="32" y="230" width="170" height="6" rx="2" fill="#1c1917"/>
+    <rect x="32" y="244" width="150" height="6" rx="2" fill="#1c1917"/>
+    <g transform="translate(32 270)">
+      <text x="0" y="14" font-family="sans-serif" font-size="18" font-weight="700" fill="#dc2626">★★★★★</text>
+    </g>
+    <rect x="32" y="302" width="176" height="6" rx="2" fill="#1c1917"/>
+    <rect x="32" y="316" width="160" height="6" rx="2" fill="#1c1917"/>
+    <rect x="32" y="350" width="120" height="6" rx="2" fill="#a8a29e"/>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="80" y="120" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-weight="700" font-size="22" fill="#34d399" letter-spacing="2">ALGORITHM DECODE · AEO</text>
+
+  <!-- Title lines -->
+  <text x="80" y="220" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-weight="900" font-size="58" fill="#fafaf9">AI 시대, 리뷰는 더 이상</text>
+  <text x="80" y="298" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-weight="900" font-size="58" fill="#fafaf9">마케팅이 아니라</text>
+
+  <!-- Highlighted -->
+  <rect x="68" y="332" width="360" height="84" fill="#dc2626"/>
+  <text x="80" y="394" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-weight="900" font-size="62" fill="#fafaf9">인프라다</text>
+
+  <!-- Author -->
+  <text x="80" y="540" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-weight="600" font-size="22" fill="#a8a29e">임보람 · BDM Lab</text>
+</svg>

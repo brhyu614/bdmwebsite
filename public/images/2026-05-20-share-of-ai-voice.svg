@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1f17"/>
+      <stop offset="55%" stop-color="#1c3a2c"/>
+      <stop offset="100%" stop-color="#0a140f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.32" r="0.55">
+      <stop offset="0%" stop-color="#34d39955"/>
+      <stop offset="100%" stop-color="#34d39900"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g transform="translate(820 150)">
+    <path d="M 20 200 A 100 100 0 0 1 220 200" fill="none" stroke="#0a140f" stroke-width="20"/>
+    <path d="M 20 200 A 100 100 0 0 1 160 110" fill="none" stroke="#34d399" stroke-width="20"/>
+    <path d="M 160 110 A 100 100 0 0 1 200 140" fill="none" stroke="#dc2626" stroke-width="20"/>
+    <line x1="120" y1="200" x2="180" y2="120" stroke="#fafaf9" stroke-width="4"/>
+    <circle cx="120" cy="200" r="8" fill="#fafaf9"/>
+    <text x="120" y="250" font-family="sans-serif" font-size="22" font-weight="900" fill="#fafaf9" text-anchor="middle">SHARE OF AI VOICE</text>
+  </g>
+  <text x="80" y="120" font-family="'Noto Sans KR',sans-serif" font-weight="700" font-size="22" fill="#34d399" letter-spacing="2">광고전략 · AEO</text>
+  <text x="80" y="200" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="52" fill="#fafaf9">AI 인용 점유율: 라스트클릭이</text>
+<text x="80" y="266" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="52" fill="#fafaf9">못</text>
+<rect x="68" y="282" width="420" height="74" fill="#dc2626"/>
+<text x="80" y="338" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="56" fill="#fafaf9">잡는 매출의 KPI</text>
+  <text x="80" y="560" font-family="'Noto Sans KR',sans-serif" font-weight="600" font-size="22" fill="#a8a29e">임보람 · BDM Lab</text>
+</svg>

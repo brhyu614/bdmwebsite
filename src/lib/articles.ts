@@ -78,8 +78,10 @@ function readArticle(fileName: string): Article {
 
 export function getAllArticles(): Article[] {
   const files = getMDXFiles()
+  const now = Date.now()
   return files
     .map(readArticle)
+    .filter((a) => new Date(a.frontmatter.date).getTime() <= now)
     .sort((a, b) => {
       const dateDiff = new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
       if (dateDiff !== 0) return dateDiff

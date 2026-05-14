@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { getAllArticles } from '@/lib/articles'
 import ArchiveFilter from './ArchiveFilter'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: '아티클',
   description: '한양대 빅데이터마케팅 랩(Big Data Marketing Lab)의 알고리즘 분석, AI 예측, 인과분석 기반 마케팅 아티클.',

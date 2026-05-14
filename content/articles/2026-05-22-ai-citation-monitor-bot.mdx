@@ -1,0 +1,23 @@
+---
+title: "4대 AI를 매주 자동 감시하는 봇 만들기"
+series: "algorithm-decode"
+tags: ["AEO", "AI", "howto", "implementation"]
+order: -2
+date: "2026-05-22"
+readingTime: 5
+excerpt: "PART B 전략 5의 KPI(AI 인용 점유율)를 자동 측정하는 핵심 도구다. 4대 AI에 카테고리 질문 50~100개를 자동 질의하고, 자사·경쟁사 인용 횟수와 환각 여부를 매주 Slack/메일로 받습니다."
+coverImage: "/images/2026-05-22-ai-citation-monitor-bot.svg"
+featured: true
+---
+
+PART B 전략 5의 KPI(AI 인용 점유율)를 자동 측정하는 핵심 도구다. 4대 AI에 카테고리 질문 50~100개를 자동 질의하고, 자사·경쟁사 인용 횟수와 환각 여부를 매주 Slack/메일로 받습니다.
+
+Claude Code 프롬프트 예시
+
+Python 스크립트를 작성하라.- 입력: queries.csv (50개 자연어 질문), competitors.csv (자사+경쟁 5개사)- 매주 월 09:00 cron 실행- 호출: ChatGPT(gpt-4o), Claude(claude-opus-4-7), Perplexity(sonar-pro), 네이버 AI 브리핑(Playwright headless)- 답변에서 자사/경쟁사 언급 카운트, 인용 출처 URL 추출- 환각 자동 플래그(facts.json 사실원장과 대조)- BigQuery/Google Sheets 적재, Slack #aeo-monitor 전송 (전주 대비 변화 + 환각 alert)환경변수, 에러 처리, README.md 포함.
+
+## 기업이 배워야 할 것
+
+· “AI가 우리를 어떻게 말하고 있는가”를 매주 정기 감사하는 시스템 없이는 AEO 투자의 ROI 증명이 어렵다.
+
+— 임보람

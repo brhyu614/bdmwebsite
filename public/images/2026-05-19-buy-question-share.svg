@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1f17"/>
+      <stop offset="55%" stop-color="#1c3a2c"/>
+      <stop offset="100%" stop-color="#0a140f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.32" r="0.55">
+      <stop offset="0%" stop-color="#34d39955"/>
+      <stop offset="100%" stop-color="#34d39900"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g transform="translate(820 130)">
+    <text x="120" y="180" font-family="serif" font-size="280" font-weight="900" fill="#dc2626" text-anchor="middle">?</text>
+    <text x="120" y="240" font-family="sans-serif" font-size="22" font-weight="700" fill="#fafaf9" text-anchor="middle">자연어 질문</text>
+    <text x="120" y="270" font-family="sans-serif" font-size="14" fill="#34d399" text-anchor="middle">30~40개 페이지</text>
+  </g>
+  <text x="80" y="120" font-family="'Noto Sans KR',sans-serif" font-weight="700" font-size="22" fill="#34d399" letter-spacing="2">광고전략 · AEO</text>
+  <text x="80" y="200" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="52" fill="#fafaf9">검색어 점유 말고 질문</text>
+<rect x="68" y="216" width="252" height="74" fill="#dc2626"/>
+<text x="80" y="272" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="56" fill="#fafaf9">점유를 사라</text>
+  <text x="80" y="560" font-family="'Noto Sans KR',sans-serif" font-weight="600" font-size="22" fill="#a8a29e">임보람 · BDM Lab</text>
+</svg>

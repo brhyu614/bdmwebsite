@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1f17"/>
+      <stop offset="55%" stop-color="#1c3a2c"/>
+      <stop offset="100%" stop-color="#0a140f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.32" r="0.55">
+      <stop offset="0%" stop-color="#34d39955"/>
+      <stop offset="100%" stop-color="#34d39900"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+<g transform="translate(820 140)">
+  <line x1="40" y1="40" x2="120" y2="30" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="120" y1="30" x2="200" y2="50" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="40" y1="40" x2="60" y2="110" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="120" y1="30" x2="60" y2="110" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="120" y1="30" x2="140" y2="100" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="200" y1="50" x2="220" y2="120" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="60" y1="110" x2="140" y2="100" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="140" y1="100" x2="220" y2="120" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="60" y1="110" x2="80" y2="180" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="140" y1="100" x2="160" y2="170" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="220" y1="120" x2="160" y2="170" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="80" y1="180" x2="40" y2="230" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="160" y1="170" x2="180" y2="220" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="140" y1="100" x2="40" y2="230" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <line x1="160" y1="170" x2="40" y2="230" stroke="#34d399" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="40" cy="40" r="10" fill="#34d399"/>
+  <circle cx="120" cy="30" r="10" fill="#dc2626"/>
+  <circle cx="200" cy="50" r="10" fill="#34d399"/>
+  <circle cx="60" cy="110" r="10" fill="#34d399"/>
+  <circle cx="140" cy="100" r="10" fill="#dc2626"/>
+  <circle cx="220" cy="120" r="10" fill="#34d399"/>
+  <circle cx="80" cy="180" r="10" fill="#34d399"/>
+  <circle cx="160" cy="170" r="10" fill="#dc2626"/>
+  <circle cx="40" cy="230" r="10" fill="#34d399"/>
+  <circle cx="180" cy="220" r="10" fill="#34d399"/>
+  <text x="120" y="270" font-family="sans-serif" font-size="13" fill="#a8a29e" text-anchor="middle">에이전트 사회 시뮬레이션</text>
+  </g>
+  <text x="80" y="120" font-family="'Noto Sans KR',sans-serif" font-weight="700" font-size="22" fill="#34d399" letter-spacing="2">멀티에이전트 · 시뮬레이션</text>
+  <text x="80" y="200" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="52" fill="#fafaf9">AgentSociety: 출시</text>
+<text x="80" y="266" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="52" fill="#fafaf9">전에 100번</text>
+<rect x="68" y="282" width="294" height="74" fill="#dc2626"/>
+<text x="80" y="338" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="56" fill="#fafaf9">살아보는 시대</text>
+  <text x="80" y="560" font-family="'Noto Sans KR',sans-serif" font-weight="600" font-size="22" fill="#a8a29e">임보람 · BDM Lab</text>
+</svg>

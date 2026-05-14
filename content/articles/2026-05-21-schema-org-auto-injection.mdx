@@ -1,0 +1,23 @@
+---
+title: "Schema.org는 있으면 좋은 게 아니라 없으면 인용이 안 된다"
+series: "algorithm-decode"
+tags: ["AEO", "AI", "howto", "implementation"]
+order: -2
+date: "2026-05-21"
+readingTime: 5
+excerpt: "Schema.org 마크업은 가격·재고·평점·영업시간·FAQ 같은 사실을 ‘AI가 기계적으로 읽을 수 있는 코드’로 박는 표준다. 손으로 모든 페이지에 추가하긴 비현실적이라 Claude Code에 사이트맵을 던지고 일괄 처리한다."
+coverImage: "/images/2026-05-21-schema-org-auto-injection.svg"
+featured: true
+---
+
+Schema.org 마크업은 가격·재고·평점·영업시간·FAQ 같은 사실을 ‘AI가 기계적으로 읽을 수 있는 코드’로 박는 표준다. 손으로 모든 페이지에 추가하긴 비현실적이라 Claude Code에 사이트맵을 던지고 일괄 처리한다.
+
+Claude Code 프롬프트 예시
+
+당신은 AEO 전문가다. 아래 사이트맵의 페이지들을 순서대로 처리하라.각 페이지에 대해:1) HTML을 가져와 핵심 콘텐츠 타입 식별 (Product, Article, FAQPage, HowTo, LocalBusiness 중)2) 해당 타입에 맞는 Schema.org JSON-LD 마크업 생성 (필수+권장 필드 모두)3) <head> 닫히기 직전에 삽입하는 PR 작성4) https://validator.schema.org API로 검증5) 결과를 schema_audit.csv 로 저장 (URL, 타입, 추가 필드, 검증 결과)사이트맵: https://www.example.com/sitemap.xml
+
+## 기업이 배워야 할 것
+
+· Schema 마크업은 “있으면 좋은 것”이 아니라 “없으면 인용 자체가 안 되는” 기본기.
+
+— 임보람

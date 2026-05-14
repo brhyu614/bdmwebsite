@@ -4,6 +4,8 @@ import { getAllArticles } from '@/lib/articles'
 import ArticleCard from '@/components/articles/ArticleCard'
 import HeroAnimation from '@/components/home/HeroAnimation'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: '빅데이터마케팅 랩 — 한양대학교 임보람 교수',
   description: '소비자 행동을 데이터로 읽고, 매출·수요·인구를 예측합니다. 한양대학교 Big Data Marketing Lab.',

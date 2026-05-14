@@ -1,0 +1,25 @@
+---
+title: "llms.txt — AI 크롤러를 위한 새 사이트맵"
+series: "algorithm-decode"
+tags: ["AEO", "AI", "howto", "implementation"]
+order: -2
+date: "2026-05-24"
+readingTime: 5
+excerpt: "2024년 후반 등장해 2025~2026년 빠르게 표준화 중인 llms.txt는 robots.txt/sitemap.xml의 AI 버전다. 사이트 루트에 /llms.txt 파일을 두고, AI가 사이트의 어떤 콘텐츠를 어떤 우선순위로 읽어야 하는지 명시한다. 권장 스펙은 llmstxt.org에 공개되어 있다."
+coverImage: "/images/2026-05-24-llms-txt-adoption.svg"
+featured: true
+---
+
+2024년 후반 등장해 2025~2026년 빠르게 표준화 중인 llms.txt는 robots.txt/sitemap.xml의 AI 버전다. 사이트 루트에 /llms.txt 파일을 두고, AI가 사이트의 어떤 콘텐츠를 어떤 우선순위로 읽어야 하는지 명시한다. 권장 스펙은 llmstxt.org에 공개되어 있다.
+
+근거: llmstxt.org 공개 표준 (Jeremy Howard 외 2024 제안)
+
+Claude Code에 시킬 일
+
+/llms.txt 와 /llms-full.txt 두 파일을 생성하라./llms.txt: 사이트 개요, 핵심 페이지 5~10개의 URL과 한 문장 설명./llms-full.txt: 모든 핵심 페이지 본문을 마크다운 단일 파일로 직렬화.권장 스펙: https://llmstxt.org배포 후 24시간 뒤 ChatGPT에 “site:ourdomain.com 의 llms.txt 를 요약해라”로 작동 검증.
+
+## 기업이 배워야 할 것
+
+· 도입 비용 거의 0원. 한국 기업 도입 사례가 적어 선점 효과 가능.
+
+— 임보람

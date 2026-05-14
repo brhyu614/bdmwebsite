@@ -1,0 +1,37 @@
+---
+title: "FAQ는 고객 응대가 아니라 AI 학습 자산이다"
+series: "algorithm-decode"
+tags: ["AEO", "AI", "howto", "implementation"]
+order: -2
+date: "2026-05-25"
+readingTime: 5
+excerpt: "FAQ 페이지는 AEO에서 가장 ROI 높은 단일 자산 중 하나다. AI는 FAQ를 인용 블록으로 거의 통째로 가져갑니다. 그런데 대부분의 FAQ는 몇 년째 같은 10개 질문에 머물러 있다. 진짜 사용자가 묻는 질문은 매달 변하기 때문에, FAQ가 살아 있어야 인용도 살아 있다."
+coverImage: "/images/2026-05-25-faq-living-asset.svg"
+featured: true
+---
+
+FAQ 페이지는 AEO에서 가장 ROI 높은 단일 자산 중 하나다. AI는 FAQ를 인용 블록으로 거의 통째로 가져갑니다. 그런데 대부분의 FAQ는 몇 년째 같은 10개 질문에 머물러 있다. 진짜 사용자가 묻는 질문은 매달 변하기 때문에, FAQ가 살아 있어야 인용도 살아 있다.
+
+자동화 파이프라인
+
+1) 매주 다섯 소스에서 자연어 질문 수집 — Google PAA(SerpAPI), ChatGPT/Perplexity 질의, 자사 고객지원 티켓, 네이버 지식iN 신규 질문, Reddit 서브레딧.
+
+2) Claude API로 중복 제거·우선순위 점수
+
+3) 점수 상위 20개 질문에 자동 답변 초안 (사실 원장 facts.json 참조, 환각 방지)
+
+4) Slack에서 인간 검수자 한 번 클릭 승인/거부
+
+5) 승인된 Q&A를 FAQPage Schema와 함께 자동 게시
+
+6) 4주 뒤 노하우 2 봇이 인용 여부 자동 추적
+
+## 기업이 배워야 할 것
+
+· FAQ는 “고객 응대 페이지”가 아니라 “AI 학습용 핵심 자산”으로 격상해 KPI를 분리.
+
+· 갱신되는 FAQ가 정적 FAQ보다 AI 인용 빈도에서 유리하다(일반 패턴).
+
+· 인간 검수 단계를 생략하지 마라. 자동 답변 초안의 환각이 그대로 게시되면 본인 사이트가 환각 소스가 된다.
+
+— 임보람

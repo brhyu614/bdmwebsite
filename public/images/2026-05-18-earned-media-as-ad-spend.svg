@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1f17"/>
+      <stop offset="55%" stop-color="#1c3a2c"/>
+      <stop offset="100%" stop-color="#0a140f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.32" r="0.55">
+      <stop offset="0%" stop-color="#34d39955"/>
+      <stop offset="100%" stop-color="#34d39900"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g transform="translate(820 170)">
+    <polygon points="0,80 100,40 100,140 0,100" fill="#dc2626"/>
+    <rect x="100" y="60" width="60" height="60" fill="#fafaf9"/>
+    <circle cx="180" cy="90" r="20" fill="none" stroke="#34d399" stroke-width="4"/>
+    <circle cx="210" cy="90" r="32" fill="none" stroke="#34d399" stroke-width="3"/>
+    <circle cx="240" cy="90" r="44" fill="none" stroke="#34d399" stroke-width="2"/>
+    <text x="120" y="200" font-family="sans-serif" font-size="32" font-weight="900" fill="#fafaf9">88%</text>
+    <text x="120" y="230" font-family="sans-serif" font-size="13" fill="#a8a29e">상위 10위 밖 인용</text>
+  </g>
+  <text x="80" y="120" font-family="'Noto Sans KR',sans-serif" font-weight="700" font-size="22" fill="#34d399" letter-spacing="2">광고전략 · AEO</text>
+  <text x="80" y="200" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="52" fill="#fafaf9">PR이 광고비처럼 굴러간다 —</text>
+<rect x="68" y="216" width="620" height="74" fill="#dc2626"/>
+<text x="80" y="272" font-family="'Noto Sans KR',sans-serif" font-weight="900" font-size="56" fill="#fafaf9">Earned Media 시대</text>
+  <text x="80" y="560" font-family="'Noto Sans KR',sans-serif" font-weight="600" font-size="22" fill="#a8a29e">임보람 · BDM Lab</text>
+</svg>

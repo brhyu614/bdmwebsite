@@ -4,22 +4,41 @@ series: "algorithm-decode"
 tags: ["AEO", "AI", "howto", "implementation"]
 order: -2
 date: "2026-05-24"
-readingTime: 5
-excerpt: "2024년 후반 등장해 2025~2026년 빠르게 표준화 중인 llms.txt는 robots.txt/sitemap.xml의 AI 버전다. 사이트 루트에 /llms.txt 파일을 두고, AI가 사이트의 어떤 콘텐츠를 어떤 우선순위로 읽어야 하는지 명시한다. 권장 스펙은 llmstxt.org에 공개되어 있다."
-coverImage: "/images/2026-05-24-llms-txt-adoption.svg"
+readingTime: 6
+excerpt: "2024년 후반 등장해 빠르게 퍼지고 있는 llms.txt는 robots.txt·sitemap.xml의 AI 버전이다. 사이트 루트에 /llms.txt를 두고, AI가 어떤 콘텐츠를 어떤 우선순위로 읽어야 하는지 명시한다. 도입 비용은 거의 0원이고, 한국 기업 도입 사례가 적어 선점 여지가 있다."
+coverImage: "https://images.pexels.com/photos/37730212/pexels-photo-37730212.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
 featured: true
 ---
 
-2024년 후반 등장해 2025~2026년 빠르게 표준화 중인 llms.txt는 robots.txt/sitemap.xml의 AI 버전다. 사이트 루트에 /llms.txt 파일을 두고, AI가 사이트의 어떤 콘텐츠를 어떤 우선순위로 읽어야 하는지 명시한다. 권장 스펙은 llmstxt.org에 공개되어 있다.
+검색 엔진에는 robots.txt와 sitemap.xml이 있다. 크롤러에게 "여기는 읽고, 저기는 읽지 말고, 이게 중요하다"를 알려주는 안내문이다. AI 크롤러에는 그동안 그런 안내문이 없었다. AI는 사람용으로 만든 복잡한 HTML을 헤집으며, 메뉴·광고·스크립트 사이에서 본문을 추측해야 했다. **llms.txt** 는 그 문제를 푸는, AI를 위한 사이트맵이다. 2024년 후반 제안돼 빠르게 퍼지고 있다(llmstxt.org 공개 표준, Jeremy Howard 외 2024 제안).
 
-근거: llmstxt.org 공개 표준 (Jeremy Howard 외 2024 제안)
+## 무엇을 하는 파일인가
 
-Claude Code에 시킬 일
+사이트 루트(`/llms.txt`)에 두는 마크다운 파일이다. AI에게 두 가지를 알려준다. 첫째, 이 사이트가 무엇에 관한 곳인지. 둘째, 핵심 페이지가 어디고 무엇을 담고 있는지. 보통 한 쌍으로 만든다.
 
-/llms.txt 와 /llms-full.txt 두 파일을 생성하라./llms.txt: 사이트 개요, 핵심 페이지 5~10개의 URL과 한 문장 설명./llms-full.txt: 모든 핵심 페이지 본문을 마크다운 단일 파일로 직렬화.권장 스펙: https://llmstxt.org배포 후 24시간 뒤 ChatGPT에 “site:ourdomain.com 의 llms.txt 를 요약해라”로 작동 검증.
+- **/llms.txt** — 사이트 개요 + 핵심 페이지 5~10개의 URL과 한 문장 설명. AI가 "어디부터 봐야 하는지"를 빠르게 파악하는 목차.
+- **/llms-full.txt** — 핵심 페이지 본문 전체를 마크다운 단일 파일로 직렬화. AI가 HTML을 헤집을 필요 없이, 정제된 본문을 한 번에 읽게 한다.
 
-## 기업이 배워야 할 것
+## 왜 효과가 있나
 
-· 도입 비용 거의 0원. 한국 기업 도입 사례가 적어 선점 효과 가능.
+AI가 본문을 추출할 때 가장 큰 비용은 '노이즈 제거'다. 내비게이션, 배너, 스크립트, 반복되는 푸터를 걷어내고 진짜 내용을 찾는 일. llms-full.txt는 이 과정을 통째로 생략시킨다. **이미 정제된 본문** 을 떠먹여 주기 때문에, 추출 오류가 줄고 핵심 페이지가 읽힐 확률이 올라간다. 게다가 무엇이 핵심인지를 사이트 주인이 직접 지정하므로, AI가 엉뚱한 페이지를 대표 콘텐츠로 오해할 여지도 준다.
+
+## 어떻게 만드나 — Claude Code에 시킬 일
+
+```text
+/llms.txt 와 /llms-full.txt 두 파일을 생성하라.
+/llms.txt: 사이트 개요, 핵심 페이지 5~10개의 URL과 한 문장 설명.
+/llms-full.txt: 모든 핵심 페이지 본문을 마크다운 단일 파일로 직렬화.
+권장 스펙: https://llmstxt.org
+배포 후 24시간 뒤 ChatGPT에 "site:ourdomain.com 의 llms.txt 를 요약해라"로 작동 검증.
+```
+
+## 한계
+
+- **아직 모든 AI가 의무적으로 읽지는 않는다.** robots.txt만큼 보편적으로 준수되는 표준은 아니다. 다만 도입 비용이 거의 0이라, 비용 대비 기대값이 높은 쪽이다.
+- **갱신 안 하면 거짓말이 된다.** 본문이 바뀌었는데 llms-full.txt가 옛날 그대로면, AI에게 낡은 사실을 떠먹이는 셈이다. 배포 파이프라인에 자동 생성·갱신을 넣는다.
+- 민감 페이지를 실수로 넣지 않도록 포함 목록을 관리한다.
+
+큰 기술이 아니다. 그러나 한국 기업 도입 사례가 아직 적다. 비용이 거의 없고 효과는 분명한 기본기일수록, 먼저 깐 쪽이 이득을 가져간다.
 
 — 임보람

@@ -5,6 +5,7 @@ import JsonLd from '@/components/JsonLd'
 export const metadata: Metadata = {
   title: 'Research',
   description: '빅데이터마케팅 랩(BDM Lab) 연구 영역. 인과분석, AI 예측, LLM 멀티 에이전트 시뮬레이션 기반 마케팅 연구.',
+  alternates: { canonical: '/research' },
 }
 
 /* ── tiny helper ── */
@@ -109,7 +110,7 @@ export default function ResearchPage() {
           {[
             { en: 'Prediction', ko: 'AI 예측', sub: '매출·수요·인구', href: '/projects' },
             { en: 'Replication', ko: '소비자 시뮬레이션', sub: 'Mind-Bridge 디지털 트윈', href: '/synthetic-consumer' },
-            { en: 'Social', ko: '소셜·인플루언서', sub: '대규모 SNS 효과 검증', href: '/social-research' },
+            { en: 'Digital Marketing', ko: '디지털 마케팅', sub: '인플루언서·SNS 효과 검증', href: '/digital-marketing' },
           ].map((a) => (
             <a key={a.en} href={a.href} className="group rounded-xl border border-border bg-surface p-5 transition-colors hover:border-accent/40">
               <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{a.en}</p>

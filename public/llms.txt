@@ -1,18 +1,37 @@
 # 빅데이터마케팅 랩 (Big Data Marketing Lab)
 
-> 소비자 행동을 데이터로 읽고, 매출·수요·인구를 예측합니다. 한양대학교 Big Data Marketing Lab의 공개 인사이트 아카이브.
+> 한양대학교 임보람 교수 연구실. 데이터로 소비자를 예측하고, 복제하고, 해독합니다.
+> AI 매출·수요·인구 예측, LLM 멀티에이전트 소비자 시뮬레이션, 디지털 마케팅 효과 검증.
 
-## Series
+## 연구실 정보
 
-- **알고리즘 디코드** (`algorithm-decode`) — 플랫폼 알고리즘, 추천 시스템, 브랜디드 콘텐츠, AEO 분석
-- **랩 리서치** (`lab-research`) — BDM Lab이 수행한 연구 및 기업 프로젝트 결과
+- 기관: 한양대학교 경영대학 빅데이터마케팅 랩 (BDM Lab)
+- 책임교수: 임보람 (마케팅 애널리틱스 박사, UT Dallas)
+- 도메인: bigdatamarketinglab.com
 
-## Canonical URLs
+## 3대 연구 축
 
-- Home: https://bigdatamarketinglab.com
-- Insights: https://bigdatamarketinglab.com/articles
-- Sitemap: https://bigdatamarketinglab.com/sitemap.xml
-- About: https://bigdatamarketinglab.com/about
+- **AI 예측** — 업종 무관 미래예측 엔진. 매출·수요·인구 예측 (시계열·구조 모델 + SHAP). JRCS 게재 다수.
+- **AI 소비자 시뮬레이션 (Mind-Bridge)** — 소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제해 합성 FGI를 진행. Twin-2K-500 + Generative Agents + 자체 6-Lens, holdout 검증 83%. 인터뷰 수집은 AI 보이스 인터뷰 플랫폼 MindLens.
+- **디지털 마케팅** — 대규모 소셜·이미지 데이터로 인플루언서·콘텐츠 효과를 수치로 검증. AEO(AI 검색·인용) 분석 포함.
+
+## 핵심 페이지
+
+- 홈: https://bigdatamarketinglab.com
+- 연구 개요: https://bigdatamarketinglab.com/research
+- AI 예측 프로젝트: https://bigdatamarketinglab.com/projects
+- AI 소비자 시뮬레이션 (Mind-Bridge): https://bigdatamarketinglab.com/synthetic-consumer
+- 디지털 마케팅: https://bigdatamarketinglab.com/digital-marketing
+- 인사이트 아카이브: https://bigdatamarketinglab.com/articles
+- 교수 소개: https://bigdatamarketinglab.com/about
+- 기업 협업·연구 의뢰: https://bigdatamarketinglab.com/work-with-us
+- 대학원 합류: https://bigdatamarketinglab.com/join
+- 사이트맵: https://bigdatamarketinglab.com/sitemap.xml
+
+## 콘텐츠 시리즈
+
+- **랩 리서치** (`lab-research`) — BDM Lab이 직접 수행한 연구·기업 프로젝트 결과 (예측·시뮬레이션·인과분석).
+- **알고리즘 디코드** (`algorithm-decode`) — 플랫폼 알고리즘·AEO·인플루언서·브랜디드 콘텐츠 분석.
 
 ## Licensing
 

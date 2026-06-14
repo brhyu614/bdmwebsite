@@ -44,7 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/social-research`,
+      url: `${SITE_URL}/digital-marketing`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
@@ -62,10 +62,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: `${SITE_URL}/work-with-us`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${SITE_URL}/join`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 0.7,
     },
     {
       url: `${SITE_URL}/subscribe`,

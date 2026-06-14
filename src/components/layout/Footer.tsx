@@ -25,14 +25,20 @@ export default function Footer() {
               Pages
             </p>
             <nav className="flex flex-col gap-2">
+              <Link href="/research" className="text-sm text-subtext hover:text-accent transition-colors">
+                연구
+              </Link>
               <Link href="/articles" className="text-sm text-subtext hover:text-accent transition-colors">
-                아티클
+                인사이트
+              </Link>
+              <Link href="/work-with-us" className="text-sm text-subtext hover:text-accent transition-colors">
+                기업 협업
               </Link>
               <Link href="/about" className="text-sm text-subtext hover:text-accent transition-colors">
-                About
+                교수
               </Link>
               <Link href="/join" className="text-sm text-subtext hover:text-accent transition-colors">
-                Join the Lab
+                합류 (Join the Lab)
               </Link>
             </nav>
           </div>

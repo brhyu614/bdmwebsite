@@ -6,8 +6,9 @@ import { usePathname, useSearchParams } from 'next/navigation'
 const NAV_LINKS = [
   { href: '/research', label: '연구' },
   { href: '/articles', label: '인사이트' },
+  { href: '/work-with-us', label: '기업 협업' },
   { href: '/about', label: '교수' },
-  { href: '/contact', label: '문의' },
+  { href: '/join', label: '합류' },
 ]
 
 export default function Header() {

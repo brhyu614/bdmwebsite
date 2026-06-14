@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Projects — BDM Lab',
   description: 'BDM Lab의 데이터 분석 프로젝트. AI 매출 예측, 인과분석, 소비자 행동 분석, 플랫폼 전략.',
+  alternates: { canonical: '/projects' },
 }
 
 const PROJECTS = [
@@ -80,6 +81,7 @@ export default function ProjectsPage() {
 
       {/* Projects — 이미지 전면 */}
       <section className="mx-auto mt-12 max-w-[720px]">
+        <h2 className="mb-6 text-xl font-bold text-text">데이터 분석 프로젝트</h2>
         <div className="space-y-10">
           {PROJECTS.map((project) => (
             <a key={project.title} href={project.link} className="group block">

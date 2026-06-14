@@ -68,7 +68,7 @@ export default async function ArticlePage({ params }: PageProps) {
     components: mdxComponents,
     options: {
       mdxOptions: {
-        remarkPlugins: [remarkGfm],
+        remarkPlugins: [[remarkGfm, { singleTilde: false }]],
         rehypePlugins: [rehypeSlug],
       },
     },

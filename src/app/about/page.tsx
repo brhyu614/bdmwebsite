@@ -5,6 +5,7 @@ import { AUTHOR_NAME } from '@/lib/constants'
 export const metadata: Metadata = {
   title: 'About',
   description: '한양대학교 임보람 교수의 빅데이터마케팅 랩(Big Data Marketing Lab). AI 예측, 인과분석, 플랫폼 알고리즘 연구.',
+  alternates: { canonical: '/about' },
 }
 
 export default function AboutPage() {
@@ -62,7 +63,7 @@ export default function AboutPage() {
 
       {/* Career */}
       <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Career</p>
+        <h2 className="font-mono text-xs uppercase tracking-widest text-muted">Career</h2>
         <div className="mt-6 space-y-5">
           <div className="flex items-start gap-4">
             <span className="mt-0.5 inline-block w-24 shrink-0 font-mono text-xs font-medium text-accent">2022 ~</span>
@@ -83,7 +84,7 @@ export default function AboutPage() {
 
       {/* Education */}
       <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">Education</p>
+        <h2 className="font-mono text-xs uppercase tracking-widest text-muted">Education</h2>
         <div className="mt-6 space-y-5">
           <div className="flex items-start gap-4">
             <span className="mt-0.5 inline-block w-24 shrink-0 font-mono text-xs text-muted">Ph.D.</span>

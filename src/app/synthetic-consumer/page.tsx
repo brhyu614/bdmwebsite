@@ -1,11 +1,19 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import SixLensDiagram from '@/components/mind-bridge/SixLensDiagram'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'AI 소비자 시뮬레이션 (Mind-Bridge) — BDM Lab',
   description:
     '소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제한다. 합성 FGI를 만들고, 사고를 복제한 소비자와 대화한다. Twin-2K-500 + Generative Agents + 6-Lens, holdout 검증 83%.',
+  alternates: { canonical: '/synthetic-consumer' },
+  openGraph: {
+    title: 'AI 소비자 시뮬레이션 (Mind-Bridge) — BDM Lab',
+    description: '소비자의 사고를 디지털 트윈으로 복제 → 합성 FGI → 대화. holdout 검증 83%.',
+    images: [{ url: '/images/og/synthetic-consumer.jpg', width: 1200, height: 627 }],
+  },
 }
 
 const STEPS = [
@@ -28,7 +36,7 @@ const METHODS = [
     name: 'Generative Agents',
     who: 'Park et al. 2024 (Stanford)',
     desc: '2시간 음성 인터뷰로 1,052명의 "왜 그렇게 행동하는지"를 재현. GSS 재현 정확도 85%.',
-    role: '인터뷰 방식 + Expert Reflection 차용',
+    role: '인터뷰 + Expert Reflection',
   },
   {
     name: '6-Lens 의사결정 구조',
@@ -47,9 +55,25 @@ function StatCard({ stat, label }: { stat: string; label: string }) {
   )
 }
 
+function SectionHead({ no, title }: { no: string; title: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-bg font-mono text-sm font-bold text-accent">
+        {no}
+      </span>
+      <h2 className="text-xl font-bold text-text">{title}</h2>
+    </div>
+  )
+}
+
 export default function SyntheticConsumerPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+      <JsonLd type="breadcrumb" data={{ items: [
+        { name: '홈', url: SITE_URL },
+        { name: '연구', url: `${SITE_URL}/research` },
+        { name: 'AI 소비자 시뮬레이션', url: `${SITE_URL}/synthetic-consumer` },
+      ] }} />
       {/* Hero */}
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">
@@ -75,49 +99,96 @@ export default function SyntheticConsumerPage() {
         </div>
       </section>
 
-      {/* 문제 */}
+      {/* 01 문제와 해법 */}
       <section className="mx-auto mt-16 max-w-[720px]">
-        <div className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-bg font-mono text-sm font-bold text-accent">
-            01
-          </span>
-          <h2 className="text-xl font-bold text-text">문제 — 비싸고 느린 FGI</h2>
-        </div>
+        <SectionHead no="01" title="비싸고 느린 FGI, 그리고 해법" />
         <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
           기업은 신제품 출시 전 소비자의 진짜 &lsquo;행동 이유&rsquo;와 &lsquo;숨은
-          니즈&rsquo;를 파악하기 위해 FGI(집단 심층면접)를 한다. 하지만 전통 FGI는{' '}
-          <strong className="text-text">1회에 수백만~수천만 원</strong>, 기획부터
-          리포트까지 <strong className="text-text">최소 한 달에서 수개월</strong>이
-          걸린다. 비용과 시간의 벽 때문에, 정작 잦은 테스트가 필요한 중소·인디 브랜드는
-          FGI를 거의 쓰지 못한다. 신제품 다수가 출시 1년 내 실패하는 이유다.
+          니즈&rsquo;를 FGI(집단 심층면접)로 파악한다. 하지만 전통 FGI는{' '}
+          <strong className="text-text">1회 수백만~수천만 원</strong>, 기획부터
+          리포트까지 <strong className="text-text">한 달에서 수개월</strong>이 걸린다.
+          이 벽 때문에 잦은 테스트가 필요한 중소·인디 브랜드는 거의 쓰지 못한다.
+        </p>
+        <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
+          <strong className="text-text">Mind-Bridge</strong>는 실제 소비자를 복제한
+          AI 에이전트가 서로 의견을 주고받는 <strong className="text-text">멀티에이전트
+          FGI</strong>를 진행한다. 1:1 응답이 아니라 진영이 갈리고 다시 모이는 그룹
+          토론으로, 실제 집단면접에 가까운 깊이를 비용·시간 1/10로 만든다. 같은
+          페르소나에 시점을 바꿔 반복 질문하면 변화·개선 추적도 가능하다.
         </p>
       </section>
 
-      {/* 솔루션 */}
+      {/* 02 행동 + 인지 (+ MindLens) */}
       <section className="mx-auto mt-14 max-w-[720px]">
-        <div className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-bg font-mono text-sm font-bold text-accent">
-            02
-          </span>
-          <h2 className="text-xl font-bold text-text">솔루션 — 복제된 소비자 멀티에이전트</h2>
-        </div>
+        <SectionHead no="02" title="왜 더 진짜에 가까운가 — 행동 + 인지" />
         <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
-          실제 소비자를 복제한 AI 에이전트가 서로 의견을 주고받는{' '}
-          <strong className="text-text">멀티에이전트 FGI</strong>를 진행한다.
-          단일 1:1 응답이 아니라 그룹 토론 형태로, 진영이 갈리고 다시 모이는 실제
-          집단면접에 가까운 깊이의 인사이트를 만든다. 같은 페르소나에 시점을 바꿔
-          반복 질문할 수 있어 변화·개선 추적도 가능하다.
+          기존 LLM 에이전트 모델링은 인구통계나 한 문단짜리 페르소나 프롬프트에
+          의존해, &ldquo;그럴듯하지만 누구든 될 수 있는&rdquo; 응답에 그친다. 우리는
+          한 사람을 <strong className="text-text">두 종류의 실제 데이터</strong>로
+          직조한다.
         </p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-border bg-surface p-5">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">
+              무엇을 선택하는가
+            </p>
+            <p className="mt-1 text-base font-bold text-text">선호 (Preference)</p>
+            <p className="mt-2 text-sm leading-relaxed text-subtext">
+              실제 구매·행동 데이터에서 드러난 선호(revealed preference)를 가져온다.
+              말이 아니라 선택으로 증명된 취향.
+            </p>
+          </div>
+          <div className="rounded-xl border border-border bg-surface p-5">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">
+              왜 그렇게 생각하는가
+            </p>
+            <p className="mt-1 text-base font-bold text-text">인지 (Cognition)</p>
+            <p className="mt-2 text-sm leading-relaxed text-subtext">
+              자체 AI 인터뷰 시스템 MindLens로 의사결정의 사고 과정을 끌어낸다.
+              구매 데이터엔 안 남는 &ldquo;왜&rdquo;를 캐낸다.
+            </p>
+          </div>
+        </div>
+        <div className="mt-3 rounded-xl border border-accent bg-accent-bg p-5 text-center">
+          <p className="font-mono text-sm text-subtext">
+            <span className="text-text">행동(무엇을)</span>
+            <span className="mx-2 text-accent">+</span>
+            <span className="text-text">인지(왜)</span>
+            <span className="mx-2 text-accent">→</span>
+            <span className="font-bold text-accent">디지털 트윈</span>
+          </p>
+          <p className="mt-2 text-xs text-muted">
+            행동과 인지를 한 사람 안에서 직조하므로, 설문 응답과 실제 행동의 간극이 줄어든다.
+          </p>
+        </div>
+
+        {/* MindLens (인지 수집 시스템) */}
+        <p className="mt-6 font-serif text-base leading-[1.9] text-subtext">
+          인지 데이터를 모으는 도구가 <strong className="text-text">MindLens</strong>다.
+          AI가 음성으로 서베이·심층 인터뷰를 직접 진행하고, 응답이 얕으면 후속
+          질문(follow-up)을 자동 생성해 &ldquo;왜?&rdquo;를 끝까지 캐낸다. 이 데이터가
+          6-Lens로 재구조화되어 에이전트의 &lsquo;사고&rsquo;가 된다.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-border bg-surface p-5 text-center font-mono text-xs">
+          <span className="rounded-lg bg-bg px-3 py-2 text-text">MindLens<br /><span className="text-[10px] text-muted">AI 인터뷰·서베이</span></span>
+          <span className="text-accent">→</span>
+          <span className="rounded-lg bg-bg px-3 py-2 text-text">6-Lens<br /><span className="text-[10px] text-muted">사고 재구조화</span></span>
+          <span className="text-accent">→</span>
+          <span className="rounded-lg border border-accent bg-accent-bg px-3 py-2 text-accent">Mind-Bridge<br /><span className="text-[10px] text-subtext">합성 FGI</span></span>
+        </div>
+        <a
+          href="https://mindlens-ai.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-accent bg-accent-bg px-5 py-2.5 text-sm font-bold text-accent transition-opacity hover:opacity-90"
+        >
+          MindLens — AI 보이스 인터뷰 플랫폼 ↗
+        </a>
       </section>
 
-      {/* 작동 방식 */}
+      {/* 03 작동 방식 + 6-Lens */}
       <section className="mx-auto mt-14 max-w-[720px]">
-        <div className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-bg font-mono text-sm font-bold text-accent">
-            03
-          </span>
-          <h2 className="text-xl font-bold text-text">작동 방식 — 7단계 파이프라인</h2>
-        </div>
+        <SectionHead no="03" title="작동 방식 — 7단계 파이프라인" />
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {STEPS.map((s) => (
             <div key={s.no} className="rounded-xl border border-border bg-surface p-4">
@@ -127,26 +198,19 @@ export default function SyntheticConsumerPage() {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* 6-Lens */}
-      <section className="mx-auto mt-10 max-w-[720px]">
-        <SixLensDiagram />
-      </section>
-
-      {/* 방법론 · 검증 */}
-      <section className="mx-auto mt-14 max-w-[720px]">
-        <div className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-bg font-mono text-sm font-bold text-accent">
-            04
-          </span>
-          <h2 className="text-xl font-bold text-text">방법론과 검증</h2>
+        <div className="mt-8">
+          <SixLensDiagram />
         </div>
+      </section>
+
+      {/* 04 방법론과 검증 */}
+      <section className="mx-auto mt-14 max-w-[720px]">
+        <SectionHead no="04" title="방법론과 검증" />
         <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
           검증된 두 선행연구를 결합한다 — 설문은 잘 재현하지만 자유 발화가 약한{' '}
           <strong className="text-text">Toubia</strong>, 인터뷰 깊이는 있지만 정량
-          검증이 어려운 <strong className="text-text">Park</strong>. 둘을 합쳐
-          설문 정확도와 인터뷰 인사이트를 동시에 확보하고, 자체 6-Lens로 재구조화한다.
+          검증이 어려운 <strong className="text-text">Park</strong>. 둘을 합쳐 설문
+          정확도와 인터뷰 인사이트를 동시에 확보하고, 자체 6-Lens로 재구조화한다.
         </p>
         <div className="mt-6 space-y-3">
           {METHODS.map((m) => (
@@ -164,40 +228,27 @@ export default function SyntheticConsumerPage() {
           <p className="text-sm leading-relaxed text-subtext">
             <strong className="text-accent">검증 결과:</strong> 학습에 쓰지 않은 holdout
             90문항에서, 에이전트 응답의 <strong className="text-text">83%</strong>가 실제
-            사람의 응답과 의미적으로 일치(가중 일치 점수)했다. &ldquo;그 사람처럼
-            답한다&rdquo;는 주장을, LLM이 본 적 없는 응답을 정답으로 두고 맞추게 해 검증한다.
+            사람의 응답과 의미적으로 일치(가중 일치 점수)했다. LLM이 본 적 없는 응답을
+            정답으로 두고 맞추게 해, &ldquo;그 사람처럼 답한다&rdquo;를 검증한다.
           </p>
         </div>
       </section>
 
-      {/* 파일럿 */}
-      <section className="mx-auto mt-14 max-w-[720px]">
-        <div className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-bg font-mono text-sm font-bold text-accent">
-            05
-          </span>
-          <h2 className="text-xl font-bold text-text">파일럿 — 실제 브랜드 적용</h2>
-        </div>
-        <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
-          소비재 브랜드(셀프사진관)의 실제 리서치 니즈를 기반으로, 에이전트 구축부터
-          소비자 인사이트 도출까지 전 과정을 직접 구현했다. 같은 브랜드의 매출 예측
-          프로젝트와 연결되는, 예측과 복제를 잇는 사례다.
-        </p>
-      </section>
-
-      {/* CTA */}
+      {/* 05 파일럿 + CTA */}
       <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-10">
-        <h2 className="text-xl font-bold text-text">함께 연구할 분을 찾습니다</h2>
-        <p className="mt-3 text-base leading-relaxed text-subtext">
-          소비자 시뮬레이션을 활용한 공동연구·기업 협업에 관심이 있으시면 편하게
-          연락 주세요.
+        <SectionHead no="05" title="파일럿, 그리고 함께 연구할 분" />
+        <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
+          소비재 브랜드(셀프사진관)의 실제 리서치 니즈로 에이전트 구축부터 인사이트
+          도출까지 전 과정을 구현한 파일럿을 마쳤다. 같은 브랜드의 매출 예측 프로젝트와
+          연결되는, 예측과 복제를 잇는 사례다. 소비자 시뮬레이션을 활용한 공동연구·기업
+          협업에 관심이 있으시면 편하게 연락 주세요.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href="/contact"
             className="rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-[#0B0F14] transition-opacity hover:opacity-90"
           >
-            협업 문의
+            공동연구·협업 문의
           </Link>
           <Link
             href="/research"

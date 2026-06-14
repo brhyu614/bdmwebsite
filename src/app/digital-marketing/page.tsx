@@ -1,10 +1,20 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
+import { DBR_ARTICLES } from '@/lib/media'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: '소셜미디어·인플루언서 분석 — BDM Lab',
+  title: '디지털 마케팅 — BDM Lab',
   description:
-    '대규모 소셜미디어 데이터를 구축해 인플루언서와 콘텐츠가 만드는 효과를 수치로 검증한다. 이미지·텍스트·행동 데이터 결합, 얼굴 노출·시각 진단성의 인게이지먼트 효과 분석.',
+    '대규모 디지털·소셜 데이터를 구축해 인플루언서와 콘텐츠가 만드는 효과를 수치로 검증한다. 이미지·텍스트·행동 데이터 결합, 얼굴 노출·시각 진단성의 인게이지먼트 효과 분석.',
+  alternates: { canonical: '/digital-marketing' },
+  openGraph: {
+    title: '디지털 마케팅 — BDM Lab',
+    description: '대규모 소셜·이미지 데이터로 인플루언서·콘텐츠 효과를 수치로 검증한다.',
+    images: [{ url: '/images/og/digital-marketing.jpg', width: 1200, height: 627 }],
+  },
 }
 
 const METHODS = [
@@ -32,13 +42,18 @@ const FINDINGS = [
 export default function SocialResearchPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+      <JsonLd type="breadcrumb" data={{ items: [
+        { name: '홈', url: SITE_URL },
+        { name: '연구', url: `${SITE_URL}/research` },
+        { name: '디지털 마케팅', url: `${SITE_URL}/digital-marketing` },
+      ] }} />
       {/* Hero */}
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">
-          Social Media & Influencer Analytics
+          Digital Marketing
         </p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          인플루언서의 효과를
+          디지털 마케팅의 효과를
           <br />
           감이 아니라 수치로 검증합니다.
         </h1>
@@ -93,6 +108,50 @@ export default function SocialResearchPage() {
         </p>
       </section>
 
+      {/* DBR 미디어 기고 */}
+      <section className="mx-auto mt-14 max-w-[720px]">
+        <div className="flex items-center gap-3">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-bg font-mono text-sm font-bold text-accent">
+            03
+          </span>
+          <h2 className="text-xl font-bold text-text">미디어 기고 — DBR</h2>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-subtext">
+          연구의 시각을 실무 독자에게 전합니다. 동아비즈니스리뷰(DBR)에 기고한 글.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {DBR_ARTICLES.map((a) => (
+            <a key={a.href} href={a.href} target="_blank" rel="noopener noreferrer" className="group block">
+              <div className="overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:border-accent/40">
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={a.image}
+                    alt={a.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, 360px"
+                  />
+                  <span className="absolute left-3 top-3 rounded-sm bg-black/70 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-white">
+                    {a.issue}
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-sm font-bold leading-snug text-text transition-colors group-hover:text-accent">
+                    {a.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-subtext">
+                    {a.summary}
+                  </p>
+                  <p className="mt-3 font-mono text-[11px] text-accent group-hover:underline">
+                    DBR에서 읽기 ↗
+                  </p>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
       {/* 대중 콘텐츠 연결 */}
       <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
         <h2 className="text-xl font-bold text-text">알고리즘 디코드</h2>
@@ -111,7 +170,7 @@ export default function SocialResearchPage() {
             href="/contact"
             className="rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-[#0B0F14] transition-opacity hover:opacity-90"
           >
-            협업 문의
+            공동연구·협업 문의
           </Link>
         </div>
       </section>

@@ -6,6 +6,7 @@ const AUTHOR_EMAIL = 'brlim@hanyang.ac.kr'
 export const metadata: Metadata = {
   title: 'Contact',
   description: '빅데이터마케팅 랩(BDM Lab)에 연락하기. 연구 협업, 기업 프로젝트, 대학원 지원 문의.',
+  alternates: { canonical: '/contact' },
 }
 
 export default function ContactPage() {

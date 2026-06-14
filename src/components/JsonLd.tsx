@@ -1,7 +1,7 @@
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, AUTHOR_NAME, INSTAGRAM_URL, CONTACT_EMAIL } from '@/lib/constants'
 
 interface JsonLdProps {
-  type: 'website' | 'article' | 'person' | 'organization' | 'breadcrumb'
+  type: 'website' | 'article' | 'person' | 'organization' | 'breadcrumb' | 'faq'
   data?: Record<string, unknown>
 }
 
@@ -92,6 +92,19 @@ function generateSchema(type: string, data?: Record<string, unknown>) {
           alternateName: 'Hanyang University',
         },
         sameAs: [INSTAGRAM_URL],
+      }
+    case 'faq':
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: (data?.items as Array<{ q: string; a: string }> ?? []).map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.a,
+          },
+        })),
       }
     case 'breadcrumb':
       return {

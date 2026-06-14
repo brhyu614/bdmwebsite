@@ -4,20 +4,49 @@ series: "algorithm-decode"
 tags: ["AEO", "AI", "howto", "implementation"]
 order: -2
 date: "2026-05-22"
-readingTime: 5
-excerpt: "PART B 전략 5의 KPI(AI 인용 점유율)를 자동 측정하는 핵심 도구다. 4대 AI에 카테고리 질문 50~100개를 자동 질의하고, 자사·경쟁사 인용 횟수와 환각 여부를 매주 Slack/메일로 받습니다."
-coverImage: "/images/2026-05-22-ai-citation-monitor-bot.svg"
+readingTime: 6
+excerpt: "AI 인용 점유율은 한 번 재고 끝나는 지표가 아니다. AI 답변은 매주 바뀐다. 4대 AI에 카테고리 질문 50~100개를 자동 질의하고, 자사·경쟁사 인용 횟수와 환각 여부를 매주 Slack/메일로 받는 감시 봇을 만든다. AEO 투자의 ROI를 증명하는 계기판이다."
+coverImage: "https://images.pexels.com/photos/97080/pexels-photo-97080.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
 featured: true
 ---
 
-PART B 전략 5의 KPI(AI 인용 점유율)를 자동 측정하는 핵심 도구다. 4대 AI에 카테고리 질문 50~100개를 자동 질의하고, 자사·경쟁사 인용 횟수와 환각 여부를 매주 Slack/메일로 받습니다.
+AI 인용 점유율은 한 번 재고 끝나는 지표가 아니다. AI의 답변은 모델 업데이트, 색인 변화, 경쟁사 콘텐츠에 따라 **매주 달라진다.** 지난달에 우리를 추천하던 AI가 이번 달엔 경쟁사를 추천할 수 있고, 사실이 아닌 정보(환각)를 우리 이름과 함께 말할 수도 있다. 그래서 "AI가 우리를 어떻게 말하고 있는가"를 사람이 가끔 검색해 보는 걸로는 부족하다. 정기 감사 시스템이 필요하다.
 
-Claude Code 프롬프트 예시
+## 왜 자동 감시가 필요한가
 
-Python 스크립트를 작성하라.- 입력: queries.csv (50개 자연어 질문), competitors.csv (자사+경쟁 5개사)- 매주 월 09:00 cron 실행- 호출: ChatGPT(gpt-4o), Claude(claude-opus-4-7), Perplexity(sonar-pro), 네이버 AI 브리핑(Playwright headless)- 답변에서 자사/경쟁사 언급 카운트, 인용 출처 URL 추출- 환각 자동 플래그(facts.json 사실원장과 대조)- BigQuery/Google Sheets 적재, Slack #aeo-monitor 전송 (전주 대비 변화 + 환각 alert)환경변수, 에러 처리, README.md 포함.
+세 가지 이유다. **첫째, 변동성.** AI 답변은 비결정적이라 같은 질문에도 흔들린다. 추세를 보려면 반복 측정이 필수다. **둘째, 환각 리스크.** AI가 우리에 관해 틀린 사실을 말하면 그게 곧 평판 사고다. 빨리 발견할수록 교정이 쉽다. **셋째, ROI 증명.** 콘텐츠·PR에 쓴 돈이 인용에 반영되는지를 시간 축으로 보여주지 못하면, AEO 투자는 계속 설득력을 잃는다. 감시 봇은 이 셋을 한 번에 해결하는 계기판이다.
 
-## 기업이 배워야 할 것
+## 무엇을 측정하나
 
-· “AI가 우리를 어떻게 말하고 있는가”를 매주 정기 감사하는 시스템 없이는 AEO 투자의 ROI 증명이 어렵다.
+- **인용 여부와 위치** — 자사·경쟁사가 각 답변에 언급되는 횟수와 순서.
+- **인용 출처 URL** — AI가 근거로 든 페이지. 어떤 콘텐츠가 일하고 있는지 보인다.
+- **환각 플래그** — 답변 속 우리 관련 사실을, 미리 정리한 사실 원장(facts.json)과 대조해 불일치를 자동 표시.
+- **전주 대비 변화** — 점유율이 오르내린 질문과 그 폭.
+
+## 구현 — Claude Code 프롬프트 예시
+
+직접 코딩하지 않아도, 아래 명세를 던지면 골격이 나온다.
+
+```text
+Python 스크립트를 작성하라.
+- 입력: queries.csv (50개 자연어 질문), competitors.csv (자사+경쟁 5개사)
+- 매주 월 09:00 cron 실행
+- 호출: ChatGPT(gpt-4o), Claude(claude-opus 계열), Perplexity(sonar-pro),
+        네이버 AI 브리핑(Playwright headless)
+- 답변에서 자사/경쟁사 언급 카운트, 인용 출처 URL 추출
+- 환각 자동 플래그(facts.json 사실 원장과 대조)
+- BigQuery/Google Sheets 적재, Slack #aeo-monitor 전송
+  (전주 대비 변화 + 환각 alert)
+- 환경변수, 에러 처리, README.md 포함
+```
+
+## 한계
+
+- **API와 실제 챗 UI는 다르다.** API 응답과 사용자가 보는 답변이 항상 일치하지 않는다. 핵심 질문은 실제 UI도 표본으로 점검한다.
+- **모델·정책 변경에 취약하다.** 각 AI의 호출 방식이 바뀌면 스크립트도 따라 고쳐야 한다.
+- **사실 원장이 부실하면 환각 탐지도 부실하다.** facts.json을 정확히 관리하는 게 봇의 전제다.
+- 질의 비용이 든다. 질문 수와 빈도를 ROI에 맞춰 조절한다.
+
+측정하지 않으면 개선할 수 없다. AI가 우리를 어떻게 말하는지를 매주 같은 방식으로 기록하는 순간, AEO는 '느낌'에서 '관리 가능한 지표'로 바뀐다.
 
 — 임보람

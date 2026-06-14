@@ -58,6 +58,15 @@ export default function ContactPage() {
           </a>
         </div>
       </section>
+
+      {/* 조용한 안내 — 협업 / 합류 */}
+      <section className="mx-auto mt-12 max-w-[720px] border-t border-border pt-8 text-sm leading-relaxed text-subtext">
+        <p>
+          데이터·AI를 활용한 <a href="/work-with-us" className="text-accent hover:underline">기업 공동연구</a>나,
+          연구실에 <a href="/join" className="text-accent hover:underline">대학원생으로 합류</a>하는 데 관심이
+          있으시면 위 이메일로 편하게 연락 주세요.
+        </p>
+      </section>
     </div>
   )
 }

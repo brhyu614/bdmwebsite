@@ -31,14 +31,11 @@ export default function Footer() {
               <Link href="/articles" className="text-sm text-subtext hover:text-accent transition-colors">
                 인사이트
               </Link>
-              <Link href="/work-with-us" className="text-sm text-subtext hover:text-accent transition-colors">
-                기업 협업
-              </Link>
               <Link href="/about" className="text-sm text-subtext hover:text-accent transition-colors">
                 교수
               </Link>
-              <Link href="/join" className="text-sm text-subtext hover:text-accent transition-colors">
-                합류 (Join the Lab)
+              <Link href="/contact" className="text-sm text-subtext hover:text-accent transition-colors">
+                Contact
               </Link>
             </nav>
           </div>

@@ -5,12 +5,12 @@ import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'AI 소비자 시뮬레이션 (Mind-Bridge) — BDM Lab',
+  title: 'AI 소비자 시뮬레이션 — BDM Lab',
   description:
     '소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제한다. 합성 FGI를 만들고, 사고를 복제한 소비자와 대화한다. Twin-2K-500 + Generative Agents + 6-Lens, holdout 검증 83%.',
   alternates: { canonical: '/synthetic-consumer' },
   openGraph: {
-    title: 'AI 소비자 시뮬레이션 (Mind-Bridge) — BDM Lab',
+    title: 'AI 소비자 시뮬레이션 — BDM Lab',
     description: '소비자의 사고를 디지털 트윈으로 복제 → 합성 FGI → 대화. holdout 검증 83%.',
     images: [{ url: '/images/og/synthetic-consumer.jpg', width: 1200, height: 627 }],
   },
@@ -77,7 +77,7 @@ export default function SyntheticConsumerPage() {
       {/* Hero */}
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">
-          AI Consumer Simulation · Mind-Bridge
+          AI Consumer Simulation
         </p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
           사람처럼 답하는 AI.
@@ -110,11 +110,11 @@ export default function SyntheticConsumerPage() {
           이 벽 때문에 잦은 테스트가 필요한 중소·인디 브랜드는 거의 쓰지 못한다.
         </p>
         <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
-          <strong className="text-text">Mind-Bridge</strong>는 실제 소비자를 복제한
-          AI 에이전트가 서로 의견을 주고받는 <strong className="text-text">멀티에이전트
-          FGI</strong>를 진행한다. 1:1 응답이 아니라 진영이 갈리고 다시 모이는 그룹
-          토론으로, 실제 집단면접에 가까운 깊이를 비용·시간 1/10로 만든다. 같은
-          페르소나에 시점을 바꿔 반복 질문하면 변화·개선 추적도 가능하다.
+          이 연구의 핵심은, 실제 소비자를 복제한 AI 에이전트가 서로 의견을 주고받는{' '}
+          <strong className="text-text">멀티에이전트 FGI</strong>다. 1:1 응답이 아니라
+          진영이 갈리고 다시 모이는 그룹 토론으로, 실제 집단면접에 가까운 깊이를
+          비용·시간 1/10로 만든다. 같은 페르소나에 시점을 바꿔 반복 질문하면 변화·개선
+          추적도 가능하다.
         </p>
       </section>
 
@@ -144,7 +144,7 @@ export default function SyntheticConsumerPage() {
             </p>
             <p className="mt-1 text-base font-bold text-text">인지 (Cognition)</p>
             <p className="mt-2 text-sm leading-relaxed text-subtext">
-              자체 AI 인터뷰 시스템 MindLens로 의사결정의 사고 과정을 끌어낸다.
+              자체 AI 음성 인터뷰 시스템으로 의사결정의 사고 과정을 끌어낸다.
               구매 데이터엔 안 남는 &ldquo;왜&rdquo;를 캐낸다.
             </p>
           </div>
@@ -162,28 +162,20 @@ export default function SyntheticConsumerPage() {
           </p>
         </div>
 
-        {/* MindLens (인지 수집 시스템) */}
+        {/* 인지 수집 시스템 */}
         <p className="mt-6 font-serif text-base leading-[1.9] text-subtext">
-          인지 데이터를 모으는 도구가 <strong className="text-text">MindLens</strong>다.
-          AI가 음성으로 서베이·심층 인터뷰를 직접 진행하고, 응답이 얕으면 후속
-          질문(follow-up)을 자동 생성해 &ldquo;왜?&rdquo;를 끝까지 캐낸다. 이 데이터가
-          6-Lens로 재구조화되어 에이전트의 &lsquo;사고&rsquo;가 된다.
+          인지 데이터를 모으는 도구는 <strong className="text-text">자체 AI 음성 인터뷰
+          시스템</strong>이다. AI가 음성으로 서베이·심층 인터뷰를 직접 진행하고, 응답이
+          얕으면 후속 질문(follow-up)을 자동 생성해 &ldquo;왜?&rdquo;를 끝까지 캐낸다. 이
+          데이터가 6-Lens로 재구조화되어 에이전트의 &lsquo;사고&rsquo;가 된다.
         </p>
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-border bg-surface p-5 text-center font-mono text-xs">
-          <span className="rounded-lg bg-bg px-3 py-2 text-text">MindLens<br /><span className="text-[10px] text-muted">AI 인터뷰·서베이</span></span>
+          <span className="rounded-lg bg-bg px-3 py-2 text-text">AI 음성 인터뷰<br /><span className="text-[10px] text-muted">사고 데이터 수집</span></span>
           <span className="text-accent">→</span>
           <span className="rounded-lg bg-bg px-3 py-2 text-text">6-Lens<br /><span className="text-[10px] text-muted">사고 재구조화</span></span>
           <span className="text-accent">→</span>
-          <span className="rounded-lg border border-accent bg-accent-bg px-3 py-2 text-accent">Mind-Bridge<br /><span className="text-[10px] text-subtext">합성 FGI</span></span>
+          <span className="rounded-lg border border-accent bg-accent-bg px-3 py-2 text-accent">합성 FGI<br /><span className="text-[10px] text-subtext">멀티에이전트 토론</span></span>
         </div>
-        <a
-          href="https://mindlens-ai.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-accent bg-accent-bg px-5 py-2.5 text-sm font-bold text-accent transition-opacity hover:opacity-90"
-        >
-          MindLens — AI 보이스 인터뷰 플랫폼 ↗
-        </a>
       </section>
 
       {/* 03 작동 방식 + 6-Lens */}
@@ -257,6 +249,10 @@ export default function SyntheticConsumerPage() {
             다른 연구 보기
           </Link>
         </div>
+        <p className="mt-8 text-xs leading-relaxed text-muted">
+          이 연구는 <strong className="text-subtext">Mind-Bridge</strong>(합성 FGI)·
+          <a href="https://mindlens-ai.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">MindLens</a>(AI 음성 인터뷰, mindlens-ai.com)로 상용화되고 있습니다.
+        </p>
       </section>
     </div>
   )

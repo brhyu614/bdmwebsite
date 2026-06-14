@@ -5,7 +5,6 @@ import { getHomeArticles } from '@/lib/topics'
 import { DBR_ARTICLES } from '@/lib/media'
 import ArticleCard from '@/components/articles/ArticleCard'
 import HeroAnimation from '@/components/home/HeroAnimation'
-import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 3600
 
@@ -37,10 +36,10 @@ const RESEARCH_AXES = [
     no: '02',
     en: 'Replication',
     title: 'AI 소비자 시뮬레이션',
-    desc: '소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제한다. 자체 AI 인터뷰 시스템 MindLens로 사고를 수집하고, 합성 FGI를 만들어 복제된 소비자와 직접 대화한다.',
-    stats: ['Mind-Bridge', 'MindLens', '검증 정확도 83%'],
+    desc: '소비자의 의식적·무의식적 사고를 LLM 멀티에이전트로 복제한다. 디지털 트윈으로 합성 FGI를 만들어, 출시 전 소비자 반응을 검증한다.',
+    stats: ['디지털 트윈', '합성 FGI', '검증 정확도 83%'],
     link: '/synthetic-consumer',
-    cta: 'Mind-Bridge · MindLens 보기',
+    cta: '소비자 시뮬레이션 연구 보기',
   },
   {
     no: '03',
@@ -59,30 +58,6 @@ const HIGHLIGHTS = [
   { stat: '97.6%', label: 'IP 콜라보 매출 예측', sub: '462명 · 4,042건 검증' },
   { stat: '83%', label: '합성 소비자 재현', sub: 'Mind-Bridge · holdout 검증' },
   { stat: '3,518', label: '행정동 인구 예측', sub: '20년 · 461개 변수' },
-]
-
-// ── FAQ (AEO: FAQPage 스키마 + 사람용) ──
-const FAQ_ITEMS = [
-  {
-    q: '빅데이터마케팅 랩은 무엇을 하는 곳인가요?',
-    a: '한양대학교 임보람 교수 연구실로, 마케팅 질문을 데이터와 AI로 풉니다. 세 축 — AI 예측(매출·수요·인구), AI 소비자 시뮬레이션(디지털 트윈 합성 FGI), 디지털 마케팅 효과 검증 — 으로 연구하고 기업과 협업합니다.',
-  },
-  {
-    q: 'Mind-Bridge가 무엇인가요?',
-    a: '소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제해, 실제 소비자처럼 답하는 AI 에이전트로 합성 FGI(집단 심층면접)를 진행하는 연구 플랫폼입니다. Twin-2K-500과 Generative Agents 연구에 자체 6-Lens 구조를 결합했고, holdout 검증에서 83%의 응답 재현 정확도를 보였습니다.',
-  },
-  {
-    q: 'MindLens는 Mind-Bridge와 어떻게 다른가요?',
-    a: 'MindLens는 AI가 음성으로 서베이·심층 인터뷰를 직접 진행하는 인터뷰 수집 플랫폼(mindlens-ai.com)이고, Mind-Bridge는 그렇게 모은 데이터로 만든 합성 소비자가 FGI를 진행하는 시뮬레이션입니다. MindLens가 데이터를 모으고, Mind-Bridge가 대화를 만듭니다.',
-  },
-  {
-    q: '기업이 어떤 협업을 의뢰할 수 있나요?',
-    a: 'AI 매출·수요 예측, 신제품 출시 전 소비자 반응 시뮬레이션, 캠페인·인플루언서 효과의 인과적 검증 등을 용역·공동연구·자문 형태로 진행합니다. 문제만 가지고 오셔도 데이터로 풀 수 있는지부터 함께 진단합니다.',
-  },
-  {
-    q: '대학원생으로 합류하려면 어떻게 하나요?',
-    a: '간단한 자기소개와 관심 연구 주제를 이메일(brlim@hanyang.ac.kr)로 보내주세요. 전공·배경은 제한하지 않으며, 통계·프로그래밍을 배우려는 의지와 호기심을 봅니다.',
-  },
 ]
 
 export default function HomePage() {
@@ -117,10 +92,10 @@ export default function HomePage() {
               연구 살펴보기
             </Link>
             <Link
-              href="/work-with-us"
+              href="/articles"
               className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-subtext transition-colors hover:border-accent hover:text-accent"
             >
-              기업 협업·연구 의뢰
+              인사이트 읽기
             </Link>
           </div>
         </div>
@@ -258,26 +233,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ FAQ (AEO) ══ */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-[760px] px-4 py-16 sm:px-6 lg:px-8">
-          <JsonLd type="faq" data={{ items: FAQ_ITEMS }} />
-          <h2 className="text-2xl font-bold text-text">자주 묻는 질문</h2>
-          <div className="mt-6 divide-y divide-border border-y border-border">
-            {FAQ_ITEMS.map((f) => (
-              <details key={f.q} className="group py-4">
-                <summary className="flex cursor-pointer items-center justify-between gap-4 text-base font-bold text-text marker:content-none">
-                  {f.q}
-                  <span className="shrink-0 font-mono text-accent transition-transform group-open:rotate-45">
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-sm leading-relaxed text-subtext">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   )
 }

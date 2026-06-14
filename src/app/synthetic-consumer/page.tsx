@@ -5,44 +5,54 @@ import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'AI 소비자 시뮬레이션 — BDM Lab',
+  title: 'AI 소비자 시뮬레이션 — 소비자 디지털 트윈 | BDM Lab',
   description:
-    '소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제한다. 합성 FGI를 만들고, 사고를 복제한 소비자와 대화한다. Twin-2K-500 + Generative Agents + 6-Lens, holdout 검증 83%.',
+    '소비자행동 연구 교수가 설계한 6-Lens 인지 엔진으로 실제 소비자의 행동과 인지를 디지털 트윈으로 복제한다. 합성 FGI로 출시 전 시장 반응을 검증 — holdout 90문항 83% 일치. 프롬프트 챗봇이 아닌 마케팅 과학.',
   alternates: { canonical: '/synthetic-consumer' },
   openGraph: {
-    title: 'AI 소비자 시뮬레이션 — BDM Lab',
-    description: '소비자의 사고를 디지털 트윈으로 복제 → 합성 FGI → 대화. holdout 검증 83%.',
+    title: 'AI 소비자 시뮬레이션 — 소비자 디지털 트윈 | BDM Lab',
+    description: '소비자행동 연구 교수가 설계한 6-Lens 인지 엔진. 행동+인지를 복제한 합성 소비자, holdout 검증 83%.',
     images: [{ url: '/images/og/synthetic-consumer.jpg', width: 1200, height: 627 }],
   },
 }
 
-const STEPS = [
-  { no: '1', label: '의뢰 접수', sub: '조사 목적·타깃 정의' },
-  { no: '2', label: '설문·인터뷰 설계', sub: '6-Lens 기반 질문 구조' },
-  { no: '3', label: '패널 데이터 수집', sub: '설문 2종 + 음성 인터뷰' },
-  { no: '4', label: 'AI 에이전트 생성', sub: '사고복제 페르소나 빌드' },
-  { no: '5', label: 'FGI 진행', sub: '멀티에이전트 그룹 토론' },
-  { no: '6', label: '인사이트 리포트', sub: '발화 + 현상 + 시사점' },
-]
-
 const METHODS = [
   {
     name: 'Twin-2K-500',
-    who: 'Toubia et al. 2025',
-    desc: '500+ 문항 설문·행동실험으로 2,058명의 디지털 트윈 구축. 설문 응답 재현 정확도(정규화) 0.877.',
-    role: '설문 구조 차용',
+    who: 'Toubia et al. 2025 (Columbia)',
+    desc: '500+ 문항 설문·행동실험으로 2,058명의 디지털 트윈을 구축. 설문 응답 재현 정확도(정규화) 0.877.',
+    role: '설문 구조',
   },
   {
     name: 'Generative Agents',
     who: 'Park et al. 2024 (Stanford)',
     desc: '2시간 음성 인터뷰로 1,052명의 "왜 그렇게 행동하는지"를 재현. GSS 재현 정확도 85%.',
-    role: '인터뷰 + Expert Reflection',
+    role: '인터뷰 + 해석',
   },
   {
-    name: '6-Lens 의사결정 구조',
-    who: 'BDM Lab',
-    desc: '소비자행동 이론 6종으로 응답을 재구조화해 응답–행동 간극을 최소화. 정형 데이터의 한계를 보완.',
-    role: '자체 방법론',
+    name: '6-Lens 인지 엔진',
+    who: 'BDM Lab · 임보람',
+    desc: '소비자행동 이론 6종으로 응답을 재구조화해 응답–행동 간극을 최소화. 정형 데이터의 한계를 보완하는 자체 설계.',
+    role: '핵심 차별점',
+  },
+]
+
+const FAQ_ITEMS = [
+  {
+    q: 'AI 소비자 시뮬레이션이란 무엇인가요?',
+    a: '실제 소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제해, 합성 FGI(집단 심층면접)로 출시 전 시장 반응을 검증하는 연구 방법입니다. 빅데이터마케팅 랩은 소비자의 구매 행동과 인지(왜 그렇게 결정하는가)를 함께 복제합니다.',
+  },
+  {
+    q: '기존 페르소나 챗봇과 무엇이 다른가요?',
+    a: '일반적인 페르소나 챗봇은 인구통계 프롬프트 몇 줄로 "누구든 될 수 있는" 답을 냅니다. 빅데이터마케팅 랩의 합성 소비자는 (1) 실제 구매·행동 데이터에서 드러난 선호와 (2) AI 음성 인터뷰로 끝까지 캐낸 인지를, 소비자행동 이론 기반의 6-Lens 인지 엔진으로 재구조화해 만듭니다. 마케팅 과학 연구자가 설계한 아키텍처라는 점이 근본적인 차이입니다.',
+  },
+  {
+    q: '정확도는 어떻게 검증하나요?',
+    a: 'AI가 학습에 쓰지 않은 holdout 90문항으로 검증합니다. 6-Lens가 이식된 에이전트의 응답 83%가 실제 사람의 응답과 의미적으로 일치했습니다(가중 일치 점수). "그 사람처럼 답한다"를, 본 적 없는 문항을 정답으로 두고 맞히게 해 측정합니다.',
+  },
+  {
+    q: '어떤 경우에 적합하고, 어떤 한계가 있나요?',
+    a: '신제품 콘셉트·광고 카피·가격을 빠르고 넓게 1차 스크리닝하는 데 강합니다. 다만 친숙한 카테고리에서 정확도가 높고 신규·낯선 카테고리에서는 신뢰도를 낮춰 봐야 합니다. 합성 결과는 소수의 인간 검증과 짝지어 쓰는 것이 원칙입니다.',
   },
 ]
 
@@ -74,136 +84,116 @@ export default function SyntheticConsumerPage() {
         { name: '연구', url: `${SITE_URL}/research` },
         { name: 'AI 소비자 시뮬레이션', url: `${SITE_URL}/synthetic-consumer` },
       ] }} />
+      <JsonLd type="faq" data={{ items: FAQ_ITEMS }} />
+
       {/* Hero */}
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">
-          AI Consumer Simulation
+          AI Consumer Simulation · 디지털 트윈
         </p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          사람처럼 답하는 AI.
+          단순한 AI가 아니다.
           <br />
-          사고를 복제한 소비자와 대화합니다.
+          소비자의 뇌를 복제한 디지털 트윈.
         </h1>
         <p className="mt-4 text-base leading-relaxed text-subtext">
-          소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제하고, 합성 FGI(집단
-          심층면접)를 만들어, 사고가 복제된 소비자와 직접 대화하는 연구 플랫폼입니다.
+          <strong className="text-text">AI 소비자 시뮬레이션</strong>은 실제 소비자의
+          의식적·무의식적 사고를 디지털 트윈으로 복제해, 합성 FGI로 출시 전 시장 반응을
+          검증하는 연구다. 빅데이터에서 소비자의 묻힌 선호와 인지를 끄집어내는 마케팅 과학 —
+          그 핵심은 <strong className="text-text">소비자행동 연구자가 직접 설계한
+          &lsquo;6-Lens 인지 엔진&rsquo;</strong>이다.
         </p>
       </section>
 
       {/* 핵심 수치 */}
       <section className="mx-auto mt-10 max-w-[720px]">
         <div className="grid grid-cols-3 gap-3">
-          <StatCard stat="83%" label="holdout 응답 재현" />
-          <StatCard stat="1/10" label="기존 FGI 대비 비용·시간" />
-          <StatCard stat="6" label="의사결정 렌즈" />
+          <StatCard stat="83%" label="holdout 행동 예측 일치" />
+          <StatCard stat="1/10" label="리서치 비용·시간 압축" />
+          <StatCard stat="6-Lens" label="독자적 인지 엔진" />
         </div>
       </section>
 
-      {/* 01 문제와 해법 */}
+      {/* 01 시장의 복제 */}
       <section className="mx-auto mt-16 max-w-[720px]">
-        <SectionHead no="01" title="비싸고 느린 FGI, 그리고 해법" />
+        <SectionHead no="01" title="시장의 복제 — 챗봇의 흉내를 넘어선 '진짜 소비자'" />
         <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
-          기업은 신제품 출시 전 소비자의 진짜 &lsquo;행동 이유&rsquo;와 &lsquo;숨은
-          니즈&rsquo;를 FGI(집단 심층면접)로 파악한다. 하지만 전통 FGI는{' '}
-          <strong className="text-text">1회 수백만~수천만 원</strong>, 기획부터
-          리포트까지 <strong className="text-text">한 달에서 수개월</strong>이 걸린다.
-          이 벽 때문에 잦은 테스트가 필요한 중소·인디 브랜드는 거의 쓰지 못한다.
-        </p>
-        <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
-          이 연구의 핵심은, 실제 소비자를 복제한 AI 에이전트가 서로 의견을 주고받는{' '}
-          <strong className="text-text">멀티에이전트 FGI</strong>다. 1:1 응답이 아니라
-          진영이 갈리고 다시 모이는 그룹 토론으로, 실제 집단면접에 가까운 깊이를
-          비용·시간 1/10로 만든다. 같은 페르소나에 시점을 바꿔 반복 질문하면 변화·개선
-          추적도 가능하다.
-        </p>
-      </section>
-
-      {/* 02 행동 + 인지 (+ MindLens) */}
-      <section className="mx-auto mt-14 max-w-[720px]">
-        <SectionHead no="02" title="왜 더 진짜에 가까운가 — 행동 + 인지" />
-        <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
-          기존 LLM 에이전트 모델링은 인구통계나 한 문단짜리 페르소나 프롬프트에
-          의존해, &ldquo;그럴듯하지만 누구든 될 수 있는&rdquo; 응답에 그친다. 우리는
-          한 사람을 <strong className="text-text">두 종류의 실제 데이터</strong>로
+          일반적인 LLM 에이전트는 인구통계 프롬프트에 의존해 &ldquo;누구든 될 수 있는 뻔한
+          대답&rdquo;을 뱉는다. <strong className="text-text">BDM Lab의 접근은 근본적으로
+          다르다.</strong> 평생 소비자 행동과 빅데이터를 연구해 온 마케팅 과학의 설계가
+          기술의 근간에 자리 잡고 있다. 한 사람의 모순된 자아를, 두 가지 실제 데이터로
           직조한다.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-border bg-surface p-5">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">
-              무엇을 선택하는가
-            </p>
-            <p className="mt-1 text-base font-bold text-text">선호 (Preference)</p>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">행동 · Preference</p>
+            <p className="mt-1 text-base font-bold text-text">증명된 취향</p>
             <p className="mt-2 text-sm leading-relaxed text-subtext">
-              실제 구매·행동 데이터에서 드러난 선호(revealed preference)를 가져온다.
-              말이 아니라 선택으로 증명된 취향.
+              실제 구매·행동 데이터에서 드러난 선호(revealed preference). 말이 아니라 선택으로
+              증명된, 타협 없는 취향.
             </p>
           </div>
           <div className="rounded-xl border border-border bg-surface p-5">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">
-              왜 그렇게 생각하는가
-            </p>
-            <p className="mt-1 text-base font-bold text-text">인지 (Cognition)</p>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">인지 · Cognition</p>
+            <p className="mt-1 text-base font-bold text-text">숨은 이유</p>
             <p className="mt-2 text-sm leading-relaxed text-subtext">
-              자체 AI 음성 인터뷰 시스템으로 의사결정의 사고 과정을 끌어낸다.
-              구매 데이터엔 안 남는 &ldquo;왜&rdquo;를 캐낸다.
+              자체 AI 음성 인터뷰로 끝까지 추적해 낸 의사결정의 &lsquo;숨은 이유&rsquo;.
+              구매 데이터엔 남지 않는 &ldquo;왜&rdquo;.
             </p>
           </div>
         </div>
-        <div className="mt-3 rounded-xl border border-accent bg-accent-bg p-5 text-center">
-          <p className="font-mono text-sm text-subtext">
-            <span className="text-text">행동(무엇을)</span>
-            <span className="mx-2 text-accent">+</span>
-            <span className="text-text">인지(왜)</span>
-            <span className="mx-2 text-accent">→</span>
-            <span className="font-bold text-accent">디지털 트윈</span>
-          </p>
-          <p className="mt-2 text-xs text-muted">
-            행동과 인지를 한 사람 안에서 직조하므로, 설문 응답과 실제 행동의 간극이 줄어든다.
-          </p>
-        </div>
-
-        {/* 인지 수집 시스템 */}
-        <p className="mt-6 font-serif text-base leading-[1.9] text-subtext">
-          인지 데이터를 모으는 도구는 <strong className="text-text">자체 AI 음성 인터뷰
-          시스템</strong>이다. AI가 음성으로 서베이·심층 인터뷰를 직접 진행하고, 응답이
-          얕으면 후속 질문(follow-up)을 자동 생성해 &ldquo;왜?&rdquo;를 끝까지 캐낸다. 이
-          데이터가 6-Lens로 재구조화되어 에이전트의 &lsquo;사고&rsquo;가 된다.
+        <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
+          말과 행동의 괴리가 사라진, <strong className="text-text">스스로 고민하고 논쟁하는
+          진짜 타깃 시장</strong>이 화면 안에 복제된다.
         </p>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-border bg-surface p-5 text-center font-mono text-xs">
-          <span className="rounded-lg bg-bg px-3 py-2 text-text">AI 음성 인터뷰<br /><span className="text-[10px] text-muted">사고 데이터 수집</span></span>
-          <span className="text-accent">→</span>
-          <span className="rounded-lg bg-bg px-3 py-2 text-text">6-Lens<br /><span className="text-[10px] text-muted">사고 재구조화</span></span>
-          <span className="text-accent">→</span>
-          <span className="rounded-lg border border-accent bg-accent-bg px-3 py-2 text-accent">합성 FGI<br /><span className="text-[10px] text-subtext">멀티에이전트 토론</span></span>
-        </div>
       </section>
 
-      {/* 03 작동 방식 + 6-Lens */}
+      {/* 02 6-Lens 인지 엔진 */}
       <section className="mx-auto mt-14 max-w-[720px]">
-        <SectionHead no="03" title="작동 방식 — 7단계 파이프라인" />
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {STEPS.map((s) => (
-            <div key={s.no} className="rounded-xl border border-border bg-surface p-4">
-              <span className="font-mono text-xs text-accent">STEP {s.no}</span>
-              <p className="mt-1 text-sm font-bold text-text">{s.label}</p>
-              <p className="mt-0.5 text-xs text-muted">{s.sub}</p>
-            </div>
-          ))}
-        </div>
+        <SectionHead no="02" title="기술의 핵심 — 6-Lens 인지 엔진" />
+        <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
+          프롬프트 엔지니어링의 얄팍함을 부수는 지점이 여기다. 소비자행동 이론과 빅데이터
+          분석의 정수가 <strong className="text-text">6-Lens 의사결정 구조</strong>로 압축되어
+          에이전트의 &lsquo;사고&rsquo;가 된다. 이 렌즈를 거친 에이전트는, 인간 고유의 편향과
+          갈등을 내재한 자율적 개체가 된다. 인간의 비합리성까지 데이터로 구조화했기에,
+          단순한 확률적 텍스트가 아니라 <strong className="text-text">6차원의 가치 공간에서
+          &lsquo;왜&rsquo;를 추론</strong>하며 결정을 재현한다.
+        </p>
         <div className="mt-8">
           <SixLensDiagram />
         </div>
       </section>
 
-      {/* 04 방법론과 검증 */}
+      {/* 03 데이터 파이프라인 */}
       <section className="mx-auto mt-14 max-w-[720px]">
-        <SectionHead no="04" title="방법론과 검증" />
+        <SectionHead no="03" title="데이터 파이프라인 — 인지 발굴부터 멀티에이전트 토론까지" />
         <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
-          검증된 두 선행연구를 결합한다 — 설문은 잘 재현하지만 자유 발화가 약한{' '}
-          <strong className="text-text">Toubia</strong>, 인터뷰 깊이는 있지만 정량
-          검증이 어려운 <strong className="text-text">Park</strong>. 둘을 합쳐 설문
-          정확도와 인터뷰 인사이트를 동시에 확보하고, 자체 6-Lens로 재구조화한다.
+          스탠퍼드(Park)와 컬럼비아(Toubia)의 최신 연구를 결합하고, BDM Lab의 6-Lens
+          엔진을 얹었다.
         </p>
+        <ol className="mt-6 space-y-3">
+          <li className="rounded-xl border border-border bg-surface p-5">
+            <p className="text-sm font-bold text-text">① 초정밀 인지 발굴</p>
+            <p className="mt-1 text-sm leading-relaxed text-subtext">
+              피상적 설문을 거부한다. AI 음성 인터뷰가 후속 질문(follow-up)을 자동 생성해
+              소비자의 무의식을 끝까지 캐낸다.
+            </p>
+          </li>
+          <li className="rounded-xl border border-border bg-surface p-5">
+            <p className="text-sm font-bold text-text">② 사고복제 페르소나 빌드</p>
+            <p className="mt-1 text-sm leading-relaxed text-subtext">
+              추출된 인지와 행동 데이터를 6-Lens로 재구조화해, 통제 가능한 사고 엔진으로
+              변환한다.
+            </p>
+          </li>
+          <li className="rounded-xl border border-border bg-surface p-5">
+            <p className="text-sm font-bold text-text">③ 합성 FGI — 멀티에이전트 토론</p>
+            <p className="mt-1 text-sm leading-relaxed text-subtext">
+              복제된 에이전트들이 그룹 토론을 벌이며 진영을 형성하고 합의에 이른다. 실제
+              집단면접의 깊이를, 1/10의 비용과 시간으로 구현한다.
+            </p>
+          </li>
+        </ol>
         <div className="mt-6 space-y-3">
           {METHODS.map((m) => (
             <div key={m.name} className="rounded-xl border border-border bg-surface p-5">
@@ -216,24 +206,38 @@ export default function SyntheticConsumerPage() {
             </div>
           ))}
         </div>
-        <div className="mt-6 rounded-xl border border-accent bg-accent-bg p-5">
-          <p className="text-sm leading-relaxed text-subtext">
-            <strong className="text-accent">검증 결과:</strong> 학습에 쓰지 않은 holdout
-            90문항에서, 에이전트 응답의 <strong className="text-text">83%</strong>가 실제
-            사람의 응답과 의미적으로 일치(가중 일치 점수)했다. LLM이 본 적 없는 응답을
-            정답으로 두고 맞추게 해, &ldquo;그 사람처럼 답한다&rdquo;를 검증한다.
-          </p>
-        </div>
       </section>
 
-      {/* 05 파일럿 + CTA */}
-      <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-10">
-        <SectionHead no="05" title="파일럿, 그리고 함께 연구할 분" />
+      {/* 04 검증 */}
+      <section className="mx-auto mt-14 max-w-[720px]">
+        <SectionHead no="04" title="결과로 증명된 83%의 현실 예측력" />
         <p className="mt-5 font-serif text-base leading-[1.9] text-subtext">
-          소비재 브랜드(셀프사진관)의 실제 리서치 니즈로 에이전트 구축부터 인사이트
-          도출까지 전 과정을 구현한 파일럿을 마쳤다. 같은 브랜드의 매출 예측 프로젝트와
-          연결되는, 예측과 복제를 잇는 사례다. 소비자 시뮬레이션을 활용한 공동연구·기업
-          협업에 관심이 있으시면 편하게 연락 주세요.
+          결과가 담보되지 않는 시뮬레이션은 무의미하다. AI가 단 한 번도 본 적 없는 90개의
+          낯선 질문(holdout) 앞에서도, 6-Lens가 이식된 에이전트의{' '}
+          <strong className="text-text">83%가 실제 사람과 동일한 선택</strong>을 내렸다.
+          예측을 넘어선 현실의 복제다.
+        </p>
+        <div className="mt-6 rounded-xl border border-accent bg-accent-bg p-5">
+          <p className="text-sm leading-relaxed text-subtext">
+            시장에 출시해 막대한 실패 비용을 치르기 전에, BDM Lab의 합성 에이전트 그룹에게
+            먼저 물어보라. 출시 전, 당신 브랜드의 숨은 리스크와 기회를 미리 살아볼 수 있다.
+          </p>
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-muted">
+          단, 합성 소비자는 인간 조사를 대체하지 않는다. 넓고 빠른 1차 스크리닝의 도구이며,
+          소수의 인간 검증과 짝지을 때 가장 정확하다. 친숙한 카테고리와 신규 카테고리의
+          신뢰 등급은 다르게 둔다.
+        </p>
+      </section>
+
+      {/* CTA */}
+      <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-10">
+        <h2 className="text-xl font-bold text-text">파일럿, 그리고 함께 연구할 분</h2>
+        <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
+          소비재 브랜드(셀프사진관)의 실제 리서치 니즈로, 에이전트 구축부터 인사이트 도출까지
+          전 과정을 구현한 파일럿을 마쳤다. 같은 브랜드의 매출 예측 프로젝트와 연결되는,
+          예측과 복제를 잇는 사례다. 소비자 시뮬레이션을 활용한 공동연구·기업 협업에 관심이
+          있으시면 편하게 연락 주세요.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link

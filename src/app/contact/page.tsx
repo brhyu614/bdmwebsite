@@ -17,7 +17,7 @@ export default function ContactPage() {
           Contact
         </h1>
         <p className="mt-3 text-lg text-subtext">
-          궁금한 점이 있으면 편하게 연락주세요.
+          궁금한 점이 있으면 편하게 연락 주세요.
         </p>
       </section>
 

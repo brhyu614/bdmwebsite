@@ -233,11 +233,14 @@ export default function SyntheticConsumerPage() {
       {/* CTA */}
       <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-10">
         <h2 className="text-xl font-bold text-text">파일럿, 그리고 함께 연구할 분</h2>
-        <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
-          소비재 브랜드(셀프사진관)의 실제 리서치 니즈로, 에이전트 구축부터 인사이트 도출까지
-          전 과정을 구현한 파일럿을 마쳤다. 같은 브랜드의 매출 예측 프로젝트와 연결되는,
-          예측과 복제를 잇는 사례다. 소비자 시뮬레이션을 활용한 공동연구·기업 협업에 관심이
-          있으시면 편하게 연락 주세요.
+        <p className="mt-4 text-base leading-relaxed text-subtext">
+          실제 소비재 브랜드(셀프사진관)와 함께, 에이전트 구축부터 인사이트 도출까지 전
+          과정을 적용한 파일럿을 마쳤습니다. 같은 브랜드의 매출 예측 프로젝트와도 이어지는,
+          예측과 복제를 잇는 사례입니다.
+        </p>
+        <p className="mt-4 text-base leading-relaxed text-subtext">
+          소비자 시뮬레이션을 활용한 공동연구나 기업 협업에 관심이 있으시면 편하게 연락
+          주세요.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link

@@ -97,6 +97,38 @@ export default function ResearchPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
+          3대 연구 축 (허브)
+          ═══════════════════════════════════════════════════ */}
+      <section className="mx-auto mt-16 max-w-[720px]">
+        <h2 className="text-xl font-bold text-text">3대 연구 축</h2>
+        <p className="mt-2 text-sm leading-relaxed text-subtext">
+          같은 데이터 분석 역량을 세 방향으로 확장합니다 — 미래를 예측하고, 소비자를
+          복제하고, 소셜미디어를 해독합니다.
+        </p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {[
+            { en: 'Prediction', ko: 'AI 예측', sub: '매출·수요·인구', href: '/projects' },
+            { en: 'Replication', ko: '소비자 시뮬레이션', sub: 'Mind-Bridge 디지털 트윈', href: '/synthetic-consumer' },
+            { en: 'Social', ko: '소셜·인플루언서', sub: '대규모 SNS 효과 검증', href: '/social-research' },
+          ].map((a) => (
+            <a key={a.en} href={a.href} className="group rounded-xl border border-border bg-surface p-5 transition-colors hover:border-accent/40">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{a.en}</p>
+              <p className="mt-1 text-base font-bold text-text group-hover:text-accent transition-colors">{a.ko}</p>
+              <p className="mt-1 text-xs text-muted">{a.sub}</p>
+              <p className="mt-3 font-mono text-xs text-accent group-hover:underline">자세히 →</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════
+          방법론 — 1. Causal Inference
+          ═══════════════════════════════════════════════════ */}
+      <section className="mx-auto mt-20 max-w-[720px]">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted">Methodology</p>
+        <p className="mt-1 text-sm text-subtext">세 축을 떠받치는 분석 방법론</p>
+      </section>
+      {/* ═══════════════════════════════════════════════════
           1. Causal Inference
           ═══════════════════════════════════════════════════ */}
       <section className="mx-auto mt-20 max-w-[720px]">
@@ -375,8 +407,8 @@ export default function ResearchPage() {
           </div>
         </div>
 
-        <div className="mt-6">
-          <a href="/projects" className="text-sm text-accent hover:underline">관련 프로젝트 보기 →</a>
+        <div className="mt-6 flex flex-wrap gap-4">
+          <a href="/synthetic-consumer" className="text-sm text-accent hover:underline">AI 소비자 시뮬레이션 (Mind-Bridge) →</a>
         </div>
       </section>
 

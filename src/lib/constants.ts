@@ -1,7 +1,7 @@
 export const SITE_NAME = '빅데이터마케팅 랩'
 export const SITE_NAME_EN = 'BDM Lab'
 export const SITE_URL = 'https://bigdatamarketinglab.com'
-export const SITE_DESCRIPTION = '직감 대신 근거. 데이터로 읽는 마케팅.'
+export const SITE_DESCRIPTION = '데이터로 소비자를 예측하고, 복제하고, 해독합니다. AI 예측 · 소비자 시뮬레이션 · 소셜미디어 분석 — 한양대 빅데이터마케팅 랩.'
 export const AUTHOR_NAME = '임보람'
 export const INSTAGRAM_HANDLE = '@bdm.lab'
 export const INSTAGRAM_URL = 'https://www.instagram.com/bdm.lab/'

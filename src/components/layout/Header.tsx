@@ -4,9 +4,8 @@ import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 const NAV_LINKS = [
-  { href: '/projects', label: '프로젝트' },
+  { href: '/research', label: '연구' },
   { href: '/articles', label: '인사이트' },
-  { href: '/research', label: '연구실' },
   { href: '/about', label: '교수' },
   { href: '/contact', label: '문의' },
 ]

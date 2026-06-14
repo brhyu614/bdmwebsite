@@ -27,7 +27,7 @@ const RESEARCH_AXES = [
     no: '01',
     en: 'Prediction',
     title: 'AI 예측',
-    desc: '매출·수요·인구를 예측하는 업종 무관 예측 엔진. 시계열·구조 모델 + SHAP 설명으로 의사결정 근거까지 만든다.',
+    desc: '내일의 매출·수요·인구를 미리 안다. 수백 개 변수를 학습한 모델이 예측하고, SHAP로 "왜"까지 설명해 바로 의사결정에 쓴다.',
     stats: ['슈퍼마켓 R² 98.3%', 'IP 콜라보 적중 97.6%', 'JRCS 게재'],
     link: '/projects',
     cta: '예측 프로젝트 보기',
@@ -36,7 +36,7 @@ const RESEARCH_AXES = [
     no: '02',
     en: 'Replication',
     title: 'AI 소비자 시뮬레이션',
-    desc: '소비자의 의식적·무의식적 사고를 LLM 멀티에이전트로 복제한다. 디지털 트윈으로 합성 FGI를 만들어, 출시 전 소비자 반응을 검증한다.',
+    desc: '출시 전에 "가상 소비자"에게 먼저 물어본다. 실제 소비자의 행동과 생각을 복제한 AI가, 비용·시간 1/10로 시장 반응을 테스트한다.',
     stats: ['디지털 트윈', '합성 FGI', '검증 정확도 83%'],
     link: '/synthetic-consumer',
     cta: '소비자 시뮬레이션 연구 보기',
@@ -45,7 +45,7 @@ const RESEARCH_AXES = [
     no: '03',
     en: 'Digital Marketing',
     title: '디지털 마케팅',
-    desc: '대규모 디지털·소셜 데이터를 구축해, 인플루언서와 콘텐츠가 만드는 효과를 수치로 검증한다. 이미지·텍스트·행동 데이터 결합.',
+    desc: '인플루언서·콘텐츠가 만든 효과를 감이 아니라 수치로 검증한다. 대규모 소셜·이미지 데이터를 직접 구축해 인과적으로 분석한다.',
     stats: ['대규모 인스타 데이터', '얼굴·이미지 AI 분석', '효과 인과 검증'],
     link: '/digital-marketing',
     cta: '디지털 마케팅 연구 보기',
@@ -80,9 +80,12 @@ export default function HomePage() {
             예측하고, 복제하고, 해독합니다.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-subtext">
-            한양대학교 임보람 교수 연구실.
-            <br />
-            AI 예측 · 소비자 시뮬레이션 · 소셜미디어 분석.
+            내일의 매출을 <strong className="text-text">예측</strong>하고, 출시 전 소비자를
+            가상으로 <strong className="text-text">복제</strong>해 테스트하고, 마케팅의 효과를
+            데이터로 <strong className="text-text">해독</strong>합니다.
+          </p>
+          <p className="mt-3 max-w-xl font-mono text-sm text-muted">
+            한양대학교 경영대학 임보람 교수 연구실
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link

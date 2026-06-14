@@ -103,8 +103,9 @@ export default function ResearchPage() {
       <section className="mx-auto mt-16 max-w-[720px]">
         <h2 className="text-xl font-bold text-text">3대 연구 축</h2>
         <p className="mt-2 text-sm leading-relaxed text-subtext">
-          같은 데이터 분석 역량을 세 방향으로 확장합니다 — 미래를 예측하고, 소비자를
-          복제하고, 소셜미디어를 해독합니다.
+          같은 데이터 분석 역량을 세 방향으로 확장합니다 — 미래를 <strong className="text-text">예측</strong>하고,
+          소비자를 <strong className="text-text">복제</strong>하고, 디지털 마케팅의 효과를 <strong className="text-text">검증</strong>합니다.
+          아래 방법론(인과분석·머신러닝·LLM 시뮬레이션)이 이 세 축을 떠받칩니다.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {[

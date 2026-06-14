@@ -39,7 +39,7 @@ const FINDINGS = [
   },
 ]
 
-export default function SocialResearchPage() {
+export default function DigitalMarketingPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <JsonLd type="breadcrumb" data={{ items: [

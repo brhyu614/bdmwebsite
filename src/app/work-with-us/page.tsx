@@ -3,7 +3,7 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 
 export const metadata: Metadata = {
-  title: '기업 협업·연구 의뢰',
+  title: '기업 협업·공동연구',
   description:
     '빅데이터마케팅 랩과 기업이 함께 일하는 법. AI 매출·수요 예측, 소비자 시뮬레이션(디지털 트윈), 디지털 마케팅 효과 검증·인과분석. 용역·공동연구·자문.',
   alternates: { canonical: '/work-with-us' },

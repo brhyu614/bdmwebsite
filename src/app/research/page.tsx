@@ -109,7 +109,7 @@ export default function ResearchPage() {
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {[
             { en: 'Prediction', ko: 'AI 예측', sub: '매출·수요·인구', href: '/projects' },
-            { en: 'Replication', ko: '소비자 시뮬레이션', sub: 'Mind-Bridge 디지털 트윈', href: '/synthetic-consumer' },
+            { en: 'Replication', ko: '소비자 시뮬레이션', sub: '디지털 트윈 합성 FGI', href: '/synthetic-consumer' },
             { en: 'Digital Marketing', ko: '디지털 마케팅', sub: '인플루언서·SNS 효과 검증', href: '/digital-marketing' },
           ].map((a) => (
             <a key={a.en} href={a.href} className="group rounded-xl border border-border bg-surface p-5 transition-colors hover:border-accent/40">
@@ -409,7 +409,7 @@ export default function ResearchPage() {
         </div>
 
         <div className="mt-6 flex flex-wrap gap-4">
-          <a href="/synthetic-consumer" className="text-sm text-accent hover:underline">AI 소비자 시뮬레이션 (Mind-Bridge) →</a>
+          <a href="/synthetic-consumer" className="text-sm text-accent hover:underline">AI 소비자 시뮬레이션 →</a>
         </div>
       </section>
 

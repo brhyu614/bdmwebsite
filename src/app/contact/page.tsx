@@ -59,12 +59,24 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* 조용한 안내 — 협업 / 합류 */}
+      {/* 조용한 안내 — 협업 / 합류 / 비즈니스 랩 */}
       <section className="mx-auto mt-12 max-w-[720px] border-t border-border pt-8 text-sm leading-relaxed text-subtext">
         <p>
           데이터·AI를 활용한 <a href="/work-with-us" className="text-accent hover:underline">기업 공동연구</a>나,
           연구실에 <a href="/join" className="text-accent hover:underline">대학원생으로 합류</a>하는 데 관심이
           있으시면 위 이메일로 편하게 연락 주세요.
+        </p>
+        <p className="mt-3">
+          2026년 2학기 <strong className="text-text">비즈니스 랩</strong> 참여를 희망하면{' '}
+          <a
+            href="https://tame-sorrel-185.notion.site/Big-Data-Marketing-Lab-2026-2-2dd55c836da98048b8f7e2c57e21bf0c"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent hover:underline"
+          >
+            여기를 확인하세요 &rarr;
+          </a>{' '}
+          지원은 이메일로 받습니다.
         </p>
       </section>
     </div>

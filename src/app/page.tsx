@@ -56,7 +56,7 @@ const RESEARCH_AXES = [
 const HIGHLIGHTS = [
   { stat: '98.3%', label: '슈퍼마켓 수요 예측', sub: '284개 점포 · JRCS 게재' },
   { stat: '97.6%', label: 'IP 콜라보 매출 예측', sub: '462명 · 4,042건 검증' },
-  { stat: '83%', label: '합성 소비자 재현', sub: 'Mind-Bridge · holdout 검증' },
+  { stat: '83%', label: '합성 소비자 재현', sub: '디지털 트윈 · holdout 검증' },
   { stat: '3,518', label: '행정동 인구 예측', sub: '20년 · 461개 변수' },
 ]
 

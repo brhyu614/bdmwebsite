@@ -15,7 +15,6 @@ type Track = {
   question: string
   method: string
   data: string
-  status: string
 }
 
 const LLM_TRACKS: Track[] = [
@@ -27,7 +26,6 @@ const LLM_TRACKS: Track[] = [
     method:
       '한 사람의 6년치 구매 로그와 같은 사람의 설문 응답을 짝지어 LLM 에이전트에 넣습니다. 에이전트가 고른 답과 본인이 실제로 고른 답을 대조해 일치율을 잽니다.',
     data: '패널 500명, 구매 로그 6년, 설문과 인터뷰를 같은 사람 기준으로 연결',
-    status: '자료 수집 협의와 검증 규약 확정 단계',
   },
   {
     id: 'review',
@@ -37,7 +35,6 @@ const LLM_TRACKS: Track[] = [
     method:
       'Yelp 리뷰 데이터로 리뷰 노출 정책을 바꿔 가며 시뮬레이션합니다. 높은 평점부터 보여 주는 정책과 무작위로 보여 주는 정책을 비교하면, 리뷰를 의심하며 읽는 집단에서 효과의 부호가 뒤집힙니다.',
     data: 'Yelp 공개 데이터의 사업체·리뷰·이용자 기록',
-    status: '원고 집필 단계',
   },
   {
     id: 'inverse',
@@ -47,7 +44,6 @@ const LLM_TRACKS: Track[] = [
     method:
       '거래 기록을 입력받아 설문 문항의 답을 되맞히는 방향으로 모형을 학습시킵니다. 실제 응답과 맞춰 정확도를 측정합니다.',
     data: '구매 로그와 설문 응답이 짝지어진 표본',
-    status: '설계와 소규모 예비 분석 단계',
   },
   {
     id: 'homogenize',
@@ -57,7 +53,6 @@ const LLM_TRACKS: Track[] = [
     method:
       '컨조인트 실험으로 사람의 선호를 측정하고, 같은 선택을 LLM에게 시켜 두 결과의 분포를 비교합니다. 선호의 폭이 줄어드는지를 봅니다.',
     data: '한국 콘텐츠 이용자 대상 선택 실험',
-    status: '예비 실험 진행 단계',
   },
   {
     id: 'rare',
@@ -67,7 +62,6 @@ const LLM_TRACKS: Track[] = [
     method:
       '실제 경험자만 남기는 확인 문항을 설문에 심어 자격 없는 응답을 제거합니다. 걸러진 응답자를 심층 인터뷰해 의사결정 과정을 페르소나로 만들고, 페르소나를 LLM 에이전트로 구현해 제품 반응과 구매 의향을 묻습니다.',
     data: '희귀 질환 진단자 대상 126문항 설문과 확인 문항 8개',
-    status: '실제 조사에 적용해 검증까지 마친 단계',
   },
   {
     id: 'embedding',
@@ -77,7 +71,6 @@ const LLM_TRACKS: Track[] = [
     method:
       '검색과 주문 기록에서 제품과 브랜드를 벡터로 바꿔 거리로 경쟁 관계를 그립니다. 사람이 정한 업종 분류 대신 소비자 행동이 분류를 만듭니다.',
     data: '국내 검색 포털의 프랜차이즈 관련 수집 데이터',
-    status: '데이터 수집 완료, 분석 단계',
   },
 ]
 
@@ -89,7 +82,6 @@ const FORECAST_TRACKS: Track[] = [
     method:
       'XGBoost로 온라인 주문, 오프라인 결제, 상권 정보를 한 모형에 넣어 매장별 매출을 예측합니다.',
     data: '349개 매장의 채널별 매출과 지리 정보',
-    status: '기업 과제로 수행 완료',
   },
   {
     id: 'demand',
@@ -98,7 +90,6 @@ const FORECAST_TRACKS: Track[] = [
     method:
       '매장과 품목과 채널을 나눠 각각 예측하고, 온라인과 오프라인 중 어느 쪽 수요가 더 잘 맞는지를 비교합니다.',
     data: '284개 매장의 품목별 판매 기록',
-    status: '기업 과제 수행과 논문 게재 완료',
   },
   {
     id: 'population',
@@ -107,7 +98,6 @@ const FORECAST_TRACKS: Track[] = [
     method:
       '행정동 단위로 인구 이동과 연령 구성을 넣어 장래 인구를 예측합니다. 매장 입지 판단의 기초 자료가 됩니다.',
     data: '전국 3,518개 행정동의 인구 통계',
-    status: '분석 완료',
   },
   {
     id: 'ews',
@@ -116,7 +106,6 @@ const FORECAST_TRACKS: Track[] = [
     method:
       '매출 하락이 시작되기 전에 나타나는 신호를 찾아 폐업 위험을 미리 알립니다. 이미지와 소셜미디어 자료도 신호로 씁니다.',
     data: '프랜차이즈 매장의 운영 기록과 온라인 노출 자료',
-    status: '연구비 신청 후 결과 대기',
   },
   {
     id: 'selfemployed',
@@ -126,7 +115,6 @@ const FORECAST_TRACKS: Track[] = [
     method:
       '업종과 상권을 나눠 회복 속도의 차이를 만드는 요인을 분해합니다. 정책 보고서로 제출합니다.',
     data: '경기 지역 자영업 관련 행정 자료',
-    status: '한국은행 경기본부 연구용역, 7개월 과제 중 진행 단계',
   },
   {
     id: 'ip',
@@ -135,7 +123,6 @@ const FORECAST_TRACKS: Track[] = [
     method:
       'IP별 매출을 예측하고 인기가 오르내리는 요인을 분해합니다. 계약 시점 판단에 씁니다.',
     data: '포토 부스 브랜드의 IP별 매출 기록',
-    status: '기업 과제로 수행 완료',
   },
 ]
 
@@ -157,10 +144,6 @@ function TrackCard({ track }: { track: Track }) {
         <div className="flex gap-2">
           <dt className="w-10 shrink-0 font-mono text-muted">자료</dt>
           <dd className="text-subtext">{track.data}</dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="w-10 shrink-0 font-mono text-muted">단계</dt>
-          <dd className="text-subtext">{track.status}</dd>
         </div>
       </dl>
     </article>

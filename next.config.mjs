@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  async redirects() {
+    return [{ source: '/work-with-us', destination: '/collaborate', permanent: true }]
+  },
   images: {
     remotePatterns: [
       {

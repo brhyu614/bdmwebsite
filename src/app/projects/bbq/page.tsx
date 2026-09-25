@@ -24,7 +24,7 @@ export default function BBQPage() {
           {[
             { num: '349개', label: '전수 매장 분석' },
             { num: '3년', label: '주간 데이터' },
-            { num: '96%', label: '매장식사 예측' },
+            { num: 'R² 0.96', label: '매장식사 채널 예측' },
             { num: '3채널', label: '배달·매장·포장' },
           ].map((item) => (
             <div key={item.label} className="rounded-xl border border-border bg-surface p-3 text-center">
@@ -180,10 +180,10 @@ export default function BBQPage() {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {[
-            { channel: '매장식사', r2: '96%', desc: '매장별 인력 배치, 좌석 운영 최적화' },
-            { channel: '총 매출', r2: '80%', desc: '전체 손익 관리, 임대료 협상 근거' },
-            { channel: '배달', r2: '78%', desc: '배달 물량 예측, 포장재·식자재 발주' },
-            { channel: '포장', r2: '67%', desc: '포장 수요 대비 인력 배치' },
+            { channel: '매장식사', r2: 'R² 0.96', desc: '매장별 인력 배치, 좌석 운영 최적화' },
+            { channel: '총 매출', r2: 'R² 0.80', desc: '전체 손익 관리, 임대료 협상 근거' },
+            { channel: '배달', r2: 'R² 0.78', desc: '배달 물량 예측, 포장재·식자재 발주' },
+            { channel: '포장', r2: 'R² 0.67', desc: '포장 수요 대비 인력 배치' },
           ].map((item) => (
             <div key={item.channel} className="rounded-xl border border-border bg-surface p-5">
               <div className="flex items-baseline justify-between">

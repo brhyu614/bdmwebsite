@@ -51,6 +51,32 @@ export default function ResearchPage() {
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
           연구실에서 하는 일
         </h1>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a
+            href="/research/ai"
+            className="rounded-lg border border-accent bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+          >
+            AI 연구 12건 보기
+          </a>
+          <a
+            href="/research/digital-twin"
+            className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text hover:border-accent/40"
+          >
+            소비자 디지털 트윈의 원리
+          </a>
+          <a
+            href="/research/human-in-the-loop"
+            className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text hover:border-accent/40"
+          >
+            AI가 실패하는 자리
+          </a>
+          <a
+            href="/publications"
+            className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text hover:border-accent/40"
+          >
+            논문 목록
+          </a>
+        </div>
       </section>
 
       {/* Lab Photo */}
@@ -98,26 +124,49 @@ export default function ResearchPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          3대 연구 축 (허브)
+          2대 연구 축 (허브)
           ═══════════════════════════════════════════════════ */}
       <section className="mx-auto mt-16 max-w-[720px]">
-        <h2 className="text-xl font-bold text-text">3대 연구 축</h2>
+        <h2 className="text-xl font-bold text-text">2대 연구 축</h2>
         <p className="mt-2 text-sm leading-relaxed text-subtext">
-          같은 데이터 분석 역량을 세 방향으로 확장합니다 — 미래를 <strong className="text-text">예측</strong>하고,
-          소비자를 <strong className="text-text">복제</strong>하고, 디지털 마케팅의 효과를 <strong className="text-text">검증</strong>합니다.
-          아래 방법론(인과분석·머신러닝·LLM 시뮬레이션)이 이 세 축을 떠받칩니다.
+          같은 데이터 분석 역량을 두 방향으로 씁니다. 하나는 사람을{' '}
+          <strong className="text-text">복제</strong>해 가상에서 실험을 돌리는 쪽이고, 다른 하나는
+          숫자로 미래를 <strong className="text-text">예측</strong>하는 쪽입니다. 인과분석,
+          머신러닝, LLM 시뮬레이션 세 방법이 두 축을 떠받칩니다.
         </p>
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {[
-            { en: 'Prediction', ko: 'AI 예측', sub: '매출·수요·인구', href: '/projects' },
-            { en: 'Replication', ko: '소비자 시뮬레이션', sub: '디지털 트윈 합성 FGI', href: '/synthetic-consumer' },
-            { en: 'Digital Marketing', ko: '디지털 마케팅', sub: '인플루언서·SNS 효과 검증', href: '/digital-marketing' },
+            {
+              en: 'LLM Multi-Agent',
+              ko: 'LLM 멀티에이전트 모델링',
+              sub: '소비자 복제와 가상 실험',
+              href: '/research/ai',
+            },
+            {
+              en: 'Forecasting',
+              ko: 'XGBoost 기반 미래 예측',
+              sub: '매출·수요·인구·폐업',
+              href: '/projects',
+            },
           ].map((a) => (
             <a key={a.en} href={a.href} className="group rounded-xl border border-border bg-surface p-5 transition-colors hover:border-accent/40">
               <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{a.en}</p>
               <p className="mt-1 text-base font-bold text-text group-hover:text-accent transition-colors">{a.ko}</p>
               <p className="mt-1 text-xs text-muted">{a.sub}</p>
               <p className="mt-3 font-mono text-xs text-accent group-hover:underline">자세히 →</p>
+            </a>
+          ))}
+        </div>
+
+        <p className="mt-6 text-sm font-bold text-text">두 축의 적용 분야</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          {[
+            { ko: '디지털 마케팅', sub: '인플루언서와 SNS 효과 검증', href: '/digital-marketing' },
+            { ko: '소비자 시뮬레이션', sub: '디지털 트윈 집단 면접', href: '/synthetic-consumer' },
+          ].map((a) => (
+            <a key={a.ko} href={a.href} className="group rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent/40">
+              <p className="text-sm font-bold text-text group-hover:text-accent transition-colors">{a.ko}</p>
+              <p className="mt-1 text-xs text-muted">{a.sub}</p>
             </a>
           ))}
         </div>
@@ -128,7 +177,7 @@ export default function ResearchPage() {
           ═══════════════════════════════════════════════════ */}
       <section className="mx-auto mt-20 max-w-[720px]">
         <p className="font-mono text-xs uppercase tracking-widest text-muted">Methodology</p>
-        <p className="mt-1 text-sm text-subtext">세 축을 떠받치는 분석 방법론</p>
+        <p className="mt-1 text-sm text-subtext">두 축을 떠받치는 분석 방법론</p>
       </section>
       {/* ═══════════════════════════════════════════════════
           1. Causal Inference

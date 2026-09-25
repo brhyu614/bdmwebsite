@@ -21,43 +21,34 @@ export const metadata: Metadata = {
   },
 }
 
-// ── 3대 연구 축 ──
+// ── 2대 연구 축 ──
 const RESEARCH_AXES = [
   {
     no: '01',
-    en: 'Prediction',
-    title: 'AI 예측',
-    desc: '내일의 매출·수요·인구를 미리 안다. 수백 개 변수를 학습한 모델이 예측하고, SHAP로 "왜"까지 설명해 바로 의사결정에 쓴다.',
-    stats: ['슈퍼마켓 R² 98.3%', 'IP 콜라보 적중 97.6%', 'JRCS 게재'],
-    link: '/projects',
-    cta: '예측 프로젝트 보기',
+    en: 'LLM Multi-Agent',
+    title: 'LLM 멀티에이전트 모델링',
+    desc: '사람의 의사결정 과정을 LLM 에이전트로 복제해, 현실에서 시간을 되돌려야만 가능한 실험을 가상으로 돌린다. 가격을 올리면 떠날지, 새 상품을 받아들일지를 출시 전에 묻는다.',
+    stats: ['6년 구매 기록 기반 복제', '집단 면접 시뮬레이션', '희소 표본 페르소나 확장'],
+    link: '/research/ai',
+    cta: 'AI 연구 12건 보기',
   },
   {
     no: '02',
-    en: 'Replication',
-    title: 'AI 소비자 시뮬레이션',
-    desc: '출시 전에 "가상 소비자"에게 먼저 물어본다. 실제 소비자의 행동과 생각을 복제한 AI가, 비용·시간 1/10로 시장 반응을 테스트한다.',
-    stats: ['디지털 트윈', '합성 FGI', '검증 정확도 83%'],
-    link: '/synthetic-consumer',
-    cta: '소비자 시뮬레이션 연구 보기',
-  },
-  {
-    no: '03',
-    en: 'Digital Marketing',
-    title: '디지털 마케팅',
-    desc: '인플루언서·콘텐츠가 만든 효과를 감이 아니라 수치로 검증한다. 대규모 소셜·이미지 데이터를 직접 구축해 인과적으로 분석한다.',
-    stats: ['대규모 인스타 데이터', '얼굴·이미지 AI 분석', '효과 인과 검증'],
-    link: '/digital-marketing',
-    cta: '디지털 마케팅 연구 보기',
+    en: 'Forecasting',
+    title: 'XGBoost 기반 미래 예측',
+    desc: '매출, 수요, 인구, 폐업을 숫자로 미리 내놓는다. 어떤 변수가 그 예측을 밀어 올렸는지까지 분해해, 바로 의사결정에 쓸 수 있게 만든다.',
+    stats: ['매장 633개 분석', '행정동 3,518개 인구 예측', '국제 저널 게재'],
+    link: '/projects',
+    cta: '예측 프로젝트 보기',
   },
 ]
 
-// ── 대표 성과 (외부 발표용 핵심 수치) ──
+// ── 대표 성과 (지표 이름과 표본 수를 함께 표기) ──
 const HIGHLIGHTS = [
-  { stat: '98.3%', label: '슈퍼마켓 수요 예측', sub: '284개 점포 · JRCS 게재' },
-  { stat: '97.6%', label: 'IP 콜라보 매출 예측', sub: '462명 · 4,042건 검증' },
-  { stat: '83%', label: '합성 소비자 재현', sub: '디지털 트윈 · holdout 검증' },
-  { stat: '3,518', label: '행정동 인구 예측', sub: '20년 · 461개 변수' },
+  { stat: 'R² 0.983', label: '슈퍼마켓 수요 예측', sub: '284개 매장 · 국제 저널 게재' },
+  { stat: 'R² 0.96', label: '치킨 프랜차이즈 매출 예측', sub: '349개 매장 · 매장식사 채널' },
+  { stat: '97.6%', label: 'IP 협업 매출 적중률', sub: '462명 · 4,042건 검증' },
+  { stat: '3,518', label: '행정동 인구 예측', sub: '20년 자료 · 461개 변수' },
 ]
 
 export default function HomePage() {
@@ -104,15 +95,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ 3대 연구 축 ══ */}
+      {/* ══ 2대 연구 축 ══ */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-2xl font-bold text-text">3대 연구 축</h2>
+          <h2 className="text-2xl font-bold text-text">두 갈래 연구 축</h2>
           <Link href="/research" className="text-sm text-accent hover:underline">
             연구실 전체 보기 →
           </Link>
         </div>
-        <div className="mt-6 grid gap-5 lg:grid-cols-3">
+        <div className="mt-6 grid gap-5 lg:grid-cols-2">
           {RESEARCH_AXES.map((axis) => (
             <Link key={axis.en} href={axis.link} className="group flex">
               <div className="flex w-full flex-col rounded-2xl border border-border bg-surface p-6 transition-all hover:border-accent/40 hover:bg-surface-alt">

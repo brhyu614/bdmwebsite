@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: '슈퍼마켓 284개 매장 수요 예측 — 98.3% | BDM Lab',
-  description: '매장별 매출, 품목별 수요를 98% 정확도로 예측. 온라인과 오프라인의 관리 단위가 다르다.',
+  description: '매장별 매출, 품목별 수요를 결정계수(R²) 0.983로 예측. 온라인과 오프라인의 관리 단위가 다르다.',
 }
 
 export default function GroceryPage() {
@@ -14,7 +14,7 @@ export default function GroceryPage() {
       <section className="mx-auto max-w-[900px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">Project — AI 수요 예측</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          매장별 매출, 품목별 수요를 98% 정확도로 예측
+          매장별 매출, 품목별 수요를 결정계수(R²) 0.983로 예측
         </h1>
         <p className="mt-3 text-base text-subtext">
           284개 슈퍼마켓 매장 · 52주 데이터 · 온/오프 채널별 분리 예측

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const PROJECTS = [
   {
     category: 'AI 매출 예측',
-    title: '포토이즘 IP 콜라보 매출 예측',
+    title: 'ㅇㅇ셀프사진관 IP 콜라보 매출 예측',
     description: '462명 연예인, 4,042건 검증, 97.6% 적중률. 새로운 셀럽/IP 콜라보의 주간 매출을 예측하는 AI 시스템.',
     tags: ['XGBoost', 'LightGBM', 'Streamlit'],
     link: '/projects/photoism',
@@ -17,7 +17,7 @@ const PROJECTS = [
   {
     category: 'AI 수요 예측 · 리테일',
     title: '슈퍼마켓 284개 매장 — 품목별, 채널별 수요 예측',
-    description: '매장별 매출을 98% 정확도로 예측. 온라인은 카테고리 단위로, 오프라인은 세부 상품 단위로 관리해야 한다는 것을 발견.',
+    description: '매장별 매출을 결정계수(R²) 0.983으로 예측. 온라인은 카테고리 단위로, 오프라인은 세부 상품 단위로 관리해야 한다는 것을 발견.',
     tags: ['XGBoost+LightGBM', 'SHAP', '품목별 수요 예측', '채널별 전략'],
     link: '/projects/grocery',
   },
@@ -79,9 +79,47 @@ export default function ProjectsPage() {
         </p>
       </section>
 
-      {/* Projects — 이미지 전면 */}
+      {/* 수행 과제 전체 목록 */}
       <section className="mx-auto mt-12 max-w-[720px]">
-        <h2 className="mb-6 text-xl font-bold text-text">데이터 분석 프로젝트</h2>
+        <h2 className="text-xl font-bold text-text">수행한 기업·기관 과제</h2>
+        <p className="mt-2 text-sm leading-relaxed text-subtext">
+          기업 과제 8건과 기관 연구용역 1건입니다. 의뢰처 이름은 계약에 따라 업종으로 적었습니다.
+        </p>
+        <div className="mt-6 overflow-x-auto">
+          <table className="w-full min-w-[560px] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border text-left">
+                <th className="py-2.5 pr-4 font-bold text-text">의뢰처</th>
+                <th className="py-2.5 pr-4 font-bold text-text">과제</th>
+                <th className="py-2.5 font-bold text-text">방법</th>
+              </tr>
+            </thead>
+            <tbody className="text-subtext">
+              {[
+                ['ㅇㅇ슈퍼 체인', '매장 최적 입지 선정 모형 개발', '계량경제 모형, 상권 특성 반영'],
+                ['ㅇㅇ치킨 프랜차이즈', '349개 매장의 채널별 매출 예측 시스템', 'XGBoost, 지리정보 결합'],
+                ['ㅇㅇ셀프사진관', '연예인 IP별 매출 예측과 인기 변동 요인 분해', 'XGBoost, LightGBM'],
+                ['ㅇㅇ슈퍼 체인', '284개 매장의 품목별·채널별 수요 예측', 'XGBoost, SHAP 설명'],
+                ['유통 업계', '새벽배송 확산이 오프라인 업태에 미친 영향 분석', '이중차분법'],
+                ['ㅇㅇ슈퍼 체인', '새벽배송 진입의 수익성과 사업 타당성 분석', '비용·수익 구조 분석'],
+                ['ㅇㅇ건설·ㅇㅇ증권', 'LLM 에이전트를 이용한 가상 공간 설계', 'LLM 멀티에이전트'],
+                ['조사 기관', '인터뷰·설문 조사와 보고서 작성 자동화', 'LLM 파이프라인'],
+                ['한국은행 경기본부', '경기 지역 자영업의 회복 격차 분석', '업종·상권별 요인 분해'],
+              ].map(([who, what, how]) => (
+                <tr key={what} className="border-b border-border last:border-0">
+                  <td className="py-2.5 pr-4 font-medium text-text">{who}</td>
+                  <td className="py-2.5 pr-4">{what}</td>
+                  <td className="py-2.5 font-mono text-xs text-muted">{how}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Projects — 이미지 전면 */}
+      <section className="mx-auto mt-16 max-w-[720px]">
+        <h2 className="mb-6 text-xl font-bold text-text">상세 분석 기록</h2>
         <div className="space-y-10">
           {PROJECTS.map((project) => (
             <a key={project.title} href={project.link} className="group block">

@@ -4,9 +4,16 @@ import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 const NAV_LINKS = [
-  { href: '/research', label: '연구' },
+  { href: '/research/ai', label: 'AI 연구' },
+  { href: '/research/digital-twin', label: '디지털 트윈' },
+  { href: '/research/human-in-the-loop', label: 'AI와 사람' },
+  { href: '/publications', label: '논문' },
+  { href: '/projects', label: '프로젝트' },
+  { href: '/bizlab', label: '비즈니스랩' },
+  { href: '/press', label: '언론' },
   { href: '/articles', label: '인사이트' },
   { href: '/about', label: '교수' },
+  { href: '/collaborate', label: '협력' },
   { href: '/contact', label: 'Contact' },
 ]
 
@@ -36,7 +43,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-4 md:flex lg:gap-5">
             {NAV_LINKS.map((link) => {
               const isActive = currentUrl === link.href || (pathname === link.href && !link.href.includes('?'))
               return (

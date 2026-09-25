@@ -5,18 +5,19 @@ import { getHomeArticles } from '@/lib/topics'
 import { DBR_ARTICLES } from '@/lib/media'
 import ArticleCard from '@/components/articles/ArticleCard'
 import HeroAnimation from '@/components/home/HeroAnimation'
+import HeroRotator from '@/components/home/HeroRotator'
 
 export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: '빅데이터마케팅 랩 — 한양대학교 임보람 교수',
   description:
-    '데이터로 소비자를 예측하고, 복제하고, 해독합니다. AI 매출·수요 예측, LLM 멀티에이전트 소비자 시뮬레이션, 소셜미디어·인플루언서 분석. 한양대학교 Big Data Marketing Lab.',
+    'AI의 빈자리를 사람이 채웁니다. 6년치 구매 기록으로 소비자를 복제해 가상에서 실험하고, XGBoost로 매출과 폐업 가능성을 예측합니다. 한양대학교 Big Data Marketing Lab.',
   alternates: { canonical: '/' },
   openGraph: {
     title: '빅데이터마케팅 랩 — 한양대학교 임보람 교수',
     description:
-      '데이터로 소비자를 예측하고, 복제하고, 해독합니다. AI 예측 · 소비자 시뮬레이션 · 소셜미디어 분석.',
+      'AI의 빈자리를 사람이 채웁니다. 소비자 복제와 가상 실험, XGBoost 기반 미래 예측.',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
 }
@@ -65,15 +66,18 @@ export default function HomePage() {
           <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">
             Big Data Marketing Lab
           </p>
-          <h1 className="mt-4 text-4xl font-bold leading-[1.1] text-text sm:text-5xl lg:text-6xl">
-            데이터로 소비자를
-            <br />
-            예측하고, 복제하고, 해독합니다.
+          <h1 className="mt-4 text-4xl font-bold leading-[1.12] text-text sm:text-5xl lg:text-6xl">
+            <span className="block">AI의 빈자리를</span>
+            <span className="block">사람이 채웁니다.</span>
           </h1>
+          <div className="mt-5 text-3xl font-bold leading-[1.2] sm:text-4xl lg:text-[2.75rem]">
+            <HeroRotator />
+          </div>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-subtext">
-            내일의 매출을 <strong className="text-text">예측</strong>하고, 출시 전 소비자를
-            가상으로 <strong className="text-text">복제</strong>해 테스트하고, 마케팅의 효과를
-            데이터로 <strong className="text-text">해독</strong>합니다.
+            AI 에이전트를 엮어 일을 시키면 절반 가까이 실패합니다. 공개된 멀티에이전트 시스템
+            7종의 실패율은 <strong className="text-text">41%에서 86.7%</strong>였고, 원인은 모델의
+            성능이 아니라 설계였습니다. 이 연구실은 실패가 생기는 세 자리에 사람의 판단을 넣고,
+            나머지 자리에서 AI의 속도를 끝까지 씁니다.
           </p>
           <p className="mt-3 max-w-xl font-mono text-sm text-muted">
             한양대학교 경영대학 임보람 교수 연구실

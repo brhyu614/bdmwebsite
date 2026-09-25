@@ -170,17 +170,6 @@ export default function PressPage() {
         </div>
       </section>
 
-      {/* 문의 */}
-      <section className="mx-auto mt-16 max-w-[820px] rounded-2xl border border-border bg-surface p-7">
-        <h2 className="text-lg font-bold text-text">취재와 기고 문의</h2>
-        <p className="mt-3 font-serif text-base leading-[1.9] text-subtext">
-          AI 예측, 소비자 시뮬레이션, 유통 데이터 분석 주제의 취재와 기고 요청을 받습니다. 연락처는{' '}
-          <a href="mailto:brlim@hanyang.ac.kr" className="text-accent hover:underline">
-            brlim@hanyang.ac.kr
-          </a>
-          입니다.
-        </p>
-      </section>
     </div>
   )
 }

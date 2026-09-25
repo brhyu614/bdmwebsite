@@ -72,8 +72,8 @@ export default function HomePage() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-subtext">
             LLM은 자기 답이 맞는지 스스로 판정하지 못하고, 사람마다 다른 취향을 하나로 뭉치고,
-            미래 가치에 대한 가치 절감이 심합니다. 이 연구실은 6년치 구매 기록과 심층 인터뷰로 그
-            빈자리를 채워 소비자를 복제하고, 실제 응답과 대조해 맞은 만큼만 씁니다.
+            미래 가치에 대한 가치 절감이 심합니다. 우리는 그 한계를 측정하고, 개선하고,
+            검증합니다.
           </p>
           <p className="mt-3 max-w-xl font-mono text-sm text-muted">
             한양대학교 경영대학 임보람 교수 연구실

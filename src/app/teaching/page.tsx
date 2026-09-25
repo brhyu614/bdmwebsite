@@ -19,7 +19,7 @@ const COURSES = [
       { name: '마케팅 조사방법', level: '학부' },
       { name: '마케팅관리', level: '학부' },
       { name: '고급마케팅', level: '박사과정' },
-      { name: '비즈니스랩 빅데이터마케팅 랩', level: '학부 연구실 수업' },
+      { name: '비즈랩 빅데이터마케팅 랩', level: '학부 연구실 수업' },
     ],
   },
   {
@@ -146,8 +146,8 @@ export default function TeachingPage() {
       <section className="mx-auto mt-16 max-w-[820px] rounded-2xl border border-border bg-surface p-7">
         <h2 className="text-lg font-bold text-text">수업에서 연구로</h2>
         <p className="mt-3 font-serif text-base leading-[1.9] text-subtext">
-          학부 수업에서 만든 에이전트가 비즈니스랩 과제로 이어지고, 비즈니스랩 과제가 창업경진대회
-          출품과 연구 참여로 이어집니다. 2025년 창업경진대회 우수상은 비즈니스랩 과제에서 나온
+          학부 수업에서 만든 에이전트가 비즈랩 과제로 이어지고, 비즈랩 과제가 창업경진대회
+          출품과 연구 참여로 이어집니다. 2025년 창업경진대회 우수상은 비즈랩 과제에서 나온
           결과물입니다.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
@@ -155,7 +155,7 @@ export default function TeachingPage() {
             href="/bizlab"
             className="rounded-lg border border-accent bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-90"
           >
-            비즈니스랩 기록 보기
+            비즈랩 기록 보기
           </Link>
           <Link
             href="/join"

@@ -4,9 +4,9 @@ import JsonLd from '@/components/JsonLd'
 import SemesterAccordion from '@/components/bizlab/SemesterAccordion'
 
 export const metadata: Metadata = {
-  title: '비즈니스랩',
+  title: '비즈랩',
   description:
-    '한양대학교 경영대학 비즈니스랩(Hanyang Business Lab)의 빅데이터마케팅 랩 운영 기록. 2023년 1학기부터 7개 학기 동안 학부생이 수행한 데이터 분석과 서비스 개발 과제를 정리했습니다.',
+    '한양대학교 경영대학 비즈랩(Hanyang Business Lab)의 빅데이터마케팅 랩 운영 기록. 2023년 1학기부터 7개 학기 동안 학부생이 수행한 데이터 분석과 서비스 개발 과제를 정리했습니다.',
   alternates: { canonical: '/bizlab' },
 }
 
@@ -129,7 +129,7 @@ const AWARDS = [
   {
     year: '2025',
     name: '창업경진대회 우수상',
-    detail: '비즈니스랩 과제로 만든 AI 표적집단면접 서비스로 수상했습니다.',
+    detail: '비즈랩 과제로 만든 AI 표적집단면접 서비스로 수상했습니다.',
   },
 ]
 
@@ -149,13 +149,13 @@ export default function BizLabPage() {
 
       {/* Hero */}
       <section className="mx-auto max-w-[720px]">
-        <p className="font-mono text-sm uppercase tracking-widest text-accent">Business Lab</p>
+        <p className="font-mono text-sm uppercase tracking-widest text-accent">BizLab</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
           한 학기를 통째로 쓰는 연구실 수업
         </h1>
         <div className="mt-6 space-y-5 font-serif text-base leading-[1.9] text-subtext">
           <p>
-            한양대학교 경영대학 비즈니스랩은 선발된 학부생이 한 학기 동안 연구실에 들어와 실제
+            한양대학교 경영대학 비즈랩은 선발된 학부생이 한 학기 동안 연구실에 들어와 실제
             과제를 수행하는 제도입니다. 수강생은 9학점을 받고, 팀은 4명에서 5명으로 짜이며, 학기
             중에는 경영대학 3층 실습실에 주 2회 이상 나옵니다. 2026년 1학기 기준으로 아홉 개
             연구실이 참여하고 있고, 빅데이터마케팅 랩은 그중 하나입니다.
@@ -213,7 +213,7 @@ export default function BizLabPage() {
             },
             {
               t: '다음 단계로 가는 길',
-              d: '비즈니스랩에서 한 과제가 창업경진대회 출품, 대학원 진학, 연구 참여로 이어집니다.',
+              d: '비즈랩에서 한 과제가 창업경진대회 출품, 대학원 진학, 연구 참여로 이어집니다.',
             },
           ].map((c) => (
             <div key={c.t} className="rounded-xl border border-border bg-surface p-5">
@@ -239,7 +239,7 @@ export default function BizLabPage() {
             rel="noopener noreferrer"
             className="rounded-lg border border-accent bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-90"
           >
-            비즈니스랩 공식 안내
+            비즈랩 공식 안내
           </a>
           <Link
             href="/join"

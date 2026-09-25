@@ -44,7 +44,7 @@ export default function Footer() {
                 강의
               </Link>
               <Link href="/bizlab" className="text-sm text-subtext hover:text-accent transition-colors">
-                비즈니스랩
+                비즈랩
               </Link>
               <Link href="/about" className="text-sm text-subtext hover:text-accent transition-colors">
                 교수

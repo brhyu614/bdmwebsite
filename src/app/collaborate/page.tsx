@@ -5,7 +5,7 @@ import JsonLd from '@/components/JsonLd'
 export const metadata: Metadata = {
   title: 'Collaborate',
   description:
-    '빅데이터마케팅 랩(BDM Lab)과 기업이 함께 푸는 문제. 출점 후보지 진단, 가맹점 매출 하락 위험 진단, 협업 상품 매출 예측. 기업 과제 8건과 기관 연구용역 1건 수행.',
+    '빅데이터마케팅 랩(BDM Lab)과 기업이 함께 푸는 문제. 출점 후보지 진단, 가맹점 매출 하락 위험 진단, 협업 상품 매출 예측.',
   alternates: { canonical: '/collaborate' },
 }
 
@@ -43,7 +43,7 @@ const MODES = [
   },
   {
     title: '공동연구',
-    desc: '기업 데이터로 함께 연구하고 결과를 논문으로 발표합니다. 지금까지 두 건이 국제 저널에 실렸습니다.',
+    desc: '기업 데이터로 함께 연구하고 결과를 논문으로 발표합니다.',
   },
   {
     title: '자문과 교육',
@@ -53,11 +53,11 @@ const MODES = [
 
 const TRUST = [
   {
-    stat: '논문 6편',
-    label: 'Journal of Retailing과 Journal of Retailing and Consumer Services 등 국제 저널 게재',
+    stat: '국제 저널',
+    label: 'Journal of Retailing과 Journal of Retailing and Consumer Services 게재',
   },
   { stat: '매장 633개', label: '치킨 프랜차이즈 349개와 슈퍼마켓 284개의 매출·수요 예측 시스템 납품' },
-  { stat: '과제 9건', label: '기업 과제 8건과 한국은행 경기본부 연구용역 1건 수행' },
+  { stat: '기업 과제', label: '유통·프랜차이즈 매출 예측 시스템 납품과 한국은행 경기본부 연구용역 수행' },
 ]
 
 export default function CollaboratePage() {

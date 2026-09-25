@@ -121,10 +121,6 @@ export default function PressPage() {
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
           언론 보도와 기고
         </h1>
-        <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
-          동아비즈니스리뷰 기고 2건, 연구 보도 1건, 수상 보도 2건, 인터뷰 1건입니다. 기고는 모두
-          AI가 소비자의 구매 경로를 바꾸는 주제를 다뤘습니다.
-        </p>
       </section>
 
       {/* DBR */}

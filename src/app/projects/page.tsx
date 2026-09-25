@@ -83,7 +83,7 @@ export default function ProjectsPage() {
       <section className="mx-auto mt-12 max-w-[720px]">
         <h2 className="text-xl font-bold text-text">수행한 기업·기관 과제</h2>
         <p className="mt-2 text-sm leading-relaxed text-subtext">
-          기업 과제 8건과 기관 연구용역 1건입니다. 의뢰처 이름은 계약에 따라 업종으로 적었습니다.
+          의뢰처 이름은 계약에 따라 업종으로 적었습니다.
         </p>
         <div className="mt-6 overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-sm">

@@ -230,9 +230,8 @@ export default function PublicationsPage() {
         <p className="font-mono text-sm uppercase tracking-widest text-accent">Publications</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">연구 논문</h1>
         <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
-          국제 저널에 게재한 논문 6편, 국내 저널 논문 5편, 진행 중인 연구 5건입니다. 대부분
-          실제 기업의 구매 데이터를 다룬 연구이고, 최근 연구는 LLM 멀티에이전트 모델링과 AI 예측
-          두 축으로 이어집니다.
+          실제 기업의 구매 데이터를 다룬 연구가 대부분이고, 최근 연구는 LLM 멀티에이전트
+          모델링과 AI 예측 두 축으로 이어집니다.
         </p>
       </section>
 

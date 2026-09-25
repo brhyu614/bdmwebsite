@@ -16,7 +16,6 @@ type Track = {
   method: string
   data: string
   status: string
-  target?: string
 }
 
 const LLM_TRACKS: Track[] = [
@@ -29,7 +28,6 @@ const LLM_TRACKS: Track[] = [
       '한 사람의 6년치 구매 로그와 같은 사람의 설문 응답을 짝지어 LLM 에이전트에 넣습니다. 에이전트가 고른 답과 본인이 실제로 고른 답을 대조해 일치율을 잽니다.',
     data: '패널 500명, 구매 로그 6년, 설문과 인터뷰를 같은 사람 기준으로 연결',
     status: '자료 수집 협의와 검증 규약 확정 단계',
-    target: 'Marketing Science 투고 준비',
   },
   {
     id: 'review',
@@ -40,7 +38,6 @@ const LLM_TRACKS: Track[] = [
       'Yelp 리뷰 데이터로 리뷰 노출 정책을 바꿔 가며 시뮬레이션합니다. 높은 평점부터 보여 주는 정책과 무작위로 보여 주는 정책을 비교하면, 리뷰를 의심하며 읽는 집단에서 효과의 부호가 뒤집힙니다.',
     data: 'Yelp 공개 데이터의 사업체·리뷰·이용자 기록',
     status: '원고 집필 단계',
-    target: 'Marketing Science 투고 준비',
   },
   {
     id: 'inverse',
@@ -51,7 +48,6 @@ const LLM_TRACKS: Track[] = [
       '거래 기록을 입력받아 설문 문항의 답을 되맞히는 방향으로 모형을 학습시킵니다. 실제 응답과 맞춰 정확도를 측정합니다.',
     data: '구매 로그와 설문 응답이 짝지어진 표본',
     status: '설계와 소규모 예비 분석 단계',
-    target: 'Marketing Science 투고 준비',
   },
   {
     id: 'homogenize',
@@ -62,7 +58,6 @@ const LLM_TRACKS: Track[] = [
       '컨조인트 실험으로 사람의 선호를 측정하고, 같은 선택을 LLM에게 시켜 두 결과의 분포를 비교합니다. 선호의 폭이 줄어드는지를 봅니다.',
     data: '한국 콘텐츠 이용자 대상 선택 실험',
     status: '예비 실험 진행 단계',
-    target: 'Management Science 또는 Marketing Science 투고 준비',
   },
   {
     id: 'rare',
@@ -167,12 +162,6 @@ function TrackCard({ track }: { track: Track }) {
           <dt className="w-10 shrink-0 font-mono text-muted">단계</dt>
           <dd className="text-subtext">{track.status}</dd>
         </div>
-        {track.target && (
-          <div className="flex gap-2">
-            <dt className="w-10 shrink-0 font-mono text-muted">목표</dt>
-            <dd className="text-subtext">{track.target}</dd>
-          </div>
-        )}
       </dl>
     </article>
   )

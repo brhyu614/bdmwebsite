@@ -257,7 +257,7 @@ export default function HumanInTheLoopPage() {
             href="/research/ai"
             className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text hover:border-accent/40"
           >
-            AI 연구 12건 보기
+            AI 연구 보기
           </Link>
         </div>
       </section>

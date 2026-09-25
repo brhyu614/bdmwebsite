@@ -56,7 +56,7 @@ export default function ResearchPage() {
             href="/research/ai"
             className="rounded-lg border border-accent bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-90"
           >
-            AI 연구 12건 보기
+            AI 연구 보기
           </a>
           <a
             href="/research/digital-twin"

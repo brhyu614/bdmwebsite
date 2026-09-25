@@ -186,7 +186,7 @@ export default function AiResearchPage() {
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">AI Research</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          지금 돌아가는 AI 연구 12건
+          AI 기반 소비자 연구
         </h1>
         <div className="mt-6 space-y-5 font-serif text-base leading-[1.9] text-subtext">
           <p>

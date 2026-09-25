@@ -27,53 +27,58 @@ const INTERNATIONAL: Paper[] = [
     authors: 'Lim, Boram, Lauren Min, and Kissan Joseph',
     year: '2026',
     title: 'Beyond the Receipt: Risk Reduction and Locus of Attribution in Grocery Returns',
-    venue: 'Journal of Retailing (2026년 9월 온라인 게재), doi 10.1016/j.jretai.2026.08.008',
+    venue: 'Journal of Retailing',
+    doi: '10.1016/j.jretai.2026.08.008',
     method: '이중차분법으로 반품 전후를 비교해 인과 효과를 추정',
     detail:
       '식료품 반품 이후 같은 소매업체에서의 지출이 40.1% 늘어난다. 다양성을 추구하는 상위 25% 집단과 지출 하위 25% 집단에서는 증가폭이 100%를 넘는다. 반품이 세 번째에 이르면 증가폭은 음수로 바뀐다.',
-    url: 'https://www.sciencedirect.com/science/article/pii/S0022435926000904',
   },
   {
-    authors: 'Lim, Boram, et al.',
+    authors: 'Lim, Boram, Sofia Cavieres, Wen Jing Han, and Hyeong-Tak Lee',
     year: '2026',
     title:
       'Omni-channel grocery forecasting: Channel differences in forecastability and predictive signals',
     venue: 'Journal of Retailing and Consumer Services, 92, 104853',
+    doi: '10.1016/j.jretconser.2026.104853',
     method: '머신러닝(XGBoost)으로 채널별 수요를 예측하고 기여 변수를 분해',
     detail:
       '온라인과 오프라인 중 어느 채널의 수요가 더 잘 맞는지, 각 채널에서 예측에 실제로 기여하는 변수가 무엇인지를 구분해 측정했다.',
     axis: 'forecast',
   },
   {
-    authors: 'Lim, Boram, et al.',
+    authors: 'Lim, Boram, Taewan Kim, Dongyoup Kim, and Yihan Chiu',
     year: '2026',
     title: 'Structural drivers of sales in omnichannel retailing',
     venue: 'Journal of Retailing and Consumer Services, 92, 104817',
+    doi: '10.1016/j.jretconser.2026.104817',
     method: '구조 모형으로 매출 요인을 분해',
     detail: '옴니채널 소매에서 매출을 움직이는 구조적 요인을 분해했다.',
     axis: 'forecast',
   },
   {
-    authors: 'Hong, Eunhye, Jaehyun Park, and Boram Lim',
+    authors: 'Hong, EunPyo, JungKun Park, and Boram Lim',
     year: '2025',
     title:
       "Exploring perceived value's impact on attitudes in autonomous public transportation services: a multi-dimensional approach",
-    venue: 'Total Quality Management & Business Excellence',
+    venue: 'Total Quality Management & Business Excellence, 36, 100–124',
+    doi: '10.1080/14783363.2024.2443078',
     detail: '자율주행 대중교통 서비스에서 이용자가 느끼는 가치가 태도로 이어지는 경로를 여러 차원으로 나눠 확인했다.',
   },
   {
     authors: 'Lim, Boram, Ying Xie, and Ernan Haruvy',
-    year: '2021',
-    title: 'The Impact of Mobile Channel Adoption on Physical and Online Channels',
-    venue: 'Journal of Retailing',
+    year: '2022',
+    title: 'The impact of mobile app adoption on physical and online channels',
+    venue: 'Journal of Retailing, 98(3), 453–470',
+    doi: '10.1016/j.jretai.2021.10.001',
     method: '패널 데이터 계량경제 모형으로 채널 전환 효과를 추정',
     detail: '소비자가 모바일 앱을 쓰기 시작한 뒤 오프라인 매장과 PC 주문이 어떻게 달라지는지를 구매 데이터로 추정했다.',
   },
   {
-    authors: 'Lim, Boram, Ernan Haruvy, and Peter T. L. Popkowski Leszczyc',
-    year: '2021',
+    authors: 'Haruvy, Ernan, Boram Lim, and Peter T. L. Popkowski Leszczyc',
+    year: '2023',
     title: 'The effect of surcharge on price in online auctions',
-    venue: 'Electronic Commerce Research',
+    venue: 'Electronic Commerce Research, 23, 1161–1182',
+    doi: '10.1007/s10660-021-09508-6',
     method: '경매 데이터 회귀분석으로 수수료의 가격 효과를 추정',
     detail: '온라인 경매에서 별도로 붙는 수수료가 최종 낙찰가를 어떻게 움직이는지를 분석했다.',
   },
@@ -321,14 +326,6 @@ export default function PublicationsPage() {
         </ul>
       </section>
 
-      <section className="mx-auto mt-14 max-w-[720px] rounded-xl border border-border bg-surface p-6">
-        <h2 className="text-base font-bold text-text">학회 발표</h2>
-        <p className="mt-2 font-serif text-sm leading-[1.8] text-subtext">
-          INFORMS Marketing Science Conference에서 2016년 푸단대학교, 2017년 서던캘리포니아대학교,
-          2021년 발표를 했습니다. 그 밖에 University of Houston 박사 심포지엄(2018), London Business
-          School TDAC(2016), University of Alberta Choice Symposium(2016)에서 발표했습니다.
-        </p>
-      </section>
     </div>
   )
 }

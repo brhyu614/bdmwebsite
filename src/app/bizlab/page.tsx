@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
+import SemesterAccordion from '@/components/bizlab/SemesterAccordion'
 
 export const metadata: Metadata = {
   title: '비즈니스랩',
@@ -9,29 +10,25 @@ export const metadata: Metadata = {
   alternates: { canonical: '/bizlab' },
 }
 
-type Semester = {
-  term: string
-  year: string
-  theme: string
-  work: string[]
-  output: string
-}
-
-const SEMESTERS: Semester[] = [
+const SEMESTERS = [
   {
     term: '2026년 1학기',
-    year: '2026',
-    theme: '멀티에이전트 집단 면접 시스템',
+    theme: '멀티에이전트 표적집단면접(FGI) 시스템',
     work: [
-      'AI 에이전트가 진행하는 집단 면접의 질문지 설계와 진행 규칙 제작',
+      'AI 에이전트가 진행하는 표적집단면접(FGI)의 질문지 설계와 진행 규칙 제작',
       '응답자 성향을 여섯 축으로 나눠 화면에 보여 주는 시제품 개발',
       '포토 부스 이용자 응답 자료를 받아 에이전트 답변과 대조',
     ],
-    output: '집단 면접 시제품과 기술 설계서, 창업경진대회 제출 자료',
+    output: '표적집단면접 시제품과 기술 설계서, 창업경진대회 제출 자료',
+    detail: [
+      { label: '질문지 설계', body: 'AI 에이전트가 사람을 대신해 질문을 던질 때 무엇을 먼저 묻고 어디서 파고들지를 규칙으로 적었습니다. 응답자가 짧게 답하면 다시 물어 들어가는 조건, 화제를 바꿀 시점, 면접을 끝낼 조건을 문서로 남겼습니다.' },
+      { label: '성향 표시 화면', body: '응답자의 성향을 여섯 축으로 나눠 화면에 보여 주는 시제품을 만들었습니다. 응답을 읽고 축마다 점수를 매기는 방식과 그 점수를 그림으로 보여 주는 방식을 함께 설계했습니다.' },
+      { label: '검증', body: '셀프사진관 이용자의 실제 응답 자료를 받아, 같은 질문에 대한 에이전트의 답과 사람의 답을 나란히 놓고 비교했습니다.' },
+      { label: '팀 구성', body: '두 팀으로 나눠 한 팀은 면접 진행 규칙을, 다른 팀은 화면과 성향 분석을 맡았습니다.' },
+    ],
   },
   {
     term: '2025년 2학기',
-    year: '2025',
     theme: 'AI 인터뷰 자동화 도구의 시장 검증',
     work: [
       '인터뷰 자동화 도구를 파는 국내외 회사 조사와 기능 비교',
@@ -39,10 +36,15 @@ const SEMESTERS: Semester[] = [
       '인터뷰 질문지 설계 규칙 정리와 화면 개선안 제작',
     ],
     output: '시장 조사 보고서 4건과 화면 설계안',
+    detail: [
+      { label: '경쟁 도구 조사', body: '인터뷰 자동화 도구를 파는 국내외 회사를 찾아 기능을 항목별로 비교했습니다. 무엇을 자동화했고 무엇을 사람이 하는지, 가격을 어떻게 매기는지를 표로 정리했습니다.' },
+      { label: '수익 구조 분석', body: '설문 플랫폼이 실제로 돈을 버는 조건을 따졌습니다. 응답자 모집 비용, 재사용 가능한 문항의 비중, 반복 의뢰 여부를 기준으로 삼았습니다.' },
+      { label: '질문지 설계 규칙', body: '좋은 인터뷰 질문이 갖춰야 할 조건을 정리하고, 화면에서 질문을 만드는 흐름을 개선안으로 냈습니다.' },
+      { label: '추가 과제', body: '투표 기반 소셜 앱 사례를 조사해 별도의 사업 모델 제안서를 만들었습니다.' },
+    ],
   },
   {
     term: '2025년 1학기',
-    year: '2025',
     theme: '인터뷰 기반 조사 설계와 응답 데이터 분석',
     work: [
       '생활 행태와 웰빙 수준을 묻는 설문 설계와 응답 분석',
@@ -50,10 +52,16 @@ const SEMESTERS: Semester[] = [
       '응답 자료를 실시간 도표로 바꾸는 분석 코드 작성',
     ],
     output: '설문 결과 보고서와 분석 코드, 중간발표와 최종발표 자료',
+    detail: [
+      { label: '설문 설계와 수집', body: '생활 행태와 웰빙 수준을 묻는 설문을 설계하고 응답을 모아 분석했습니다. 문항마다 무엇을 재려는지 먼저 정하고 문항을 썼습니다.' },
+      { label: '시장 분석', body: '국내 설문 시장의 규모와 주요 사업자를 조사해 경쟁 구도를 정리했습니다.' },
+      { label: '분석 코드', body: '응답 자료를 받아 실시간으로 도표를 그리는 코드를 작성했습니다. 응답이 들어오는 대로 결과가 갱신되는 구조입니다.' },
+      { label: '자료 구조 설계', body: '응답과 응답자와 문항의 관계를 정리한 데이터베이스 구조도를 만들었습니다.' },
+      { label: '발표', body: '중간발표와 최종발표 자료를 만들어 랩 단위 발표회에서 보고했습니다.' },
+    ],
   },
   {
     term: '2024년 2학기',
-    year: '2024',
     theme: '브랜드 협업 과제와 응용 서비스 개발',
     work: [
       '패션 브랜드와 함께 소비자 자료를 분석하는 과제 수행',
@@ -61,10 +69,16 @@ const SEMESTERS: Semester[] = [
       '할인 쿠폰 사용 기록 분석',
     ],
     output: '프로젝트 기록 문서와 최종보고회 발표 자료',
+    detail: [
+      { label: '브랜드 협업 과제', body: '패션 브랜드와 함께 소비자 자료를 분석하는 과제를 수행했습니다. 기업이 가진 실제 자료를 받아 다뤘습니다.' },
+      { label: '앱 개발', body: '분석 결과를 쓰는 응용 서비스를 앱으로 만드는 과제를 진행했습니다.' },
+      { label: '연구 윤리 심의', body: '사람을 대상으로 하는 조사에 필요한 연구 윤리 심의 서류를 준비했습니다.' },
+      { label: '쿠폰 분석', body: '할인 쿠폰 사용 기록을 분석해 어떤 조건에서 쿠폰이 쓰이는지 확인했습니다.' },
+      { label: '주간 회의 기록', body: '팀별 주간 회의록을 남겨 진행 상황을 추적했습니다.' },
+    ],
   },
   {
     term: '2024년 1학기',
-    year: '2024',
     theme: '상권 분석과 자료 수집 도구 제작',
     work: [
       '상권 보고서를 읽고 분석 항목을 정리',
@@ -72,10 +86,15 @@ const SEMESTERS: Semester[] = [
       '기업과 진행 상황을 공유하는 중간 보고',
     ],
     output: '활동계획서와 기업 공유 보고서, 학기 과제 결과물',
+    detail: [
+      { label: '상권 보고서 분석', body: '상용 상권 분석 보고서를 읽고 어떤 항목이 들어가는지, 그 항목을 무엇으로 계산하는지 정리했습니다.' },
+      { label: '자료 수집 도구', body: '웹에서 매장 정보와 경쟁사 정보를 모으는 수집 도구를 직접 만들었습니다.' },
+      { label: '기업 공유', body: '4월에 중간 진행 상황을 기업과 공유하는 보고 자리를 가졌습니다.' },
+      { label: '방학 과제', body: '학기 과제와 별도로 방학 기간 과제를 이어서 진행했습니다.' },
+    ],
   },
   {
     term: '2023년 2학기',
-    year: '2023',
     theme: '행정동 생활인구 분석',
     work: [
       '전국 행정구역 분류표와 생활인구 자료 정리',
@@ -83,10 +102,14 @@ const SEMESTERS: Semester[] = [
       '분석 결과를 투자 설명 자료로 정리',
     ],
     output: '행정동 단위 분석 코드와 설명 자료',
+    detail: [
+      { label: '자료 정리', body: '전국 행정구역 분류표와 행정동별 생활인구 자료를 받아 분석에 쓸 수 있는 형태로 정리했습니다.' },
+      { label: '거리 계산', body: '행정동 사이의 거리를 계산해 한 매장이 실제로 손님을 끌어오는 범위를 추정했습니다. R로 좌표를 다뤘습니다.' },
+      { label: '투자 설명 자료', body: '분석 결과를 투자 설명 자료로 정리했습니다.' },
+    ],
   },
   {
     term: '2023년 1학기',
-    year: '2023',
     theme: '데이터 분석 기초와 사업 기획',
     work: [
       'R을 이용한 자료 처리와 분석 훈련',
@@ -94,6 +117,11 @@ const SEMESTERS: Semester[] = [
       '사업계획서 작성과 수정',
     ],
     output: '사업계획서와 분석 실습 결과물',
+    detail: [
+      { label: '분석 훈련', body: 'R로 자료를 불러오고 정리하고 그림을 그리는 기초 훈련을 했습니다. 원자료를 직접 다루는 일부터 시작했습니다.' },
+      { label: '자료 조사', body: '기업 지원 과제에 필요한 자료를 찾아 정리했습니다.' },
+      { label: '사업계획서', body: '사업계획서를 쓰고 여러 차례 고쳐 완성했습니다.' },
+    ],
   },
 ]
 
@@ -101,7 +129,7 @@ const AWARDS = [
   {
     year: '2025',
     name: '창업경진대회 우수상',
-    detail: '비즈니스랩 과제로 만든 AI 집단 면접 서비스로 수상했습니다.',
+    detail: '비즈니스랩 과제로 만든 AI 표적집단면접 서비스로 수상했습니다.',
   },
 ]
 
@@ -151,29 +179,7 @@ export default function BizLabPage() {
       <section className="mx-auto mt-16 max-w-[820px]">
         <h2 className="text-2xl font-bold text-text">학기별 과제 기록</h2>
 
-        <ol className="mt-8 space-y-6">
-          {SEMESTERS.map((s) => (
-            <li key={s.term} className="rounded-xl border border-border bg-surface p-6">
-              <div className="flex flex-wrap items-baseline gap-3">
-                <span className="rounded bg-accent-bg px-2 py-0.5 font-mono text-xs text-accent">
-                  {s.term}
-                </span>
-                <h3 className="text-base font-bold text-text">{s.theme}</h3>
-              </div>
-              <ul className="mt-4 space-y-1.5">
-                {s.work.map((w) => (
-                  <li key={w} className="flex gap-2 font-serif text-sm leading-[1.8] text-subtext">
-                    <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-accent" />
-                    {w}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 border-t border-border pt-3 text-xs text-muted">
-                <span className="font-mono text-accent">산출물</span> {s.output}
-              </p>
-            </li>
-          ))}
-        </ol>
+        <SemesterAccordion semesters={SEMESTERS} />
       </section>
 
       {/* 수상 */}

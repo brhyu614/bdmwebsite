@@ -162,7 +162,7 @@ export default function ResearchPage() {
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {[
             { ko: '디지털 마케팅', sub: '인플루언서와 SNS 효과 검증', href: '/digital-marketing' },
-            { ko: '소비자 시뮬레이션', sub: '디지털 트윈 집단 면접', href: '/synthetic-consumer' },
+            { ko: '소비자 시뮬레이션', sub: '디지털 트윈 표적집단면접(FGI)', href: '/synthetic-consumer' },
           ].map((a) => (
             <a key={a.ko} href={a.href} className="group rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent/40">
               <p className="text-sm font-bold text-text group-hover:text-accent transition-colors">{a.ko}</p>

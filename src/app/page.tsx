@@ -66,18 +66,14 @@ export default function HomePage() {
           <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">
             Big Data Marketing Lab
           </p>
-          <h1 className="mt-4 text-4xl font-bold leading-[1.12] text-text sm:text-5xl lg:text-6xl">
-            <span className="block">AI의 빈자리를</span>
-            <span className="block">사람이 채웁니다.</span>
-          </h1>
-          <div className="mt-5 text-3xl font-bold leading-[1.2] sm:text-4xl lg:text-[2.75rem]">
+          <h1 className="mt-4 text-4xl font-bold leading-[1.15] text-text sm:text-5xl lg:text-6xl">
+            <span className="block">소비자 행동을 AI와 데이터로</span>
             <HeroRotator />
-          </div>
+          </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-subtext">
-            AI 에이전트를 엮어 일을 시키면 절반 가까이 실패합니다. 공개된 멀티에이전트 시스템
-            7종의 실패율은 <strong className="text-text">41%에서 86.7%</strong>였고, 원인은 모델의
-            성능이 아니라 설계였습니다. 이 연구실은 실패가 생기는 세 자리에 사람의 판단을 넣고,
-            나머지 자리에서 AI의 속도를 끝까지 씁니다.
+            6년치 구매 기록으로 소비자를 복제해 가격 인상과 신제품 출시를 가상에서 먼저 돌립니다.
+            매출, 수요, 인구, 폐업은 숫자로 미리 내놓습니다. AI가 내놓은 답은 실제 소비자의 답과
+            대조해 검증합니다.
           </p>
           <p className="mt-3 max-w-xl font-mono text-sm text-muted">
             한양대학교 경영대학 임보람 교수 연구실

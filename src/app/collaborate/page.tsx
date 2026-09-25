@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const SERVICES = [
   {
     no: '01',
-    title: '출점 후보지 진단',
+    title: '출점 후보지의 매출과 생존',
     question: '이 자리에 매장을 열면 얼마를 법니까.',
     output:
       '후보 주소마다 예상 매출 범위와 1년 안에 문 닫을 가능성을 함께 냅니다. 어느 변수가 그 판단을 밀어 올렸는지도 숫자로 적습니다.',
@@ -20,18 +20,18 @@ const SERVICES = [
   },
   {
     no: '02',
-    title: '가맹점 매출 하락 위험 진단',
-    question: '어느 가맹점을 먼저 챙겨야 합니까.',
+    title: '가맹점 매출 하락의 조기 신호',
+    question: '어느 가맹점이 먼저 무너집니까.',
     output:
-      '매출이 꺾이기 전에 나타나는 신호를 찾아 먼저 관리해야 할 가맹점 명단을 냅니다. 명단마다 위험 근거를 붙입니다.',
+      '매출이 꺾이기 전에 나타나는 신호를 찾습니다. 매장마다 무엇이 위험 신호인지를 함께 밝힙니다.',
     basis: '매장별 운영 기록과 상권 자료를 결합한 조기 경보 모형',
   },
   {
     no: '03',
-    title: '협업 상품 매출 예측',
+    title: '협업 상품의 매출 예측',
     question: '이 연예인과 손잡으면 매출이 얼마나 오릅니까.',
     output:
-      '협업 대상별 예상 매출을 내고, 인기가 오르내리는 요인을 분해합니다. 계약 시점 판단에 씁니다.',
+      '협업 대상별 예상 매출을 내고, 인기가 오르내리는 요인을 분해합니다.',
     basis: '셀프사진관 브랜드의 IP별 매출 예측 과제',
   },
 ]
@@ -72,14 +72,15 @@ export default function CollaboratePage() {
           기업과 함께 푸는 문제
         </h1>
         <p className="mt-4 font-serif text-base leading-[1.9] text-subtext">
-          출점, 가맹점 관리, 협업 상품. 결정하기 전에 매출과 폐업 가능성을 숫자로 확인합니다.
-          연구실이 만든 예측 모형을 기업의 실제 자료에 적용해 답을 냅니다.
+          기업이 쌓은 데이터에는 연구로 풀 만한 질문이 들어 있습니다. 어느 자리에 매장을 열면
+          얼마를 버는지, 어느 가맹점이 먼저 무너지는지, 협업 상품이 얼마나 팔리는지를 그 데이터로
+          답해 왔습니다.
         </p>
       </section>
 
       {/* 서비스 */}
       <section className="mx-auto mt-14 max-w-[820px]">
-        <h2 className="text-2xl font-bold text-text">세 가지 진단</h2>
+        <h2 className="text-2xl font-bold text-text">함께 풀어 온 질문</h2>
         <div className="mt-6 space-y-4">
           {SERVICES.map((s) => (
             <div key={s.no} className="rounded-2xl border border-border bg-surface p-6">
@@ -125,8 +126,7 @@ export default function CollaboratePage() {
           ))}
         </div>
         <p className="mt-4 text-xs text-muted">
-          고객사 이름과 계약 조건은 계약에 따라 공개하지 않습니다. 참고 사례가 필요하시면 문의
-          시점에 안내합니다.
+          고객사 이름과 계약 조건은 계약에 따라 공개하지 않습니다.
         </p>
         <div className="mt-5">
           <Link href="/projects" className="font-mono text-sm text-accent hover:underline">
@@ -137,40 +137,15 @@ export default function CollaboratePage() {
 
       {/* 문의 */}
       <section className="mx-auto mt-16 max-w-[820px] border-t border-border pt-10">
-        <h2 className="text-2xl font-bold text-text">문의</h2>
-        <p className="mt-3 font-serif text-base leading-[1.9] text-subtext">
-          문제만 들고 오셔도 됩니다. 데이터로 풀 수 있는 문제인지부터 함께 판단합니다. 아래 네
-          가지를{' '}
+        <p className="font-serif text-base leading-[1.9] text-subtext">
+          연구 주제나 데이터에 관해 이야기를 나누고 싶으시면{' '}
           <a href="mailto:brlim@hanyang.ac.kr" className="text-accent hover:underline">
             brlim@hanyang.ac.kr
           </a>
-          로 보내 주시면 회신합니다.
+          로 연락 주십시오. 어떤 문제를 풀고 싶은지만 적어 주셔도 됩니다.
         </p>
-        <ul className="mt-5 grid gap-2 sm:grid-cols-2">
-          {[
-            '회사명과 업종',
-            '브랜드명',
-            '관심 주제 (출점, 가맹점 관리, 협업 상품 중 선택)',
-            '연락처',
-          ].map((f, i) => (
-            <li
-              key={f}
-              className="flex items-baseline gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-sm text-text"
-            >
-              <span className="font-mono text-xs text-accent">{`0${i + 1}`}</span>
-              {f}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-6">
-          <a
-            href="mailto:brlim@hanyang.ac.kr?subject=%5BBDM%20Lab%5D%20%ED%98%91%EC%97%85%20%EB%AC%B8%EC%9D%98"
-            className="inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
-          >
-            협업 문의 보내기
-          </a>
-        </div>
       </section>
+
     </div>
   )
 }

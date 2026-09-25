@@ -95,44 +95,42 @@ export default function ResearchPage() {
       <section className="mx-auto mt-12 max-w-[720px]">
         <div className="space-y-5 font-serif text-base leading-[1.9] text-subtext">
           <p>
-            데이터 분석에는 두 가지 질문이 있다.
+            AI에게 소비자를 물어보면 답은 곧바로 돌아온다. 문제는 그 답이 맞는지를 AI가 스스로
+            알지 못한다는 데 있다.
           </p>
           <p>
-            첫째, <strong className="text-text">&ldquo;무엇이 일어날까?&rdquo;</strong>{' '}
-            — 머신러닝이 잘하는 일이다. 과거 패턴을 학습해서 미래를 예측한다.
-            내일 매출이 얼마일지, 어떤 고객이 이탈할지. 유용하다.
-            하지만 이건 <em>상관관계</em>의 세계다.
-            &ldquo;A와 B가 함께 움직인다&rdquo;는 걸 발견할 뿐,
-            A가 B를 <em>만들었는지</em>는 알 수 없다.
+            LLM은 <strong className="text-text">자기 답의 정확도를 판정하지 못한다.</strong> 틀린
+            답에도 맞는 답과 같은 확신을 보인다. 여러 사람을 시켜도{' '}
+            <strong className="text-text">비슷한 답만 내놓아</strong> 사람 사이의 차이가 사라진다.
+            나중에 받을 값은 실제 소비자보다 심하게 깎는다. 질문의 형식을 조금만 바꿔도 답이
+            달라지고, 영어권 밖의 소비자는 제대로 복제하지 못한다.
           </p>
           <p>
-            둘째, <strong className="text-text">&ldquo;왜 일어났을까?&rdquo;</strong>{' '}
-            — 이건 훨씬 어렵다.
-            광고를 했더니 매출이 올랐다. 광고 <em>때문</em>일까, 성수기라서 어차피 올랐을까?
-            새벽배송이 시작되고 동네 슈퍼가 문을 닫았다. 새벽배송 <em>때문</em>일까, 인구 변화 때문일까?
-            이게 <em>인과관계</em>의 질문이다.
-            대부분의 데이터 분석은 첫 번째 질문에서 멈춘다.{' '}
-            <strong className="text-text">BDM Lab은 두 번째 질문에 답한다.</strong>
+            이 한계를 모르고 쓰면 그럴듯한 문장을 근거로 착각하게 된다.{' '}
+            <strong className="text-text">
+              BDM Lab은 AI의 한계를 먼저 측정하고, 그 자리를 실제 기록으로 채운 뒤에 쓴다.
+            </strong>{' '}
+            한 사람의 6년치 구매 기록과 설문과 인터뷰를 묶어 그 사람을 에이전트로 세우고, 에이전트가
+            내놓은 답은 본인의 실제 답과 대조해 일치율로 잰다. 맞은 만큼만 결과로 쓴다.
           </p>
           <p>
-            그리고 세 번째 질문도 던진다 —{' '}
-            <strong className="text-text">&ldquo;만약 ~했다면 어떻게 됐을까?&rdquo;</strong>{' '}
-            현실에서는 시간을 되돌릴 수 없다. 하지만 AI로 가상 세계를 만들면,
-            인과관계와 AI를 결합해서 현실에서 불가능한 실험을 돌릴 수 있다.
+            그렇게 검증한 에이전트로는 현실에서 못 하는 실험을 돌릴 수 있다. 가격을 올린 세상과
+            올리지 않은 세상을 나란히 돌려 두 결과를 비교하는 일이, 가상에서는 가능하다. 같은
+            데이터 위에서 머신러닝은 다음 달 매출을 맞히고, 에이전트는 그 숫자가 왜 그렇게 나오는지
+            말한다.
           </p>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          2대 연구 축 (허브)
+          연구 축 (허브)
           ═══════════════════════════════════════════════════ */}
       <section className="mx-auto mt-16 max-w-[720px]">
-        <h2 className="text-xl font-bold text-text">2대 연구 축</h2>
+        <h2 className="text-xl font-bold text-text">소비자 복제와 미래 예측</h2>
         <p className="mt-2 text-sm leading-relaxed text-subtext">
-          같은 데이터 분석 역량을 두 방향으로 씁니다. 하나는 사람을{' '}
-          <strong className="text-text">복제</strong>해 가상에서 실험을 돌리는 쪽이고, 다른 하나는
-          숫자로 미래를 <strong className="text-text">예측</strong>하는 쪽입니다. 인과분석,
-          머신러닝, LLM 시뮬레이션 세 방법이 두 축을 떠받칩니다.
+          같은 데이터를 두 방향으로 씁니다. 사람을 복제해 가상에서 실험을 돌리는 쪽과, 숫자로
+          미래를 예측하는 쪽입니다. 인과분석, 머신러닝, LLM 시뮬레이션 세 방법이 두 방향을
+          떠받칩니다.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {[
@@ -158,7 +156,7 @@ export default function ResearchPage() {
           ))}
         </div>
 
-        <p className="mt-6 text-sm font-bold text-text">두 축의 적용 분야</p>
+        <p className="mt-6 text-sm font-bold text-text">두 방향이 함께 쓰이는 곳</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {[
             { ko: '디지털 마케팅', sub: '인플루언서와 SNS 효과 검증', href: '/digital-marketing' },
@@ -177,7 +175,7 @@ export default function ResearchPage() {
           ═══════════════════════════════════════════════════ */}
       <section className="mx-auto mt-20 max-w-[720px]">
         <p className="font-mono text-xs uppercase tracking-widest text-muted">Methodology</p>
-        <p className="mt-1 text-sm text-subtext">두 축을 떠받치는 분석 방법론</p>
+        <p className="mt-1 text-sm text-subtext">연구를 떠받치는 세 가지 분석 방법</p>
       </section>
       {/* ═══════════════════════════════════════════════════
           1. Causal Inference

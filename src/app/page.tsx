@@ -71,11 +71,9 @@ export default function HomePage() {
             <HeroRotator />
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-subtext">
-            LLM은 그럴듯한 답을 빠르게 내놓습니다. 그 답이 맞는지는 스스로 알지 못합니다.
-            멀티에이전트 시스템의 실패 기록 1,642건 중 <strong className="text-text">23.5%</strong>가
-            검증 단계에서 나왔고, 원인의 <strong className="text-text">44.2%</strong>는 사람이
-            명세를 흐리게 준 설계였습니다. 이 연구실은 6년치 구매 기록과 심층 인터뷰로 판단
-            근거를 고정하고, 실제 소비자의 답과 대조해 맞은 만큼만 씁니다.
+            소비자는 말과 행동이 다릅니다. 건강을 중요하게 본다고 답한 사람이 장바구니에는 탄산음료를
+            담습니다. 이 연구실은 6년치 구매 기록으로 그 사람을 복제해 가격과 신제품을 가상에서 먼저
+            시험하고, 매출과 폐업은 숫자로 미리 내놓습니다.
           </p>
           <p className="mt-3 max-w-xl font-mono text-sm text-muted">
             한양대학교 경영대학 임보람 교수 연구실

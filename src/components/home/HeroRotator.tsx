@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-const PHRASES = ['미래를 실험합니다.', '미래를 예측합니다.', '소비자를 복제합니다.', '답을 검증합니다.']
+const PHRASES = ['빅데이터로 예측합니다.', 'AI 에이전트를 만듭니다.', '가상의 시장에서 실험합니다.']
 
 export default function HeroRotator() {
   const [i, setI] = useState(0)

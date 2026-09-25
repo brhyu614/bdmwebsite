@@ -67,7 +67,7 @@ export default function HomePage() {
             Big Data Marketing Lab
           </p>
           <h1 className="mt-4 text-4xl font-bold leading-[1.15] text-text sm:text-5xl lg:text-6xl">
-            <span className="block">소비자 행동을 AI로</span>
+            <span className="block">소비자 행동을 데이터로</span>
             <HeroRotator />
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-subtext">

@@ -66,19 +66,6 @@ export default function JoinPage() {
         </div>
       </section>
 
-      {/* 어떤 사람 */}
-      <section className="mx-auto mt-14 max-w-[720px]">
-        <h2 className="text-xl font-bold text-text">이런 분을 찾습니다</h2>
-        <ul className="mt-5 space-y-2 text-base leading-relaxed text-subtext">
-          <li>· 통계·프로그래밍(R/Python)에 거부감이 없고, 배우려는 의지가 있는 분</li>
-          <li>· 숫자 뒤의 &lsquo;왜&rsquo;를 끝까지 묻는 분</li>
-          <li>· 마케팅·소비자행동·데이터사이언스 중 하나라도 진심인 분</li>
-        </ul>
-        <p className="mt-4 text-sm text-muted">
-          전공·배경은 제한하지 않습니다. 경영·통계·공학·심리 어디서 와도 좋습니다.
-        </p>
-      </section>
-
       {/* 지원 방법 */}
       <section className="mx-auto mt-16 max-w-[720px] border-t border-border pt-10">
         <h2 className="text-xl font-bold text-text">지원 방법</h2>

@@ -94,10 +94,6 @@ export default function TeachingPage() {
       {/* 평가 기준 */}
       <section className="mx-auto mt-16 max-w-[820px]">
         <h2 className="text-2xl font-bold text-text">네 가지 평가 기준</h2>
-        <p className="mt-3 font-serif text-base leading-[1.9] text-subtext">
-          노력의 양이 아니라 검증된 성과가 점수가 됩니다. 밤을 새운 시간은 평가에 들어가지
-          않습니다.
-        </p>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {CRITERIA.map((c, i) => (
             <div key={c.t} className="rounded-xl border border-border bg-surface p-5">

@@ -129,10 +129,6 @@ export default function PressPage() {
           <h2 className="text-2xl font-bold text-text">동아비즈니스리뷰 기고</h2>
           <span className="font-mono text-xs text-muted">DBR</span>
         </div>
-        <p className="mt-2 font-serif text-sm leading-[1.8] text-subtext">
-          동아일보가 발행하는 경영 전문지입니다. 아래 두 편은 AI가 검색과 결제를 대신하기 시작한
-          환경에서 기업이 무엇을 바꿔야 하는지를 다뤘습니다.
-        </p>
         <div className="mt-6 space-y-4">
           {DBR.map((d) => (
             <Card key={d.title} item={d} big />

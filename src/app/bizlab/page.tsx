@@ -150,11 +150,6 @@ export default function BizLabPage() {
       {/* 학기별 기록 */}
       <section className="mx-auto mt-16 max-w-[820px]">
         <h2 className="text-2xl font-bold text-text">학기별 과제 기록</h2>
-        <p className="mt-3 font-serif text-base leading-[1.9] text-subtext">
-          아래는 학기마다 학생이 실제로 만든 결과물입니다. 과제는 연구실의 두 연구 축과 이어지도록
-          골랐습니다. 상권과 인구 분석은 예측 축으로, 인터뷰 자동화와 집단 면접은 LLM
-          멀티에이전트 축으로 이어집니다.
-        </p>
 
         <ol className="mt-8 space-y-6">
           {SEMESTERS.map((s) => (

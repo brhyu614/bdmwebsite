@@ -4,7 +4,7 @@ import JsonLd from '@/components/JsonLd'
 export const metadata: Metadata = {
   title: 'Publications',
   description:
-    '빅데이터마케팅 랩(BDM Lab) 임보람 교수의 연구 논문 목록. Journal of Retailing, Journal of Retailing and Consumer Services 등 국제 저널 게재 논문과 진행 중인 연구.',
+    '빅데이터마케팅 랩(BDM Lab) 임보람 교수의 연구 논문 목록. Journal of Retailing, Journal of Retailing and Consumer Services 등 국제 저널과 국내 저널 게재 논문.',
   alternates: { canonical: '/publications' },
 }
 
@@ -125,47 +125,6 @@ const DOMESTIC: Paper[] = [
   },
 ]
 
-const WORKING: Paper[] = [
-  {
-    authors: 'Lim, Boram, Hyeongtak Lee, and Ramkumar Janakiraman',
-    year: '진행 중',
-    title: 'Health Product Choice by Time of Day',
-    venue: '시간대에 따라 건강 관련 제품 선택이 달라지는지를 구매 로그로 검증한다.',
-    method: '시간대별 선택 모형',
-  },
-  {
-    authors: 'Lim, Boram, Harsha Kamatham, and Brian T. Ratchford',
-    year: '진행 중',
-    title: 'Store Entry Model for Multi-Channel Retailers',
-    venue: '온라인과 오프라인을 함께 운영하는 소매업체가 어디에 매장을 열어야 하는지를 모형으로 푼다.',
-    method: '입지 선택 구조 모형',
-    axis: 'forecast',
-  },
-  {
-    authors: 'Lim, Boram and Harsha Kamatham',
-    year: '진행 중',
-    title:
-      'Understanding complementarity and substitutability among products in online and offline channel',
-    venue: '머신러닝으로 채널별 제품 간 보완·대체 관계를 추정한다.',
-    method: '머신러닝 기반 제품 관계 추정',
-    axis: 'forecast',
-  },
-  {
-    authors: 'Lim, Boram and Paul Parker',
-    year: '진행 중',
-    title: 'The Effect of Take-A-Break Notification on Social Media Addiction',
-    venue: '사용 중단을 권하는 알림이 소셜미디어 과다 사용을 줄이는지를 실험으로 확인한다.',
-    method: '필드 실험',
-  },
-  {
-    authors: 'Lim, Boram and Paul Parker',
-    year: '진행 중',
-    title: 'Social media use and offline interpersonal outcomes',
-    venue: '소셜미디어 사용량이 대면 관계에 남기는 결과를 측정한다.',
-    method: '패널 조사 분석',
-  },
-]
-
 const AWARDS = [
   { year: '2025', name: '대한민국마케팅대상 연구 부문 특별상', org: '한국마케팅협회' },
   { year: '2018', name: 'AMA-Sheth Foundation Fellow', org: 'American Marketing Association' },
@@ -269,18 +228,6 @@ export default function PublicationsPage() {
         <ul className="mt-4">
           {DOMESTIC.map((p) => (
             <PaperItem key={p.title + p.year} paper={p} />
-          ))}
-        </ul>
-      </section>
-
-      <section className="mx-auto mt-14 max-w-[720px]">
-        <h2 className="text-xl font-bold text-text">진행 중인 연구</h2>
-        <p className="mt-2 text-sm text-muted">
-          아래 연구는 심사 중이거나 집필 중이어서 결과 수치를 싣지 않았습니다.
-        </p>
-        <ul className="mt-4">
-          {WORKING.map((p) => (
-            <PaperItem key={p.title} paper={p} />
           ))}
         </ul>
       </section>

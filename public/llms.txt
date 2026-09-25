@@ -1,38 +1,82 @@
 # 빅데이터마케팅 랩 (Big Data Marketing Lab)
 
-> 한양대학교 임보람 교수 연구실. 데이터로 소비자를 예측하고, 복제하고, 해독합니다.
-> AI 매출·수요·인구 예측, LLM 멀티에이전트 소비자 시뮬레이션, 디지털 마케팅 효과 검증.
+> 한양대학교 경영대학 임보람 교수 연구실. 소비자 행동을 AI와 데이터로 실험하고 예측합니다.
+> LLM 멀티에이전트로 소비자를 복제해 가상 실험을 돌리고, XGBoost로 매출·수요·인구·폐업을 예측합니다.
+
+최종 갱신: 2026-09
 
 ## 연구실 정보
 
-- 기관: 한양대학교 경영대학 빅데이터마케팅 랩 (BDM Lab)
-- 책임교수: 임보람 (마케팅 애널리틱스 박사, UT Dallas)
+- 기관: 한양대학교 경영대학 빅데이터마케팅 랩 (Big Data Marketing Lab, BDM Lab)
+- 책임교수: 임보람 (Boram Lim). 마케팅 애널리틱스 박사(The University of Texas at Dallas, 2019)
+- 이전 소속: The University of Kansas 경영학부 조교수 (2019–2022)
+- 연락처: brlim@hanyang.ac.kr, 02-2220-1076
 - 도메인: bigdatamarketinglab.com
 
-## 3대 연구 축
+## 2대 연구 축
 
-- **AI 예측** — 업종 무관 미래예측 엔진. 매출·수요·인구 예측 (시계열·구조 모델 + SHAP). JRCS 게재 다수.
-- **AI 소비자 시뮬레이션 (Mind-Bridge)** — 소비자의 의식적·무의식적 사고를 디지털 트윈으로 복제해 합성 FGI를 진행. Twin-2K-500 + Generative Agents + 자체 6-Lens, holdout 검증 83%. 인터뷰 수집은 AI 보이스 인터뷰 플랫폼 MindLens.
-- **디지털 마케팅** — 대규모 소셜·이미지 데이터로 인플루언서·콘텐츠 효과를 수치로 검증. AEO(AI 검색·인용) 분석 포함.
+- **LLM 멀티에이전트 모델링** — 6년치 구매 기록과 설문과 인터뷰를 같은 사람 기준으로 묶어 소비자를
+  LLM 에이전트로 복제하고, 가격 인상·신제품 출시 같은 조건을 가상에서 먼저 돌립니다. 에이전트의 답은
+  실제 응답자의 답과 대조해 일치율로 검증합니다.
+- **XGBoost 기반 미래 예측** — 매장 매출, 품목 수요, 행정동 인구, 매장 폐업을 예측합니다. 어떤 변수가
+  예측을 밀어 올렸는지까지 분해합니다.
+
+## AI의 한계와 사람의 역할
+
+2025년 NeurIPS에 실린 MAST 연구는 공개 멀티에이전트 시스템 7종의 실패율이 41%에서 86.7%라고
+보고했습니다. 실패 기록 1,642건 중 원인의 44.2%가 시스템 설계, 32.3%가 에이전트 간 엇갈림,
+23.5%가 검증 부실이었습니다. 이 연구실은 세 자리에 사람의 판단을 넣습니다. 질문지와 역할은 연구자가
+직접 설계하고, 판단 근거는 실제 경험자의 심층 인터뷰로 고정하며, 결과는 실제 응답과 대조해 검증합니다.
+
+## 대표 실적 수치
+
+- 슈퍼마켓 284개 매장 품목별 수요 예측: 결정계수(R²) 0.983
+- 치킨 프랜차이즈 349개 매장 매장식사 채널 매출 예측: 결정계수(R²) 0.96
+- 연예인 IP 협업 매출 예측: 적중률 97.6% (462명, 4,042건 검증)
+- 전국 행정동 3,518개 5년 후 인구 예측 (20년 자료, 461개 변수)
+- 식료품 반품 이후 같은 소매업체 지출 40.1% 증가 (Journal of Retailing 2026)
+
+## 대표 논문
+
+- Lim, Boram, Lauren Min, and Kissan Joseph (2026), "Beyond the Receipt: Risk Reduction and Locus
+  of Attribution in Grocery Returns," Journal of Retailing. doi 10.1016/j.jretai.2026.08.008
+- Lim, Boram, Sofia Cavieres, Wen Jing Han, and Hyeong-Tak Lee (2026), "Omni-channel grocery
+  forecasting," Journal of Retailing and Consumer Services, 92, 104853.
+  doi 10.1016/j.jretconser.2026.104853
+- Lim, Boram, Taewan Kim, Dongyoup Kim, and Yihan Chiu (2026), "Structural drivers of sales in
+  omnichannel retailing," Journal of Retailing and Consumer Services, 92, 104817.
+  doi 10.1016/j.jretconser.2026.104817
+- Lim, Boram, Ying Xie, and Ernan Haruvy (2022), "The impact of mobile app adoption on physical and
+  online channels," Journal of Retailing, 98(3), 453–470. doi 10.1016/j.jretai.2021.10.001
 
 ## 핵심 페이지
 
 - 홈: https://bigdatamarketinglab.com
 - 연구 개요: https://bigdatamarketinglab.com/research
-- AI 예측 프로젝트: https://bigdatamarketinglab.com/projects
-- AI 소비자 시뮬레이션 (Mind-Bridge): https://bigdatamarketinglab.com/synthetic-consumer
-- 디지털 마케팅: https://bigdatamarketinglab.com/digital-marketing
+- AI 기반 소비자 연구: https://bigdatamarketinglab.com/research/ai
+- 소비자 디지털 트윈의 원리: https://bigdatamarketinglab.com/research/digital-twin
+- AI가 실패하는 자리와 사람의 역할: https://bigdatamarketinglab.com/research/human-in-the-loop
+- 논문 목록: https://bigdatamarketinglab.com/publications
+- 기업·기관 과제: https://bigdatamarketinglab.com/projects
+- 언론 보도와 기고: https://bigdatamarketinglab.com/press
+- 강의: https://bigdatamarketinglab.com/teaching
+- 비즈니스랩: https://bigdatamarketinglab.com/bizlab
 - 인사이트 아카이브: https://bigdatamarketinglab.com/articles
 - 교수 소개: https://bigdatamarketinglab.com/about
-- 기업 협업·연구 의뢰: https://bigdatamarketinglab.com/work-with-us
+- 기업 협력: https://bigdatamarketinglab.com/collaborate
 - 대학원 합류: https://bigdatamarketinglab.com/join
 - 사이트맵: https://bigdatamarketinglab.com/sitemap.xml
 
 ## 콘텐츠 시리즈
 
-- **랩 리서치** (`lab-research`) — BDM Lab이 직접 수행한 연구·기업 프로젝트 결과 (예측·시뮬레이션·인과분석).
-- **알고리즘 디코드** (`algorithm-decode`) — 플랫폼 알고리즘·AEO·인플루언서·브랜디드 콘텐츠 분석.
+- **랩 리서치** (`lab-research`) — 연구실이 직접 수행한 연구와 기업 과제 결과
+- **알고리즘 디코드** (`algorithm-decode`) — 플랫폼 알고리즘과 AI 검색, 인플루언서 효과 분석
+
+## 수상
+
+- 2025 제13회 대한민국마케팅대상 연구 부문 특별상 (한국마케팅협회)
+- AMA-Sheth Foundation Fellow (2018)
 
 ## Licensing
 
-개별 아티클의 참고문헌과 출처는 각 글 말미에 표기. 인용 시 출처와 원문 링크를 함께 표기해 주세요.
+개별 아티클의 참고문헌과 출처는 각 글 말미에 표기합니다. 인용 시 출처와 원문 링크를 함께 표기해 주세요.

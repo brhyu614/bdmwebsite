@@ -28,11 +28,32 @@ export default function Footer() {
               <Link href="/research" className="text-sm text-subtext hover:text-accent transition-colors">
                 연구
               </Link>
+              <Link href="/publications" className="text-sm text-subtext hover:text-accent transition-colors">
+                논문
+              </Link>
+              <Link href="/projects" className="text-sm text-subtext hover:text-accent transition-colors">
+                프로젝트
+              </Link>
               <Link href="/articles" className="text-sm text-subtext hover:text-accent transition-colors">
                 인사이트
               </Link>
+              <Link href="/press" className="text-sm text-subtext hover:text-accent transition-colors">
+                언론 보도
+              </Link>
+              <Link href="/teaching" className="text-sm text-subtext hover:text-accent transition-colors">
+                강의
+              </Link>
+              <Link href="/bizlab" className="text-sm text-subtext hover:text-accent transition-colors">
+                비즈니스랩
+              </Link>
               <Link href="/about" className="text-sm text-subtext hover:text-accent transition-colors">
                 교수
+              </Link>
+              <Link href="/join" className="text-sm text-subtext hover:text-accent transition-colors">
+                대학원 합류
+              </Link>
+              <Link href="/collaborate" className="text-sm text-subtext hover:text-accent transition-colors">
+                협력
               </Link>
               <Link href="/contact" className="text-sm text-subtext hover:text-accent transition-colors">
                 Contact

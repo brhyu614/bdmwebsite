@@ -7,10 +7,7 @@ const NAV_LINKS = [
   { href: '/research', label: '연구' },
   { href: '/publications', label: '논문' },
   { href: '/projects', label: '프로젝트' },
-  { href: '/bizlab', label: '비즈니스랩' },
-  { href: '/press', label: '언론' },
   { href: '/articles', label: '인사이트' },
-  { href: '/about', label: '교수' },
   { href: '/collaborate', label: '협력' },
 ]
 

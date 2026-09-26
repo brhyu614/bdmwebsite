@@ -66,7 +66,14 @@ export default function AboutPage() {
         <h2 className="font-mono text-xs uppercase tracking-widest text-muted">Career</h2>
         <div className="mt-6 space-y-5">
           <div className="flex items-start gap-4">
-            <span className="mt-0.5 inline-block w-24 shrink-0 font-mono text-xs font-medium text-accent">2022 ~</span>
+            <span className="mt-0.5 inline-block w-24 shrink-0 font-mono text-xs font-medium text-accent">2026 ~</span>
+            <div>
+              <p className="font-bold text-text">한양대학교 부교수</p>
+              <p className="text-sm text-subtext">경영학부 마케팅 / 공과대학 데이터사이언스학부</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <span className="mt-0.5 inline-block w-24 shrink-0 font-mono text-xs text-muted">2022 ~ 26</span>
             <div>
               <p className="font-bold text-text">한양대학교 조교수</p>
               <p className="text-sm text-subtext">경영학부 마케팅 / 공과대학 데이터사이언스학부</p>

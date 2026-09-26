@@ -8,8 +8,9 @@
 ## 연구실 정보
 
 - 기관: 한양대학교 경영대학 빅데이터마케팅 랩 (Big Data Marketing Lab, BDM Lab)
-- 책임교수: 임보람 (Boram Lim). 마케팅 애널리틱스 박사(The University of Texas at Dallas, 2019)
-- 이전 소속: The University of Kansas 경영학부 조교수 (2019–2022)
+- 책임교수: 임보람 (Boram Lim), 한양대학교 경영대학 부교수 (2026년 9월부터)
+- 학위: 마케팅 애널리틱스 박사 (The University of Texas at Dallas, 2019)
+- 이전 직위: 한양대학교 조교수 (2022–2026), The University of Kansas 경영학부 조교수 (2019–2022)
 - 연락처: brlim@hanyang.ac.kr, 02-2220-1076
 - 도메인: bigdatamarketinglab.com
 

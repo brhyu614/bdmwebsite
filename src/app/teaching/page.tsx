@@ -14,7 +14,7 @@ const COURSES = [
     school: '한양대학교',
     en: 'Hanyang University',
     period: '2022년부터',
-    role: '경영학부 마케팅 전공, 공과대학 데이터사이언스학부 겸직',
+    role: '경영학부 마케팅 전공 부교수, 공과대학 데이터사이언스학부 겸직',
     items: [
       { name: '마케팅 조사방법', level: '학부' },
       { name: '마케팅관리', level: '학부' },
@@ -26,7 +26,7 @@ const COURSES = [
     school: 'University of Kansas',
     en: '캔자스 대학교',
     period: '2019년부터 2022년까지',
-    role: '경영학부 조교수',
+    role: '경영학부 조교수(Assistant Professor)',
     items: [
       { name: 'Digital Marketing and Social Media', level: '학부' },
       { name: 'Pricing', level: '학부, 2020년 봄' },

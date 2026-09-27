@@ -62,7 +62,7 @@ export default function ResearchPage() {
             href="/research/digital-twin"
             className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text hover:border-accent/40"
           >
-            소비자 디지털 트윈의 원리
+            개인 단위 소비자 복제
           </a>
           <a
             href="/research/human-in-the-loop"
@@ -160,7 +160,7 @@ export default function ResearchPage() {
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {[
             { ko: '디지털 마케팅', sub: '인플루언서와 SNS 효과 검증', href: '/digital-marketing' },
-            { ko: '소비자 시뮬레이션', sub: '디지털 트윈 표적집단면접(FGI)', href: '/synthetic-consumer' },
+            { ko: '소비자 시뮬레이션', sub: '생성형 에이전트 표적집단면접(FGI)', href: '/synthetic-consumer' },
           ].map((a) => (
             <a key={a.ko} href={a.href} className="group rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent/40">
               <p className="text-sm font-bold text-text group-hover:text-accent transition-colors">{a.ko}</p>

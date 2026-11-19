@@ -15,7 +15,7 @@ export default function Footer() {
               Big Data Marketing Lab · Hanyang Univ.
             </p>
             <p className="mt-2 text-sm text-subtext">
-              직감 대신 근거. 데이터로 읽는 마케팅.
+              소비자 디지털 트윈 · 머신러닝 예측 · 디지털 마케팅
             </p>
           </div>
 
@@ -34,8 +34,8 @@ export default function Footer() {
               <Link href="/projects" className="text-sm text-subtext hover:text-accent transition-colors">
                 프로젝트
               </Link>
-              <Link href="/articles" className="text-sm text-subtext hover:text-accent transition-colors">
-                인사이트
+              <Link href="/digital-marketing" className="text-sm text-subtext hover:text-accent transition-colors">
+                디지털 마케팅 · DBR 기고
               </Link>
               <Link href="/press" className="text-sm text-subtext hover:text-accent transition-colors">
                 언론 보도

@@ -152,20 +152,7 @@ export default function DigitalMarketingPage() {
         </div>
       </section>
 
-      {/* 대중 콘텐츠 연결 */}
-      <section className="mx-auto mt-14 max-w-[720px] border-t border-border pt-10">
-        <h2 className="text-xl font-bold text-text">알고리즘 디코드</h2>
-        <p className="mt-3 text-base leading-relaxed text-subtext">
-          이 연구의 시각을 누구나 읽을 수 있게 풀어 쓴 글들도 발행합니다 — 플랫폼
-          알고리즘, 인플루언서, 바이럴 콘텐츠를 데이터로 해독한 인사이트.
-        </p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-            href="/articles?series=algorithm-decode"
-            className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-subtext transition-colors hover:border-accent hover:text-accent"
-          >
-            알고리즘 디코드 읽기 →
-          </Link>
+      <section className="mx-auto mt-12 max-w-[720px]"><div>
           <Link
             href="/contact"
             className="rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-[#0B0F14] transition-opacity hover:opacity-90"

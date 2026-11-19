@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: '슈퍼마켓 284개 매장 수요 예측 — 98.3% | BDM Lab',
-  description: '매장별 매출, 품목별 수요를 결정계수(R²) 0.983로 예측. 온라인과 오프라인의 관리 단위가 다르다.',
+  title: '슈퍼마켓 284개 매장 수요 예측 — 온라인 매출 예측 R² 0.983 | BDM Lab',
+  description: '온라인 채널의 매출 예측에서 결정계수(R²) 0.983. 온라인과 오프라인의 관리 단위가 다르다.',
 }
 
 export default function GroceryPage() {
@@ -14,7 +14,7 @@ export default function GroceryPage() {
       <section className="mx-auto max-w-[900px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">Project — AI 수요 예측</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          매장별 매출, 품목별 수요를 결정계수(R²) 0.983로 예측
+          온라인 채널의 매출 예측에서 결정계수(R²) 0.983
         </h1>
         <p className="mt-3 text-base text-subtext">
           284개 슈퍼마켓 매장 · 52주 데이터 · 온/오프 채널별 분리 예측
@@ -36,9 +36,9 @@ export default function GroceryPage() {
       <section className="mx-auto mt-10 max-w-[720px]">
         <div className="grid grid-cols-3 gap-3">
           {[
-            { num: '98.3%', label: '온라인 예측 정확도' },
+            { num: '0.983', label: '온라인 매출 예측 R²' },
             { num: '284개', label: '매장 분석' },
-            { num: '87.3%', label: '오프라인 예측 정확도' },
+            { num: '0.873', label: '오프라인 매출 예측 R²' },
           ].map((item) => (
             <div key={item.label} className="rounded-xl border border-border bg-surface p-3 text-center">
               <p className="text-xl font-bold text-accent sm:text-2xl">{item.num}</p>

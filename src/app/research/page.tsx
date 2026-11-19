@@ -49,7 +49,7 @@ export default function ResearchPage() {
       <section className="mx-auto max-w-[720px]">
         <p className="font-mono text-sm uppercase tracking-widest text-accent">Research</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          연구실에서 하는 일
+          AI 기반 소비자 행동 연구
         </h1>
         <div className="mt-6 flex flex-wrap gap-3">
           <a
@@ -68,7 +68,7 @@ export default function ResearchPage() {
             href="/research/human-in-the-loop"
             className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text hover:border-accent/40"
           >
-            AI가 실패하는 자리
+            사람의 응답을 이용한 모형 평가
           </a>
           <a
             href="/publications"
@@ -91,46 +91,13 @@ export default function ResearchPage() {
         />
       </div>
 
-      {/* Philosophy */}
-      <section className="mx-auto mt-12 max-w-[720px]">
-        <div className="space-y-5 font-serif text-base leading-[1.9] text-subtext">
-          <p>
-            AI에게 소비자를 물어보면 답은 곧바로 돌아온다. 문제는 그 답이 맞는지를 AI가 스스로
-            알지 못한다는 데 있다.
-          </p>
-          <p>
-            LLM은 <strong className="text-text">자기 답의 정확도를 판정하지 못한다.</strong> 틀린
-            답에도 맞는 답과 같은 확신을 보인다. 여러 사람을 시켜도{' '}
-            <strong className="text-text">비슷한 답만 내놓아</strong> 사람 사이의 차이가 사라진다.
-            나중에 받을 값은 실제 소비자보다 심하게 깎는다. 질문의 형식을 조금만 바꿔도 답이
-            달라지고, 영어권 밖의 소비자는 제대로 복제하지 못한다.
-          </p>
-          <p>
-            이 한계를 모르고 쓰면 그럴듯한 문장을 근거로 착각하게 된다.{' '}
-            <strong className="text-text">
-              BDM Lab은 AI의 한계를 먼저 측정하고, 그 자리를 실제 기록으로 채운 뒤에 쓴다.
-            </strong>{' '}
-            한 사람의 6년치 구매 기록과 설문과 인터뷰를 묶어 그 사람을 에이전트로 세우고, 에이전트가
-            내놓은 답은 본인의 실제 답과 대조해 일치율로 잰다. 맞은 만큼만 결과로 쓴다.
-          </p>
-          <p>
-            그렇게 검증한 에이전트로는 현실에서 못 하는 실험을 돌릴 수 있다. 가격을 올린 세상과
-            올리지 않은 세상을 나란히 돌려 두 결과를 비교하는 일이, 가상에서는 가능하다. 같은
-            데이터 위에서 머신러닝은 다음 달 매출을 맞히고, 에이전트는 그 숫자가 왜 그렇게 나오는지
-            말한다.
-          </p>
-        </div>
-      </section>
-
       {/* ═══════════════════════════════════════════════════
           연구 축 (허브)
           ═══════════════════════════════════════════════════ */}
       <section className="mx-auto mt-16 max-w-[720px]">
         <h2 className="text-xl font-bold text-text">소비자 복제와 미래 예측</h2>
         <p className="mt-2 text-sm leading-relaxed text-subtext">
-          같은 데이터를 두 방향으로 씁니다. 사람을 복제해 가상에서 실험을 돌리는 쪽과, 숫자로
-          미래를 예측하는 쪽입니다. 인과분석, 머신러닝, LLM 시뮬레이션 세 방법이 두 방향을
-          떠받칩니다.
+          개인 단위에서는 구매 이력과 설문으로 소비자의 선택을 모형화합니다. 점포 단위에서는 판매 기록과 상권 특성으로 채널별 매출과 수요를 예측합니다.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {[

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
+import HeroAnimation from '@/components/home/HeroAnimation'
+import HeroRotator from '@/components/home/HeroRotator'
 import { DBR_ARTICLES } from '@/lib/media'
 
 export const metadata: Metadata = {
@@ -23,22 +25,39 @@ const jump = 'mt-5 inline-block font-semibold text-teal-800 underline decoration
 export default function HomePage() {
   return (
     <div className="bg-[#fafaf7] text-[#142d3a] [word-break:keep-all]">
-      <section className="bg-[#102d39] text-white">
-        <div className={wrap + ' grid items-center gap-12 py-16 lg:grid-cols-[1.3fr_1fr] lg:py-24'}>
-          <div>
-            <p className="font-mono text-sm text-teal-200">한양대학교 경영대학 · 임보람 교수 연구실</p>
-            <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">소비자 디지털 트윈과<br />시장 예측</h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-200">개인의 구매 이력과 설문 응답으로 소비자의 판단을 모형화합니다. 점포와 지역 단위에서는 머신러닝으로 매출과 수요를 예측합니다.</p>
-            <div className="mt-8 flex flex-wrap gap-6 text-sm font-semibold"><a href="#research" className="border-b border-teal-300 pb-1">연구 프로젝트 ↓</a><a href="#papers" className="border-b border-teal-300 pb-1">주요 논문 ↓</a></div>
+      <section className="relative flex min-h-[85vh] items-center bg-bg overflow-hidden">
+        <HeroAnimation />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg)]/30 via-transparent to-[var(--color-bg)]" />
+
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">
+            Big Data Marketing Lab
+          </p>
+          <h1 className="mt-4 text-4xl font-bold leading-[1.15] text-text sm:text-5xl lg:text-6xl">
+            <span className="block">데이터로</span>
+            <HeroRotator />
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-subtext">
+            소비자 디지털 트윈은 개인의 구매 이력과 설문 응답으로 그 사람의 판단을 모형화합니다.
+            연구실은 대규모 언어모형이 예측한 선택을 실제 응답과 대조하고, 머신러닝으로 점포별 매출과 수요를 예측합니다.
+          </p>
+          <p className="mt-3 max-w-xl font-mono text-sm text-muted">
+            한양대학교 경영대학 임보람 교수 연구실
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link
+              href="#research"
+              className="rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-[#0B0F14] transition-opacity hover:opacity-90"
+            >
+              연구 프로젝트
+            </Link>
+            <Link
+              href="#papers"
+              className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-subtext transition-colors hover:border-accent hover:text-accent"
+            >
+              주요 논문
+            </Link>
           </div>
-          <figure className="border-l border-teal-300/40 pl-6 sm:pl-9">
-            <figcaption className="mb-5 font-mono text-sm text-teal-200">개인별 디지털 트윈의 검증 설계</figcaption>
-            <ol className="space-y-4">
-              <li className="border-b border-white/20 pb-4"><strong>개인의 행동과 경험</strong><p className="mt-1 text-sm text-slate-300">같은 참여자의 구매 기록과 설문 응답을 연결</p></li>
-              <li className="border-b border-white/20 pb-4"><strong>새로운 선택 과제</strong><p className="mt-1 text-sm text-slate-300">대규모 언어모형(LLM)이 개인별 정보로 선택을 예측</p></li>
-              <li><strong>실제 선택과 대조</strong><p className="mt-1 text-sm text-slate-300">동일한 과제에서 참여자와 모형이 고른 대안 비교</p></li>
-            </ol>
-          </figure>
         </div>
       </section>
       <section id="research" className={wrap + ' scroll-mt-24 py-16'}>

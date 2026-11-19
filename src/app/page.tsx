@@ -11,12 +11,6 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
 }
 
-const papers = [
-  { journal: 'Journal of Retailing and Consumer Services', year: '2026', title: 'Omni-channel grocery forecasting: Channel differences in forecastability and predictive signals', doi: '10.1016/j.jretconser.2026.104853' },
-  { journal: 'Journal of Retailing', year: '2026', title: 'Beyond the Receipt: Risk Reduction and Locus of Attribution in Grocery Returns', doi: '10.1016/j.jretai.2026.08.008' },
-  { journal: 'Journal of Retailing', year: '2022', title: 'The impact of mobile app adoption on physical and online channels', doi: '10.1016/j.jretai.2021.10.001' },
-]
-
 const wrap = 'mx-auto max-w-6xl px-5 sm:px-8'
 const heading = 'text-3xl font-bold tracking-tight sm:text-4xl'
 const detail = 'mt-4 leading-8 text-slate-600'
@@ -52,10 +46,10 @@ export default function HomePage() {
               연구 프로젝트
             </Link>
             <Link
-              href="#papers"
+              href="/about"
               className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-subtext transition-colors hover:border-accent hover:text-accent"
             >
-              주요 논문
+              연구책임자
             </Link>
           </div>
         </div>
@@ -82,13 +76,6 @@ export default function HomePage() {
           <article><h3 className="text-xl font-bold">디지털 마케팅과 소셜미디어 알고리즘</h3><p className={detail}>플랫폼에서 노출되는 콘텐츠의 시각적 특성과 이용자 반응을 분석합니다. 이미지 인식 모형인 ResNet50과 YOLOv8로 게시물 속 얼굴과 객체를 식별하고, 제품군에 따라 얼굴 노출과 이용자 반응의 관계가 어떻게 달라지는지 비교합니다.</p><Link className={jump} href="/digital-marketing">디지털 마케팅 연구 보기 →</Link></article>
         </div>
       </section>
-      <section id="papers" className="scroll-mt-24 border-y border-slate-300 bg-[#eef2f0]">
-        <div className={wrap + ' py-14'}>
-          <div className="flex flex-wrap items-baseline justify-between gap-3"><h2 className={heading}>주요 논문</h2><Link className={jump} href="/publications">전체 논문 →</Link></div>
-          <ul className="mt-6">{papers.map(paper => <li key={paper.doi} className="border-t border-slate-300 py-5"><p className="text-sm text-teal-800">{paper.journal} · {paper.year}</p><a href={'https://doi.org/' + paper.doi} className="mt-1 block font-serif text-xl leading-snug hover:underline">{paper.title} ↗</a></li>)}</ul>
-        </div>
-      </section>
-
       <section className="border-t border-border bg-bg">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between">

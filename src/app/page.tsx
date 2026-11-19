@@ -70,7 +70,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-t border-border">
+      <section className="border-t border-border bg-bg">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between">
             <div>
